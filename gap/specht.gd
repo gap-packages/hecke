@@ -14,7 +14,7 @@ BindGlobal("SchurType", NewType(AlgebraObjFamily, IsSchur));
 BindGlobal("SchurDecompositionMatrixType", NewType(AlgebraObjFamily, IsSchurDecompositionMatrix));
 
 DeclareCategory("IsHeckeModule", IsAlgebraObjModule);
-DeclareCategory("IsHeckeSpecht", IsHeckeModule);
+DeclareCategory("IsHeckeSpecht", IsHeckeModule); ##TODO chack naming, maybe replace this to IsSpecht
 DeclareCategory("IsHeckePIM", IsHeckeModule);
 DeclareCategory("IsHeckeSimple", IsHeckeModule); ## Immediate Method -> simple?
 ##
@@ -47,4 +47,10 @@ DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsList
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsAlgebraObjModule]);
 
 DeclareOperation("OrderOfQ",[IsAlgebraObj]);
+DeclareOperation("OrderOfQ",[IsAlgebraObjModule]);
 DeclareOperation("SetOrdering",[IsAlgebraObj,IsFunction]);
+
+DeclareOperation("SpechtPartitions",[IsHeckeSpecht]);
+DeclareOperation("SpechtCoefficients",[IsHeckeSpecht]);
+
+DeclareOperation("ListERegulars",[IsAlgebraObjModule]);

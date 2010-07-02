@@ -243,7 +243,32 @@ InstallMethod(OrderOfQ,"reading access to H.e",[IsAlgebraObj],
   function(H) return H!.e; end
 );
 
+InstallMethod(OrderOfQ,"reading access to x.H.e",[IsAlgebraObjModule],
+  function(x) return x!.H!.e; end
+);
+
 InstallMethod(SetOrdering,"writing access to H.Ordering",
   [IsAlgebraObj,IsFunction],
   function(H,ord) H!.Ordering := ord; end
 );
+
+InstallMethod(SpechtCoefficients,"reading access to S.coeffs",[IsHeckeSpecht],
+  function(S) return S!.coeffs; end
+);
+
+InstallMethod(SpechtPartitions,"reading access to S.parts",[IsHeckeSpecht],
+  function(S) return S!.parts; end
+);
+
+InstallMethod(ListERegulars,[IsAlgebraObjModule],
+  function(x) local e,parts,coeffs,p;
+    e:=x!.H!.e;
+    parts:=x!.parts;
+    coeffs:=x!.coeffs;
+    if e=0 then return parts;
+    elif x=0*x then return [];
+    else return List(Filtered([Length(parts),Length(parts)-1..1],
+           p->IsERegular(e,parts[p])),p->[coeffs[p], parts[p]]);
+    fi;
+  end
+); # ListERegulars
