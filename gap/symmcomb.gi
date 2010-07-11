@@ -39,16 +39,16 @@
 #F Lexicographic ordering on partitions
 ## Lexicographic(mu,nu); -mu and nu are lists
 InstallMethod(
-  Lexicographic,
+  LexicographicOp,
   "for two partitions",
   [IsList,IsList],      
   function(lambda,mu) return lambda=mu or lambda>mu; end
-);
+); # LexicographicOp
 
 #F LengthLexicographic(mu,nu); -mu and nu are lists
 ## By default this is used by DecompositionMatrix().
 InstallMethod(
-  LengthLexicographic,
+  LengthLexicographicOp,
   "for two partitions",
   [IsList,IsList],      
   function(mu,nu)
@@ -57,11 +57,11 @@ InstallMethod(
     else return Length(mu)<Length(nu);
     fi;
   end
-);
+); # LengthLexicographicOp
 
 #F Yet another total order. *** undocumented
 InstallMethod(
-  ReverseDominance,
+  ReverseDominanceOp,
   "for two partitions",
   [IsList,IsList],      
   function(nu,mu) local i, Mu, Nu;
@@ -78,12 +78,12 @@ InstallMethod(
     else return Length(nu)<Length(mu);
     fi;
   end
-);
+); # ReverseDominanceOp
 
 ## dominance ordering: returns true is mu dominates, or equals, nu
-#F Dominance(mu,nu);  -mu and nu are lists
+#F Dominates(mu,nu);  -mu and nu are lists
 InstallMethod(
-  Dominance,
+  DominatesOp,
   "for two partitions",
   [IsList,IsList],      
   function(mu, nu) local i, m, n;
@@ -100,12 +100,12 @@ InstallMethod(
     od;
     return true;
   end
-);
+); # DominatesOp
 
 ## The coonjugate partition to arg.
 #F ConjugatePartition(mu);  -mu is a sequence or a list
 InstallMethod(
-  ConjugatePartition,  
+  ConjugatePartitionOp,  
   "for partition",
   [IsList],      
   function(arg) local part, d, l, dl, x;
@@ -122,14 +122,14 @@ InstallMethod(
     od;
     return d;
   end
-);
+); # ConjugatePartitionOp
 
 #F The Littlewood-Richardson Rule.
 ## the algorithm has (at least), one obvious improvement in that it should
 ## collect like terms using something like H.operations.Collect after wrapping 
 ## on each row of beta.
 InstallMethod(
-  LittlewoodRichardsonRule,
+  LittlewoodRichardsonRuleOp,
   "for two partitions",
   [IsList,IsList],
   function(alpha, beta)
@@ -181,7 +181,7 @@ InstallMethod(
     if alpha=[] or alpha=[0] then return [ beta ];
     elif beta=[] or beta=[0] then return [ alpha ];
     elif Length(beta)*Sum(beta) > Length(alpha)*Sum(alpha) then
-      return LittlewoodRichardsonRule(beta, alpha); 
+      return LittlewoodRichardsonRuleOp(beta, alpha); 
     else
       lrr:=Place(rec(lam:=StructuralCopy(alpha),# partition
                    new:=List(alpha, i->0)),  # new nodes added from this row
@@ -199,27 +199,27 @@ InstallMethod(
       od;
       return List(lrr, x->x.lam);
     fi;
-  end  # LittlewoodRichardsonRule
-);
+  end
+); # LittlewoodRichardsonRuleOp
 
 #F Not used anywhere, but someone might want it. It wouldn't be too hard 
 ## to write something more efficient, but...
 InstallMethod(
-  LittlewoodRichardsonCoefficient,
+  LittlewoodRichardsonCoefficientOp,
   "for three partitions", ##TODO Better description here
   [IsList,IsList,IsList],  
   function(lambda,mu,nu) 
     local x;
   
     if Sum(nu)<>Sum(mu)+Sum(lambda) then return 0;
-    else return Length(Filtered(LittlewoodRichardsonRule(lambda,mu),x->x=nu));
+    else return Length(Filtered(LittlewoodRichardsonRuleOp(lambda,mu),x->x=nu));
     fi;
   end
-);
+); # LittlewoodRichardsonCoefficientOp
 
 #F the inverse Littlewood-Richardson Rule
 InstallMethod(
-  InverseLittlewoodRichardsonRule,
+  InverseLittlewoodRichardsonRuleOp,
   "for partitions",
   [IsList],
   function(alpha)
@@ -300,17 +300,17 @@ InstallMethod(
     invlr[Length(invlr)]:=[alpha,[]];   ## rough hack...
     return invlr;
   end
-);  # Inverse Littlewood-Richardson Rule
+);  # InverseLittlewoodRichardsonRuleOp
 
 #F dimension of a Specht module
 InstallMethod(
-  SpechtDimension,
+  SpechtDimensionOp,
   "for partitions",
   [IsList],
   function(part) local Dim,y;
 
     Dim:=function(mu) local mud, i,j,d;
-      mud:=ConjugatePartition(mu);
+      mud:=ConjugatePartitionOp(mu);
       d:=Factorial(Sum(mu));
       for i in [1..Length(mu)] do
         for j in [1..mu[i]] do
@@ -325,32 +325,32 @@ InstallMethod(
 ); 
 
 InstallMethod(
-  SpechtDimension,
+  SpechtDimensionOp,
   "for Specht modules",
   [IsHeckeSpecht],
   function(S) local coeffs, parts;
 
     coeffs := SpechtCoefficients(S);
     parts := SpechtPartitions(S);
-    return Sum([1..Length(coeffs)], y->coeffs[y]*SpechtDimension(parts[y]));
+    return Sum([1..Length(coeffs)], y->coeffs[y]*SpechtDimensionOp(parts[y]));
   end
-);#SpechtDimension
+); # SpechtDimension
 
 
 ## returns a set of the beta numbers for the partition mu
 InstallMethod(
-  BetaNumbers,
+  BetaNumbersOp,
   "for partitions",
   [IsList],  
   function(mu)
     return mu + [Length(mu)-1, Length(mu)-2..0];
   end
-);
+); # BetaNumbersOp
 
 ## ALREADY AVAILABLE IN GAP4
 ## returns a set of the beta numbers for the partition mu
 ## InstallMethod(
-##   BetaSet,
+##   BetaSetOp,
 ##   [IsList], 
 ##   function(mu)
 ##     if mu=[] then return [0];
@@ -361,7 +361,7 @@ InstallMethod(
 
 ## given a beta set return the corresponding partition
 InstallMethod(
-  PartitionBetaSet,
+  PartitionBetaSetOp,
   "for beta sets",
   [IsList], 
   function(beta) local i;
@@ -372,7 +372,7 @@ InstallMethod(
     fi;
     return Reversed(beta);
   end
-);
+); # PartitionBetaSetOp
 
 
 ## **** undocumented
@@ -380,7 +380,7 @@ InstallMethod(
 ## is returned  
 #F EAbacusRunners(mu);  -mu is a list
 InstallMethod(
-  EAbacusRunners,
+  EAbacusRunnersOp,
   "for an integer and a partition",
   [IsInt,IsList],  
   function(e,mu) local i, j, k, aba, beta;
@@ -389,7 +389,7 @@ InstallMethod(
 
     ## first we find a set of beta numbers for mu; we want an e-multiple
     ## of (strictly) decreasing beta numbers for mu.
-    beta:=BetaNumbers(mu);
+    beta:=BetaNumbersOp(mu);
     
     if Length(beta) mod e <> 0 then ## now add beta numbers back to get 
       i:=-Length(beta) mod e;       ## an e-multiple of beta numbers
@@ -402,17 +402,17 @@ InstallMethod(
     od;
     return aba;
   end 
-); # EAbacusRunners
+); # EAbacusRunnersOp
 
 #F ECore(e,mu), ECore(H,mu); -mu is a sequence or a list
 ##   Find the core of a partition (all partitions are 0-cores).
 InstallMethod(
-	ECore,
+	ECoreOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local core, beta, i, j;
     if e=0 then return mu; fi;  
-    beta:=List(EAbacusRunners(e,mu), i->Length(i));
+    beta:=List(EAbacusRunnersOp(e,mu), i->Length(i));
     beta:=beta - Minimum(beta);  # remove all fully occupied rows
     if Maximum(beta)=0 then return [];
     else
@@ -437,70 +437,70 @@ InstallMethod(
 );
 
 InstallMethod(
-	ECore,
+	ECoreOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return ECore(OrderOfQ(H),mu);
+		return ECoreOp(OrderOfQ(H),mu);
 	end
-); # ECore
+); # ECoreOp
 
 #F True is mu is an e-core. slightly better than the test mu=ECore(e,mu)
 InstallMethod(
-	IsECore,
+	IsECoreOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu)
-		return ForAll(EAbacusRunners(e,mu), r->r=[] or Length(r)=r[1]+1);
+		return ForAll(EAbacusRunnersOp(e,mu),r->r=[] or Length(r)=r[1]+1);
 	end
 );
 
 InstallMethod(
-	IsECore,
+	IsECoreOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return ForAll(EAbacusRunners(OrderOfQ(H),mu), r->r=[] or Length(r)=r[1]+1);
+		return ForAll(EAbacusRunnersOp(OrderOfQ(H),mu),r->r=[] or Length(r)=r[1]+1);
 	end
-); # IsECore
+); # IsECoreOp
 
 ## returns the e-weight of a partition
 #F EWeight(e,mu);  -mu is a sequence or a list
 ## again, a slight improvement on (Sum(mu)-Sum(ECore(e,mu))/e
 InstallMethod(
-	EWeight,
+	EWeightOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu)
 	  if e=0 then return 0;
-    else return Sum(EAbacusRunners(e,mu), r->Sum(r)-Length(r)*(Length(r)-1)/2);
+    else return Sum(EAbacusRunnersOp(e,mu),r->Sum(r)-Length(r)*(Length(r)-1)/2);
     fi;
 	end
 );
 
 InstallMethod(
-	EWeight,
+	EWeightOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu) local e;
-    e:=OrderOfQ(H); ## TODO Design?
+    e:=OrderOfQ(H);
 
 		if e=0 then return 0;
-    else return Sum(EAbacusRunners(e,mu), r->Sum(r)-Length(r)*(Length(r)-1)/2);
+    else return Sum(EAbacusRunnersOp(e,mu),r->Sum(r)-Length(r)*(Length(r)-1)/2);
     fi;
 	end
-); # EWeight
+); # EWeightOp
 
 #F EQuotient(e,mu);  -mu is a sequence or a list
 ## e-quotient of a partition. algorithm based on the "star diagram"
 InstallMethod(
-	EQuotient,
+	EQuotientOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local q, d, i, j, qj, x;
 
     if e=0 then return []; fi;
-    d:=ConjugatePartition(mu);
+    d:=ConjugatePartitionOp(mu);
     q:=List([1..e], j->[]);
     for i in [1..Length(mu)] do
       x:=0;
@@ -515,20 +515,20 @@ InstallMethod(
 );
 
 InstallMethod(
-	EQuotient,
+	EQuotientOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return EQuotient(OrderOfQ(H),mu);
+		return EQuotientOp(OrderOfQ(H),mu);
 	end
-); # EQuotient
+); # EQuotientOp
 
 ## Prints the e-abacus for the partition arg (the number of beads is
 ## divisible by e, and it is the smallest abacus for arg with this
 ## property). Pretty to look at, but useful?
 #P EAbacus(mu);  -mu is a sequence or a list
 InstallMethod(
-	EAbacus,
+	EAbacusOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local i, j, m;
@@ -537,7 +537,7 @@ InstallMethod(
       for j in [1..e] do Print("  ."); od;
       Print("\n\n");
     else
-      mu:=EAbacusRunners(e,mu);
+      mu:=EAbacusRunnersOp(e,mu);
       m:=Maximum(Flat(mu)) + 1; ## TODO unnecessary Flat?
       for i in [0..m] do
         for j in [1..e] do
@@ -553,19 +553,19 @@ InstallMethod(
 );
 
 InstallMethod(
-	EAbacus,
+	EAbacusOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-    EAbacus(OrderOfQ(H),mu);
+    EAbacusOp(OrderOfQ(H),mu);
 	end
-); # EAbacus
+); # EAbacusOp
 
 ## combine a quotient and core to give a partition using abacuses.
 #F CombineEQuotientECore(e,quot,core);  
 ##   <quot> is a list of e-partitions and <core> is a partition.
 InstallMethod(
-	CombineEQuotientECore,
+	CombineEQuotientECoreOp,
 	"for an integer, a list of partition and a partition",
 	[IsInt,IsList,IsList],
 	function(e,q,c) local aba, m, beta, i, j;
@@ -575,8 +575,8 @@ InstallMethod(
             "where <q> must be a list of <e> partitions");
     fi;
 
-    aba:=EAbacusRunners(e,c); # abacus with an e-multiple of runners to which
-                              # we need to add m beads to fit the quotient
+    aba:=EAbacusRunnersOp(e,c); # abacus with an e-multiple of runners to which
+                                # we need to add m beads to fit the quotient
     m:=Maximum(List([1..e], i->Length(q[i])-Length(aba[i])));
     m:=Maximum(m, 0);
     beta:=[];
@@ -601,19 +601,19 @@ InstallMethod(
 );
 
 InstallMethod(
-	CombineEQuotientECore,
+	CombineEQuotientECoreOp,
 	"for an algebra, a list of partition and a partition",
 	[IsAlgebraObj,IsList,IsList],
 	function(H,q,c)
-		return CombineEQuotientECore(OrderOfQ(H),q,c);
+		return CombineEQuotientECoreOp(OrderOfQ(H),q,c);
 	end
-); # CombineEQuotientECore
+); # CombineEQuotientECoreOp
 
 ## true is arg is a ERegular partition
 #F IsERegular(e,mu), IsERegular(H,mu)  -mu is a sequence or a list
 
 InstallMethod(
-	IsERegular,
+	IsERegularOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu)
@@ -626,7 +626,7 @@ InstallMethod(
 ); 
 
 InstallMethod(
-	IsERegular,
+	IsERegularOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu) local e;
@@ -638,12 +638,12 @@ InstallMethod(
       return ForAll([1..Length(mu)-e], i->mu[i]<>mu[i+e]);
     fi;
 	end
-); # IsERegular
+); # IsERegularOp
 
 #F list of the ERegular partitions of n
 ## ??? add support for e-regular partitions of length k ???
 InstallMethod(
-	ERegularPartitions,
+	ERegularPartitionsOp,
 	"for two integers <e> and <n>",
 	[IsInt,IsInt],
 	function(e,n)
@@ -657,7 +657,7 @@ InstallMethod(
 );
 
 InstallMethod(
-	ERegularPartitions,
+	ERegularPartitionsOp,
 	"for an algebra and an integer",
 	[IsAlgebraObj,IsInt],
 	function(H,n) local e;
@@ -670,12 +670,12 @@ InstallMethod(
     e:=e-1;
     return Filtered(Partitions(n),p->ForAll([1..Length(p)-e], i->p[i]<>p[i+e]));
 	end
-); # ERegularPartitions
+); # ERegularPartitionsOp
 
 #P usage: EResidueDiagram(e,mu) or EResidueDiagram(x), the second form
 ## returns the residue daigrams of the e-regular partitions in x
 InstallMethod(
-	EResidueDiagram,
+	EResidueDiagramOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local i, j;
@@ -692,27 +692,27 @@ InstallMethod(
 );
 
 InstallMethod(
-	EResidueDiagram,
+	EResidueDiagramOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		EResidueDiagram(OrderOfQ(H),mu);
+		EResidueDiagramOp(OrderOfQ(H),mu);
 	end
 );
 
 InstallMethod(
-	EResidueDiagram,
+	EResidueDiagramOp,
 	"for a Specht module",
 	[IsHeckeSpecht],
 	function(x) local e, r, rs;
     rs:=ListERegulars(x);
     e:=OrderOfQ(x);
-    if rs=[] or IsInt(rs[1]) then EResidueDiagram(e, rs);
+    if rs=[] or IsInt(rs[1]) then EResidueDiagramOp(e, rs);
     else
       for r in rs do
         if r[1]<>1 then Print(r[1],"*"); fi;
         Print(r[2],"\n");
-        EResidueDiagram(e, r[2]);
+        EResidueDiagramOp(e, r[2]);
       od;
       if Length(rs) > 1 then
         Print("# There are ", Length(rs), " ", e, 
@@ -720,12 +720,12 @@ InstallMethod(
       fi;
     fi;
 	end
-); # EResidueDiagram
+); # EResidueDiagramOp
 
 #F Returns the partion obtained from mu by pushing nodes to the top
 ## of their e-ladders (see [JK]; there the notation is mu^R).
 InstallMethod(
-	ETopLadder,
+	ETopLadderOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local ladder, r, c, C, k;
@@ -751,22 +751,22 @@ InstallMethod(
 );
 
 InstallMethod(
-	ETopLadder,
+	ETopLadderOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return ETopLadder(OrderOfQ(H),mu);
+		return ETopLadderOp(OrderOfQ(H),mu);
 	end
-); # ETopLadder
+); # ETopLadderOp
 
 #P hook lengths in a diagram mod e 
 ## *** undocumented: useful when lookng at the q-Schaper theorem
 InstallMethod( 
-	EHookDiagram, ##TODO Naming?
+	EHookDiagramOp, ##TODO Naming?
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local mud, i, j;
-    mud:=ConjugatePartition(mu);
+    mud:=ConjugatePartitionOp(mu);
     for i in [1..Length(mu)] do
       for j in [1..mu[i]] do
           Print("  ", (mu[i]+mud[j]-i-j+1) mod e);
@@ -777,21 +777,21 @@ InstallMethod(
 );
 
 InstallMethod(
-	EHookDiagram,
+	EHookDiagramOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		EHookDiagram(OrderOfQ(H),mu);
+		EHookDiagramOp(OrderOfQ(H),mu);
 	end
-); # EHookDiagram
+); # EHookDiagramOp
 
 #P hook length diagram
 InstallMethod(
-	HookLengthDiagram,
+	HookLengthDiagramOp,
 	"for an integer and a partition",
 	[IsList],
 	function(mu) local mud, i, j;
-    mud:=ConjugatePartition(mu);
+    mud:=ConjugatePartitionOp(mu);
     for i in [1..Length(mu)] do
       for j in [1..mu[i]] do
         Print(String(mu[i]+mud[j]-i-j+1, 4));
@@ -799,13 +799,13 @@ InstallMethod(
       Print("\n");
     od;
 	end
-); # HookLengthDiagram
+); # HookLengthDiagramOp
 
 #F Returns the numbers of the rows which end in one of Kleshchev's 
 ## "normal nodes" (see [LLT] or one of Kleshchev's papers for a description).
 ##   usage: NormalNodes(H|e, mu [,i]);
 InstallMethod(
-	NormalNodes,
+	NormalNodesOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local normalnodes, res, i, r;
@@ -829,44 +829,44 @@ InstallMethod(
 );
 
 InstallMethod(
-	NormalNodes,
+	NormalNodesOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return NormalNodes(OrderOfQ(H),mu);
+		return NormalNodesOp(OrderOfQ(H),mu);
 	end
 );
 
 InstallMethod(
-	NormalNodes,
+	NormalNodesOp,
 	"for an integer, a partition and a residue",
 	[IsInt,IsList,IsInt],
 	function(e,mu,I)
     if I<0 or I>=e then
       Error("usage: NormalNodes(<e|H>, mu [, I]) where 0 <= I < e\n");
-		else return NormalNodes(e,mu)[I+1];
+		else return NormalNodesOp(e,mu)[I+1];
     fi;
 	end
 );
 
 InstallMethod(
-	NormalNodes,
+	NormalNodesOp,
 	"for an algebra, a partition and a residue",
 	[IsAlgebraObj,IsList,IsInt],
 	function(H,mu,I) local e;
     e:=OrderOfQ(H);
     if I<0 or I>=e then
       Error("usage: NormalNodes(<e|H>, mu [, I]) where 0 <= I < e\n");
-		else return NormalNodes(e,mu)[I+1];
+		else return NormalNodesOp(e,mu)[I+1];
     fi;
 	end
-); # NormalNodes
+); # NormalNodesOp
 
 ## usage: RemoveNormalNodes(H|e, mu, i)
 ## returnsthe partition obtained from <mu> by removing all the normal
 ## nodes of residue <i>.
 InstallMethod(
-	RemoveNormalNodes,
+	RemoveNormalNodesOp,
 	"for an integer, a partition and a residue",
 	[IsInt,IsList,IsInt],
 	function(e,mu,I) local res, i, r;
@@ -892,13 +892,13 @@ InstallMethod(
 );
 
 InstallMethod(
-	RemoveNormalNodes,
+	RemoveNormalNodesOp,
 	"for an algebra, a partition and a residue",
 	[IsAlgebraObj,IsList,IsInt],
 	function(H,mu,I)
-		return RemoveNormalNodes(OrderOfQ(H),mu,I);;
+		return RemoveNormalNodesOp(OrderOfQ(H),mu,I);;
 	end
-); # RemoveNormalNodes
+); # RemoveNormalNodesOp
 
 #F Returns the numbers of the rows which end in one of Kleshchev's 
 ## "good nodes" (see [LLT] or one of Kleshchev's papers for a description).
@@ -910,7 +910,7 @@ InstallMethod(
 ## If <I> is supplied the number of the row containing the unique good node
 ## of residue I is return.
 InstallMethod(
-	GoodNodes,
+	GoodNodesOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local goodnodes, res, i, r;
@@ -934,48 +934,48 @@ InstallMethod(
 );
 
 InstallMethod(
-	GoodNodes,
+	GoodNodesOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return GoodNodes(OrderOfQ(H),mu);
+		return GoodNodesOp(OrderOfQ(H),mu);
 	end
 );
 
 InstallMethod(
-	GoodNodes,
+	GoodNodesOp,
 	"for an integer, a partition and a residue",
 	[IsInt,IsList,IsInt],
 	function(e,mu,I)
     if I<0 or I>=e then
       Error("usage: GoodNodes(<e|H>, mu [, I]) where 0 <= I < e\n");
-		else return GoodNodes(e,mu)[I+1];
+		else return GoodNodesOp(e,mu)[I+1];
     fi;
 	end
 );
 
 InstallMethod(
-	GoodNodes,
+	GoodNodesOp,
 	"for an algebra, a partition and a residue",
 	[IsAlgebraObj,IsList,IsInt],
 	function(H,mu,I) local e;
     e:=OrderOfQ(H);
     if I<0 or I>=e then
       Error("usage: GoodNodes(<e|H>, mu [, I]) where 0 <= I < e\n");
-		else return GoodNodes(e,mu)[I+1];
+		else return GoodNodesOp(e,mu)[I+1];
     fi;
 	end
-); # GoodNodes
+); # GoodNodesOp
 
 #F Given an e-regular partition mu this function returns the corresponding
 ## good node sequence (= path is Kleshchev's e-good partition lattice).
 ##   usage: GoodNodeSequence(e|H, mu);
 InstallMethod(
-	GoodNodeSequence,
+	GoodNodeSequenceOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local goodnodeseq,  row, res, r;
-    if not IsERegular(e,mu) then
+    if not IsERegularOp(e,mu) then
       Error("GoodNodeSequence(<e>,<mu>): <mu> must be <e>-regular\n");
     fi;
     goodnodeseq:=[];
@@ -1007,34 +1007,34 @@ InstallMethod(
 );
 
 InstallMethod(
-	GoodNodeSequence,
+	GoodNodeSequenceOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return GoodNodeSequence(OrderOfQ(H),mu);
+		return GoodNodeSequenceOp(OrderOfQ(H),mu);
 	end
-); # GoodNodeSequence
+); # GoodNodeSequenceOp
 
 #F Returns the list of all good node sequences for the partition <mu>
 InstallMethod(
-	GoodNodeSequences,
+	GoodNodeSequencesOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local r, gnss, nu, s, res;
-    if not IsERegular(e,mu) then
+    if not IsERegularOp(e,mu) then
       Error("GoodNodeSequence(<e>,<mu>): <mu> must be <e>-regular\n");
     fi;
 
     if mu=[1] then gnss:=[ [0] ]; 
     else
       gnss:=[];
-      for r in GoodNodes(e,mu) do
+      for r in GoodNodesOp(e,mu) do
         if r<>fail then
           nu:=StructuralCopy(mu);
           nu[r]:=nu[r]-1;
           if nu[r]=0 then Unbind(nu[r]); fi;
           res:=(mu[r]-r) mod e;
-          for s in GoodNodeSequences(e,nu) do
+          for s in GoodNodeSequencesOp(e,nu) do
             Add(s,res); 
             Add(gnss, s);
           od;
@@ -1046,19 +1046,19 @@ InstallMethod(
 );
 
 InstallMethod(
-	GoodNodeSequences,
+	GoodNodeSequencesOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return GoodNodeSequences(OrderOfQ(H),mu);
+		return GoodNodeSequencesOp(OrderOfQ(H),mu);
 	end
-); # GoodNodeSequences
+); # GoodNodeSequencesOp
 
 #F Given a good node sequence this function returns the corresponding
 ## partition, or fail if the sequence is not a good node sequence.
 ##   usage: GoodNodeSequence(H|e, gns)
 InstallMethod(
-	PartitionGoodNodeSequence,
+	PartitionGoodNodeSequenceOp,
 	"for an integer and a good node sequence",
 	[IsInt,IsList],
 	function(e,gns) local mu, r, i, res, row;
@@ -1084,71 +1084,71 @@ InstallMethod(
 );
 
 InstallMethod(
-	PartitionGoodNodeSequence,
+	PartitionGoodNodeSequenceOp,
 	"for an algebra and a good node sequence",
 	[IsAlgebraObj,IsList],
 	function(H,gns)
-		return PartitionGoodNodeSequence(OrderOfQ(H),gns);
+		return PartitionGoodNodeSequenceOp(OrderOfQ(H),gns);
 	end
-); # PartitionGoodNodeSequence
+); # PartitionGoodNodeSequenceOp
 
 #F GoodNodeLatticePath: returns a path in the good partition lattice
 ## from the empty partition to <mu>.
 InstallMethod(
-	GoodNodeLatticePath,
+	GoodNodeLatticePathOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local gns;
-	  gns:=GoodNodeSequence(e,mu);
-    return List([1..Length(gns)],i->PartitionGoodNodeSequence(e,gns{[1..i]}));
+	  gns:=GoodNodeSequenceOp(e,mu);
+    return List([1..Length(gns)],i->PartitionGoodNodeSequenceOp(e,gns{[1..i]}));
 	end
 );
 
 InstallMethod(
-	GoodNodeLatticePath,
+	GoodNodeLatticePathOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu) local e, gns;
     e:=OrderOfQ(H);
-	  gns:=GoodNodeSequence(e,mu);
-    return List([1..Length(gns)],i->PartitionGoodNodeSequence(e,gns{[1..i]}));
+	  gns:=GoodNodeSequenceOp(e,mu);
+    return List([1..Length(gns)],i->PartitionGoodNodeSequenceOp(e,gns{[1..i]}));
 	end
-); # GoodNodeLatticePath
+); # GoodNodeLatticePathOp
 
 #F GoodNodeLatticePath: returns the list of all paths in the good partition 
 ## lattice from the empty partition to <mu>.
 InstallMethod(
-	GoodNodeLatticePaths,
+	GoodNodeLatticePathsOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local gns;
-	  gns:=GoodNodeSequences(e,mu);
+	  gns:=GoodNodeSequencesOp(e,mu);
     return List(gns, g->List([1..Length(g)],
-              i->PartitionGoodNodeSequence(e,g{[1..i]})));
+              i->PartitionGoodNodeSequenceOp(e,g{[1..i]})));
 	end
 );
 
 InstallMethod(
-	GoodNodeLatticePaths,
+	GoodNodeLatticePathsOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu) local e, gns;
     e:=OrderOfQ(H);
-	  gns:=GoodNodeSequences(e,mu);
+	  gns:=GoodNodeSequencesOp(e,mu);
     return List(gns, g->List([1..Length(g)],
-              i->PartitionGoodNodeSequence(e,g{[1..i]})));
+              i->PartitionGoodNodeSequenceOp(e,g{[1..i]})));
 	end
-); # GoodNodeLatticePaths
+); # GoodNodeLatticePathsOp
 
 #F LatticePathGoodNodeSequence()
 ## Returns the path in the e-good partition lattice corresponding
 ## to the good node sequence <gns>.
 InstallMethod(
-	LatticePathGoodNodeSequence,
+	LatticePathGoodNodeSequenceOp,
 	"for an integer and a good node sequence",
 	[IsInt,IsList],
 	function(e,gns)
-    gns:=List([1..Length(gns)],i->PartitionGoodNodeSequence(e,gns{[1..i]}));
+    gns:=List([1..Length(gns)],i->PartitionGoodNodeSequenceOp(e,gns{[1..i]}));
     if fail in gns then return gns{[1..Position(gns,fail)]};
     else return gns;
     fi;
@@ -1156,17 +1156,17 @@ InstallMethod(
 );
 
 InstallMethod(
-	LatticePathGoodNodeSequence,
+	LatticePathGoodNodeSequenceOp,
 	"for an algebra and a good node sequence",
 	[IsAlgebraObj,IsList],
 	function(H,gns) local e;
     e:=OrderOfQ(H);
-    gns:=List([1..Length(gns)],i->PartitionGoodNodeSequence(e,gns{[1..i]}));
+    gns:=List([1..Length(gns)],i->PartitionGoodNodeSequenceOp(e,gns{[1..i]}));
     if fail in gns then return gns{[1..Position(gns,fail)]};
     else return gns;
     fi;
 	end
-);
+); # LatticePathGoodNodeSequenceOp
 
 #F returns the Mullineux symbol of the <e>-regular partition <mu>
 ##   usage, MullineuxSymbol(<H>|<e>, <mu>)
@@ -1183,7 +1183,7 @@ InstallMethod(
 ##                  5, 3, 1
 ##                  3, 2, 1
 InstallMethod(
-	MullineuxSymbol,
+	MullineuxSymbolOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local betaset, newbetaset, tally, difference,i,ms;
@@ -1225,18 +1225,18 @@ InstallMethod(
 );
 
 InstallMethod(
-	MullineuxSymbol,
+	MullineuxSymbolOp,
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return MullineuxSymbol(OrderOfQ(H),mu);
+		return MullineuxSymbolOp(OrderOfQ(H),mu);
 	end
-); # MullineuxSymbol
+); # MullineuxSymbolOp
 
 #F given a Mullineux Symbol <ms> and an integer <e>, return the corresponding 
 ## <e>-regular partition.
 InstallMethod(
-	PartitionMullineuxSymbol,
+	PartitionMullineuxSymbolOp,
 	"for an integer and a mullinex symbol",
 	[IsInt,IsList],
 	function(e,Ms) local ms, betaset, i,tally,betaN;
@@ -1271,23 +1271,23 @@ InstallMethod(
       if tally>0 or ms[1][i]>0 then return fail; fi;
       i:=i-1;
     od; ## while
-    return PartitionBetaSet(betaset);
+    return PartitionBetaSetOp(betaset);
 	end
 );
 
 InstallMethod(
-	PartitionMullineuxSymbol,
+	PartitionMullineuxSymbolOp,
 	"for an algebra and a mullinex symbol",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		return PartitionMullineuxSymbol(OrderOfQ(H),mu);
+		return PartitionMullineuxSymbolOp(OrderOfQ(H),mu);
 	end
-); # PartitionMullineuxSymbol
+); # PartitionMullineuxSymbolOp
 
 #F removes the rim hook from mu which corresponding to the 
 ## (row,cols)-th hook.
 InstallMethod(
-	RemoveRimHook,
+	RemoveRimHookOp,
 	"for a partition, two integers and another partition",
 	[IsList,IsInt,IsInt,IsList],
   function(mu,row,col,mud) local r, c, x, nx;
@@ -1307,19 +1307,19 @@ InstallMethod(
 );
 
 InstallMethod(
-	RemoveRimHook,
-	"for a partition, two integers and another partition",
+	RemoveRimHookOp,
+	"for a partition and two integers",
 	[IsList,IsInt,IsInt],
   function(mu,row,col)
-    return RemoveRimHook(mu,row,col,ConjugatePartition(mu));
+    return RemoveRimHookOp(mu,row,col,ConjugatePartitionOp(mu));
   end
-); # RemoveRimHook
+); # RemoveRimHookOp
 
 #F Returns the partition obtained from mu by adding a rim hook with 
 ## foot in row <row>, of length of length <h>. The empty partition []
 ## is returned if the resulting diagram is not a partition.
 InstallMethod(
-	AddRimHook,
+	AddRimHookOp,
 	"for a partition and two integers",
 	[IsList,IsInt,IsInt],
   function(nu, row, h) local r;
@@ -1342,5 +1342,5 @@ InstallMethod(
     fi;
     return [nu, row - r]; ## TODO is here a flat missing
   end
-); # AddRimHook
+); # AddRimHookOp
 

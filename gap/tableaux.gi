@@ -207,7 +207,7 @@ InstallMethod(SemiStandardTableaux, [IsList,IsList],
     fi;
 
     ## no semi-standard nu-tableau with content mu
-    if Dominance(mu, nu) then    
+    if Dominates(mu, nu) then    
       if mu<>nu then return [];
       else return [Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)))];
       fi;
@@ -226,7 +226,7 @@ InstallMethod(SemiStandardTableaux, [IsList],
 
     ss:=[];
     for mu in Partitions(Sum(nu)) do
-      if Dominance(mu, nu) then
+      if Dominates(mu, nu) then
         if mu = nu then
           Append(ss,
               [ Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)) )]);
