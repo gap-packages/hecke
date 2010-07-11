@@ -1,81 +1,51 @@
+MakeDispatcherFunc("Lexicographic", [[IsList]],[2],[2]);
+MakeDispatcherFunc("LengthLexicographic", [[IsList]],[2],[2]);
+MakeDispatcherFunc("ReverseDominance", [[IsList]],[2],[2]);
+MakeDispatcherFunc("Dominates", [[IsList]],[2],[2]);
 
-DeclareOperation("Lexicographic", [IsList,IsList]);
-DeclareOperation("LengthLexicographic", [IsList,IsList]);
-DeclareOperation("ReverseDominance", [IsList,IsList]);
-DeclareOperation("Dominance", [IsList,IsList]);
+MakeDispatcherFunc("ConjugatePartition", [[]],[1],[1]);
 
-DeclareOperation("ConjugatePartition", [IsList]);
+MakeDispatcherFunc("LittlewoodRichardsonRule", [[IsList]],[2],[2]);
+MakeDispatcherFunc("LittlewoodRichardsonCoefficient", [[IsList,IsList]],[3],[3]);
+MakeDispatcherFunc("InverseLittlewoodRichardsonRule", [[]],[1],[1]);
 
-DeclareOperation("LittlewoodRichardsonRule", [IsList,IsList]);
-DeclareOperation("LittlewoodRichardsonCoefficient", [IsList,IsList,IsList]);
-DeclareOperation("InverseLittlewoodRichardsonRule", [IsList]);
+MakeDispatcherFunc("SpechtDimension", [[],[IsHeckeSpecht]],[1,0],[1,1]);
 
-DeclareOperation("SpechtDimension", [IsHeckeSpecht]);
-DeclareOperation("SpechtDimension", [IsList]);
-
-DeclareOperation("BetaNumbers", [IsList]);
+MakeDispatcherFunc("BetaNumbers", [[]],[1],[1]);
 ## ALREADY AVAILABLE IN GAP4
-## DeclareOperation("BetaSet", [IsList]);
-DeclareOperation("PartitionBetaSet", [IsList]);
+## MakeDispatcherFunc("BetaSet", [],1,1);
+MakeDispatcherFunc("PartitionBetaSet", [[]],[1],[1]);
 
-DeclareOperation("EAbacusRunners", [IsInt,IsList]);
-DeclareOperation("ECore",[IsInt,IsList]);
-DeclareOperation("ECore",[IsAlgebraObj,IsList]);
-DeclareOperation("IsECore",[IsInt,IsList]);
-DeclareOperation("IsECore",[IsAlgebraObj,IsList]);
-DeclareOperation("EWeight",[IsInt,IsList]);
-DeclareOperation("EWeight",[IsAlgebraObj,IsList]);
-DeclareOperation("EQuotient",[IsInt,IsList]);
-DeclareOperation("EQuotient",[IsAlgebraObj,IsList]);
-DeclareOperation("EAbacus",[IsInt,IsList]);
-DeclareOperation("EAbacus",[IsAlgebraObj,IsList]);
-DeclareOperation("CombineEQuotientECore",[IsInt,IsList,IsList]);
-DeclareOperation("CombineEQuotientECore",[IsAlgebraObj,IsList,IsList]);
-DeclareOperation("IsERegular",[IsInt,IsList]);
-DeclareOperation("IsERegular",[IsAlgebraObj,IsList]);
-DeclareOperation("ERegularPartitions",[IsInt,IsInt]);
-DeclareOperation("ERegularPartitions",[IsAlgebraObj,IsInt]);
+MakeDispatcherFunc("EAbacusRunners", [[IsInt]],[2],[2]);
+MakeDispatcherFunc("ECore",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("IsECore",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("EWeight",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("EQuotient",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("EAbacus",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("CombineEQuotientECore",[[IsInt,IsList],[IsAlgebraObj,IsList]],[3,3],[3,3]);
+MakeDispatcherFunc("IsERegular",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("ERegularPartitions",[[IsInt,IsInt],[IsAlgebraObj,IsInt]],[0,0],[2,2]);
 
-DeclareOperation("EResidueDiagram",[IsInt,IsList]);
-DeclareOperation("EResidueDiagram",[IsAlgebraObj,IsList]);
-DeclareOperation("EResidueDiagram",[IsHeckeSpecht]);
+MakeDispatcherFunc("EResidueDiagram",[[IsInt],[IsAlgebraObj],[IsHeckeSpecht]],[2,2,0],[2,2,1]);
 
-DeclareOperation("ETopLadder",[IsInt,IsList]);
-DeclareOperation("ETopLadder",[IsAlgebraObj,IsList]);
-DeclareOperation("EHookDiagram",[IsInt,IsList]);
-DeclareOperation("EHookDiagram",[IsAlgebraObj,IsList]);
+MakeDispatcherFunc("ETopLadder",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("EHookDiagram",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
 
-DeclareOperation("HookLengthDiagram",[IsList]);
+MakeDispatcherFunc("HookLengthDiagram",[[]],[1],[1]);
 
-DeclareOperation("NormalNodes",[IsInt,IsList]);
-DeclareOperation("NormalNodes",[IsAlgebraObj,IsList]);
-DeclareOperation("NormalNodes",[IsInt,IsList,IsInt]);
-DeclareOperation("NormalNodes",[IsAlgebraObj,IsList,IsInt]);
-DeclareOperation("RemoveNormalNodes",[IsInt,IsList,IsInt]);
-DeclareOperation("RemoveNormalNodes",[IsAlgebraObj,IsList,IsInt]);
-DeclareOperation("GoodNodes",[IsInt,IsList]);
-DeclareOperation("GoodNodes",[IsAlgebraObj,IsList]);
-DeclareOperation("GoodNodes",[IsInt,IsList,IsInt]);
-DeclareOperation("GoodNodes",[IsAlgebraObj,IsList,IsInt]);
-DeclareOperation("GoodNodeSequence",[IsInt,IsList]);
-DeclareOperation("GoodNodeSequence",[IsAlgebraObj,IsList]);
-DeclareOperation("GoodNodeSequences",[IsInt,IsList]);
-DeclareOperation("GoodNodeSequences",[IsAlgebraObj,IsList]);
-DeclareOperation("PartitionGoodNodeSequence",[IsInt,IsList]);
-DeclareOperation("PartitionGoodNodeSequence",[IsAlgebraObj,IsList]);
-DeclareOperation("GoodNodeLatticePath",[IsInt,IsList]);
-DeclareOperation("GoodNodeLatticePath",[IsAlgebraObj,IsList]);
-DeclareOperation("GoodNodeLatticePaths",[IsInt,IsList]);
-DeclareOperation("GoodNodeLatticePaths",[IsAlgebraObj,IsList]);
-DeclareOperation("LatticePathGoodNodeSequence",[IsInt,IsList]);
-DeclareOperation("LatticePathGoodNodeSequence",[IsAlgebraObj,IsList]);
+MakeDispatcherFunc("NormalNodes",[[IsInt],[IsAlgebraObj],[IsInt,IsInt],[IsAlgebraObj,IsInt]],[2,2,2,2],[2,2,3,3]);
+MakeDispatcherFunc("RemoveNormalNodes",[[IsInt,IsInt],[IsAlgebraObj,IsInt]],[2,2],[3,3]);
+MakeDispatcherFunc("GoodNodes",[[IsInt],[IsAlgebraObj],[IsInt,IsInt],[IsAlgebraObj,IsInt]],[2,2,2,2],[2,2,3,3]);
+MakeDispatcherFunc("GoodNodeSequence",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("GoodNodeSequences",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("PartitionGoodNodeSequence",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("GoodNodeLatticePath",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("GoodNodeLatticePaths",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("LatticePathGoodNodeSequence",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
 
-DeclareOperation("MullineuxSymbol",[IsInt,IsList]);
-DeclareOperation("MullineuxSymbol",[IsAlgebraObj,IsList]);
-DeclareOperation("PartitionMullineuxSymbol",[IsInt,IsList]);
-DeclareOperation("PartitionMullineuxSymbol",[IsAlgebraObj,IsList]);
+MakeDispatcherFunc("MullineuxSymbol",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
+MakeDispatcherFunc("PartitionMullineuxSymbol",[[IsInt],[IsAlgebraObj]],[2,2],[2,2]);
 
-DeclareOperation("RemoveRimHook",[IsList,IsInt,IsInt,IsList]);
-DeclareOperation("RemoveRimHook",[IsList,IsInt,IsInt]);
-DeclareOperation("AddRimHook",[IsList,IsInt,IsInt]);
+MakeDispatcherFunc("RemoveRimHook",[[IsInt,IsInt],[IsList,IsInt,IsInt]],[1,4],[3,4]);
+MakeDispatcherFunc("AddRimHook",[[IsInt,IsInt]],[1],[3]);
 
