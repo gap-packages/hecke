@@ -17,18 +17,22 @@
 #######################################################################
 
 InstallMethod(FoldLeft,[IsFunction,IsObject,IsList],
-  function(f,i,l)
-    if l = [] then return i;
-    else return FoldLeft(f,f(i,l[1]),l{[2..Length(l)]});
-    fi;
+  function(f,i,l) local acc, x;
+    acc := i;
+    for x in l do
+      acc := f(acc,x);
+    od;
+    return acc;
   end
 );
 
 InstallMethod(FoldAfterMapLeft,[IsFunction,IsFunction,IsObject,IsList],
-  function(f,g,i,l)
-    if l = [] then return i;
-    else return FoldAfterMapLeft(f,g,f(i,g(l[1])),l{[2..Length(l)]});
-    fi;
+  function(f,g,i,l) local acc, x;
+    acc := i;
+    for x in l do
+      acc := f(acc,g(x));
+    od;
+    return acc;
   end
 );
 
