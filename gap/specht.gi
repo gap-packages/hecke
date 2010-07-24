@@ -272,3 +272,217 @@ InstallMethod(ListERegulars,[IsAlgebraObjModule],
     fi;
   end
 ); # ListERegulars
+
+## MODULES #####################################################################
+InstallMethod(Module,[IsAlgebraObj,IsString,IsList,IsList],
+  function(H,m,c,p)
+    local module;
+    ## TODO: Argument tests!?
+    module := rec(H:=H,module:=m,coeffs:=c,parts:=p);
+
+    if m = "S" and IsHecke(H) then Objectify(HeckeSpechtType,module);
+    elif m = "P" and IsHecke(H) then Objectify(HeckePIMType,module);
+    elif m = "D" and IsHecke(H) then Objectify(HeckeSimpleType,module);
+    elif m = "Sq" and IsHecke(H) then Objectify(HeckeSpechtFockType,module);
+    elif m = "Pq" and IsHecke(H) then Objectify(HeckePIMFockType,module);
+    elif m = "Dq" and IsHecke(H) then Objectify(HeckeSimpleFockType,module);
+    fi;
+
+    return module;
+  end
+);
+
+InstallMethod(Module,[IsAlgebraObj,IsString,IsInt,IsList],
+  function(H,m,c,p)
+    return Module(H,m,[c],[p]);
+  end
+);
+
+InstallMethod(Module,[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList],
+  function(H,m,c,p)
+    return Module(H,m,[c],[p]);
+  end
+);
+
+## Takes two lists, one containing coefficients and the other the
+## corresponding partitions, and orders them lexicogrphcailly collecting
+## like terms on the way. We use a variation on quicksort which is
+## induced by the lexicographic order (if parts contains partitions of
+## different integers this can lead to an error - which we don't catch).
+InstallMethod(Collect,[IsAlgebraObj,IsString,IsList,IsList],
+  function(H, module, coeffs, parts)
+    local newx, i, Place, Unplace, places;
+
+    ## inserting parts[i] into places. if parts[i]=[p1,p2,...] then
+    ## we insert it into places at places[p1][[p2][...] stopping
+    ## at the fist empty position (say places[p1], or places[p1][p2]
+    ## etc.). Here we are trying to position parts[i] at
+    ## places[p1]...[pd]. Actually, we just insert i rather than
+    ## parts[i] and if we find that parts[i]=parts[j] for some j then
+    ## we set coeffs[i]:=coeffs[i]+coeffs[j] and don't place j.
+    Place:=function(i, places, d) local t;
+      if IsInt(places) then
+        t:=places;
+        if parts[t]=parts[i] then coeffs[t]:=coeffs[t]+coeffs[i];
+        else
+          places:=[];
+          places[parts[t][d]]:=t;
+          if parts[i][d]<>parts[t][d] then places[parts[i][d]]:=i;
+          else places:=Place(i, places, d);
+          fi;
+        fi;
+      elif places=[] or not IsBound(places[parts[i][d]]) then  
+        # must be a list
+        places[parts[i][d]]:=i;
+      else places[parts[i][d]]:=Place(i, places[parts[i][d]], d+1);
+      fi;
+      return places;
+    end;
+
+    Unplace:=function(places) local p, newp, np;
+      newp:=[[],[]];
+      for p in places do
+        if IsInt(p) then if coeffs[p]<>0*coeffs[p] then
+          Add(newp[1], coeffs[p]);
+          Add(newp[2], StructuralCopy(parts[p])); fi;
+        else
+          np:=Unplace(p);
+          Append(newp[1], np[1]);
+          Append(newp[2], np[2]);
+        fi;
+      od;
+      return newp;
+    end;
+
+   if parts=[] then return Module(H,module,0,[]);
+   elif Length(parts)=1 then return Module(H,module,coeffs,parts);
+   else places:=[];
+      for i in [1..Length(parts)] do places:=Place(i, places, 1); od;
+      newx:=Unplace(places);
+      if newx=[[],[]] then return Module(H,module,0,[]);
+      else return Module(H,module,newx[1],newx[2]);
+      fi;
+    fi;
+  end  ## H.operations.Collect
+);
+
+## ARITHMETICS #################################################################
+InstallMethod(\+,[IsAlgebraObjModule,IsAlgebraObjModule],
+  function(a,b)
+    local i, j, ab, x;
+    
+    if a=fail or b=fail then return false;
+    elif a=0*a then return b; 
+    elif b=0*b then return a; 
+    elif a!.H<>b!.H then 
+      Error("modules belong to different Grothendieck rings");
+    fi;
+
+    if a!.module<>b!.module then # only convert to Specht modules if different
+      if Length(a!.module) <> Length(b!.module) then
+        Error("AddModule(<a>,<b>): can only add modules of same type.");
+      fi;
+      a:=a.operations.S(a,false);  #TODO
+      b:=b.operations.S(b,false);  #TODO
+      if a=fail or b=fail then return fail;fi;
+    fi;
+
+    ## profiling shows _convincingly_ that the method used below to add
+    ## a and b is faster than using SortParallel or H.operations.Collect.
+    ab:=[[],[]];
+    i:=1; j:=1;
+    while i <=Length(a!.parts) and j <=Length(b!.parts) do
+      if a!.parts[i]=b!.parts[j] then
+        x:=a!.coeffs[i]+b!.coeffs[j];
+        if x<>0*x then 
+          Add(ab[1],x); 
+          Add(ab[2], a!.parts[i]); 
+        fi;
+        i:=i+1; j:=j+1;
+      elif a!.parts[i] < b!.parts[j] then
+        if a!.coeffs[i]<>0*a!.coeffs[i] then 
+          Add(ab[1], a!.coeffs[i]);
+          Add(ab[2], a!.parts[i]); 
+        fi;
+        i:=i+1;
+      else
+        if b!.coeffs[j]<>0*b!.coeffs[j] then 
+          Add(ab[1], b!.coeffs[j]);
+          Add(ab[2], b!.parts[j]); 
+        fi;
+        j:=j+1;
+      fi;
+    od;
+    if i <=Length(a!.parts) then 
+      Append(ab[1], a!.coeffs{[i..Length(a!.coeffs)]});
+      Append(ab[2], a!.parts{[i..Length(a!.parts)]});
+    elif j <=Length(b!.parts) then 
+      Append(ab[1], b!.coeffs{[j..Length(b!.coeffs)]});
+      Append(ab[2], b!.parts{[j..Length(b!.parts)]});
+    fi;
+    if ab=[[],[]] then ab:=[ [0],[[]] ]; fi;
+    return Module(a!.H, a!.module, ab[1], ab[2]);
+  end
+); # AddModules
+
+InstallMethod(\-,[IsAlgebraObjModule,IsAlgebraObjModule],
+  function(a,b) 
+    if a=fail or b=fail then return fail;
+    else 
+      b:=StructuralCopy(b); 
+      b!.coeffs:=-b!.coeffs;
+      return a+b; 
+    fi;
+  end
+); # SubModules
+
+InstallMethod(\*,[IsScalar,IsHeckeSpecht],
+  function(n,b)
+    if n = 0 
+    then return Module(b!.H, b!.module, 0, []);
+    else return Module(b!.H, b!.module, n*b!.coeffs, b!.parts);
+    fi;
+  end
+);
+
+InstallMethod(\*,[IsHeckeSpecht,IsScalar],
+  function(a,n)
+    if n = 0 
+    then return Module(a!.H, a!.module, 0, []);
+    else return Module(a!.H, a!.module, n*a!.coeffs, a!.parts);
+    fi;
+  end
+);
+
+InstallMethod(\*,[IsHeckeSpecht,IsHeckeSpecht],
+  function(a,b) local x, y, ab, abcoeff, xy, z;
+    if a=fail or b=fail then return false;
+    elif a!.H<>b!.H then 
+      Error("modules belong to different Grothendieck rings");
+    fi;
+    ## a:=a.operations.S(a,false); # TODO Reconsider?
+    ab:=[[],[]];
+    for x in [1..Length(a!.parts)] do
+      for y in [1..Length(b!.parts)] do
+        abcoeff:=a!.coeffs[x]*b!.coeffs[y];
+        if abcoeff<>0*abcoeff then
+          z:=LittlewoodRichardsonRule(a!.parts[x], b!.parts[y]);
+          Append(ab[1], List(z, xy->abcoeff));
+          Append(ab[2], z);
+        fi;
+      od;
+    od;
+    if ab=[] then return Module(a!.H, a!.module, 0, []);
+    else return Collect(b!.H, b!.module, ab[1], ab[2]); #TODO
+    fi;
+  end  # MultiplyModules
+); # MulModules
+
+InstallMethod(\/,[IsAlgebraObjModule,IsScalar],
+  function(b,n) local x;
+    if n=0 then Error("can't divide by 0!\n");
+    else return Module(b!.H, b!.module, b!.coeffs/n, b!.parts);
+    fi;
+  end
+); # DivModules
+

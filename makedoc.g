@@ -6,9 +6,9 @@
 
 RequirePackage("GAPDoc");
 
-MakeGAPDocDoc("doc", "leer", [], "leer");
+MakeGAPDocDoc("doc", "specht", [], "specht");
 
-GAPDocManualLab("leer");
+GAPDocManualLab("specht");
 
 quit;
 
