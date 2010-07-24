@@ -46,7 +46,7 @@ Version := "3.0",
 # 
 ArchiveURL := Concatenation( 
   "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/",
-  "leer/leer"),
+  "specht/specht"),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -239,7 +239,7 @@ PackageDoc := rec(
   LongTitle := "leer - another try",
   # Should this help book be autoloaded when GAP starts up? This should
   # usually be 'true', otherwise say 'false'. 
-  Autoload  := false
+  Autoload  := true
 ),
 
 
@@ -295,7 +295,7 @@ BannerString := Concatenation(
 ##  started.  This should usually be 'false'. Say 'true' only if your package 
 ##  provides some improvements of the GAP library which are likely to enhance 
 ##  the overall system performance for many users.
-Autoload := false,
+Autoload := true,
 
 ##  *Optional*, but recommended: path relative to package root to a file which 
 ##  contains as many tests of the package functionality as sensible.

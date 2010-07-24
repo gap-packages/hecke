@@ -1,3 +1,21 @@
+#######################################################################
+##  SPECHT - specht.g : the kernel of SPECHT                         ##
+##                                                                   ##
+##     A GAP package for calculating the decomposition numbers of    ##
+##     Hecke algebras of type A (over fields of characteristic       ##
+##     zero). The functions provided are primarily combinatorial in  ##
+##     nature. Many of the combinatorial tools from the (modular)    ##
+##     representation theory of the symmetric groups appear in the   ##
+##     package.                                                      ##
+##                                                                   ##
+##     These programs, and the enclosed libraries, are distributed   ##
+##     under the usual licensing agreements and conditions of GAP.   ##
+##                                                                   ##
+##     Dmitriy Traytel                                               ##
+##     (heavily using the GAP3-version by Andrew Mathas)             ##
+##                                                                   ##
+#######################################################################
+
 BindGlobal("AlgebraObjFamily", NewFamily("AlgebraObjFamily"));
 DeclareCategory("IsAlgebraObj", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsAlgebraObjModule", IsComponentObjectRep);
@@ -14,18 +32,27 @@ BindGlobal("SchurType", NewType(AlgebraObjFamily, IsSchur));
 BindGlobal("SchurDecompositionMatrixType", NewType(AlgebraObjFamily, IsSchurDecompositionMatrix));
 
 DeclareCategory("IsHeckeModule", IsAlgebraObjModule);
-DeclareCategory("IsHeckeSpecht", IsHeckeModule); ##TODO chack naming, maybe replace this to IsSpecht
+DeclareCategory("IsHeckeSpecht", IsHeckeModule);
 DeclareCategory("IsHeckePIM", IsHeckeModule);
-DeclareCategory("IsHeckeSimple", IsHeckeModule); ## Immediate Method -> simple?
+DeclareCategory("IsHeckeSimple", IsHeckeModule);
+##
+DeclareCategory("IsFockModule", IsAlgebraObjModule);
+DeclareCategory("IsFockSpecht", IsFockModule);
+DeclareCategory("IsFockPIM", IsFockModule);
+DeclareCategory("IsFockSimple", IsFockModule);
 ##
 DeclareCategory("IsSchurModule", IsAlgebraObjModule);
 DeclareCategory("IsSchurWeyl", IsSchurModule);
 DeclareCategory("IsSchurPIM", IsSchurModule);
-DeclareCategory("IsSchurSimple", IsSchurModule); ## Immediate Method -> simple?
+DeclareCategory("IsSchurSimple", IsSchurModule);
 
 BindGlobal("HeckeSpechtType", NewType(AlgebraObjFamily, IsHeckeSpecht));
 BindGlobal("HeckePIMType", NewType(AlgebraObjFamily, IsHeckePIM));
 BindGlobal("HeckeSimpleType", NewType(AlgebraObjFamily, IsHeckeSimple));
+##
+BindGlobal("HeckeSpechtFockType", NewType(AlgebraObjFamily, IsFockSpecht));
+BindGlobal("HeckePIMFockType", NewType(AlgebraObjFamily, IsFockPIM));
+BindGlobal("HeckeSimpleFockType", NewType(AlgebraObjFamily, IsFockSimple));
 ##
 BindGlobal("SchurWeylType", NewType(AlgebraObjFamily, IsSchurWeyl));
 BindGlobal("SchurPIMType", NewType(AlgebraObjFamily, IsSchurPIM));
@@ -40,6 +67,19 @@ DeclareOperation("Schur", [IsInt]);
 DeclareOperation("Schur", [IsInt,IsPrime]);
 #  DeclareOperation("Schur", [IsInt], , );
 #  DeclareOperation("Schur", [IsInt], , );
+
+
+DeclareOperation("Module",[IsAlgebraObj,IsString,IsInt,IsList]);
+DeclareOperation("Module",[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList]);
+DeclareOperation("Module",[IsAlgebraObj,IsString,IsList,IsList]);
+DeclareOperation("Collect",[IsAlgebraObj,IsString,IsList,IsList]);
+
+DeclareOperation("\+",[IsAlgebraObjModule,IsAlgebraObjModule]);
+DeclareOperation("\*",[IsAlgebraObjModule,IsAlgebraObjModule]);
+DeclareOperation("\*",[IsScalar,IsAlgebraObjModule]);
+DeclareOperation("\*",[IsAlgebraObjModule,IsScalar]);
+DeclareOperation("\-",[IsAlgebraObjModule,IsAlgebraObjModule]);
+DeclareOperation("\/",[IsAlgebraObjModule,IsScalar]);
 
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsList]);
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsAlgebraObjModule]);
