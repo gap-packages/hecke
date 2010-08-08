@@ -68,23 +68,32 @@ DeclareOperation("Schur", [IsInt,IsPrime]);
 #  DeclareOperation("Schur", [IsInt], , );
 #  DeclareOperation("Schur", [IsInt], , );
 
+DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsList]);
+DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsAlgebraObjModule]);
+DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsList]);
+DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsAlgebraObjModule]);
 
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsInt,IsList]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsList,IsList]);
 DeclareOperation("Collect",[IsAlgebraObj,IsString,IsList,IsList]);
 
+DeclareOperation("MakeSpecht",[IsAlgebraObjModule,IsBool]);
+DeclareOperation("MakePIM",[IsAlgebraObjModule,IsBool]);
+DeclareOperation("MakeSimple",[IsAlgebraObjModule,IsBool]);
+
+DeclareOperation("InnerProduct",[IsAlgebraObjModule,IsAlgebraObjModule]);
+DeclareOperation("Coefficient",[IsAlgebraObjModule,IsList]);
+DeclareOperation("PositiveCoefficients",[IsAlgebraObjModule]);
+DeclareOperation("IntegralCoefficients",[IsAlgebraObjModule]);
+
+DeclareOperation("\=",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\+",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\*",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\*",[IsScalar,IsAlgebraObjModule]);
 DeclareOperation("\*",[IsAlgebraObjModule,IsScalar]);
 DeclareOperation("\-",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\/",[IsAlgebraObjModule,IsScalar]);
-
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsList]);
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsAlgebraObjModule]);
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsList]);
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsAlgebraObjModule]);
 
 DeclareOperation("OrderOfQ",[IsAlgebraObj]);
 DeclareOperation("OrderOfQ",[IsAlgebraObjModule]);

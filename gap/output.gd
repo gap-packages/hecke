@@ -19,3 +19,4 @@
 DeclareOperation("ModuleString",[IsAlgebraObjModule,IsBool]);
 DeclareOperation("LabelPartition",[IsList]);
 DeclareOperation("StringPartition",[IsList]);
+DeclareOperation("TightStringList",[IsList]);

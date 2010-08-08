@@ -215,7 +215,7 @@
 
 InstallMethod(
   Specht,
-  "generates a Hecke-Algebra object",
+  "generate a Hecke-Algebra object",
   [IsInt],
   function(e)
     local H;
@@ -260,7 +260,9 @@ InstallMethod(SpechtPartitions,"reading access to S.parts",[IsHeckeSpecht],
   function(S) return S!.parts; end
 );
 
-InstallMethod(ListERegulars,[IsAlgebraObjModule],
+#P returns a list of the e-regular partitions occurring in x
+InstallMethod(ListERegulars,"e-regular partitions of a module", 
+  [IsAlgebraObjModule],
   function(x) local e,parts,coeffs,p;
     e:=x!.H!.e;
     parts:=x!.parts;
@@ -274,7 +276,7 @@ InstallMethod(ListERegulars,[IsAlgebraObjModule],
 ); # ListERegulars
 
 ## MODULES #####################################################################
-InstallMethod(Module,[IsAlgebraObj,IsString,IsList,IsList],
+InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
   function(H,m,c,p)
     local module;
     ## TODO: Argument tests!?
@@ -292,13 +294,13 @@ InstallMethod(Module,[IsAlgebraObj,IsString,IsList,IsList],
   end
 );
 
-InstallMethod(Module,[IsAlgebraObj,IsString,IsInt,IsList],
+InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsInt,IsList],
   function(H,m,c,p)
     return Module(H,m,[c],[p]);
   end
 );
 
-InstallMethod(Module,[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList],
+InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList],
   function(H,m,c,p)
     return Module(H,m,[c],[p]);
   end
@@ -309,7 +311,7 @@ InstallMethod(Module,[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList],
 ## like terms on the way. We use a variation on quicksort which is
 ## induced by the lexicographic order (if parts contains partitions of
 ## different integers this can lead to an error - which we don't catch).
-InstallMethod(Collect,[IsAlgebraObj,IsString,IsList,IsList],
+InstallMethod(Collect,"TODO",[IsAlgebraObj,IsString,IsList,IsList],
   function(H, module, coeffs, parts)
     local newx, i, Place, Unplace, places;
 
@@ -366,8 +368,81 @@ InstallMethod(Collect,[IsAlgebraObj,IsString,IsList,IsList],
   end  ## H.operations.Collect
 );
 
+## MODULE CONVERSION ###########################################################
+
+## Finally the conversion functions S(), P() and D(). All take
+## a linear combination of Specht modules and return corresponding
+## linear combinations of Specht, indecomposables, and simples resp.
+## If they have a problem they return false and print an error
+## message unless silent=true.
+InstallMethod(MakeSpecht,"S()->S()",[IsHeckeSpecht,IsBool],
+  function(x,silent) return x; end
+);
+
+## Here I only allow for linear combinations of projectives which 
+## have non-negative coefficients; the reason for this is that I
+## can't see how to do it otherwise. The problem is that in the
+## Grothendieck ring there are many ways to write a given linear
+## combination of Specht modules (or PIMs).
+InstallMethod(MakeSpecht,"S()->P()",[IsHeckeSpecht,IsBool],
+  function(x,silent) return x; end ## FIXME
+);
+
+InstallMethod(MakeSpecht,"S()->D()",[IsHeckeSpecht,IsBool],
+  function(x,silent) return x; end ## FIXME
+);
+
+## The P->S functions are quite involved.
+   
+#F Writes x, which is a sum of indecomposables, as a sum of S(nu)'s if 
+## possible. We first check to see if the decomposition matrix for x is
+## stored somewhere, and if not we try to calculate what we need. If we
+## can't do this we return false.
+InstallMethod(MakeSpecht,"P()->S()",[IsHeckePIM,IsBool],
+  function(x,silent) return x; end ## FIXME
+);
+
+InstallMethod(MakeSpecht,"P()->P()",[IsHeckePIM,IsBool],
+  function(x,silent) return x; end
+);
+
+InstallMethod(MakeSpecht,"P()->D()",[IsHeckePIM,IsBool],
+    function(x,silent)
+      x:=MakeSpecht(x,silent);
+      if x=fail then return x;
+      else return MakeSimple(x,silent); 
+      fi;
+    end
+);
+
+#F Writes D(mu) as a sum of S(nu)'s if possible. We first check to see
+## if the decomposition matrix for Sum(mu) is stored in the library, and
+## then try to calculate it directly. If we are unable to do this either
+## we return false.
+InstallMethod(MakeSpecht,"D()->S()",[IsHeckeSimple,IsBool],
+  function(x,silent) return x; end ## FIXME
+);
+
+InstallMethod(MakeSpecht,"D()->P()",[IsHeckeSimple,IsBool],
+  function(x,silent) 
+      x:=MakeSpecht(x,silent);
+      if x=fail then return x;
+      else return MakePIM(x,silent);
+      fi;
+    end
+);
+
+InstallMethod(MakeSpecht,"D()->D()",[IsHeckeSimple,IsBool],
+  function(x,silent) return x; end
+);
+
 ## ARITHMETICS #################################################################
-InstallMethod(\+,[IsAlgebraObjModule,IsAlgebraObjModule],
+InstallMethod(\=,"compare modules",[IsAlgebraObjModule,IsAlgebraObjModule],
+  function(a,b) return a!.H=b!.H and a!.module=b!.module 
+    and Set(Zip(a!.coeffs,a!.parts))=Set(Zip(b!.coeffs,b!.parts)); end
+);
+
+InstallMethod(\+,"add modules",[IsAlgebraObjModule,IsAlgebraObjModule],
   function(a,b)
     local i, j, ab, x;
     
@@ -382,9 +457,9 @@ InstallMethod(\+,[IsAlgebraObjModule,IsAlgebraObjModule],
       if Length(a!.module) <> Length(b!.module) then
         Error("AddModule(<a>,<b>): can only add modules of same type.");
       fi;
-      a:=a.operations.S(a,false);  #TODO
-      b:=b.operations.S(b,false);  #TODO
-      if a=fail or b=fail then return fail;fi;
+      a:=MakeSpecht(a,false);
+      b:=MakeSpecht(b,false);
+      if a=fail or b=fail then return fail; fi;
     fi;
 
     ## profiling shows _convincingly_ that the method used below to add
@@ -429,14 +504,13 @@ InstallMethod(\-,[IsAlgebraObjModule,IsAlgebraObjModule],
   function(a,b) 
     if a=fail or b=fail then return fail;
     else 
-      b:=StructuralCopy(b); 
-      b!.coeffs:=-b!.coeffs;
+      b:=Module(b!.H, b!.module, -b!.coeffs, b!.parts);
       return a+b; 
     fi;
   end
 ); # SubModules
 
-InstallMethod(\*,[IsScalar,IsHeckeSpecht],
+InstallMethod(\*,"multiply module by scalar",[IsScalar,IsHeckeSpecht],
   function(n,b)
     if n = 0 
     then return Module(b!.H, b!.module, 0, []);
@@ -445,7 +519,7 @@ InstallMethod(\*,[IsScalar,IsHeckeSpecht],
   end
 );
 
-InstallMethod(\*,[IsHeckeSpecht,IsScalar],
+InstallMethod(\*,"multiply module by scalar",[IsHeckeSpecht,IsScalar],
   function(a,n)
     if n = 0 
     then return Module(a!.H, a!.module, 0, []);
@@ -454,13 +528,13 @@ InstallMethod(\*,[IsHeckeSpecht,IsScalar],
   end
 );
 
-InstallMethod(\*,[IsHeckeSpecht,IsHeckeSpecht],
+InstallMethod(\*,"multiply modules",[IsHeckeSpecht,IsHeckeSpecht],
   function(a,b) local x, y, ab, abcoeff, xy, z;
     if a=fail or b=fail then return false;
     elif a!.H<>b!.H then 
       Error("modules belong to different Grothendieck rings");
     fi;
-    ## a:=a.operations.S(a,false); # TODO Reconsider?
+    # a:=MakeSpecht(a,false); # TODO Reconsider?
     ab:=[[],[]];
     for x in [1..Length(a!.parts)] do
       for y in [1..Length(b!.parts)] do
@@ -478,11 +552,62 @@ InstallMethod(\*,[IsHeckeSpecht,IsHeckeSpecht],
   end  # MultiplyModules
 ); # MulModules
 
-InstallMethod(\/,[IsAlgebraObjModule,IsScalar],
+InstallMethod(\/,"divide module by scalar",[IsAlgebraObjModule,IsScalar],
   function(b,n) local x;
     if n=0 then Error("can't divide by 0!\n");
     else return Module(b!.H, b!.module, b!.coeffs/n, b!.parts);
     fi;
   end
 ); # DivModules
+
+################################################################################
+
+InstallMethod(InnerProduct,"inner product of modules",
+  [IsAlgebraObjModule,IsAlgebraObjModule],
+  function(a,b) local pr, x, y;
+    if a=0*a or b=0*b then return 0;
+    elif a!.module<>b!.module then
+      a:=MakeSpecht(a,true);
+      b:=MakeSpecht(b,true);
+    fi;
+
+    pr:=0; x:=1; y:=1;  # use the fact that a.parts and b.parts are ordered
+    while x <=Length(a!.parts) and y <=Length(b!.parts) do
+      if a!.parts[x]=b!.parts[y] then
+        pr:=pr + a!.coeffs[x]*b!.coeffs[y];
+        x:=x + 1; y:=y + 1;
+      elif a!.parts[x]<b!.parts[y] then x:=x + 1;
+      else y:=y + 1;
+      fi;
+    od;
+    return pr;
+  end
+);  # InnerProduct
+
+#F Returns the Coefficient of p in x
+InstallMethod(Coefficient, "extract coefficient of a partition from module",
+  [IsAlgebraObjModule,IsList],
+  function(x,p) local pos;
+    pos:=Position(x!.parts, p);
+    if pos=fail then return 0;
+    else return x!.coeffs[pos];
+    fi;
+  end
+);  # Coefficient
+    
+#F Returns true if all coefficients are non-negative
+InstallMethod(PositiveCoefficients, "test if all coefficients are non-negative",
+  [IsAlgebraObjModule],
+  function(x) local c;
+    return ForAll(x!.coeffs, c->c>=0);
+  end
+);  # PositiveCoefficients
+
+#F Returns true if all coefficients are integral
+InstallMethod(IntegralCoefficients, "test if all coefficients are integral",
+  [IsAlgebraObjModule],
+  function(x) local c;
+    return ForAll(x!.coeffs, c->IsInt(c));
+  end
+); # IntegralCoefficients
 

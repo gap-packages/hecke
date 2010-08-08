@@ -19,3 +19,5 @@
 DeclareOperation("FoldLeft",[IsFunction,IsObject,IsList]);
 DeclareOperation("FoldAfterMapLeft",[IsFunction,IsFunction,IsObject,IsList]);
 DeclareOperation("StringFold",[IsString,IsList]);
+
+DeclareOperation("Zip",[IsList,IsList]);

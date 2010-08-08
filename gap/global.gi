@@ -41,3 +41,13 @@ InstallMethod(StringFold,[IsString,IsList],
     return FoldAfterMapLeft(Concatenation,String,str,l);
   end
 );
+
+InstallMethod(Zip,[IsList,IsList],
+  function(l1,l2) local i, res;
+    res:=[];
+    for i in [1..Length(l1)] do
+      res[i]:=[l1[i],l2[i]];
+    od;
+    return res;
+  end
+);
