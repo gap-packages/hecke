@@ -16,30 +16,30 @@
 ##                                                                   ##
 #######################################################################
 
-InstallMethod(PrintObj,[IsAlgebraObjModule],
+InstallMethod(PrintObj, "simple module output", [IsAlgebraObjModule],
   function(m) Print(ModuleString(m,false)); end
 );
 
-InstallMethod(ViewString,[IsAlgebraObjModule],
+InstallMethod(ViewString, "compact module output", [IsAlgebraObjModule],
   function(m) 
     return Concatenation("<direct sum of ",
       String(Length(m!.parts))," ",m!.module,"-modules>"); 
   end
 );
 
-InstallMethod(ViewObj,[IsAlgebraObjModule],
+InstallMethod(ViewObj, "compact module output",[IsAlgebraObjModule],
   function(m) Print(ViewString(m)); end
 );
 
-InstallMethod(DisplayString,[IsAlgebraObjModule],
+InstallMethod(DisplayString, "pretty module output", [IsAlgebraObjModule],
   function(m) return ModuleString(m,true); end
 );
 
-InstallMethod(Display,[IsAlgebraObjModule],
+InstallMethod(Display, "pretty module output", [IsAlgebraObjModule],
   function(m) Print(DisplayString(m),"\n"); end
 );
 
-InstallMethod(ModuleString,[IsAlgebraObjModule,IsBool],
+InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool],
   function(a,pp) 
     local x, len, n, star, tmp, coefficients, valuation, str;
 
@@ -108,7 +108,7 @@ InstallMethod(ModuleString,[IsAlgebraObjModule,IsBool],
 );
 
 ## adding this string if it does not already exist.
-InstallMethod(LabelPartition, [IsList], 
+InstallMethod(LabelPartition, "pretty partition output", [IsList], 
   function(mu) local n, m, label, p;
     n:=Sum(mu);
     if n<2 then return String(n); fi;
@@ -124,11 +124,24 @@ InstallMethod(LabelPartition, [IsList],
 
 #F Returns a string for ModuleString() from SpechtParts.labels, adding this 
 ## string if it does not already exist.
-InstallMethod(StringPartition, [IsList], 
+InstallMethod(StringPartition, "ergonomic partition output", [IsList], 
   function(mu) local m, string, p;
     if mu=[] or mu=[0] then return "0";
-    else return ViewString(mu);#TODO TightStringList(mu);
+    else return TightStringList(mu);
     fi;
+  end
+);
+
+#F Returns a string of the form "l1,l2,...,lk" for the list [l1,l2,..,lk]"
+## which contains no spaces, and has first element 1.
+InstallMethod(TightStringList, "ergonomic list output", [IsList],
+  function(list) local s, l;
+    if list=[] then return ""; fi;
+    s:=String(list[1]);
+    for l in [2..Length(list)] do 
+      s:=Concatenation(s,",",String(list[l])); 
+    od;
+    return s;
   end
 );
 
