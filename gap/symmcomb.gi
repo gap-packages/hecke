@@ -307,8 +307,8 @@ InstallMethod(
   SpechtDimensionOp,
   "for partitions",
   [IsList],
-  function(part) local Dim,y;
-
+  function(arg) local Dim,part;
+		part := Flat(arg);
     Dim:=function(mu) local mud, i,j,d;
       mud:=ConjugatePartitionOp(mu);
       d:=Factorial(Sum(mu));

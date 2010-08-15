@@ -18,7 +18,7 @@
 
 BindGlobal("AlgebraObjFamily", NewFamily("AlgebraObjFamily"));
 DeclareCategory("IsAlgebraObj", IsComponentObjectRep and IsAttributeStoringRep);
-DeclareCategory("IsAlgebraObjModule", IsComponentObjectRep);
+DeclareCategory("IsAlgebraObjModule", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsDecompositionMatrix", IsComponentObjectRep and IsAttributeStoringRep);
 
 DeclareCategory("IsHecke", IsAlgebraObj);
@@ -103,3 +103,14 @@ DeclareOperation("SpechtPartitions",[IsHeckeSpecht]);
 DeclareOperation("SpechtCoefficients",[IsHeckeSpecht]);
 
 DeclareOperation("ListERegulars",[IsAlgebraObjModule]);
+## DeclareProperty("IsERegular",[IsDecompositionMatrix]); ## TODO
+MakeDispatcherFunc("SplitECores",
+	[[IsAlgebraObjModule],[IsAlgebraObjModule],[IsAlgebraObjModule,IsHeckeSpecht]],
+	[ 2									 , 0									,	0],
+	[ 2									 , 1									,	2]);
+MakeDispatcherFunc("IsSimpleModule", [[IsAlgebraObj]],[2],[2]);
+MakeDispatcherFunc("MullineuxMap", 
+	[[IsAlgebraObj],[IsInt],[IsAlgebraObjModule],[IsDecompositionMatrix]],
+	[ 2						 , 2		 , 0									, 2											],
+	[ 2						 , 2		 , 1									, 2											]);
+MakeDispatcherFunc("Schaper", [[IsAlgebraObj]],[2],[2]);

@@ -36,12 +36,15 @@
 #F Dispatches an function with variable number of arguments to an operation
 ## with a fixed number of arguments
 ## For internal usage only
-
+## name 	- operation name
+## filts 	- list of lists of filters
+## pos 		- list of positions for variable length arguments
+## l			- list of total numbers of arguments
 DeclareGlobalFunction("MakeDispatcherFunc");
 
-InstallGlobalFunction(MakeDispatcherFunc, 
+InstallGlobalFunction(MakeDispatcherFunc,
   function(name,filts,pos,l)
-    local nameop, filters, oper, disp, newarg, i, p;
+    local nameop, filters, oper, disp, newarg, i, p, ps;
 
     nameop := Concatenation(name,"Op");
     
@@ -62,18 +65,19 @@ InstallGlobalFunction(MakeDispatcherFunc,
     od;
     oper := ValueGlobal(nameop);
     disp := function(arg)
-      p := Position(l,Length(arg));
-      if p<>fail and (pos[p]=0 or IsList(arg[pos[p]])) then
-        ## Print("Do call ",oper,"(",arg,")\n"); ## DEBUG
-        return CallFuncList(oper,arg);
-      else
-        p := 1; ## first entry ist the default entry
-        newarg := Concatenation(arg{[1..pos[p]-1]},
-          [arg{[pos[p]..pos[p]+(Length(arg)-l[p])]}],
-          arg{[pos[p]+(Length(arg)-l[p])+1..Length(arg)]});
-        ## Print("Do call ",oper,"(",newarg,")\n"); ## DEBUG
-        return CallFuncList(oper,newarg);
-      fi;
+      ps := Positions(l,Length(arg));
+      for p in ps do
+				if p<>fail and (pos[p]=0 or IsList(arg[pos[p]])) then
+        	## Print("Do call ",oper,"(",arg,")\n"); ## DEBUG
+        	return CallFuncList(oper,arg);
+				fi;
+			od;
+      p := 1; ## first entry ist the default entry
+      newarg := Concatenation(arg{[1..pos[p]-1]},
+        [arg{[pos[p]..pos[p]+(Length(arg)-l[p])]}],
+        arg{[pos[p]+(Length(arg)-l[p])+1..Length(arg)]});
+      ## Print(">> Do call ",oper,"(",newarg,")\n"); ## DEBUG
+      return CallFuncList(oper,newarg);
     end;
     BindGlobal(name,disp);
   end
