@@ -88,6 +88,8 @@
 
 ## Here is a description of the structure of the main records used 
 ## in SPECHT
+#### In GAP4 all "operations"-fields do not exist. They are replaced
+#### by top-level operations with some filter restrictions
 
 ## 1. Specht()
 ## Specht() is the main function in specht.g, it returns a record 'H'
@@ -96,12 +98,16 @@
 ## the components:
 ##   IsSpecht      : is either 'true' or 'false' depending on whether
 ##                   'H' is a Hecke algebra or Schur algebra resp.
+#### This function is obsolete in the GAP4 version - it is replaced 
+#### by the filter IsHecke
 ##   S(), P(), D() : these three functions return records which 
 ##                   represent Specht modules, PIMs, and simple
 ##                   'H' modules repectively. These functions exist
 ##                   only when 'H' is a Hecke algebra record.
+#### Use NewModule(H,"S",...) instead of H.S(...)
 ##   W(), P(), F() : these are the corresponding functions for Weyl
 ##                   modules, PIMs, and simple modules of Schur algbras.
+#### Use NewModule(H,"W",...) instead of H.W(...)
 ##   info          : this is a record with components
 ##                     version: SPECHT version number,
 ##                     Library: path to SPECHT library files
@@ -109,6 +115,7 @@
 ##                            SPECHT (defaults to current directory)
 ##                     Indeterminate: the indedeterminate used by SPECHT
 ##                            in the LLT algorithm when H.p=0.
+#### TODO
 ##   operations    : apart from the obvious things like the Print()
 ##                   function for 'H' this record also contains the
 ##                   operation records for the modules S(), P() etc.
@@ -116,6 +123,7 @@
 ##                   and accessing decomposition matrix files. The most
 ##                   most important of these are:
 ##                     S, P, D, Pq, Sq, Dq : operations records for modules
+#### TODO
 ##                     New : creation function for modules. Internally
 ##                       modules are created via
 ##                         H.operations.new(module,coeffs,parts)
@@ -129,32 +137,45 @@
 ##                       algebras. Note that coeffs and parts must be 
 ##                       ordered reverse lexicographically (ie. they are 
 ##                       *sets*).
+#### Use New(H,...) instead of H.operations.New(...)
 ##                     Collect: like New() except that  coeffs and parts
 ##                       need not be sets (and may contain repeats).
+#### Use Collect(H,...) instead of H.operations.Collect(...)
 ##                     NewDecompositionMatrix : creates a decomposition
 ##                       matrix.
+#### TODO
 ##                     ReadDecompositionMatrix : reads, and returns, a 
 ##                       decomposition matrix file.
+#### TODO
 ##                     KnownDecompositionMatrix : returns a decomposition
 ##                       matrix of a given size; will either extract this
 ##                       matrix from Specht's internal lists or call
 ##                       ReadDecompositionMatrix(), or try to calculate 
 ##                       the decomposition matrix (without using the
 ##                       crystalized decomposition matrices).
+#### TODO
 ##                     FindDecompositionMatrix : like KnownDM except that
 ##                       it will calculate the crystalized DM if needed.
+#### TODO
 ##   Ordering      : a function for ordering partitions; controls how
 ##                   decomposition matrices for H are printed.
+#### Use SetOrdering(...) to control the output
 ##   e             : order of <q> in <R>
+#### Use OrderOfQ(...) to extract the e from an algebra or a module 
+#### corresponding to an algebra 
 ##   p             : characteristic of <R>
+#### TODO
 ##   valuation     : the valuation map of [JM2]; used primarily by
 ##                   the q-Schaper theorem.D
+#### TODO
 ##   HeckeRing     : bookkeeping string used primarily in searching for
 ##                   library files.
+#### TODO
 ##   Pq(), Sq()    : Functions for computing elements of the Fock space
 ##                   when H.p=0 (used in LLT algorithm). Note that there is
 ##                   no Dq; also unlike their counter parts S(), P(), and
 ##                   D() they accept only partitions as arguments.
+#### TODO
 ##
 ## 2. The module functions S(), P() and D() (and Schur equivalents)
 ## These functions return record 'x' which represents some 'H'--module.
@@ -167,6 +188,7 @@
 ##       + - * / : for algebric manipulations
 ##       Print : calls PrintModule
 ##       Coefficient : returns the coefficient of a given partition
+#### Use Coefficient(x,...) instead of x.operations.Coefficient(...)
 ##       PositiveCoefficients : true if all coefficients are non-negative
 ##       IntegralCoefficients : true if all coefficients are integral
 ##       InnerProduct : computes the 'Kronecker' inner product
@@ -274,6 +296,204 @@ InstallMethod(ListERegulars,"e-regular partitions of a module",
     fi;
   end
 ); # ListERegulars
+
+#F Returns true if S(mu)=D(mu) - note that this implies that mu is e-regular
+## (if mu is not e-regular, fail is returned).     -- see [JM2]
+## IsSimle(H,mu)
+##   ** uses H.valuation #### FIXME check this?
+InstallMethod(IsSimpleModuleOp,
+	"test whether the given partition defines a simple module",
+	[IsAlgebraObj,IsList],
+	function(H,mu) local mud, simple, r, c, v;
+		if not IsERegular(H!.e,mu) then return fail; 
+		elif mu=[] then return true; fi;
+
+		mud:=ConjugatePartition(mu);
+		simple:=true; c:=1;
+		while simple and c <=mu[1] do
+		  v:=H!.valuation(mu[1]+mud[c]-c);
+		  simple:=ForAll([2..mud[c]], r->v=H!.valuation(mu[r]+mud[c]-c-r+1));
+		  c:=c+1;
+		od;
+		return simple;
+	end
+); #IsSimpleModule
+
+#F Split an element up into compontents which have the same core.
+## Usage: SplitECores(x) - returns as list of all block components
+##        SplitECores(x,lambda) - returns a list with (i) core lambda,
+## (ii) the same core as lambda, or (iii) the same core as the first
+## element in lambda if IsSpecht(lambda).
+InstallMethod(SplitECoresOp,"for a single module",[IsAlgebraObjModule],
+	function(x) local cores, c, cpos, y, cmp;
+  	if x=fail or x=0*x then return []; fi;
+
+    cores:=[]; cmp:=[];
+    for y in [1..Length(x!.parts)] do
+      c:=ECore(x!.H!.e, x!.parts[y]);
+      cpos:=Position(cores, c);
+      if cpos=false then 
+        Add(cores, c); 
+        cpos:=Length(cores);
+        cmp[cpos]:=[[],[]];
+      fi;
+      Add(cmp[cpos][1], x!.coeffs[y]);
+      Add(cmp[cpos][2], x!.parts[y]);
+    od;
+    for y in [1..Length(cmp)] do
+      cmp[y]:=Module(x!.H,x!.module,cmp[y][1],cmp[y][2]);
+    od;
+		return cmp;
+	end
+);
+
+InstallMethod(SplitECoresOp,"for a module and a partition",
+	[IsAlgebraObjModule,IsList],
+	function(x,mu) local c, cpos, y, cmp;
+		c:=ECore(x!.H!.e, mu);
+		cmp:=[ [],[] ];
+    for y in [1..Length(x!.parts)] do
+      if ECore(x!.H!.e, x!.parts[y])=c then 
+        Add(cmp[1], x!.coeffs[y]); 
+        Add(cmp[2], x!.parts[y]); 
+      fi;
+    od;
+    cmp:=Module(x!.H,x!.module, cmp[1], cmp[2]);
+		return cmp;
+	end
+);
+
+InstallMethod(SplitECoresOp,"for a module and a specht module",
+	[IsAlgebraObjModule,IsHeckeSpecht], ## TODO Is this really only for specht modules?
+	function(x,s) local c, cpos, y, cmp;
+		c:=ECore(s!.H!.e, s!.parts[Length(x!.parts)]);
+		cmp:=[ [],[] ];
+    for y in [1..Length(x!.parts)] do
+      if ECore(x!.H!.e, x!.parts[y])=c then 
+        Add(cmp[1], x!.coeffs[y]); 
+        Add(cmp[2], x!.parts[y]); 
+      fi;
+    od;
+    cmp:=Module(x!.H,x!.module, cmp[1], cmp[2]);
+		return cmp;
+	end
+); #SplitECores
+
+#F This function returns the image of <mu> under the Mullineux map using
+## the Kleshcehev(-James) algorihm, or the supplied decomposition matrix.
+## Alternatively, given a "module" x it works out the image of x under 
+## Mullineux.
+## Usage:  MullineuxMap(e|H|d, mu) or MullineuxMap(x)
+InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
+	function(x) local e, v;
+		e := x!.H!.e;
+    if x=fail or not IsERegular(e,x!.parts[Length(x!.parts)]) then   
+      Print("# The Mullineux map is defined only for e-regular partitions\n");
+      return fail;
+    fi;
+    if x=fail or x=0*x then return fail; fi;
+    if x!.module{[1]}="S" then
+      if Length(x!.module)=1 then
+        return Collect(x!.H,x!.module,x!.coeffs,
+                 List(x!.parts, ConjugatePartition));
+      else
+        v:=x!.H!.info!.Indeterminate;
+        return Collect(x!.H,x!.module,
+             List([1..Length(x!.coeffs)],
+                mu->Value(v^-EWeight(e,x!.parts[mu])*x!.coeffs[mu],v^-1)),
+             List(x!.parts,ConjugatePartition) );
+      fi;
+    elif Length(x!.module)=1 then
+      return Sum([1..Length(x!.coeffs)], 
+               mu->Module(x!.H,x!.module,x!.coeffs[mu],
+                     MullineuxMap(e,x!.parts[mu])));
+    else
+      v:=x!.H!.info!.Indeterminate;
+      return Sum([1..Length(x!.coeffs)], 
+               mu->Module(x!.H,x!.module,
+                     Value(v^-EWeight(e,x!.parts[mu])*x!.coeffs[mu]),
+                     MullineuxMap(e,x!.parts[mu])));
+    fi;
+	end
+); 
+
+InstallMethod(MullineuxMapOp,"for ints: image of <mu> under the Mullineux map",
+	[IsInt,IsList],
+  function(e,mu)
+		if not IsERegular(e,mu) then                     ## q-Schur algebra
+      Error("# The Mullineux map is defined only for e-regular ",
+            "partitions\n");
+    fi;
+    return PartitionGoodNodeSequence(e,
+                  List(GoodNodeSequence(e,mu),x->-x mod e));
+	end
+);
+
+InstallMethod(MullineuxMapOp,
+	"for algebras: image of <mu> under the Mullineux map",
+	[IsAlgebraObj,IsList],
+  function(H,mu)
+		MullineuxMapOp(H!.e,mu);
+	end
+);
+
+InstallMethod(MullineuxMapOp,
+	"for decomposition matrices: image of <mu> under the Mullineux map",
+	[IsDecompositionMatrix,IsList],
+  function(d,mu) local e, x;
+		e := d!.H!.e;
+			if not IsERegular(e,mu) then                     ## q-Schur algebra
+        Error("# The Mullineux map is defined only for e-regular ",
+              "partitions\n");
+      fi;
+      x:=d!.H!.P(d,mu);
+      if x=fail or x=0*x then
+      	Print("MullineuxMap(<d>,<mu>), P(<d>,<mu>) not known\n");
+        return false;
+      else return ConjugatePartition(x!.parts[1]);
+      fi;
+	end
+); #MullineuxMap
+
+#F Calculates the Specht modules in sum_{i>0}S^lambda(i) using the
+## q-analogue of Schaper's theorem. 
+## Uses H.valuation. FIXME check this?
+##   Usage:  Schaper(H,mu);
+InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
+	function(H,mu)
+		local mud, schaper, hooklen, c, row, r, s, v;
+
+		Sort(mu); mu:=mu{[Length(mu),Length(mu)-1..1]};
+		mud:=ConjugatePartition(mu);
+		hooklen:=[];
+		for r in [1..Length(mu)] do
+		  hooklen[r]:=[];
+		  for c in [1..mu[r]] do
+		    hooklen[r][c]:=mu[r] + mud[c] - r - c + 1;
+		  od;
+		od;
+
+		schaper:=Module(H,"S",0,[]);
+		for c in [1..mu[1]] do
+		  for row in [1..mud[1]] do
+		    for r in [row+1..mud[1]] do
+		      if mu[row] >=c and mu[r] >=c then
+		        v:=H!.valuation(hooklen[row][c]) 
+		              - H!.valuation(hooklen[r][c]);
+		        if v<>0 then
+		          s:=AddRimHook(RemoveRimHook(mu,r,c,mud),row,hooklen[r][c]);
+		          if s<>false then
+		            schaper:=schaper+Module(H,"S",
+		                                (-1)^(s[2]+mud[c]-r)*v,s[1]);
+		          fi;
+		        fi;
+		      fi;
+		    od;
+		  od;
+		od;
+		return schaper;
+	end
+);  #Schaper
 
 ## MODULES #####################################################################
 InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
@@ -549,7 +769,7 @@ InstallMethod(\*,"multiply modules",[IsHeckeSpecht,IsHeckeSpecht],
     if ab=[] then return Module(a!.H, a!.module, 0, []);
     else return Collect(b!.H, b!.module, ab[1], ab[2]); #TODO
     fi;
-  end  # MultiplyModules
+  end
 ); # MulModules
 
 InstallMethod(\/,"divide module by scalar",[IsAlgebraObjModule,IsScalar],
