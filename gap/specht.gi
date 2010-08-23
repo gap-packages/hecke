@@ -235,13 +235,10 @@
 ##     Induce : for inducing decomposition matrices (non--crystallized).
 ##   P : a short-hand for d.H.P('d',<mu>).
 
-InstallMethod(
-  Specht,
-  "generate a Hecke-Algebra object",
-  [IsInt],
+InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt],
   function(e)
     local H;
-    
+
     H := rec(
       e:=e,
       ## bits and pieces about H
@@ -494,6 +491,50 @@ InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
 		return schaper;
 	end
 );  #Schaper
+
+## OPERATIONS OF FORMER SPECHT RECORD ##########################################
+
+## The following two functions are used by P(), and elsewhere.
+##   generate the hook (k,1^n-k)  - as a list - where k=arg
+##   actually not quite a hook since if arg is a list (n,k1,k2,...)
+##   this returns (k1,k2,...,1^(n-sum k_i))
+InstallMethod(HookOp,"for an integer and a list of lists",[IsInt,IsList],
+	function(n,K) local k, i;
+		k:=Sum(K);
+		if k < n then Append(K, List([1..(n-k)], i->1));
+		elif k > n then Error("hook, partition ", k, " bigger than ",n, "\n");
+		fi;
+		return K;
+	end
+); #Hook
+
+InstallMethod(DoubleHook,"for four integers",[IsInt,IsInt,IsInt,IsInt],
+	function(n,x,y,a) local s, i;
+    s:=[x];
+    if y<>0 then Add(s,y); fi;
+    if a<>0 then Append(s, List([1..a],i->2)); fi;
+    i:=Sum(s);
+    if i < n then
+      Append(s, List([1..n-i], i->1));
+      return s;
+    elif i=n then return s;
+    else return [];
+    fi;
+  end
+); #DoubleHook
+  
+#### RENAMED Omega -> HeckeOmega
+## Returns p(n) - p(n-1,1) + p(n-2,1^2) - ... + (-1)^(n-1)*p(1^n).
+## So, S(mu)*Omega(n) is the linear combination of the S(nu)'s where
+## nu is obtained by wrapping an n-hook onto mu and attaching the
+## sign of the leg length.
+InstallMethod(HeckeOmega,"for an algebra, a string and an integer",
+	[IsAlgebraObj,IsString,IsInt],
+	function(H,module,n)
+	  return Module(H,module,List([1..n],x->(-1)^(x)),
+	                   List([1..n],x->Hook(n,x)));
+	end
+); #Omega
 
 ## MODULES #####################################################################
 InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
@@ -830,4 +871,145 @@ InstallMethod(IntegralCoefficients, "test if all coefficients are integral",
     return ForAll(x!.coeffs, c->IsInt(c));
   end
 ); # IntegralCoefficients
+
+## The next functions are for restricting and inducing Specht
+## modules. They all assume that their arguments are indeed Specht
+## modules; conversations are done in H.operations.X.Y() as necessary.
+
+## r-induction: on Specht modules:
+InstallMethod(InducedSpechtModule, "r-induction on specht modules",
+	[IsHeckeSpecht,IsInt,IsInt],
+	function(a, e, r) local ind, x, i, j, np;
+    ind:=[[],[]];
+    for x in [1..Length(a!.parts)] do
+      for i in [1..Length(a!.parts[x])] do
+        if (a!.parts[x][i] + 1 - i) mod e=r then
+          if i=1 or a!.parts[x][i-1] > a!.parts[x][i] then
+            np:=StructuralCopy(a!.parts[x]);
+            np[i]:=np[i]+1;
+            Add(ind[1], a!.coeffs[x]);
+            Add(ind[2], np);
+          fi;
+        fi;
+      od;
+      if ( -Length(a!.parts[x]) mod e)=r then
+        np:=StructuralCopy(a!.parts[x]); Add(np, 1);
+        Add(ind[1],a!.coeffs[x]);
+        Add(ind[2],np);
+      fi;
+    od;
+    if ind=[ [],[] ] then return Module(a!.H,"S",0,[]);
+    else return Collect(a!.H,"S", ind[1], ind[2]);
+    fi;
+  end
+); # InducedSpechtModule
+
+## String-induction: add s r's from each partition in x (ignoring
+## multiplicities). Does both standard and q-induction.
+
+## We look at the size of x.module to decide whether we want to use
+## ordinary indcution or q-induction (in the Fock space). We could
+## write H.operations.X.SInduce to as to make this choice for us, or
+## do q-induction always, setting v=1 afterwards, but this seems the
+## better choice.
+InstallMethod(SInducedSpechtModule,"string-induction on specht modules",
+	[IsHeckeSpecht,IsInt,IsInt,IsInt],
+	function(x, e, s, r) local coeffs, parts, y, z, sinduced;
+		# add n nodes of residue r to the partition y from the i-th row down
+		sinduced:=function(y, n, e, r, i) local ny, j, z;
+		  ny:=[];
+		  for j in [i..Length(y)-n+1] do
+		    if r=(y[j] - j + 1) mod e then 
+		      if j=1 or y[j] < y[j-1] then
+		        z:=StructuralCopy(y);
+		        z[j]:=z[j] + 1; # only one node of residue r can be added
+		        if n=1 then Add(ny, z);   # no more nodes to add
+		        else Append(ny, sinduced(z, n-1, e, r, j+1));
+		        fi;
+		      fi;
+		    fi;
+		  od;
+		  return ny;
+		end;
+
+    if s=0 then return Module(x!.H,x!.module,1,[]); fi;
+    coeffs:=[]; parts:=[];
+    for y in [1..Length(x!.parts)] do
+      Append(parts,sinduced(x!.parts[y], s, e, r, 1));
+      Append(coeffs,List([1..Length(parts)-Length(coeffs)],r->x!.coeffs[y]));
+      if r=( -Length(x!.parts[y]) mod e) then # add a node to the bottom
+        z:=StructuralCopy(x!.parts[y]);
+        Add(z,1);
+        if s > 1 then                        # need to add some more nodes
+          Append(parts,sinduced(z, s-1, e, r, 1));
+          Append(coeffs,List([1..Length(parts)-Length(coeffs)],
+                             r->x!.coeffs[y]));
+        else Add(coeffs, x!.coeffs[y]); Add(parts, z);
+        fi;
+      fi;
+    od;
+
+    if coeffs=[] then return Module(x!.H,x!.module,0,[]);
+    else return Collect(x!.H,x!.module, coeffs, parts);
+    fi;
+  end
+);  # SInducedSpechtModule
+
+## r-restriction
+InstallMethod(RestrictedSpechtModule,"r-restriction on specht modules",
+	[IsHeckeSpecht,IsInt,IsInt],
+	function(a, e, r) local ind, x, i, j, np;
+    ind:=[[],[]];
+    for x in [1..Length(a!.parts)] do
+      for i in [1..Length(a!.parts[x])] do
+        if (a!.parts[x][i] - i) mod e=r then
+          np:=StructuralCopy(a!.parts[x]);
+          if i=Length(a!.parts[x]) or np[i] > np[i+1] then
+            np[i]:=np[i] - 1;
+            if np[i]=0 then Unbind(np[i]); fi;
+            Add(ind[1], a!.coeffs[x]); Add(ind[2], np);
+          fi;
+        fi;
+      od;
+    od;
+    if ind=[ [],[] ] then return Module(a!.H,"S",0,[]);
+    else return Collect(a!.H,"S", ind[1], ind[2]);
+    fi;
+  end
+); #RestrictedSpechtModule
+
+## string-restriction: remove m r's from each partition in x
+InstallMethod(SRestrictedSpechtModule,"string-restriction on specht modules",
+	[IsHeckeSpecht,IsInt,IsInt,IsInt],
+	function(x,e,s,r) local coeffs, parts, y, i, srestricted;
+		## remove n nodes from y from the ith row down
+		srestricted:=function(y, n, e, r, i) local ny, j, z;
+		  ny:=[];
+		  for j in [i..Length(y)-n+1] do
+		    if r=(y[j] - j) mod e then
+		      if j=Length(y) or y[j] > y[j+1] then
+		        z:=StructuralCopy(y);
+		        z[j]:=z[j] - 1;
+		        if z[j]=0 then   # n must be 1
+		          Unbind(z[j]);
+		          Add(ny, z);
+		        elif n=1 then Add(ny, z); # no mode nodes to remove
+		        else Append(ny, srestricted(z, n-1, e, r, j+1));
+		        fi;
+		      fi;
+		    fi;
+		  od;
+		  return ny;
+		end;
+
+    coeffs:=[]; parts:=[];
+    for y in [1..Length(x.parts)] do
+      Append(parts, srestricted(x!.parts[y], s, e, r, 1));
+      Append(coeffs,List([1..Length(parts)-Length(coeffs)],i->x!.coeffs[y]));
+    od;
+    if parts=[] then return Module(x!.H,"S",0,[]);
+    else return Collect(x!.H,"S", coeffs, parts);
+    fi;
+  end
+);  # SRestrictedSpechtModule
 

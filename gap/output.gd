@@ -16,6 +16,7 @@
 ##                                                                   ##
 #######################################################################
 
+DeclareOperation("AlgebraString",[IsAlgebraObj]);
 DeclareOperation("ModuleString",[IsAlgebraObjModule,IsBool]);
 DeclareOperation("LabelPartition",[IsList]);
 DeclareOperation("StringPartition",[IsList]);
