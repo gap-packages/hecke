@@ -73,6 +73,9 @@ DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsAlgebraObjModule]);
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsList]);
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsAlgebraObjModule]);
 
+MakeDispatcherFunc("Hook",[[IsInt]],[2],[2]);
+DeclareOperation("DoubleHook",[IsInt,IsInt,IsInt,IsInt]);
+DeclareOperation("HeckeOmega",[IsAlgebraObj,IsString,IsInt]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsInt,IsList]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsList,IsList]);
@@ -114,3 +117,8 @@ MakeDispatcherFunc("MullineuxMap",
 	[ 2						 , 2		 , 0									, 2											],
 	[ 2						 , 2		 , 1									, 2											]);
 MakeDispatcherFunc("Schaper", [[IsAlgebraObj]],[2],[2]);
+
+DeclareOperation("InducedSpechtModule",[IsHeckeSpecht,IsInt,IsInt]);
+DeclareOperation("SInducedSpechtModule",[IsHeckeSpecht,IsInt,IsInt,IsInt]);
+DeclareOperation("RestrictedSpechtModule",[IsHeckeSpecht,IsInt,IsInt]);
+DeclareOperation("SRestrictedSpechtModule",[IsHeckeSpecht,IsInt,IsInt,IsInt]);

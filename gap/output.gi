@@ -16,6 +16,74 @@
 ##                                                                   ##
 #######################################################################
 
+InstallMethod(PrintObj, "simple algebra output", [IsAlgebraObj],
+	function(x) Print(AlgebraString(x)); end
+);
+
+InstallMethod(ViewString, "compact algebra output", [IsHecke],
+	function(H) 
+		return Concatenation("<Hecke algebra with e = ",String(H!.e),">"); 
+	end
+);
+
+InstallMethod(ViewString, "compact algebra output", [IsSchur],
+	function(S) 
+		return Concatenation("<Schur algebra with e = ",String(S!.e),">"); 
+	end
+);
+
+InstallMethod(ViewObj, "compact algebra output", [IsAlgebraObj],
+	function(H) Print(ViewString(H)); end
+);
+
+InstallMethod(DisplayString, "pretty algebra output", [IsAlgebraObj],
+  function(x) return AlgebraString(x); end
+);
+
+InstallMethod(Display, "pretty algebra output", [IsAlgebraObj],
+  function(x) Print(DisplayString(x),"\n"); end
+);
+
+InstallMethod(AlgebraString, "generic algebra output", [IsHecke],
+	function(H) local p, pq, ring;
+		if H!.p<>0 
+		then p:=Concatenation("p=",String(H!.p),", "); 
+		else p:="";
+		fi;
+		if IsBound(H!.pq) 
+		then pq:=", Pq()"; 
+		else pq:="";
+		fi;
+		if H!.p<>H!.e and H!.p<>0 
+		then ring:=Concatenation(", HeckeRing=\"", String(H!.HeckeRing), "\")");
+		else ring:=")";
+		fi;
+
+		return 
+			Concatenation("Specht(e=",String(H!.e),", ",p,"S(), P(), D()",pq,ring);
+	end
+);
+
+InstallMethod(AlgebraString, "generic algebra output", [IsSchur],
+	function(S) local p, pq, ring;
+		if S!.p<>0 
+		then p:=Concatenation("p=",String(S!.p),", "); 
+		else p:="";
+		fi;
+		if IsBound(S!.pq) 
+		then pq:=", Pq()"; 
+		else pq:="";
+		fi;
+		if S!.p<>S!.e and S!.p<>0 
+		then ring:=Concatenation(", HeckeRing=\"", String(S!.HeckeRing), "\")");
+		else ring:=")";
+		fi;
+
+		return 
+			Concatenation("Schur(e=",String(S!.e),", ",p,"W(), P(), F()",pq,ring);
+	end
+);
+
 InstallMethod(PrintObj, "simple module output", [IsAlgebraObjModule],
   function(m) Print(ModuleString(m,false)); end
 );
