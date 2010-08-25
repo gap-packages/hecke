@@ -18,6 +18,7 @@
 
 DeclareOperation("AlgebraString",[IsAlgebraObj]);
 DeclareOperation("ModuleString",[IsAlgebraObjModule,IsBool]);
+DeclareOperation("DecompositionMatrixString",[IsDecompositionMatrix,IsBool]);
 DeclareOperation("LabelPartition",[IsList]);
 DeclareOperation("StringPartition",[IsList]);
 DeclareOperation("TightStringList",[IsList]);

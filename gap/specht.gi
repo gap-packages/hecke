@@ -46,7 +46,7 @@
 ##    later is done using the existence of a record component d.matname.
 ##    Need to do something here about reading such matrices in (this can be
 ##    done using DecompositionMatrix)..
-##  - Changed ReadDecompositionmatrix so that it automatically reads the
+##  - Changed ReadDecompositionMatrix so that it automatically reads the
 ##    format of version 1.0 files (and deleted ReadOldDecompositionMatrix).
 ##    Also fixed a bug here which was causing confusion between Hecke algebra
 ##    and Schur algebra matrices.
@@ -253,9 +253,15 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
                 Library:=Directory(
                   Concatenation(DirectoriesPackageLibrary("specht")[1]![1],"e",
                   String(e),"/")),
-## We keep a copy of SpechtDirectory in H so that we have a
-## chance of finding new decomposition matrices when it changes.
+      ## We keep a copy of SpechtDirectory in H so that we have a
+      ## chance of finding new decomposition matrices when it changes.
                 SpechtDirectory:=Directory(".")),
+                
+      ## This record will hold any decomposition matrices which Specht()
+      ## (or rather its derivatives) read in. This used to be a public 
+      ## record; it is now private because q-Schur algebra matrices and
+      ## Hecke algebra matrices might need to coexist. 
+      DecompositionMatrices:=[],
 
       ## ordering used when printing decomposition matrices
       Ordering:=Lexicographic,
@@ -263,6 +269,8 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
     
     if p = 0 
     then 
+      ## This list will hold the crystallized decomposition matrices (p=0)
+      H.CrystalMatrices:=[];
       H.Indeterminate:=Indeterminate(Integers);
       SetName(H.Indeterminate,"v"); 
     else H.Indeterminate:=1;
@@ -489,7 +497,7 @@ InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
         return Collect(x!.H,x!.module,x!.coeffs,
                  List(x!.parts, ConjugatePartition));
       else
-        v:=x!.H!.info!.Indeterminate;
+        v:=x!.H!.info.Indeterminate;
         return Collect(x!.H,x!.module,
              List([1..Length(x!.coeffs)],
                 mu->Value(v^-EWeight(e,x!.parts[mu])*x!.coeffs[mu],v^-1)),
@@ -500,7 +508,7 @@ InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
                mu->Module(x!.H,x!.module,x!.coeffs[mu],
                      MullineuxMap(e,x!.parts[mu])));
     else
-      v:=x!.H!.info!.Indeterminate;
+      v:=x!.H!.info.Indeterminate;
       return Sum([1..Length(x!.coeffs)], 
                mu->Module(x!.H,x!.module,
                      Value(v^-EWeight(e,x!.parts[mu])*x!.coeffs[mu]),
@@ -1314,6 +1322,11 @@ InstallMethod(SRestrictedModule, "string restriction for simple modules",
 
 ## DECOMPOSITION MATRICES ######################################################
 
+## This variable is what is used in the decomposition matrices files saved
+## by SaveDecompositionMatrix() (and also the variable which contains them
+## when they are read back in).
+A_Specht_Decomposition_Matrix:=fail;
+
 ## Finally, we can define the creation function for decomposition matrices
 ## (note that NewDM() does not add the partition labels to the decomp.
 ## matrix; this used to be done here but now happens in PrintDM() because
@@ -1325,32 +1338,147 @@ InstallMethod(SRestrictedModule, "string restriction for simple modules",
 InstallOtherMethod(DecompositionMatrix,"creates a new decomposition matrix",
   [IsAlgebraObj,IsList,IsList,IsBool],
   function(H, rows, cols, decompmat) local d;
+    d := rec(d:=[],      # matrix entries
+       rows:=rows, # matrix rows
+       cols:=cols, # matrix cols
+       inverse:=[], dimensions:=[], ## inverse matrix and dimensions
+       H:=H
+#### FIXME Necessary?
+####             P:=function(d,mu)     ## a lazy helper
+####               return d.operations.P.S(d, d.H.operations.New("P",1,mu));
+####             end
+    );
+    
     if decompmat then 
-      d := rec(d:=[],      # matrix entries
-             rows:=rows, # matrix rows
-             cols:=cols, # matrix cols
-             inverse:=[], dimensions:=[], ## inverse matrix and dimensions
-             H:=H
-#### FIXME Necessary?
-####             P:=function(d,mu)     ## a lazy helper
-####               return d.operations.P.S(d, d.H.operations.New("P",1,mu));
-####             end
-      );
-      return Objectify(IsDecompositionMatrix,d);
+      return Objectify(DecompositionMatrixType,d);
     else
-      d := rec(d:=[],      # matrix entries
-             rows:=rows, # matrix rows
-             cols:=cols, # matrix cols
-             inverse:=[], dimensions:=[], ## inverse matrix and dimensions
-             IsDecompositionMatrix:=false,   # crystallized
-             H:=H
-#### FIXME Necessary?
-####             P:=function(d,mu)     ## a lazy helper
-####               return d.operations.P.S(d, d.H.operations.New("P",1,mu));
-####             end
-      );
-      return Objectify(IsCrystalDecompositionMatrix,d);
+      return Objectify(CrystalDecompositionMatrixType,d);
     fi;
   end
 );   # DecompositonMatrix
+
+## This function will read the file "n" if n is a string; otherwise
+## it will look for the relevant file for H(Sym_n). If crystal=true
+## this will be a crystal decomposition matrix, otherwise it will be
+## a 'normal' decomposition matrix. When IsInt(n) the lists
+## CrystalMatrices[] and DecompositionMatrices[] are also checked, and
+## the crystal decomposition matrix is calculated if it is not found
+## and crystal=true (and IsInt(n)).
+## Question: if crystal=false but IsBound(CrystalMatrices[n]) should
+## we still try and read e<H.e>p0.n or specialize CrystalMatrices[n]
+## immediately. We try and read the file first...
+InstallMethod(ReadDecompositionMatrix, "load matrix from library",
+  [IsAlgebraObj,IsInt,IsBool],
+  function(H, n, crystal) local d, file, SpechtDirectory;
+    
+    if not IsBound(SpechtDirectory) then SpechtDirectory:=""; fi;
+  
+    if crystal then 
+      if IsBound(H!.CrystalMatrices[n]) then 
+        d:=H!.CrystalMatrices[n]; 
+        if d=fail and H!.info.SpechtDirectory=SpechtDirectory then
+          return fail;
+        elif d<>fail and ForAll([1..Length(d!.cols)],c->IsBound(d!.d[c])) 
+        then return d; 
+        fi;
+      fi;
+      file:=Concatenation("e",String(H!.e),"crys.",String(n));
+    else
+      file:=Concatenation(H!.HeckeRing,".",String(n));
+    fi;
+    return ReadDecompositionMatrix(H,file,crystal);
+  end
+);
+
+InstallMethod(ReadDecompositionMatrix, "load matrix from library",
+  [IsAlgebraObj,IsString,IsBool],
+  function(H, n, crystal)
+    local msg, file, M, d, c, parts, coeffs, p, x, r, cm, rm,
+      SpechtDirectory;
+    
+    ## The following directory is searched by ReadDecompositionMatrix()
+    ## when it is looking for decomposition matrices. By default, it points
+    ## to the current directory (if set, the current directory is not
+    ## searched).
+    if not IsBound(SpechtDirectory) then SpechtDirectory:=Directory("."); fi;
+
+    A_Specht_Decomposition_Matrix:=fail; ## just in case
+    
+    file:=n;
+    if crystal then
+      msg:="ReadCrystalMatrix-";
+    else 
+      msg:="ReadDecompositionMatrix-";
+    fi;
+
+    d:=fail;
+  
+    Read(Filename([Directory("."),SpechtDirectory,H!.info.Library],file));
+  
+    if A_Specht_Decomposition_Matrix<>fail then   ## extract matrix from M
+      M:=A_Specht_Decomposition_Matrix;
+      A_Specht_Decomposition_Matrix:=fail;
+      r:=Set(M.rows); c:=Set(M.cols);
+      if IsHecke(H) and r=c then
+        d:=DecompositionMatrix(H,r,
+              Filtered(c,x->IsERegular(H!.e,x)),not IsBound(M.crystal));
+      elif IsHecke(H) then
+        d:=DecompositionMatrix(H,r,c,not IsBound(M.crystal));
+      else
+        d:=DecompositionMatrix(H,r,r,not IsBound(M.crystal));
+      fi;
+      if IsSet(M.rows) and IsSet(M.cols) then ## new format
+        if IsBound(M.matname) then d!.matname:=M.matname; fi;
+        for c in [1..Length(d!.cols)] do
+          cm:=Position(M.cols, d!.cols[c]);
+          if cm<>fail and IsBound(M.d[cm]) then
+            x:=M.d[cm];
+            parts:=[]; coeffs:=[];
+            for rm in [1..Length(x)/2] do
+              r:=Position(d!.rows,M.rows[x[rm+Length(x)/2]]);
+              if r<>fail then
+                Add(parts,r);
+                if IsInt(x[rm]) then Add(coeffs,x[rm]);
+                else
+                  p:=LaurentPolynomialByCoefficients(
+                    FamilyObj(One(H!.info.Indeterminate)),
+                    x[rm]{[2..Length(x[rm])]},x[rm]);
+                  Add(coeffs,p);
+                fi;
+              fi;
+            od;
+            if parts<>[] then   ## paranoia
+              SortParallel(parts,coeffs);
+              d!.d[c]:=rec(parts:=parts,coeffs:=coeffs);
+           fi;
+          fi;
+        od;
+      else  ## old format
+        d!.d:=List(c, r->rec(coeffs:=[], parts:=[]));
+        ## next, we unravel the decomposition matrix
+        for rm in [1..Length(M.rows)] do
+          r:=Position(d!.rows,M.rows[rm]);
+          if r<>fail then
+            x:=1;
+            while x<Length(M.d[rm]) do
+              c:=Position(d!.cols,M.cols[M.d[rm][x]]);
+              if c<>false then
+                Add(d!.d[c].coeffs, M.d[rm][x+1]);
+                Add(d!.d[c].parts, r);
+              fi;
+              x:=x+2;
+            od;
+          fi;
+        od;
+        for c in [1..Length(d!.d)] do
+          if d!.d[c].parts=[] then Unbind(d!.d[c]);
+          else SortParallel(d!.d[c].parts, d!.d[c].coeffs);
+          fi;
+        od;
+      fi;
+    fi;
+    if crystal then H!.CrystalMatrices[n]:=d; fi;
+    return d;
+  end
+); # ReadDecompositionMatrix
 

@@ -35,7 +35,7 @@ DeclareCategory("IsSchur", IsAlgebraObj);
 BindGlobal("SchurType", NewType(AlgebraObjFamily, IsSchur));
 
 BindGlobal("DecompositionMatrixType", NewType(AlgebraObjFamily, IsDecompositionMatrix));
-BindGlobal("ChrystalDecompositionMatrixType", NewType(AlgebraObjFamily, IsCrystalDecompositionMatrix));
+BindGlobal("CrystalDecompositionMatrixType", NewType(AlgebraObjFamily, IsCrystalDecompositionMatrix));
 
 DeclareCategory("IsHeckeModule", IsAlgebraObjModule);
 DeclareCategory("IsHeckeSpecht", IsHeckeModule);
@@ -131,3 +131,7 @@ DeclareOperation("RInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("SInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
+
+DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsString,IsBool]);
+DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsInt,IsBool]);
+
