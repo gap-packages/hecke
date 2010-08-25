@@ -20,16 +20,22 @@ BindGlobal("AlgebraObjFamily", NewFamily("AlgebraObjFamily"));
 DeclareCategory("IsAlgebraObj", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsAlgebraObjModule", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsDecompositionMatrix", IsComponentObjectRep and IsAttributeStoringRep);
+DeclareCategory("IsCrystalDecompositionMatrix", IsComponentObjectRep and IsAttributeStoringRep);
+
+DeclareAttribute("Characteristic", IsAlgebraObj);
+DeclareAttribute("OrderOfQ",IsAlgebraObj);
+DeclareAttribute("OrderOfQ",IsAlgebraObjModule);
+
+DeclareProperty("IsZeroCharacteristic", IsAlgebraObj);
 
 DeclareCategory("IsHecke", IsAlgebraObj);
-DeclareCategory("IsHeckeDecompositionMatrix", IsDecompositionMatrix);
 BindGlobal("HeckeType", NewType(AlgebraObjFamily, IsHecke));
-BindGlobal("HeckeDecompositionMatrixType", NewType(AlgebraObjFamily, IsHeckeDecompositionMatrix));
 ##
 DeclareCategory("IsSchur", IsAlgebraObj);
-DeclareCategory("IsSchurDecompositionMatrix", IsDecompositionMatrix);
 BindGlobal("SchurType", NewType(AlgebraObjFamily, IsSchur));
-BindGlobal("SchurDecompositionMatrixType", NewType(AlgebraObjFamily, IsSchurDecompositionMatrix));
+
+BindGlobal("DecompositionMatrixType", NewType(AlgebraObjFamily, IsDecompositionMatrix));
+BindGlobal("ChrystalDecompositionMatrixType", NewType(AlgebraObjFamily, IsCrystalDecompositionMatrix));
 
 DeclareCategory("IsHeckeModule", IsAlgebraObjModule);
 DeclareCategory("IsHeckeSpecht", IsHeckeModule);
@@ -59,14 +65,14 @@ BindGlobal("SchurPIMType", NewType(AlgebraObjFamily, IsSchurPIM));
 BindGlobal("SchurSimpleType", NewType(AlgebraObjFamily, IsSchurSimple));
 
 DeclareOperation("Specht", [IsInt]);
-DeclareOperation("Specht", [IsInt,IsPrime]);
-#  DeclareOperation("Specht", [IsInt], , );
-#  DeclareOperation("Specht", [IsInt], , );
+DeclareOperation("Specht", [IsInt,IsInt]);
+DeclareOperation("Specht", [IsInt,IsInt,IsFunction]);
+DeclareOperation("Specht", [IsInt,IsInt,IsFunction,IsString]);
 ##
 DeclareOperation("Schur", [IsInt]);
-DeclareOperation("Schur", [IsInt,IsPrime]);
-#  DeclareOperation("Schur", [IsInt], , );
-#  DeclareOperation("Schur", [IsInt], , );
+DeclareOperation("Schur", [IsInt,IsInt]);
+DeclareOperation("Schur", [IsInt,IsInt,IsFunction]);
+DeclareOperation("Schur", [IsInt,IsInt,IsFunction,IsString]);
 
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsList]);
 DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsAlgebraObjModule]);
@@ -98,8 +104,6 @@ DeclareOperation("\*",[IsAlgebraObjModule,IsScalar]);
 DeclareOperation("\-",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\/",[IsAlgebraObjModule,IsScalar]);
 
-DeclareOperation("OrderOfQ",[IsAlgebraObj]);
-DeclareOperation("OrderOfQ",[IsAlgebraObjModule]);
 DeclareOperation("SetOrdering",[IsAlgebraObj,IsFunction]);
 
 DeclareOperation("SpechtPartitions",[IsHeckeSpecht]);
@@ -118,7 +122,12 @@ MakeDispatcherFunc("MullineuxMap",
 	[ 2						 , 2		 , 1									, 2											]);
 MakeDispatcherFunc("Schaper", [[IsAlgebraObj]],[2],[2]);
 
-DeclareOperation("InducedSpechtModule",[IsHeckeSpecht,IsInt,IsInt]);
-DeclareOperation("SInducedSpechtModule",[IsHeckeSpecht,IsInt,IsInt,IsInt]);
-DeclareOperation("RestrictedSpechtModule",[IsHeckeSpecht,IsInt,IsInt]);
-DeclareOperation("SRestrictedSpechtModule",[IsHeckeSpecht,IsInt,IsInt,IsInt]);
+DeclareOperation("RInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
+DeclareOperation("SInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
+DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
+DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
+
+DeclareOperation("RInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
+DeclareOperation("SInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
+DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
+DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);

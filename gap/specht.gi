@@ -235,18 +235,38 @@
 ##     Induce : for inducing decomposition matrices (non--crystallized).
 ##   P : a short-hand for d.H.P('d',<mu>).
 
-InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt],
-  function(e)
+InstallMethod(Specht,"generate a Hecke-Algebra object",
+  [IsInt,IsInt,IsFunction,IsString],
+  function(e,p,valuation,HeckeRing)
     local H;
+    if not IsPrime(p) and p<>0
+    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number"); 
+    fi;
 
     H := rec(
       e:=e,
+      p:=p,
+      valuation:=valuation,
+      HeckeRing:=HeckeRing,
       ## bits and pieces about H
-      info:=rec(version:=PackageInfo("specht")[1].Version),
+      info:=rec(version:=PackageInfo("specht")[1].Version, 
+                Library:=Directory(
+                  Concatenation(DirectoriesPackageLibrary("specht")[1]![1],"e",
+                  String(e),"/")),
+## We keep a copy of SpechtDirectory in H so that we have a
+## chance of finding new decomposition matrices when it changes.
+                SpechtDirectory:=Directory(".")),
 
       ## ordering used when printing decomposition matrices
       Ordering:=Lexicographic,
     );
+    
+    if p = 0 
+    then 
+      H.Indeterminate:=Indeterminate(Integers);
+      SetName(H.Indeterminate,"v"); 
+    else H.Indeterminate:=1;
+    fi;
 
     H.S:=function(arg) return NewModule(H,"S",arg); end;
     H.P:=function(arg) return NewModule(H,"P",arg); end;
@@ -258,11 +278,86 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt],
   end
 );
 
-InstallMethod(OrderOfQ,"reading access to H.e",[IsAlgebraObj],
+InstallMethod(Specht,"generate a Hecke-Algebra object",
+  [IsInt,IsInt,IsFunction],
+  function(e,p,val) local ring;
+    if not IsPrime(p) 
+    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number"); 
+    fi;
+    if e=p then
+      ring:=Concatenation("p",String(p),"sym");
+      return Specht(e,p,val,ring);
+    else
+      return Specht(e,p,val,"unknown");
+    fi; 
+  end
+);
+
+InstallMethod(Specht,"generate a Hecke-Algebra object",
+  [IsInt,IsInt],
+  function(e,p) local val, ring;
+    if not IsPrime(p) 
+    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number"); 
+    fi;
+    if e=p then
+      ring:=Concatenation("p",String(p),"sym");
+      ## return the exponent of the maximum power of p dividing x
+      val:=function(x) local i;
+        i:=0;
+        while x mod p=0 do
+          i:=i+1;
+          x:=x/p;
+        od;
+        return i;
+      end;
+    else
+      ring:=Concatenation("e",String(e), "p",String(p));
+      ## return the exponent of the maximum power of p that
+      ## divides e^x-1.
+      val:=function(x) local i;
+        if x mod e=0 then return 0;
+        else
+          i:=0;
+          while x mod p=0 do
+            i:=i+1;
+            x:=x/p;
+          od;
+          return p^i;
+        fi;
+      end;
+    fi; 
+    return Specht(e,p,val,ring);
+  end
+);
+
+InstallMethod(Specht,"generate a Hecke-Algebra object",
+  [IsInt],
+  function(e) local val;
+      if e=0 then val:=x->x;
+      else
+        val:=function(x)
+          if x mod e = 0 then return 1;
+          else return 0;
+          fi;
+        end;
+      fi;
+      return Specht(e,0,val,Concatenation("e",String(e), "p0")); 
+  end
+);
+
+InstallImmediateMethod(Characteristic, IsAlgebraObj, 0,
+  function(H) return H!.p; end
+);
+
+InstallImmediateMethod(IsZeroCharacteristic, IsAlgebraObj, 0,
+  function(H) return H!.p = 0; end
+);
+
+InstallImmediateMethod(OrderOfQ, IsAlgebraObj, 0,
   function(H) return H!.e; end
 );
 
-InstallMethod(OrderOfQ,"reading access to x.H.e",[IsAlgebraObjModule],
+InstallImmediateMethod(OrderOfQ, IsAlgebraObjModule, 0,
   function(x) return x!.H!.e; end
 );
 
@@ -299,21 +394,21 @@ InstallMethod(ListERegulars,"e-regular partitions of a module",
 ## IsSimle(H,mu)
 ##   ** uses H.valuation #### FIXME check this?
 InstallMethod(IsSimpleModuleOp,
-	"test whether the given partition defines a simple module",
-	[IsAlgebraObj,IsList],
-	function(H,mu) local mud, simple, r, c, v;
-		if not IsERegular(H!.e,mu) then return fail; 
-		elif mu=[] then return true; fi;
+  "test whether the given partition defines a simple module",
+  [IsAlgebraObj,IsList],
+  function(H,mu) local mud, simple, r, c, v;
+    if not IsERegular(H!.e,mu) then return fail; 
+    elif mu=[] then return true; fi;
 
-		mud:=ConjugatePartition(mu);
-		simple:=true; c:=1;
-		while simple and c <=mu[1] do
-		  v:=H!.valuation(mu[1]+mud[c]-c);
-		  simple:=ForAll([2..mud[c]], r->v=H!.valuation(mu[r]+mud[c]-c-r+1));
-		  c:=c+1;
-		od;
-		return simple;
-	end
+    mud:=ConjugatePartition(mu);
+    simple:=true; c:=1;
+    while simple and c <=mu[1] do
+      v:=H!.valuation(mu[1]+mud[c]-c);
+      simple:=ForAll([2..mud[c]], r->v=H!.valuation(mu[r]+mud[c]-c-r+1));
+      c:=c+1;
+    od;
+    return simple;
+  end
 ); #IsSimpleModule
 
 #F Split an element up into compontents which have the same core.
@@ -322,8 +417,8 @@ InstallMethod(IsSimpleModuleOp,
 ## (ii) the same core as lambda, or (iii) the same core as the first
 ## element in lambda if IsSpecht(lambda).
 InstallMethod(SplitECoresOp,"for a single module",[IsAlgebraObjModule],
-	function(x) local cores, c, cpos, y, cmp;
-  	if x=fail or x=0*x then return []; fi;
+  function(x) local cores, c, cpos, y, cmp;
+    if x=fail or x=0*x then return []; fi;
 
     cores:=[]; cmp:=[];
     for y in [1..Length(x!.parts)] do
@@ -340,15 +435,15 @@ InstallMethod(SplitECoresOp,"for a single module",[IsAlgebraObjModule],
     for y in [1..Length(cmp)] do
       cmp[y]:=Module(x!.H,x!.module,cmp[y][1],cmp[y][2]);
     od;
-		return cmp;
-	end
+    return cmp;
+  end
 );
 
 InstallMethod(SplitECoresOp,"for a module and a partition",
-	[IsAlgebraObjModule,IsList],
-	function(x,mu) local c, cpos, y, cmp;
-		c:=ECore(x!.H!.e, mu);
-		cmp:=[ [],[] ];
+  [IsAlgebraObjModule,IsList],
+  function(x,mu) local c, cpos, y, cmp;
+    c:=ECore(x!.H!.e, mu);
+    cmp:=[ [],[] ];
     for y in [1..Length(x!.parts)] do
       if ECore(x!.H!.e, x!.parts[y])=c then 
         Add(cmp[1], x!.coeffs[y]); 
@@ -356,15 +451,15 @@ InstallMethod(SplitECoresOp,"for a module and a partition",
       fi;
     od;
     cmp:=Module(x!.H,x!.module, cmp[1], cmp[2]);
-		return cmp;
-	end
+    return cmp;
+  end
 );
 
 InstallMethod(SplitECoresOp,"for a module and a specht module",
-	[IsAlgebraObjModule,IsHeckeSpecht], ## TODO Is this really only for specht modules?
-	function(x,s) local c, cpos, y, cmp;
-		c:=ECore(s!.H!.e, s!.parts[Length(x!.parts)]);
-		cmp:=[ [],[] ];
+  [IsAlgebraObjModule,IsHeckeSpecht], ## TODO Is this really only for specht modules?
+  function(x,s) local c, cpos, y, cmp;
+    c:=ECore(s!.H!.e, s!.parts[Length(x!.parts)]);
+    cmp:=[ [],[] ];
     for y in [1..Length(x!.parts)] do
       if ECore(x!.H!.e, x!.parts[y])=c then 
         Add(cmp[1], x!.coeffs[y]); 
@@ -372,8 +467,8 @@ InstallMethod(SplitECoresOp,"for a module and a specht module",
       fi;
     od;
     cmp:=Module(x!.H,x!.module, cmp[1], cmp[2]);
-		return cmp;
-	end
+    return cmp;
+  end
 ); #SplitECores
 
 #F This function returns the image of <mu> under the Mullineux map using
@@ -382,8 +477,8 @@ InstallMethod(SplitECoresOp,"for a module and a specht module",
 ## Mullineux.
 ## Usage:  MullineuxMap(e|H|d, mu) or MullineuxMap(x)
 InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
-	function(x) local e, v;
-		e := x!.H!.e;
+  function(x) local e, v;
+    e := x!.H!.e;
     if x=fail or not IsERegular(e,x!.parts[Length(x!.parts)]) then   
       Print("# The Mullineux map is defined only for e-regular partitions\n");
       return fail;
@@ -411,45 +506,45 @@ InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
                      Value(v^-EWeight(e,x!.parts[mu])*x!.coeffs[mu]),
                      MullineuxMap(e,x!.parts[mu])));
     fi;
-	end
+  end
 ); 
 
 InstallMethod(MullineuxMapOp,"for ints: image of <mu> under the Mullineux map",
-	[IsInt,IsList],
+  [IsInt,IsList],
   function(e,mu)
-		if not IsERegular(e,mu) then                     ## q-Schur algebra
+    if not IsERegular(e,mu) then                     ## q-Schur algebra
       Error("# The Mullineux map is defined only for e-regular ",
             "partitions\n");
     fi;
     return PartitionGoodNodeSequence(e,
                   List(GoodNodeSequence(e,mu),x->-x mod e));
-	end
+  end
 );
 
 InstallMethod(MullineuxMapOp,
-	"for algebras: image of <mu> under the Mullineux map",
-	[IsAlgebraObj,IsList],
+  "for algebras: image of <mu> under the Mullineux map",
+  [IsAlgebraObj,IsList],
   function(H,mu)
-		MullineuxMapOp(H!.e,mu);
-	end
+    MullineuxMapOp(H!.e,mu);
+  end
 );
 
 InstallMethod(MullineuxMapOp,
-	"for decomposition matrices: image of <mu> under the Mullineux map",
-	[IsDecompositionMatrix,IsList],
+  "for decomposition matrices: image of <mu> under the Mullineux map",
+  [IsDecompositionMatrix,IsList],
   function(d,mu) local e, x;
-		e := d!.H!.e;
-			if not IsERegular(e,mu) then                     ## q-Schur algebra
+    e := d!.H!.e;
+      if not IsERegular(e,mu) then                     ## q-Schur algebra
         Error("# The Mullineux map is defined only for e-regular ",
               "partitions\n");
       fi;
       x:=d!.H!.P(d,mu);
       if x=fail or x=0*x then
-      	Print("MullineuxMap(<d>,<mu>), P(<d>,<mu>) not known\n");
+        Print("MullineuxMap(<d>,<mu>), P(<d>,<mu>) not known\n");
         return false;
       else return ConjugatePartition(x!.parts[1]);
       fi;
-	end
+  end
 ); #MullineuxMap
 
 #F Calculates the Specht modules in sum_{i>0}S^lambda(i) using the
@@ -457,39 +552,39 @@ InstallMethod(MullineuxMapOp,
 ## Uses H.valuation. FIXME check this?
 ##   Usage:  Schaper(H,mu);
 InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
-	function(H,mu)
-		local mud, schaper, hooklen, c, row, r, s, v;
+  function(H,mu)
+    local mud, schaper, hooklen, c, row, r, s, v;
 
-		Sort(mu); mu:=mu{[Length(mu),Length(mu)-1..1]};
-		mud:=ConjugatePartition(mu);
-		hooklen:=[];
-		for r in [1..Length(mu)] do
-		  hooklen[r]:=[];
-		  for c in [1..mu[r]] do
-		    hooklen[r][c]:=mu[r] + mud[c] - r - c + 1;
-		  od;
-		od;
+    Sort(mu); mu:=mu{[Length(mu),Length(mu)-1..1]};
+    mud:=ConjugatePartition(mu);
+    hooklen:=[];
+    for r in [1..Length(mu)] do
+      hooklen[r]:=[];
+      for c in [1..mu[r]] do
+        hooklen[r][c]:=mu[r] + mud[c] - r - c + 1;
+      od;
+    od;
 
-		schaper:=Module(H,"S",0,[]);
-		for c in [1..mu[1]] do
-		  for row in [1..mud[1]] do
-		    for r in [row+1..mud[1]] do
-		      if mu[row] >=c and mu[r] >=c then
-		        v:=H!.valuation(hooklen[row][c]) 
-		              - H!.valuation(hooklen[r][c]);
-		        if v<>0 then
-		          s:=AddRimHook(RemoveRimHook(mu,r,c,mud),row,hooklen[r][c]);
-		          if s<>false then
-		            schaper:=schaper+Module(H,"S",
-		                                (-1)^(s[2]+mud[c]-r)*v,s[1]);
-		          fi;
-		        fi;
-		      fi;
-		    od;
-		  od;
-		od;
-		return schaper;
-	end
+    schaper:=Module(H,"S",0,[]);
+    for c in [1..mu[1]] do
+      for row in [1..mud[1]] do
+        for r in [row+1..mud[1]] do
+          if mu[row] >=c and mu[r] >=c then
+            v:=H!.valuation(hooklen[row][c]) 
+                  - H!.valuation(hooklen[r][c]);
+            if v<>0 then
+              s:=AddRimHook(RemoveRimHook(mu,r,c,mud),row,hooklen[r][c]);
+              if s<>false then
+                schaper:=schaper+Module(H,"S",
+                                    (-1)^(s[2]+mud[c]-r)*v,s[1]);
+              fi;
+            fi;
+          fi;
+        od;
+      od;
+    od;
+    return schaper;
+  end
 );  #Schaper
 
 ## OPERATIONS OF FORMER SPECHT RECORD ##########################################
@@ -499,17 +594,17 @@ InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
 ##   actually not quite a hook since if arg is a list (n,k1,k2,...)
 ##   this returns (k1,k2,...,1^(n-sum k_i))
 InstallMethod(HookOp,"for an integer and a list of lists",[IsInt,IsList],
-	function(n,K) local k, i;
-		k:=Sum(K);
-		if k < n then Append(K, List([1..(n-k)], i->1));
-		elif k > n then Error("hook, partition ", k, " bigger than ",n, "\n");
-		fi;
-		return K;
-	end
+  function(n,K) local k, i;
+    k:=Sum(K);
+    if k < n then Append(K, List([1..(n-k)], i->1));
+    elif k > n then Error("hook, partition ", k, " bigger than ",n, "\n");
+    fi;
+    return K;
+  end
 ); #Hook
 
 InstallMethod(DoubleHook,"for four integers",[IsInt,IsInt,IsInt,IsInt],
-	function(n,x,y,a) local s, i;
+  function(n,x,y,a) local s, i;
     s:=[x];
     if y<>0 then Add(s,y); fi;
     if a<>0 then Append(s, List([1..a],i->2)); fi;
@@ -529,11 +624,11 @@ InstallMethod(DoubleHook,"for four integers",[IsInt,IsInt,IsInt,IsInt],
 ## nu is obtained by wrapping an n-hook onto mu and attaching the
 ## sign of the leg length.
 InstallMethod(HeckeOmega,"for an algebra, a string and an integer",
-	[IsAlgebraObj,IsString,IsInt],
-	function(H,module,n)
-	  return Module(H,module,List([1..n],x->(-1)^(x)),
-	                   List([1..n],x->Hook(n,x)));
-	end
+  [IsAlgebraObj,IsString,IsInt],
+  function(H,module,n)
+    return Module(H,module,List([1..n],x->(-1)^(x)),
+                     List([1..n],x->Hook(n,x)));
+  end
 ); #Omega
 
 ## MODULES #####################################################################
@@ -645,11 +740,32 @@ InstallMethod(MakeSpecht,"S()->S()",[IsHeckeSpecht,IsBool],
 ## can't see how to do it otherwise. The problem is that in the
 ## Grothendieck ring there are many ways to write a given linear
 ## combination of Specht modules (or PIMs).
-InstallMethod(MakeSpecht,"S()->P()",[IsHeckeSpecht,IsBool],
-  function(x,silent) return x; end ## FIXME
+InstallMethod(MakePIM,"S()->P()",[IsHeckeSpecht,IsBool],
+  function(x,silent) local proj;
+    if x=fail or x=0*x then return x; 
+    elif x!.parts=[[]] then return Module(x!.H,"P",x!.coeffs[1],[]);
+    fi;
+  
+    proj:=Module(x!.H,"P",0,[]);
+    while x<>false and x<>0*x and 
+    ( not IsHeckeSpecht(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
+      proj:=proj+Module(x!.H,"P",x!.coeffs[Length(x!.parts)], 
+                                      x!.parts[Length(x!.parts)]);
+      x:=x+MakeSpecht(
+                Module(x!.H,"P",-x!.coeffs[Length(x!.parts)],
+                                      x!.parts[Length(x!.parts)]),true);
+    od;
+    if x=fail or x<>0*x then 
+      if not silent then 
+        Print("# P(<x>), unable to rewrite <x> as a sum of projectives\n");
+      fi;
+    else return proj;
+    fi;
+    return fail;
+  end
 );
 
-InstallMethod(MakeSpecht,"S()->D()",[IsHeckeSpecht,IsBool],
+InstallMethod(MakeSimple,"S()->D()",[IsHeckeSpecht,IsBool],
   function(x,silent) return x; end ## FIXME
 );
 
@@ -663,11 +779,11 @@ InstallMethod(MakeSpecht,"P()->S()",[IsHeckePIM,IsBool],
   function(x,silent) return x; end ## FIXME
 );
 
-InstallMethod(MakeSpecht,"P()->P()",[IsHeckePIM,IsBool],
+InstallMethod(MakePIM,"P()->P()",[IsHeckePIM,IsBool],
   function(x,silent) return x; end
 );
 
-InstallMethod(MakeSpecht,"P()->D()",[IsHeckePIM,IsBool],
+InstallMethod(MakeSimple,"P()->D()",[IsHeckePIM,IsBool],
     function(x,silent)
       x:=MakeSpecht(x,silent);
       if x=fail then return x;
@@ -679,12 +795,12 @@ InstallMethod(MakeSpecht,"P()->D()",[IsHeckePIM,IsBool],
 #F Writes D(mu) as a sum of S(nu)'s if possible. We first check to see
 ## if the decomposition matrix for Sum(mu) is stored in the library, and
 ## then try to calculate it directly. If we are unable to do this either
-## we return false.
+## we return fail.
 InstallMethod(MakeSpecht,"D()->S()",[IsHeckeSimple,IsBool],
   function(x,silent) return x; end ## FIXME
 );
 
-InstallMethod(MakeSpecht,"D()->P()",[IsHeckeSimple,IsBool],
+InstallMethod(MakePIM,"D()->P()",[IsHeckeSimple,IsBool],
   function(x,silent) 
       x:=MakeSpecht(x,silent);
       if x=fail then return x;
@@ -693,7 +809,7 @@ InstallMethod(MakeSpecht,"D()->P()",[IsHeckeSimple,IsBool],
     end
 );
 
-InstallMethod(MakeSpecht,"D()->D()",[IsHeckeSimple,IsBool],
+InstallMethod(MakeSimple,"D()->D()",[IsHeckeSimple,IsBool],
   function(x,silent) return x; end
 );
 
@@ -771,7 +887,7 @@ InstallMethod(\-,[IsAlgebraObjModule,IsAlgebraObjModule],
   end
 ); # SubModules
 
-InstallMethod(\*,"multiply module by scalar",[IsScalar,IsHeckeSpecht],
+InstallMethod(\*,"multiply module by scalar",[IsScalar,IsAlgebraObjModule],
   function(n,b)
     if n = 0 
     then return Module(b!.H, b!.module, 0, []);
@@ -780,7 +896,7 @@ InstallMethod(\*,"multiply module by scalar",[IsScalar,IsHeckeSpecht],
   end
 );
 
-InstallMethod(\*,"multiply module by scalar",[IsHeckeSpecht,IsScalar],
+InstallMethod(\*,"multiply module by scalar",[IsAlgebraObjModule,IsScalar],
   function(a,n)
     if n = 0 
     then return Module(a!.H, a!.module, 0, []);
@@ -789,7 +905,7 @@ InstallMethod(\*,"multiply module by scalar",[IsHeckeSpecht,IsScalar],
   end
 );
 
-InstallMethod(\*,"multiply modules",[IsHeckeSpecht,IsHeckeSpecht],
+InstallMethod(\*,"multiply specht modules",[IsHeckeSpecht,IsHeckeSpecht],
   function(a,b) local x, y, ab, abcoeff, xy, z;
     if a=fail or b=fail then return false;
     elif a!.H<>b!.H then 
@@ -808,8 +924,30 @@ InstallMethod(\*,"multiply modules",[IsHeckeSpecht,IsHeckeSpecht],
       od;
     od;
     if ab=[] then return Module(a!.H, a!.module, 0, []);
-    else return Collect(b!.H, b!.module, ab[1], ab[2]); #TODO
+    else return Collect(b!.H, b!.module, ab[1], ab[2]);
     fi;
+  end
+);
+
+InstallMethod(\*,"multiply projective indecomposable modules",[IsHeckePIM,IsHeckePIM],
+  function(a,b) local x, nx;
+    x:=MakeSpecht(a,false) * MakeSpecht(b,false);
+    nx:=MakePIM(x,true);
+    if nx<>fail then return nx; else return x; fi;
+  end
+);
+
+InstallMethod(\*,"multiply simple modules",[IsHeckeSimple,IsHeckeSimple],
+  function(a,b) local x, nx;
+    x:=MakeSpecht(a,false) * MakeSpecht(b,false);
+    nx:=MakeSimple(x,true);
+    if nx<>fail then return nx; else return x; fi;
+  end
+); 
+
+InstallMethod(\*,"multiply modules",[IsAlgebraObjModule,IsAlgebraObjModule],
+  function(a,b) 
+    return MakeSpecht(a,false) * MakeSpecht(b,false);
   end
 ); # MulModules
 
@@ -872,14 +1010,16 @@ InstallMethod(IntegralCoefficients, "test if all coefficients are integral",
   end
 ); # IntegralCoefficients
 
+## INDUCTION AND RESTRICTION ###################################################
+
 ## The next functions are for restricting and inducing Specht
 ## modules. They all assume that their arguments are indeed Specht
 ## modules; conversations are done in H.operations.X.Y() as necessary.
 
 ## r-induction: on Specht modules:
-InstallMethod(InducedSpechtModule, "r-induction on specht modules",
-	[IsHeckeSpecht,IsInt,IsInt],
-	function(a, e, r) local ind, x, i, j, np;
+InstallMethod(RInducedModule, "r-induction on specht modules",
+  [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt],
+  function(H, a, e, r) local ind, x, i, j, np;
     ind:=[[],[]];
     for x in [1..Length(a!.parts)] do
       for i in [1..Length(a!.parts[x])] do
@@ -898,11 +1038,11 @@ InstallMethod(InducedSpechtModule, "r-induction on specht modules",
         Add(ind[2],np);
       fi;
     od;
-    if ind=[ [],[] ] then return Module(a!.H,"S",0,[]);
-    else return Collect(a!.H,"S", ind[1], ind[2]);
+    if ind=[ [],[] ] then return Module(H,"S",0,[]);
+    else return Collect(H,"S", ind[1], ind[2]);
     fi;
   end
-); # InducedSpechtModule
+); # RInducedModule
 
 ## String-induction: add s r's from each partition in x (ignoring
 ## multiplicities). Does both standard and q-induction.
@@ -912,25 +1052,25 @@ InstallMethod(InducedSpechtModule, "r-induction on specht modules",
 ## write H.operations.X.SInduce to as to make this choice for us, or
 ## do q-induction always, setting v=1 afterwards, but this seems the
 ## better choice.
-InstallMethod(SInducedSpechtModule,"string-induction on specht modules",
-	[IsHeckeSpecht,IsInt,IsInt,IsInt],
-	function(x, e, s, r) local coeffs, parts, y, z, sinduced;
-		# add n nodes of residue r to the partition y from the i-th row down
-		sinduced:=function(y, n, e, r, i) local ny, j, z;
-		  ny:=[];
-		  for j in [i..Length(y)-n+1] do
-		    if r=(y[j] - j + 1) mod e then 
-		      if j=1 or y[j] < y[j-1] then
-		        z:=StructuralCopy(y);
-		        z[j]:=z[j] + 1; # only one node of residue r can be added
-		        if n=1 then Add(ny, z);   # no more nodes to add
-		        else Append(ny, sinduced(z, n-1, e, r, j+1));
-		        fi;
-		      fi;
-		    fi;
-		  od;
-		  return ny;
-		end;
+InstallMethod(SInducedModule,"string-induction on specht modules",
+  [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt],
+  function(H, x, e, s, r) local coeffs, parts, y, z, sinduced;
+    # add n nodes of residue r to the partition y from the i-th row down
+    sinduced:=function(y, n, e, r, i) local ny, j, z;
+      ny:=[];
+      for j in [i..Length(y)-n+1] do
+        if r=(y[j] - j + 1) mod e then 
+          if j=1 or y[j] < y[j-1] then
+            z:=StructuralCopy(y);
+            z[j]:=z[j] + 1; # only one node of residue r can be added
+            if n=1 then Add(ny, z);   # no more nodes to add
+            else Append(ny, sinduced(z, n-1, e, r, j+1));
+            fi;
+          fi;
+        fi;
+      od;
+      return ny;
+    end;
 
     if s=0 then return Module(x!.H,x!.module,1,[]); fi;
     coeffs:=[]; parts:=[];
@@ -949,16 +1089,16 @@ InstallMethod(SInducedSpechtModule,"string-induction on specht modules",
       fi;
     od;
 
-    if coeffs=[] then return Module(x!.H,x!.module,0,[]);
-    else return Collect(x!.H,x!.module, coeffs, parts);
+    if coeffs=[] then return Module(H, x!.module,0,[]);
+    else return Collect(H, x!.module, coeffs, parts);
     fi;
   end
-);  # SInducedSpechtModule
+);  # SInducedModule
 
 ## r-restriction
-InstallMethod(RestrictedSpechtModule,"r-restriction on specht modules",
-	[IsHeckeSpecht,IsInt,IsInt],
-	function(a, e, r) local ind, x, i, j, np;
+InstallMethod(RRestrictedModule,"r-restriction on specht modules",
+  [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt],
+  function(H, a, e, r) local ind, x, i, j, np;
     ind:=[[],[]];
     for x in [1..Length(a!.parts)] do
       for i in [1..Length(a!.parts[x])] do
@@ -972,44 +1112,245 @@ InstallMethod(RestrictedSpechtModule,"r-restriction on specht modules",
         fi;
       od;
     od;
-    if ind=[ [],[] ] then return Module(a!.H,"S",0,[]);
-    else return Collect(a!.H,"S", ind[1], ind[2]);
+    if ind=[ [],[] ] then return Module(H,"S",0,[]);
+    else return Collect(H,"S", ind[1], ind[2]);
     fi;
   end
-); #RestrictedSpechtModule
+); #RRestrictedModule
 
 ## string-restriction: remove m r's from each partition in x
-InstallMethod(SRestrictedSpechtModule,"string-restriction on specht modules",
-	[IsHeckeSpecht,IsInt,IsInt,IsInt],
-	function(x,e,s,r) local coeffs, parts, y, i, srestricted;
-		## remove n nodes from y from the ith row down
-		srestricted:=function(y, n, e, r, i) local ny, j, z;
-		  ny:=[];
-		  for j in [i..Length(y)-n+1] do
-		    if r=(y[j] - j) mod e then
-		      if j=Length(y) or y[j] > y[j+1] then
-		        z:=StructuralCopy(y);
-		        z[j]:=z[j] - 1;
-		        if z[j]=0 then   # n must be 1
-		          Unbind(z[j]);
-		          Add(ny, z);
-		        elif n=1 then Add(ny, z); # no mode nodes to remove
-		        else Append(ny, srestricted(z, n-1, e, r, j+1));
-		        fi;
-		      fi;
-		    fi;
-		  od;
-		  return ny;
-		end;
+InstallMethod(SRestrictedModule,"string-restriction on specht modules",
+  [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt],
+  function(H,x,e,s,r) local coeffs, parts, y, i, srestricted;
+    ## remove n nodes from y from the ith row down
+    srestricted:=function(y, n, e, r, i) local ny, j, z;
+      ny:=[];
+      for j in [i..Length(y)-n+1] do
+        if r=(y[j] - j) mod e then
+          if j=Length(y) or y[j] > y[j+1] then
+            z:=StructuralCopy(y);
+            z[j]:=z[j] - 1;
+            if z[j]=0 then   # n must be 1
+              Unbind(z[j]);
+              Add(ny, z);
+            elif n=1 then Add(ny, z); # no mode nodes to remove
+            else Append(ny, srestricted(z, n-1, e, r, j+1));
+            fi;
+          fi;
+        fi;
+      od;
+      return ny;
+    end;
 
     coeffs:=[]; parts:=[];
-    for y in [1..Length(x.parts)] do
+    for y in [1..Length(x!.parts)] do
       Append(parts, srestricted(x!.parts[y], s, e, r, 1));
       Append(coeffs,List([1..Length(parts)-Length(coeffs)],i->x!.coeffs[y]));
     od;
-    if parts=[] then return Module(x!.H,"S",0,[]);
-    else return Collect(x!.H,"S", coeffs, parts);
+    if parts=[] then return Module(H,"S",0,[]);
+    else return Collect(H,"S", coeffs, parts);
     fi;
   end
-);  # SRestrictedSpechtModule
+);  # SRestrictedModule
+
+## Induction and restriction; for S()
+InstallMethod(RInducedModule, "r-induction for specht modules",
+  [IsAlgebraObj, IsHeckeSpecht, IsList],
+  function(H, x, list) local r;
+    if x=fail or x=0*x then return x;
+    elif list=[] then return RInducedModule(H,x,1,0);
+    elif H!.e=0 then
+      Error("Induce, r-induction is not defined when e=0.");
+    elif ForAny(list,r-> r>=H!.e or r<0) then
+      Error("Induce, r-induction is defined only when 0<=r<e.\n");
+    else 
+      for r in list do
+        x:=RInducedModule(H,x,H!.e,r);
+      od;
+      return x;
+    fi;
+  end
+); 
+
+InstallMethod(RInducedModule, "r-induction for projective indecomposable modules",
+  [IsAlgebraObj, IsHeckePIM, IsList],
+  function(H, x, list) local nx;
+    x:=RInducedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakePIM(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+); 
+
+InstallMethod(RInducedModule, "r-induction for simple modules",
+  [IsAlgebraObj, IsHeckeSimple, IsList],
+  function(H, x, list) local nx;
+    x:=RInducedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakeSimple(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+); # RInducedModule
+
+InstallMethod(RRestrictedModule, "r-restriction for specht modules",
+  [IsAlgebraObj, IsHeckeSpecht, IsList],
+  function(H, x, list) local r;
+    if x=fail or x=0*x then return x;
+    elif list=[] then return RRestrictedModule(x,1,0);
+    elif H!.e=0 then
+      Error("Restrict, r-restriction is not defined when e=0.");
+   elif ForAny(list,r-> r>=H!.e or r<0) then
+      Error("Restrict, r-restriction is defined only when 0<=r<e.\n");
+    else 
+      for r in list do
+        x:=RRestrictedModule(H,x,H!.e,r);
+      od;
+      return x;
+    fi;
+  end
+);  
+
+InstallMethod(RRestrictedModule, "r-restriction for projective indecomposable modules",
+  [IsAlgebraObj, IsHeckePIM, IsList],
+  function(H, x, list) local nx;
+    x:=RRestrictedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakePIM(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+);   
+
+InstallMethod(RRestrictedModule, "r-restriction for simple modules",
+  [IsAlgebraObj, IsHeckeSimple, IsList],
+  function(H, x, list) local nx;
+    x:=RRestrictedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakeSimple(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+); # RRestrictedModule
+
+InstallMethod(SInducedModule,"string induction for specht modules",
+  [IsAlgebraObj, IsHeckeSpecht, IsList],
+  function(H, x, list) local r;
+    if x=fail or x=0*x then return x;
+    elif Length(list)=1 then
+      list:=list[1];
+      if list=0 then return Module(H,"Sq",1,[]); fi;
+      while list > 0 do
+        x:=SInducedModule(H,x,1,1,0);
+        list:=list-1;
+      od;
+      return x;
+    elif H!.e=0 then
+      Error("SInduce, r-induction is not defined when e=0.");
+    elif list[2]>H!.e or list[2]<0 then
+      Error("SInduce, r-induction is defined only when 0<=r<e.\n");
+    else return SInducedModule(H, x, H!.e, list[1], list[2]);
+    fi;
+  end
+);  
+
+InstallMethod(SInducedModule, "string induction for projective indecomposable modules",
+  [IsAlgebraObj, IsHeckePIM, IsList],
+  function(H, x, list) local nx;
+    x:=SInducedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakePIM(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+);   
+
+InstallMethod(SInducedModule, "string induction for simple modules",
+  [IsAlgebraObj, IsHeckeSimple, IsList],
+  function(H, x, list) local nx;
+    x:=SInducedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakeSimple(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+); # SInducedModule
+
+InstallMethod(SRestrictedModule,"string restriction for specht modules",
+  [IsAlgebraObj, IsHeckeSpecht, IsList],
+  function(H, x, list) local r;
+    if x=fail or x=0*x then return x;
+    elif Length(list)=1 then
+      list:=list[1];
+      if list=0 then return Module(H,"Sq",1,[]); fi;
+      while list > 0 do
+        x:=SRestrictedModule(H,x,1,1,0);
+        list:=list-1;
+      od;
+      return x;
+    elif H!.e=0 then
+      Error("SRestrict, r-restriction is not defined when e=0.");
+    elif list[2]>H!.e or list[2]<0 then
+      Error("SRestrict, r-restriction is defined only when 0<=r<e.\n");
+    else return SRestrictedModule(H, x, H!.e, list[1], list[2]);
+    fi;
+  end
+);  
+
+InstallMethod(SRestrictedModule, "string restriction for projective indecomposable modules",
+  [IsAlgebraObj, IsHeckePIM, IsList],
+  function(H, x, list) local nx;
+    x:=SRestrictedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakePIM(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+);   
+
+InstallMethod(SRestrictedModule, "string restriction for simple modules",
+  [IsAlgebraObj, IsHeckeSimple, IsList],
+  function(H, x, list) local nx;
+    x:=SRestrictedModule(H,MakeSpecht(x,false),list);
+    if x=fail or x=0*x then return x; fi;
+    nx:=MakeSimple(x,false);
+    if nx<>fail then return nx; else return x; fi;
+  end
+); #SRestrictedModule
+
+## DECOMPOSITION MATRICES ######################################################
+
+## Finally, we can define the creation function for decomposition matrices
+## (note that NewDM() does not add the partition labels to the decomp.
+## matrix; this used to be done here but now happens in PrintDM() because
+## crystallized matrices may never be printed and this operation is
+## expensive).
+## **NOTE: we assume when extracting entries from d that d.rows is
+## ordered lexicographically. If this is not the case then addition
+## will not work properly.
+InstallOtherMethod(DecompositionMatrix,"creates a new decomposition matrix",
+  [IsAlgebraObj,IsList,IsList,IsBool],
+  function(H, rows, cols, decompmat) local d;
+    if decompmat then 
+      d := rec(d:=[],      # matrix entries
+             rows:=rows, # matrix rows
+             cols:=cols, # matrix cols
+             inverse:=[], dimensions:=[], ## inverse matrix and dimensions
+             H:=H
+#### FIXME Necessary?
+####             P:=function(d,mu)     ## a lazy helper
+####               return d.operations.P.S(d, d.H.operations.New("P",1,mu));
+####             end
+      );
+      return Objectify(IsDecompositionMatrix,d);
+    else
+      d := rec(d:=[],      # matrix entries
+             rows:=rows, # matrix rows
+             cols:=cols, # matrix cols
+             inverse:=[], dimensions:=[], ## inverse matrix and dimensions
+             IsDecompositionMatrix:=false,   # crystallized
+             H:=H
+#### FIXME Necessary?
+####             P:=function(d,mu)     ## a lazy helper
+####               return d.operations.P.S(d, d.H.operations.New("P",1,mu));
+####             end
+      );
+      return Objectify(IsCrystalDecompositionMatrix,d);
+    fi;
+  end
+);   # DecompositonMatrix
 
