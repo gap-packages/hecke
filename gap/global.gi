@@ -16,6 +16,12 @@
 ##                                                                   ##
 #######################################################################
 
+InstallMethod(\*,"function composition",[IsFunction,IsFunction],
+  function(f,g) 
+    return function(x) return f(g(x)); end; 
+  end
+);
+
 InstallMethod(FoldLeft,[IsFunction,IsObject,IsList],
   function(f,i,l) local acc, x;
     acc := i;

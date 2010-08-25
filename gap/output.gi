@@ -175,6 +175,136 @@ InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool]
   end
 );
 
+InstallMethod(PrintObj, "simple decomposition matrix output", [IsDecompositionMatrix],
+	function(d) Print("DecompositionMatrix(",d!.H,
+	  ",",d!.rows,",",d!.cols,",",true,")"); end
+);
+
+InstallMethod(PrintObj, "simple decomposition matrix output", [IsCrystalDecompositionMatrix],
+	function(d) Print("CrystalDecompositionMatrix(",d!.H,
+	  ",",d!.rows,",",d!.cols,",",false,")"); end
+);
+
+InstallMethod(ViewString, "compact decomposition matrix output", [IsDecompositionMatrix],
+	function(d) 
+	    return Concatenation("<",String(Length(d!.rows)),"x",String(Length(d!.cols)),
+	      " decomposition matrix>"); 
+	end
+);
+
+InstallMethod(ViewObj, "compact decomposition matrix output", [IsDecompositionMatrix],
+	function(d) Print(ViewString(d)); end
+);
+
+InstallMethod(DisplayString, "pretty decomposition matrix output", [IsDecompositionMatrix],
+  function(d) return DecompositionMatrixString(d,false); end
+);
+
+InstallMethod(Display, "pretty decomposition matrix output", [IsDecompositionMatrix],
+  function(d) Print(DisplayString(d),"\n"); end
+);
+
+## Pretty printing (and TeXing) of a (decomposition) matrix.
+## d=decomposition matrix record, TeX=true of false
+## Actually, d can be any record having .d=matrix, .labels=[strings],
+## row, and cols components (this is also used by KappaMatrix for example).
+##   tex=0 normal printing
+##   tex=1 LaTeX output
+InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
+  [IsDecompositionMatrix,IsBool],
+  function(d, tex)
+    local rows, cols, r, c, col, len, endBit, sep, M, label, rowlabel,
+          spacestr, dotstr, PrintFn, i, str;
+     
+    str:=""; 
+     
+    ## if have to fix up the ordering before printing d
+    rows:=StructuralCopy(d!.rows); 
+    cols:=StructuralCopy(d!.cols); 
+    if d!.H!.Ordering=Lexicographic then
+      rows:=rows{[Length(rows),Length(rows)-1..1]};
+      cols:=cols{[Length(cols),Length(cols)-1..1]};
+    else
+      Sort(rows, d!.H!.Ordering);
+      Sort(cols, d!.H!.Ordering);
+    fi;
+    rows:=List(rows, r->Position(d!.rows,r));
+    cols:=List(cols, c->Position(d!.cols,c));
+
+    rowlabel:=List(d!.rows, LabelPartition);
+
+    if tex then # print tex output
+      PrintFn:=function(x) Append(str, TeX(x)); end; 
+                    ## PrintFn() allows us to tex() matrix elements (which
+                    ## is necessary for crystallized decomposition matices).
+      Append(str,"$$\\begin{array}{l|*{", Length(d!.cols)+1,"}{l}}\n");
+      sep:="&";
+      endBit:=function(i) Append(str,"\\\\\n"); end;
+    
+      ## gangely work around to tex 1^10 properly as 1^{10} etc.
+      label:=function(i) local locstr, bad, l; 
+        bad:=Filtered(Collected(d!.rows[i]),l->l[2]>9);
+        if bad=[] then Append(str,rowlabel[i]);
+        else # assume no conflicts as 1^10 and 1^101
+          locstr:=StructuralCopy(rowlabel[i]); 
+          IsString(locstr);   ## seems to be necessary...
+          for l in bad do
+            locstr:=ReplacedString(locstr,
+                   Concatenation(String(l[1]),"^",String(l[2])),
+                   Concatenation(String(l[1]),"^{",String(l[2]),"}"));
+          od;
+          Append(str,locstr);
+        fi;
+        Append(str,"&");
+      end;
+    else
+      PrintFn:=function(x) Append(str,String(x,len)); end; 
+      if not tex then sep:=" "; else sep:="#";fi;
+      endBit:=function(i) if i<>Length(d!.rows) then Append(str,"\n"); fi; end;
+
+      M:=-Maximum( List(rows, r->Length(rowlabel[r])) );
+      label:=function(i) Append(str,Concatenation(String(rowlabel[i],M),"| "));end;
+    
+      ## used to be able to print the dimensions at the end of the row.
+      # if false then 
+      #   endBit:=function(i) Print(" ", String(d.dim[i],-10),"\n");end;
+      # fi;
+    fi;
+    
+    ## Find out how wide the columns have to be (very expensive for 
+    ## crystallized matrices - also slightly incorrect as String(<poly>) 
+    ## returns such wonders as (2)*v rather than 2*v).
+    if tex then len:=0; 
+    else 
+      len:=1;
+      for i in d!.d do
+        if i.coeffs<>[] then
+          len:=Maximum(len,Maximum(List(i.coeffs,
+                                 j->Length(String(j)))));
+        fi;
+      od;
+    fi;
+    spacestr:=String("",len); 
+    dotstr:=String(".",len);
+    col:=0;
+    for r in rows do
+      label(r); 
+      if d!.rows[r] in d!.cols then col:=col+1; fi;
+      for c in [1..Length(cols)] do
+        if IsBound(d!.d[cols[c]]) and r in d!.d[cols[c]].parts then
+            PrintFn(d!.d[cols[c]].coeffs[Position(d!.d[cols[c]].parts,r)]);  
+          if c<>cols[1] then Append(str,sep); fi;
+        elif c<=col then Append(str, Concatenation(dotstr, sep));
+        else Append(str, Concatenation(spacestr, sep));
+        fi;
+      od;
+      endBit(rows[r]);
+    od;
+    if tex then Append(str, "\\end{array}$$\n"); fi;
+    return str;
+  end
+); # DecompositionMatrixString
+
 ## adding this string if it does not already exist.
 InstallMethod(LabelPartition, "pretty partition output", [IsList], 
   function(mu) local n, m, label, p;
