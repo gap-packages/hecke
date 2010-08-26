@@ -637,7 +637,7 @@ InstallMethod(HeckeOmega,"for an algebra, a string and an integer",
     return Module(H,module,List([1..n],x->(-1)^(x)),
                      List([1..n],x->Hook(n,x)));
   end
-); #Omega
+); #HeckeOmega
 
 ## MODULES #####################################################################
 InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
@@ -1320,7 +1320,73 @@ InstallMethod(SRestrictedModule, "string restriction for simple modules",
   end
 ); #SRestrictedModule
 
+## Q-INDUCTION AND Q-RESTRICTION ###############################################
+
+## notice that we can't pull the trick to induce all residues at once
+## that we used in InducedModule() etc. as we have to keep track of the
+## number of addable and removable nodes of each residue. Rather than
+## do this we just call this function as many times as necessary.
+InstallMethod(qSInducedModule,"q-induction for modules",
+  [IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt],
+  function(H,x,s,r) local coeffs, parts, y, z, qsinduced, v;
+    v:=H!.Indeterminate;  
+    
+    # add n nodes of residue r to the partition y from the i-th row down
+    # here exp is the exponent of the indertminate
+    qsinduced:=function(y, n, r, i, exp) local ny, j, z;
+     ny:=[];
+     for j in [i..Length(y)-n+1] do
+       if y[j]>0 and r=(y[j]-j) mod H!.e and (j=Length(y) or y[j]>y[j+1])
+       then exp:=exp-n;               ## removeable node of residue r
+       elif r=(y[j] - j + 1) mod H!.e then
+         if j=1 or y[j] < y[j-1] then ## addable node of residue r
+           z:=StructuralCopy(y);
+           z[j]:=z[j] + 1; # only one node of residue r can be added
+           if n=1 then Add(ny, [exp,z] );   # no more nodes to add
+           else Append(ny, qsinduced(z, n-1, r, j+1, exp));
+           fi;
+           exp:=exp+n;
+         fi;
+       fi;
+     od;
+     return ny;
+    end;
+
+    coeffs:=[]; parts:=[];
+    for y in [1..Length(x!.parts)] do
+      if r=( -Length(x!.parts[y]) mod H!.e) then # add a node to the bottom
+        z:=StructuralCopy(x!.parts[y]);
+        Add(z,0);
+        for z in qsinduced(z,s,r,1,0)  do
+          if z[1]=0 then Add(coeffs, x!.coeffs[y]);
+          else Add(coeffs, x!.coeffs[y]*v^z[1]);
+          fi;
+          if z[2][Length(z[2])]=0 then Unbind(z[2][Length(z[2])]); fi;
+          Add(parts, z[2]);
+        od;
+      else
+        for z in qsinduced(x!.parts[y],s,r,1,0) do
+          if z[1]=0 then Add(coeffs, x!.coeffs[y]);
+          else Add(coeffs, x!.coeffs[y]*v^z[1]);
+          fi;
+          Add(parts, z[2]);
+        od;
+      fi;
+    od;
+
+    if coeffs=[] then return Module(H,x!.module,0,[]);
+    else return Collect(H,x!.module, coeffs, parts);
+    fi;
+  end
+);  # qSInducedModule
+
 ## DECOMPOSITION MATRICES ######################################################
+
+## The following directory is searched by ReadDecompositionMatrix()
+## when it is looking for decomposition matrices. By default, it points
+## to the current directory (if set, the current directory is not
+## searched).
+if not IsBound(SpechtDirectory) then SpechtDirectory:=Directory("."); fi;
 
 ## This variable is what is used in the decomposition matrices files saved
 ## by SaveDecompositionMatrix() (and also the variable which contains them
@@ -1357,6 +1423,96 @@ InstallOtherMethod(DecompositionMatrix,"creates a new decomposition matrix",
   end
 );   # DecompositonMatrix
 
+## This also needs to be done for crystal matrices (this wasn't
+## put in above because normal decomposition matrices don't
+## specialise.
+InstallMethod(Specialized,"specialise CDM",
+  [IsCrystalDecompositionMatrix,IsInt],
+  function(d,a) local sd, c, p, coeffs, v;
+    v:=d!.H!.Indeterminate;
+    sd:=DecompositionMatrix(d!.H,d!.rows,d!.cols,true);
+    for c in [1..Length(d!.cols)] do
+      if IsBound(d!.d[c]) then
+        sd!.d[c]:=rec();
+        coeffs:=List(d!.d[c].coeffs*v^0,p->Value(p,a));
+        p:=List(coeffs,p->p<>0);
+        if true in p then
+          sd!.d[c]:=rec(coeffs:=ListBlist(coeffs,p),
+                        parts:=ListBlist(d!.d[c].parts,p) );
+        else sd!.d[c]:=rec(coeffs:=[0], parts:=[ [] ] );
+        fi;
+      fi;
+      if IsBound(d!.inverse[c]) then
+        coeffs:=List(d!.inverse[c].coeffs*v^0,p->Value(p,a));
+        p:=List(coeffs,p->p<>0);
+        if true in p then
+          sd!.inverse[c]:=rec(coeffs:=ListBlist(coeffs,p),
+                          parts:=ListBlist(d!.inverse[c].parts,p) );
+        else sd!.d[c]:=rec(coeffs:=[0], parts:=[ [] ] );
+        fi;
+      fi;
+    od;
+    return sd;
+  end
+); 
+
+InstallMethod(Specialized,"specialise CDM",
+  [IsCrystalDecompositionMatrix], a->Specialized(a,1)
+); # Specialized
+
+#P This function adds the column for Px to the decomposition matrix <d>.
+## if <checking>=true then Px is checked against its image under the
+## Mullineux map; if this image is not there then we also insert it
+## into <d>.
+InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
+  [IsDecompositionMatrix,IsAlgebraObjModule,IsBool],
+  function(d,Px,checking) local mPx, r, c;
+    c:=Position(d!.cols, Px!.parts[Length(Px!.parts)]);
+    if checking then
+      ## first look to see if <Px> already exists in <d>
+      if IsBound(d!.d[c]) then ## Px already exists
+        Print("# AddIndecomposable: overwriting old value of P(",
+              TightStringList(Px!.parts[Length(Px!.parts)]),") in <d>\n");
+        Unbind(d!.inverse);       # just in case these were bound
+        Unbind(d!.dimensions);
+      fi;
+      ## now looks at the image of <Px> under Mullineux
+      if (IsHecke(Px!.H) and IsERegular(Px!.H!.e,Px!.parts[Length(Px!.parts)])) 
+      and Px!.parts[Length(Px!.parts)]<>ConjugatePartition(Px!.parts[1]) then
+        mPx:=MullineuxMap(Px);
+        if IsBound(d!.d[Position(d!.cols,mPx!.parts[Length(Px!.parts)])])
+        and d!.P(d,mPx!.parts[Length(Px!.parts)]) <> mPx then #FIXME P
+          Print("# AddIndecomposable(<d>,<Px>), WARNING: P(",
+                TightStringList(Px!.parts[Length(Px!.parts)]), ") and P(",
+                TightStringList(mPx!.parts[Length(Px!.parts)]),
+                ") in <d> are incompatible\n");
+        else
+          Print("# AddIndecomposable(<d>,<Px>): adding MullineuxMap(<Px>) ",
+                "to <d>\n");
+          AddIndecomposable(d,mPx,false);
+        fi;
+      fi;
+    fi;      # end of check
+    d!.d[c]:=rec(coeffs:=Px!.coeffs,
+                parts:=List(Px!.parts,r->Position(d!.rows,r)) );
+  end
+); 
+
+#P A front end to d.operations.AddIndecomposable. This funciton adds <Px>
+## into the decomposition matrix <d> and checks that it is compatible with
+## its image under the Mullineux map, if this is already in <d>, and
+## inserts it if it is not.
+InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
+  [IsDecompositionMatrix,IsHeckeSpecht],
+  function(d, Px)
+    if Position(d!.cols, Px!.parts[Length(Px!.parts)])=fail then 
+      Print("# The projective P(",TightStringList(Px!.parts[Length(Px!.parts)]),
+            ") is not listed in <D>\n");
+    else AddIndecomposable(d,Px,true);
+    fi;
+  end
+);# AddIndecomposable
+
 ## This function will read the file "n" if n is a string; otherwise
 ## it will look for the relevant file for H(Sym_n). If crystal=true
 ## this will be a crystal decomposition matrix, otherwise it will be
@@ -1392,19 +1548,12 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
 
 InstallMethod(ReadDecompositionMatrix, "load matrix from library",
   [IsAlgebraObj,IsString,IsBool],
-  function(H, n, crystal)
-    local msg, file, M, d, c, parts, coeffs, p, x, r, cm, rm,
-      SpechtDirectory;
-    
-    ## The following directory is searched by ReadDecompositionMatrix()
-    ## when it is looking for decomposition matrices. By default, it points
-    ## to the current directory (if set, the current directory is not
-    ## searched).
-    if not IsBound(SpechtDirectory) then SpechtDirectory:=Directory("."); fi;
+  function(H, str, crystal)
+    local msg, file, M, d, c, parts, coeffs, p, x, r, cm, rm;
 
     A_Specht_Decomposition_Matrix:=fail; ## just in case
     
-    file:=n;
+    file:=Filename([Directory("."),SpechtDirectory,H!.info.Library],str);
     if crystal then
       msg:="ReadCrystalMatrix-";
     else 
@@ -1413,7 +1562,7 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
 
     d:=fail;
   
-    Read(Filename([Directory("."),SpechtDirectory,H!.info.Library],file));
+    if file <> fail then Read(file); fi;
   
     if A_Specht_Decomposition_Matrix<>fail then   ## extract matrix from M
       M:=A_Specht_Decomposition_Matrix;
@@ -1481,4 +1630,201 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
     return d;
   end
 ); # ReadDecompositionMatrix
+
+## Look up the decomposition matrix in the library files and in the
+## internal lists and return it if it is known.
+## NOTE: this function does not use the crystal basis to calculate the
+## decomposition matrix because it is called by the various conversion
+## functions X->Y which will only need a small part of the matrix in 
+## general. The function FindDecompositionMatrix() also uses the crystal
+## basis.
+InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
+  [IsAlgebraObj,IsInt],
+  function(H,n)
+    local d, x, r, c;
+  
+    if IsBound(H!.DecompositionMatrices[n]) then 
+      d:=H!.DecompositionMatrices[n];
+      if ( d<>fail and ForAll([1..Length(d!.cols)],c->IsBound(d!.d[c])) ) 
+      or H!.info.SpechtDirectory=SpechtDirectory then return d;
+      elif H!.info.SpechtDirectory<>SpechtDirectory then
+        for x in [1..Length(H!.DecompositionMatrices)] do
+          if IsBound(H!.DecompositionMatrices[x]) and 
+          H!.DecompositionMatrices[x]=fail then
+            Unbind(H!.DecompositionMatrices[x]);
+          fi;
+        od;
+      fi;
+    fi;
+    d:=ReadDecompositionMatrix(H,n,false);
+
+    ## next we look for crystal matrices
+    if d=fail and IsHecke(H) and IsZeroCharacteristic(H) then #FIXME overloading
+      d:=ReadDecompositionMatrix(H,n,true);
+      if d<>fail then d:=Specialized(d); fi; #TODO
+    fi;
+
+    if d=fail and n<2*H!.e then   
+      ## decomposition matrix can be calculated
+      r:=Partitions(n); 
+      if IsHecke(H) then c:=ERegularPartitions(H!.e,n); #FIXME overloading
+      else c:=r;
+      fi;
+      d:=DecompositionMatrix(H, r, c, true);
+
+      for x in [1..Length(d!.cols)] do
+        if IsECore(H,d!.cols[x]) then    ## an e-core
+          AddIndecomposable(d, #TODO
+            Module(H,"S",1,d!.cols[x]),false);
+        elif IsSimpleModule(H,d!.cols[x]) then ## first e-weight 1 partition
+          c:=Module(H,"S",1,ECore(H,d!.cols[x]) )
+                   *HeckeOmega(H,"S",H!.e);
+          for r in [2..Length(c!.parts)] do
+            AddIndecomposable(d,
+                  Module(H,"S",[1,1],c!.parts{[r-1,r]}),false);
+          od;
+          if IsSchur(H) then 
+            AddIndecomposable(d,
+              Module(H,"S",1,c!.parts[1]),false);
+          fi;
+        fi;
+      od;
+    elif IsBound(H!.DecompositionMatrices[n]) then ## partial answer only
+      return H!.DecompositionMatrices[n];
+    fi;
+    H!.DecompositionMatrices[n]:=d;
+    return d;
+  end
+);  # KnownDecompositionMatrix
+
+## almost identical to KnownDecompositionMatrix except that if this function
+## fails then the crystalized decomposition matrix is calculated.
+InstallMethod(FindDecompositionMatrix,"find or calculate CDM",
+  [IsAlgebraObj,IsInt],
+  function(H,n) local d,c;
+    d:=KnownDecompositionMatrix(H,n);
+    if d=fail and IsHecke(H) and IsZeroCharacteristic(H) then #FIXME overloading
+      d:=DecompositionMatrix(H,
+              Partitions(n),ERegularPartitions(H!.e,n),false);
+      for c in [1..Length(d!.cols)] do
+        if not IsBound(d!.d[c]) then
+          AddIndecomposable(d,FindPq(H,d!.cols[c]),false);
+        fi;
+      od;
+      H!.CrystalMatrices[n]:=d;
+      d:=Specialized(d);
+      H!.DecompositionMatrices[n]:=d;
+    fi;
+    return d;
+  end
+); # FindDecompositionMatrix
+
+## Crystal basis elements ######################################################
+
+## Retrieves or calculates the crystal basis element Pq(mu)
+InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
+  [IsAlgebraObj,IsList], 
+  function(H,mu) local  n, c, CDM, i, r, s, x, v, val,coeffs;
+    v:=H!.Indeterminate;
+    
+    if mu=[] then return Module(H,"Sq",v^0,[]); fi;
+    n:=Sum(mu);
+
+    ## first we see if we have already calculated Pq(mu)
+    if not IsBound(H!.CrystalMatrices[n]) or H!.CrystalMatrices[n]=fail then
+      x:=ReadDecompositionMatrix(H,n,true);
+      if x=fail then 
+        H!.CrystalMatrices[n]:=DecompositionMatrix(H,
+          Partitions(n), ERegularPartitions(H!.e,n), false);
+      fi;
+    fi;
+    CDM:=H!.CrystalMatrices[n];
+    c:=Position(CDM!.cols,mu);
+    if IsBound(CDM!.d[c]) then
+      return Module(H,"Sq",CDM!.d[c].coeffs,
+                 List(CDM!.d[c].parts, s->CDM!.rows[s]) );
+    fi;
+
+    if IsECore(H!.e,mu) then
+      x:=Module(H,"Sq",v^0,mu);
+    elif EWeight(H!.e,mu)=1 then
+      x:=Module(H,"Sq",v^0,ECore(H!.e,mu))
+                 * HeckeOmega(H,"Sq",H!.e);
+      r:=Position(x!.parts,mu);
+      if r=1 then 
+        x!.parts:=x!.parts{[1]};
+        x!.coeffs:=[v^0];
+      else 
+        x!.parts:=x!.parts{[r-1,r]};
+        x!.coeffs:=[v,v^0];
+      fi;
+    else  ## we calculate Pq(mu) recursively using LLT
+
+      ## don't want to change the original mu
+      mu:=StructuralCopy(mu);
+      i:=1;
+      while i<Length(mu) and mu[i]=mu[i+1] do
+        i:=i+1;
+      od;
+      r:=(mu[i]-i) mod H!.e;
+      mu[i]:=mu[i]-1;
+      s:=1;
+      i:=i+1;
+      while i<=Length(mu) do
+        while i<>Length(mu) and mu[i]=mu[i+1] do
+          i:=i+1;
+        od;
+        if r=(mu[i]-i) mod H!.e then
+          s:=s+1; 
+          mu[i]:=mu[i]-1; 
+          i:=i+1;
+        else i:=Length(mu)+1;
+        fi;
+      od;
+      if mu[Length(mu)]=0  then Unbind( mu[Length(mu)] ); fi;
+      x:=qSInducedModule(H, FindPq(mu), s, r);
+      n:=1;
+      while n<Length(x!.parts) do
+        ## FIXME valuation and coefficients
+        if x!.coeffs[Length(x!.parts)-n].valuation>0 then n:=n+1;
+        else
+          r := StructuralCopy( x.coeffs[Length(x.parts)-n] );
+          mu:=x.parts[Length(x.parts)-n];
+          if Length(r.coefficients) < 1-r.coefficients then
+            Append(r.coefficients,
+              List([1..Length(r.coefficients)-1-r.valuation], i->0));
+          fi;
+          r.coefficients := r.coefficients{[1..1-r.valuation]};
+          Append(r.coefficients, Reversed(r.coefficients{[1..-r.valuation]}));
+          x := x-r*FindPq(mu);
+          if mu in x!.parts then n:= n+1; fi;
+        fi;
+      od;
+      r := List(x!.coeffs, s->s <> 0 * v ^ 0);
+      if false in r then
+        x!.coeffs := ListBlist( x!.coeffs, r );
+        x!.parts := ListBlist( x!.parts, r );
+      fi;
+    fi;
+
+    ## having found x we add it to CDM
+    CDM!.d[c]:=rec(coeffs:=x!.coeffs, 
+                  parts:=List(x!.parts, r->Position(CDM!.rows,r)) );
+
+    ## for good measure we also add the Mullineux image of Pq(mu) to CDM
+    ## (see LLT Theorem 7.2)
+    n:=Position(CDM!.cols,ConjugatePartition(x!.parts[1]));
+    if c<>n then             ## not self-image under MullineuxMap
+      r:=List(x!.coeffs*v^0, i->Value(i,v^-1));     ## v -> v^-1
+      for i in [Length(r),Length(r)-1..1] do   ## multiply by r[1]
+        r[i].valuation:=r[i].valuation-r[1].valuation; #FIXME valuation
+      od;
+      s:=List(x!.parts, mu->Position(CDM!.rows,ConjugatePartition(mu)));
+      SortParallel(s,r);
+      CDM!.d[n]:=rec(coeffs:=r,parts:=s);
+    fi;
+    return x;
+  end
+); # FindPq
+
 

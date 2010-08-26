@@ -259,7 +259,7 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
       end;
     else
       PrintFn:=function(x) Append(str,String(x,len)); end; 
-      if not tex then sep:=" "; else sep:="#";fi;
+      if tex then sep:="#"; else sep:=" ";fi;
       endBit:=function(i) if i<>Length(d!.rows) then Append(str,"\n"); fi; end;
 
       M:=-Maximum( List(rows, r->Length(rowlabel[r])) );

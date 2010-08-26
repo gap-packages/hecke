@@ -20,7 +20,8 @@ BindGlobal("AlgebraObjFamily", NewFamily("AlgebraObjFamily"));
 DeclareCategory("IsAlgebraObj", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsAlgebraObjModule", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsDecompositionMatrix", IsComponentObjectRep and IsAttributeStoringRep);
-DeclareCategory("IsCrystalDecompositionMatrix", IsComponentObjectRep and IsAttributeStoringRep);
+DeclareCategory("IsCrystalDecompositionMatrix", 
+  IsDecompositionMatrix and IsComponentObjectRep and IsAttributeStoringRep);
 
 DeclareAttribute("Characteristic", IsAlgebraObj);
 DeclareAttribute("OrderOfQ",IsAlgebraObj);
@@ -131,7 +132,17 @@ DeclareOperation("RInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("SInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
+DeclareOperation("qSInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
+DeclareOperation("qSRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
+
+DeclareOperation("Specialized",[IsCrystalDecompositionMatrix,IsInt]);
+DeclareOperation("Specialized",[IsCrystalDecompositionMatrix]);
+DeclareOperation("AddIndecomposable",[IsDecompositionMatrix,IsAlgebraObjModule,IsBool]);
+DeclareOperation("AddIndecomposable",[IsDecompositionMatrix,IsAlgebraObjModule]);
 
 DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsString,IsBool]);
 DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsInt,IsBool]);
+DeclareOperation("KnownDecompositionMatrix",[IsAlgebraObj,IsInt]);
+DeclareOperation("FindDecompositionMatrix",[IsAlgebraObj,IsInt]);
 
+DeclareOperation("FindPq",[IsAlgebraObj,IsList]);
