@@ -21,14 +21,14 @@ InstallMethod(PrintObj, "simple algebra output", [IsAlgebraObj],
 );
 
 InstallMethod(ViewString, "compact algebra output", [IsHecke],
-	function(H) 
-		return Concatenation("<Hecke algebra with e = ",String(H!.e),">"); 
+	function(H)
+		return Concatenation("<Hecke algebra with e = ",String(H!.e),">");
 	end
 );
 
 InstallMethod(ViewString, "compact algebra output", [IsSchur],
-	function(S) 
-		return Concatenation("<Schur algebra with e = ",String(S!.e),">"); 
+	function(S)
+		return Concatenation("<Schur algebra with e = ",String(S!.e),">");
 	end
 );
 
@@ -46,40 +46,40 @@ InstallMethod(Display, "pretty algebra output", [IsAlgebraObj],
 
 InstallMethod(AlgebraString, "generic algebra output", [IsHecke],
 	function(H) local p, pq, ring;
-		if H!.p<>0 
-		then p:=Concatenation("p=",String(H!.p),", "); 
+		if H!.p<>0
+		then p:=Concatenation("p=",String(H!.p),", ");
 		else p:="";
 		fi;
-		if IsBound(H!.pq) 
-		then pq:=", Pq()"; 
+		if IsBound(H!.pq)
+		then pq:=", Pq()";
 		else pq:="";
 		fi;
-		if H!.p<>H!.e and H!.p<>0 
+		if H!.p<>H!.e and H!.p<>0
 		then ring:=Concatenation(", HeckeRing=\"", String(H!.HeckeRing), "\")");
 		else ring:=")";
 		fi;
 
-		return 
+		return
 			Concatenation("Specht(e=",String(H!.e),", ",p,"S(), P(), D()",pq,ring);
 	end
 );
 
 InstallMethod(AlgebraString, "generic algebra output", [IsSchur],
 	function(S) local p, pq, ring;
-		if S!.p<>0 
-		then p:=Concatenation("p=",String(S!.p),", "); 
+		if S!.p<>0
+		then p:=Concatenation("p=",String(S!.p),", ");
 		else p:="";
 		fi;
-		if IsBound(S!.pq) 
-		then pq:=", Pq()"; 
+		if IsBound(S!.pq)
+		then pq:=", Pq()";
 		else pq:="";
 		fi;
-		if S!.p<>S!.e and S!.p<>0 
+		if S!.p<>S!.e and S!.p<>0
 		then ring:=Concatenation(", HeckeRing=\"", String(S!.HeckeRing), "\")");
 		else ring:=")";
 		fi;
 
-		return 
+		return
 			Concatenation("Schur(e=",String(S!.e),", ",p,"W(), P(), F()",pq,ring);
 	end
 );
@@ -89,9 +89,9 @@ InstallMethod(PrintObj, "simple module output", [IsAlgebraObjModule],
 );
 
 InstallMethod(ViewString, "compact module output", [IsAlgebraObjModule],
-  function(m) 
+  function(m)
     return Concatenation("<direct sum of ",
-      String(Length(m!.parts))," ",m!.module,"-modules>"); 
+      String(Length(m!.parts))," ",m!.module,"-modules>");
   end
 );
 
@@ -108,7 +108,7 @@ InstallMethod(Display, "pretty module output", [IsAlgebraObjModule],
 );
 
 InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool],
-  function(a,pp) 
+  function(a,pp)
     local x, len, n, star, tmp, coefficients, valuation, str;
 
     str := "";
@@ -128,13 +128,13 @@ InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool]
     else
       for x in [Length(a!.parts),Length(a!.parts)-1..1] do
         if IsPolynomial(a!.coeffs[x]) then
-          tmp := CoefficientsOfUnivariateRationalFunction(a!.coeffs[x]);
+          tmp := CoefficientsOfLaurentPolynomial(a!.coeffs[x]);
           coefficients := tmp[1];
-          valuation := tmp[3];
+          valuation := tmp[2];
           if Length(coefficients)=1 then
             if valuation=0 then
               if coefficients=[-1] then Append(str," - ");
-              elif coefficients[1]<0 then 
+              elif coefficients[1]<0 then
                 str:=StringFold(str,[coefficients[1],star]);
               else
                 if x<Length(a!.parts) then Append(str," + "); fi;
@@ -143,12 +143,12 @@ InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool]
                 fi;
               fi;
             else
-              if x<Length(a!.parts) and coefficients[1]>0 then 
+              if x<Length(a!.parts) and coefficients[1]>0 then
                 Append(str," + ");
               fi;
               str:=StringFold(str,[a!.coeffs[x],star]);
             fi;
-          elif coefficients[Length(coefficients)]<0 
+          elif coefficients[Length(coefficients)]<0
           then str:=StringFold(str,[" - (",-a!.coeffs[x],")", star]);
           else
             if x<Length(a!.parts) then Append(str, " + "); fi;
@@ -159,13 +159,13 @@ InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool]
           elif a!.coeffs[x]<0 then str:=StringFold(str,[a!.coeffs[x],star]);
           else
             if x<Length(a!.parts) then Append(str, " + "); fi;
-            if a!.coeffs[x]<>1 
+            if a!.coeffs[x]<>1
               then str:=StringFold(str,[a!.coeffs[x],star]); fi;
           fi;
         fi;
-        if pp then 
-          tmp := LabelPartition(a!.parts[x]); 
-        else 
+        if pp then
+          tmp := LabelPartition(a!.parts[x]);
+        else
           tmp := StringPartition(a!.parts[x]);
         fi;
         str:=StringFold(str,[a!.module,"(",tmp,")"]);
@@ -186,9 +186,9 @@ InstallMethod(PrintObj, "simple decomposition matrix output", [IsCrystalDecompos
 );
 
 InstallMethod(ViewString, "compact decomposition matrix output", [IsDecompositionMatrix],
-	function(d) 
+	function(d)
 	    return Concatenation("<",String(Length(d!.rows)),"x",String(Length(d!.cols)),
-	      " decomposition matrix>"); 
+	      " decomposition matrix>");
 	end
 );
 
@@ -215,12 +215,12 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
   function(d, tex)
     local rows, cols, r, c, col, len, endBit, sep, M, label, rowlabel,
           spacestr, dotstr, PrintFn, i, str;
-     
-    str:=""; 
-     
+
+    str:="";
+
     ## if have to fix up the ordering before printing d
-    rows:=StructuralCopy(d!.rows); 
-    cols:=StructuralCopy(d!.cols); 
+    rows:=StructuralCopy(d!.rows);
+    cols:=StructuralCopy(d!.cols);
     if d!.H!.Ordering=Lexicographic then
       rows:=rows{[Length(rows),Length(rows)-1..1]};
       cols:=cols{[Length(cols),Length(cols)-1..1]};
@@ -234,19 +234,19 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
     rowlabel:=List(d!.rows, LabelPartition);
 
     if tex then # print tex output
-      PrintFn:=function(x) Append(str, TeX(x)); end; 
+      PrintFn:=function(x) Append(str, TeX(x)); end;
                     ## PrintFn() allows us to tex() matrix elements (which
                     ## is necessary for crystallized decomposition matices).
       Append(str,"$$\\begin{array}{l|*{", Length(d!.cols)+1,"}{l}}\n");
       sep:="&";
       endBit:=function(i) Append(str,"\\\\\n"); end;
-    
+
       ## gangely work around to tex 1^10 properly as 1^{10} etc.
-      label:=function(i) local locstr, bad, l; 
+      label:=function(i) local locstr, bad, l;
         bad:=Filtered(Collected(d!.rows[i]),l->l[2]>9);
         if bad=[] then Append(str,rowlabel[i]);
         else # assume no conflicts as 1^10 and 1^101
-          locstr:=StructuralCopy(rowlabel[i]); 
+          locstr:=StructuralCopy(rowlabel[i]);
           IsString(locstr);   ## seems to be necessary...
           for l in bad do
             locstr:=ReplacedString(locstr,
@@ -258,24 +258,24 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
         Append(str,"&");
       end;
     else
-      PrintFn:=function(x) Append(str,String(x,len)); end; 
+      PrintFn:=function(x) Append(str,String(x,len)); end;
       if tex then sep:="#"; else sep:=" ";fi;
       endBit:=function(i) if i<>Length(d!.rows) then Append(str,"\n"); fi; end;
 
       M:=-Maximum( List(rows, r->Length(rowlabel[r])) );
       label:=function(i) Append(str,Concatenation(String(rowlabel[i],M),"| "));end;
-    
+
       ## used to be able to print the dimensions at the end of the row.
-      # if false then 
+      # if false then
       #   endBit:=function(i) Print(" ", String(d.dim[i],-10),"\n");end;
       # fi;
     fi;
-    
-    ## Find out how wide the columns have to be (very expensive for 
-    ## crystallized matrices - also slightly incorrect as String(<poly>) 
+
+    ## Find out how wide the columns have to be (very expensive for
+    ## crystallized matrices - also slightly incorrect as String(<poly>)
     ## returns such wonders as (2)*v rather than 2*v).
-    if tex then len:=0; 
-    else 
+    if tex then len:=0;
+    else
       len:=1;
       for i in d!.d do
         if i.coeffs<>[] then
@@ -284,15 +284,15 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
         fi;
       od;
     fi;
-    spacestr:=String("",len); 
+    spacestr:=String("",len);
     dotstr:=String(".",len);
     col:=0;
     for r in rows do
-      label(r); 
+      label(r);
       if d!.rows[r] in d!.cols then col:=col+1; fi;
       for c in [1..Length(cols)] do
         if IsBound(d!.d[cols[c]]) and r in d!.d[cols[c]].parts then
-            PrintFn(d!.d[cols[c]].coeffs[Position(d!.d[cols[c]].parts,r)]);  
+            PrintFn(d!.d[cols[c]].coeffs[Position(d!.d[cols[c]].parts,r)]);
           if c<>cols[1] then Append(str,sep); fi;
         elif c<=col then Append(str, Concatenation(dotstr, sep));
         else Append(str, Concatenation(spacestr, sep));
@@ -306,7 +306,7 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
 ); # DecompositionMatrixString
 
 ## adding this string if it does not already exist.
-InstallMethod(LabelPartition, "pretty partition output", [IsList], 
+InstallMethod(LabelPartition, "pretty partition output", [IsList],
   function(mu) local n, m, label, p;
     n:=Sum(mu);
     if n<2 then return String(n); fi;
@@ -320,9 +320,9 @@ InstallMethod(LabelPartition, "pretty partition output", [IsList],
   end
 );
 
-#F Returns a string for ModuleString() from SpechtParts.labels, adding this 
+#F Returns a string for ModuleString() from SpechtParts.labels, adding this
 ## string if it does not already exist.
-InstallMethod(StringPartition, "ergonomic partition output", [IsList], 
+InstallMethod(StringPartition, "ergonomic partition output", [IsList],
   function(mu) local m, string, p;
     if mu=[] or mu=[0] then return "0";
     else return TightStringList(mu);
@@ -336,10 +336,30 @@ InstallMethod(TightStringList, "ergonomic list output", [IsList],
   function(list) local s, l;
     if list=[] then return ""; fi;
     s:=String(list[1]);
-    for l in [2..Length(list)] do 
-      s:=Concatenation(s,",",String(list[l])); 
+    for l in [2..Length(list)] do
+      s:=Concatenation(s,",",String(list[l]));
     od;
     return s;
+  end
+);
+
+## Keep ourselves honest when inducing decomposition matrices
+InstallMethod(BUGOp,"hopefully noone will see this function ;-)",
+  [IsString,IsInt],
+  function(msg,pos) BUG(msg,pos,[]); end
+);
+
+InstallMethod(BUGOp,"hopefully noone will see this function ;-)",
+  [IsString,IsInt,IsList],
+  function(msg,pos,list) local a;
+     PrintTo("*errout*",
+             "\n\n *** You have uncovered a bug in SPECHT's function ",
+              msg,"() - #", pos, "\n *** Please e-mail all possible ",
+              "details to ", PackageInfo("specht")[1].Persons[1].Email,"\n");
+     for a in list do
+       PrintTo("*errout*", a);
+     od;
+     Error("\n");
   end
 );
 

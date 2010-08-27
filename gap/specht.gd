@@ -20,7 +20,7 @@ BindGlobal("AlgebraObjFamily", NewFamily("AlgebraObjFamily"));
 DeclareCategory("IsAlgebraObj", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsAlgebraObjModule", IsComponentObjectRep and IsAttributeStoringRep);
 DeclareCategory("IsDecompositionMatrix", IsComponentObjectRep and IsAttributeStoringRep);
-DeclareCategory("IsCrystalDecompositionMatrix", 
+DeclareCategory("IsCrystalDecompositionMatrix",
   IsDecompositionMatrix and IsComponentObjectRep and IsAttributeStoringRep);
 
 DeclareAttribute("Characteristic", IsAlgebraObj);
@@ -43,10 +43,10 @@ DeclareCategory("IsHeckeSpecht", IsHeckeModule);
 DeclareCategory("IsHeckePIM", IsHeckeModule);
 DeclareCategory("IsHeckeSimple", IsHeckeModule);
 ##
-DeclareCategory("IsFockModule", IsAlgebraObjModule);
-DeclareCategory("IsFockSpecht", IsFockModule);
-DeclareCategory("IsFockPIM", IsFockModule);
-DeclareCategory("IsFockSimple", IsFockModule);
+DeclareCategory("IsFockModule", IsHeckeModule);
+DeclareCategory("IsFockSpecht", IsHeckeSpecht);
+DeclareCategory("IsFockPIM", IsHeckePIM);
+DeclareCategory("IsFockSimple", IsHeckeSimple);
 ##
 DeclareCategory("IsSchurModule", IsAlgebraObjModule);
 DeclareCategory("IsSchurWeyl", IsSchurModule);
@@ -84,13 +84,16 @@ MakeDispatcherFunc("Hook",[[IsInt]],[2],[2]);
 DeclareOperation("DoubleHook",[IsInt,IsInt,IsInt,IsInt]);
 DeclareOperation("HeckeOmega",[IsAlgebraObj,IsString,IsInt]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsInt,IsList]);
-DeclareOperation("Module",[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList]);
+DeclareOperation("Module",[IsAlgebraObj,IsString,IsLaurentPolynomial,IsList]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsList,IsList]);
 DeclareOperation("Collect",[IsAlgebraObj,IsString,IsList,IsList]);
 
 DeclareOperation("MakeSpecht",[IsAlgebraObjModule,IsBool]);
 DeclareOperation("MakePIM",[IsAlgebraObjModule,IsBool]);
 DeclareOperation("MakeSimple",[IsAlgebraObjModule,IsBool]);
+DeclareOperation("MakeSpecht",[IsDecompositionMatrix,IsAlgebraObjModule]);
+DeclareOperation("MakePIM",[IsDecompositionMatrix,IsAlgebraObjModule]);
+DeclareOperation("MakeSimple",[IsDecompositionMatrix,IsAlgebraObjModule]);
 
 DeclareOperation("InnerProduct",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("Coefficient",[IsAlgebraObjModule,IsList]);
@@ -117,11 +120,17 @@ MakeDispatcherFunc("SplitECores",
 	[ 2									 , 0									,	0],
 	[ 2									 , 1									,	2]);
 MakeDispatcherFunc("IsSimpleModule", [[IsAlgebraObj]],[2],[2]);
-MakeDispatcherFunc("MullineuxMap", 
+MakeDispatcherFunc("MullineuxMap",
 	[[IsAlgebraObj],[IsInt],[IsAlgebraObjModule],[IsDecompositionMatrix]],
 	[ 2						 , 2		 , 0									, 2											],
 	[ 2						 , 2		 , 1									, 2											]);
 MakeDispatcherFunc("Schaper", [[IsAlgebraObj]],[2],[2]);
+DeclareOperation("SchaperMatrix",[IsDecompositionMatrix]);
+
+DeclareOperation("DecompositionNumber",[IsDecompositionMatrix,IsList,IsList]);
+DeclareOperation("DecompositionNumber",[IsAlgebraObj,IsList,IsList]);
+DeclareOperation("Specht_DecompositionNumber",[IsAlgebraObj,IsList,IsList]);
+DeclareOperation("Obstructions",[IsDecompositionMatrix,IsAlgebraObjModule]);
 
 DeclareOperation("RInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
 DeclareOperation("SInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
@@ -139,6 +148,8 @@ DeclareOperation("Specialized",[IsCrystalDecompositionMatrix,IsInt]);
 DeclareOperation("Specialized",[IsCrystalDecompositionMatrix]);
 DeclareOperation("AddIndecomposable",[IsDecompositionMatrix,IsAlgebraObjModule,IsBool]);
 DeclareOperation("AddIndecomposable",[IsDecompositionMatrix,IsAlgebraObjModule]);
+DeclareOperation("IsNewIndecomposable",
+  [IsAlgebraObj,IsDecompositionMatrix,IsAlgebraObjModule,IsDecompositionMatrix,IsList]);
 
 DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsString,IsBool]);
 DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsInt,IsBool]);
@@ -146,3 +157,6 @@ DeclareOperation("KnownDecompositionMatrix",[IsAlgebraObj,IsInt]);
 DeclareOperation("FindDecompositionMatrix",[IsAlgebraObj,IsInt]);
 
 DeclareOperation("FindPq",[IsAlgebraObj,IsList]);
+DeclareOperation("FindSq",[IsAlgebraObj,IsList]);
+DeclareOperation("FindDq",[IsAlgebraObj,IsList]);
+
