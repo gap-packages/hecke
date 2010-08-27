@@ -42,7 +42,7 @@
 
 ## 2.1: April 1996:
 ##  - Added a filename argument to SaveDecompositionMatrix and made it
-##    save the non-decomposition matrices under (more) sensible names; the 
+##    save the non-decomposition matrices under (more) sensible names; the
 ##    later is done using the existence of a record component d.matname.
 ##    Need to do something here about reading such matrices in (this can be
 ##    done using DecompositionMatrix)..
@@ -59,11 +59,11 @@
 ##    the projective module to have positive coefficients (and fixed bug in
 ##    matrix ops).
 
-## 2.0: March 1996: 
+## 2.0: March 1996:
 ##   - LLT algorithm implemented for calculating crystal basis of
 ##     the Fock space and hence by specialization the decomposition
 ##     matrices for all Hecke algebras over fields of characteristic
-##     zero; most of the work is done by the internal function Pq(). 
+##     zero; most of the work is done by the internal function Pq().
 ##     This required a new set of 'module' types ("Pq", "Sq", and "Dq"),
 ##     with correspondining operation sets H.operations.X. In particular,
 ##     these include q-induction and q-restriction, effectively allowing
@@ -77,7 +77,7 @@
 ##     readable notation. eg. S(1,1,1,1)->S(1^4). (see SpechtPrintFn).
 ##   - reversed order of parts and coeffs records in H.S(), d.d etc;
 ##     these lists are now sets which improves use of Position().
-##   - reorganised the Specht function and the record H() which it returns; 
+##   - reorganised the Specht function and the record H() which it returns;
 ##     in particular added H.info.
 ##   - extended SInducedModule() and SRestrict to allow multiple inducing and
 ##     restricting (all residues).
@@ -86,21 +86,21 @@
 
 ######################################################################
 
-## Here is a description of the structure of the main records used 
+## Here is a description of the structure of the main records used
 ## in SPECHT
 #### In GAP4 all "operations"-fields do not exist. They are replaced
 #### by top-level operations with some filter restrictions
 
 ## 1. Specht()
 ## Specht() is the main function in specht.g, it returns a record 'H'
-## which represents the family of Hecke algebras, or Schur algebras, 
-## corresponding to some fixed field <R> and parameter <q>. 'H' has 
+## which represents the family of Hecke algebras, or Schur algebras,
+## corresponding to some fixed field <R> and parameter <q>. 'H' has
 ## the components:
 ##   IsSpecht      : is either 'true' or 'false' depending on whether
 ##                   'H' is a Hecke algebra or Schur algebra resp.
-#### This function is obsolete in the GAP4 version - it is replaced 
+#### This function is obsolete in the GAP4 version - it is replaced
 #### by the filter IsHecke
-##   S(), P(), D() : these three functions return records which 
+##   S(), P(), D() : these three functions return records which
 ##                   represent Specht modules, PIMs, and simple
 ##                   'H' modules repectively. These functions exist
 ##                   only when 'H' is a Hecke algebra record.
@@ -115,7 +115,6 @@
 ##                            SPECHT (defaults to current directory)
 ##                     Indeterminate: the indedeterminate used by SPECHT
 ##                            in the LLT algorithm when H.p=0.
-#### TODO
 ##   operations    : apart from the obvious things like the Print()
 ##                   function for 'H' this record also contains the
 ##                   operation records for the modules S(), P() etc.
@@ -131,11 +130,11 @@
 ##                       or "Dq" ("S" and "D" are used even for Schur
 ##                       algebras), coeffs is an integer or a *set* of
 ##                       integers and parts is a partition or a *set* of
-##                       partitions. In any programs the use of New is 
-##                       better than H.S(mu), for example, because the 
-##                       function names are different for Hecke and Schur 
-##                       algebras. Note that coeffs and parts must be 
-##                       ordered reverse lexicographically (ie. they are 
+##                       partitions. In any programs the use of New is
+##                       better than H.S(mu), for example, because the
+##                       function names are different for Hecke and Schur
+##                       algebras. Note that coeffs and parts must be
+##                       ordered reverse lexicographically (ie. they are
 ##                       *sets*).
 #### Use New(H,...) instead of H.operations.New(...)
 ##                     Collect: like New() except that  coeffs and parts
@@ -143,31 +142,28 @@
 #### Use Collect(H,...) instead of H.operations.Collect(...)
 ##                     NewDecompositionMatrix : creates a decomposition
 ##                       matrix.
-#### TODO
-##                     ReadDecompositionMatrix : reads, and returns, a 
+#### Use ReadDecompositionMatrix(H,...) instead of H.operations.ReadDecompositionMatrix(...)
+##                     ReadDecompositionMatrix : reads, and returns, a
 ##                       decomposition matrix file.
-#### TODO
+#### Use KnownDecompositionMatrix(H,...) instead of H.operations.KnownDecompositionMatrix(...)
 ##                     KnownDecompositionMatrix : returns a decomposition
 ##                       matrix of a given size; will either extract this
 ##                       matrix from Specht's internal lists or call
-##                       ReadDecompositionMatrix(), or try to calculate 
+##                       ReadDecompositionMatrix(), or try to calculate
 ##                       the decomposition matrix (without using the
 ##                       crystalized decomposition matrices).
-#### TODO
+#### Use FindDecompositionMatrix(H,...) instead of H.operations.FindDecompositionMatrix(...)
 ##                     FindDecompositionMatrix : like KnownDM except that
 ##                       it will calculate the crystalized DM if needed.
-#### TODO
 ##   Ordering      : a function for ordering partitions; controls how
 ##                   decomposition matrices for H are printed.
 #### Use SetOrdering(...) to control the output
 ##   e             : order of <q> in <R>
-#### Use OrderOfQ(...) to extract the e from an algebra or a module 
-#### corresponding to an algebra 
+#### Use OrderOfQ(...) to extract the e from an algebra or a module
+#### corresponding to an algebra
 ##   p             : characteristic of <R>
-#### TODO
 ##   valuation     : the valuation map of [JM2]; used primarily by
 ##                   the q-Schaper theorem.D
-#### TODO
 ##   HeckeRing     : bookkeeping string used primarily in searching for
 ##                   library files.
 #### TODO
@@ -175,7 +171,6 @@
 ##                   when H.p=0 (used in LLT algorithm). Note that there is
 ##                   no Dq; also unlike their counter parts S(), P(), and
 ##                   D() they accept only partitions as arguments.
-#### TODO
 ##
 ## 2. The module functions S(), P() and D() (and Schur equivalents)
 ## These functions return record 'x' which represents some 'H'--module.
@@ -201,14 +196,14 @@
 ##                 (so, for example, S('x') rewrites 'x' as a linear
 ##                 combination of Specht modules).
 ## 'x'.operations is a pointer to 'H'.operations.('x'.module).
-## 
+##
 ## 3. DecompositionMatrices
 ## Decomposition matrices 'd' in Specht are represented as records with the
 ## following components:
-##   
+##
 ##   d : a list, indexed by d.cols, where each entry is a record
 ##       corresponding to a column of 'd'; this record has components
-##       two * sets* coeffs and parts, where parts is the index of the 
+##       two * sets* coeffs and parts, where parts is the index of the
 ##       corresponding partition in d.rows.
 ##   rows : the *set* of the partitions which make up the rows or 'd'.
 ##   cols : the *set* of the partitions which make up the rows or 'd'.
@@ -240,7 +235,7 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
   function(e,p,valuation,HeckeRing)
     local H;
     if not IsPrime(p) and p<>0
-    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number"); 
+    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number");
     fi;
 
     H := rec(
@@ -249,30 +244,30 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
       valuation:=valuation,
       HeckeRing:=HeckeRing,
       ## bits and pieces about H
-      info:=rec(version:=PackageInfo("specht")[1].Version, 
+      info:=rec(version:=PackageInfo("specht")[1].Version,
                 Library:=Directory(
                   Concatenation(DirectoriesPackageLibrary("specht")[1]![1],"e",
                   String(e),"/")),
       ## We keep a copy of SpechtDirectory in H so that we have a
       ## chance of finding new decomposition matrices when it changes.
                 SpechtDirectory:=Directory(".")),
-                
+
       ## This record will hold any decomposition matrices which Specht()
-      ## (or rather its derivatives) read in. This used to be a public 
+      ## (or rather its derivatives) read in. This used to be a public
       ## record; it is now private because q-Schur algebra matrices and
-      ## Hecke algebra matrices might need to coexist. 
+      ## Hecke algebra matrices might need to coexist.
       DecompositionMatrices:=[],
 
       ## ordering used when printing decomposition matrices
       Ordering:=Lexicographic,
     );
-    
-    if p = 0 
-    then 
+
+    if p = 0
+    then
       ## This list will hold the crystallized decomposition matrices (p=0)
       H.CrystalMatrices:=[];
       H.Indeterminate:=Indeterminate(Integers);
-      SetName(H.Indeterminate,"v"); 
+      SetName(H.Indeterminate,"v");
     else H.Indeterminate:=1;
     fi;
 
@@ -289,23 +284,23 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
 InstallMethod(Specht,"generate a Hecke-Algebra object",
   [IsInt,IsInt,IsFunction],
   function(e,p,val) local ring;
-    if not IsPrime(p) 
-    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number"); 
+    if not IsPrime(p)
+    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number");
     fi;
     if e=p then
       ring:=Concatenation("p",String(p),"sym");
       return Specht(e,p,val,ring);
     else
       return Specht(e,p,val,"unknown");
-    fi; 
+    fi;
   end
 );
 
 InstallMethod(Specht,"generate a Hecke-Algebra object",
   [IsInt,IsInt],
   function(e,p) local val, ring;
-    if not IsPrime(p) 
-    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number"); 
+    if not IsPrime(p)
+    then Error("Specht(<e>,<p>,<val>), <p> must be a prime number");
     fi;
     if e=p then
       ring:=Concatenation("p",String(p),"sym");
@@ -333,7 +328,7 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
           return p^i;
         fi;
       end;
-    fi; 
+    fi;
     return Specht(e,p,val,ring);
   end
 );
@@ -349,7 +344,7 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
           fi;
         end;
       fi;
-      return Specht(e,0,val,Concatenation("e",String(e), "p0")); 
+      return Specht(e,0,val,Concatenation("e",String(e), "p0"));
   end
 );
 
@@ -383,7 +378,7 @@ InstallMethod(SpechtPartitions,"reading access to S.parts",[IsHeckeSpecht],
 );
 
 #P returns a list of the e-regular partitions occurring in x
-InstallMethod(ListERegulars,"e-regular partitions of a module", 
+InstallMethod(ListERegulars,"e-regular partitions of a module",
   [IsAlgebraObjModule],
   function(x) local e,parts,coeffs,p;
     e:=x!.H!.e;
@@ -400,12 +395,12 @@ InstallMethod(ListERegulars,"e-regular partitions of a module",
 #F Returns true if S(mu)=D(mu) - note that this implies that mu is e-regular
 ## (if mu is not e-regular, fail is returned).     -- see [JM2]
 ## IsSimle(H,mu)
-##   ** uses H.valuation #### FIXME check this?
+##   ** uses H.valuation
 InstallMethod(IsSimpleModuleOp,
   "test whether the given partition defines a simple module",
   [IsAlgebraObj,IsList],
   function(H,mu) local mud, simple, r, c, v;
-    if not IsERegular(H!.e,mu) then return fail; 
+    if not IsERegular(H!.e,mu) then return fail;
     elif mu=[] then return true; fi;
 
     mud:=ConjugatePartition(mu);
@@ -432,8 +427,8 @@ InstallMethod(SplitECoresOp,"for a single module",[IsAlgebraObjModule],
     for y in [1..Length(x!.parts)] do
       c:=ECore(x!.H!.e, x!.parts[y]);
       cpos:=Position(cores, c);
-      if cpos=false then 
-        Add(cores, c); 
+      if cpos=false then
+        Add(cores, c);
         cpos:=Length(cores);
         cmp[cpos]:=[[],[]];
       fi;
@@ -453,9 +448,9 @@ InstallMethod(SplitECoresOp,"for a module and a partition",
     c:=ECore(x!.H!.e, mu);
     cmp:=[ [],[] ];
     for y in [1..Length(x!.parts)] do
-      if ECore(x!.H!.e, x!.parts[y])=c then 
-        Add(cmp[1], x!.coeffs[y]); 
-        Add(cmp[2], x!.parts[y]); 
+      if ECore(x!.H!.e, x!.parts[y])=c then
+        Add(cmp[1], x!.coeffs[y]);
+        Add(cmp[2], x!.parts[y]);
       fi;
     od;
     cmp:=Module(x!.H,x!.module, cmp[1], cmp[2]);
@@ -469,9 +464,9 @@ InstallMethod(SplitECoresOp,"for a module and a specht module",
     c:=ECore(s!.H!.e, s!.parts[Length(x!.parts)]);
     cmp:=[ [],[] ];
     for y in [1..Length(x!.parts)] do
-      if ECore(x!.H!.e, x!.parts[y])=c then 
-        Add(cmp[1], x!.coeffs[y]); 
-        Add(cmp[2], x!.parts[y]); 
+      if ECore(x!.H!.e, x!.parts[y])=c then
+        Add(cmp[1], x!.coeffs[y]);
+        Add(cmp[2], x!.parts[y]);
       fi;
     od;
     cmp:=Module(x!.H,x!.module, cmp[1], cmp[2]);
@@ -481,13 +476,13 @@ InstallMethod(SplitECoresOp,"for a module and a specht module",
 
 #F This function returns the image of <mu> under the Mullineux map using
 ## the Kleshcehev(-James) algorihm, or the supplied decomposition matrix.
-## Alternatively, given a "module" x it works out the image of x under 
+## Alternatively, given a "module" x it works out the image of x under
 ## Mullineux.
 ## Usage:  MullineuxMap(e|H|d, mu) or MullineuxMap(x)
 InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
   function(x) local e, v;
     e := x!.H!.e;
-    if x=fail or not IsERegular(e,x!.parts[Length(x!.parts)]) then   
+    if x=fail or not IsERegular(e,x!.parts[Length(x!.parts)]) then
       Print("# The Mullineux map is defined only for e-regular partitions\n");
       return fail;
     fi;
@@ -504,18 +499,18 @@ InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
              List(x!.parts,ConjugatePartition) );
       fi;
     elif Length(x!.module)=1 then
-      return Sum([1..Length(x!.coeffs)], 
+      return Sum([1..Length(x!.coeffs)],
                mu->Module(x!.H,x!.module,x!.coeffs[mu],
                      MullineuxMap(e,x!.parts[mu])));
     else
       v:=x!.H!.info.Indeterminate;
-      return Sum([1..Length(x!.coeffs)], 
+      return Sum([1..Length(x!.coeffs)],
                mu->Module(x!.H,x!.module,
                      Value(v^-EWeight(e,x!.parts[mu])*x!.coeffs[mu]),
                      MullineuxMap(e,x!.parts[mu])));
     fi;
   end
-); 
+);
 
 InstallMethod(MullineuxMapOp,"for ints: image of <mu> under the Mullineux map",
   [IsInt,IsList],
@@ -556,8 +551,8 @@ InstallMethod(MullineuxMapOp,
 ); #MullineuxMap
 
 #F Calculates the Specht modules in sum_{i>0}S^lambda(i) using the
-## q-analogue of Schaper's theorem. 
-## Uses H.valuation. FIXME check this?
+## q-analogue of Schaper's theorem.
+## Uses H.valuation.
 ##   Usage:  Schaper(H,mu);
 InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
   function(H,mu)
@@ -578,7 +573,7 @@ InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
       for row in [1..mud[1]] do
         for r in [row+1..mud[1]] do
           if mu[row] >=c and mu[r] >=c then
-            v:=H!.valuation(hooklen[row][c]) 
+            v:=H!.valuation(hooklen[row][c])
                   - H!.valuation(hooklen[r][c]);
             if v<>0 then
               s:=AddRimHook(RemoveRimHook(mu,r,c,mud),row,hooklen[r][c]);
@@ -594,6 +589,131 @@ InstallMethod(SchaperOp,"calculates Specht modules",[IsAlgebraObj,IsList],
     return schaper;
   end
 );  #Schaper
+
+#F returns the matrix of upper bounds on the entries in the decomposition
+## matrix <d> given by the q-Schaper theorem
+## *** undocumented
+InstallMethod(SchaperMatrix,"upper bounds of entries of a decomposition matrix",
+  [IsDecompositionMatrix],
+  function(d) local r, C, c, coeff, sh, shmat;
+    shmat:=DecompositionMatrix(d!.H,d!.rows,d!.cols,true);
+    ##shmat.operations:=Copy(shmat.operations); FIXME: What to do with this stuff?
+    ##Unbind(shmat.operations.Induce);
+    shmat!.d:=List(shmat!.cols, c->rec(parts:=[],coeffs:=[]));
+    C:=Length(d!.cols)+1; ## this keeps track of which column we're up to
+    for r in [Length(d!.rows),Length(d!.rows)-1..1] do
+      if d!.rows[r] in d!.cols then C:=C-1; fi;
+      sh:=Schaper(d!.H,d!.rows[r]);
+      for c in [C..Length(d!.cols)] do
+        coeff:=InnerProduct(sh,MakePIM(d,d!.cols[c]));
+        if coeff<>fail and coeff<>0*coeff then
+          Add(shmat!.d[c].parts,r);
+          Add(shmat!.d[c].coeffs,coeff);
+        fi;
+      od;
+    od;
+    sh:=[];
+    for c in [1..Length(d!.d)] do
+      Add(shmat!.d[c].parts, Position(shmat!.rows,shmat!.cols[c]));
+      Add(shmat!.d[c].coeffs,1);
+    od;
+    shmat!.matname:="Schaper matrix";
+    return shmat;
+  end
+);
+
+##############################################################
+## Next some functions for accessing decomposition matrices ##
+##############################################################
+
+#F Returns the dcomposition number d_{mu,nu}; row and column removal
+## are used if the projective P(nu) is not already known.
+## Usage: DecompositionNumber(H,mu,nu), or
+##        DecompositionNumber(d,mu,nu);
+## If unable to calculate the decomposition number we return false.
+## Note that H.IsSpecht is false if we are looking at decomposition matrices
+## of a q-Schur algebra and true for a Hecke algebra.
+InstallMethod(DecompositionNumber,
+  "for a decomposition matrix and two partitions",
+  [IsDecompositionMatrix,IsList,IsList],
+  function(d,mu,nu) local Pnu;
+    if mu=nu then return 1;
+    elif not Dominates(nu,mu) then return 0;
+    else
+      Pnu:=MakePIM(d,nu);
+      if Pnu<>fail then return Coefficient(Pnu,mu); fi;
+      return Specht_DecompositionNumber(d!.H,mu,nu);
+    fi;
+  end
+);
+
+InstallMethod(DecompositionNumber,"for an algebra and two partitions",
+  [IsAlgebraObj,IsList,IsList],
+  function(H,mu,nu) local Pnu;
+    Pnu:=MakeSpecht(Module(H,"P",1,nu),true);
+    if Pnu<>fail then return Coefficient(Pnu,mu); fi;
+    if IsHecke(H) and not IsERegular(H!.e, nu) then
+      Error("DecompositionNumber(H,mu,nu), <nu> is not ",H!.e,"-regular");
+    fi;
+    return Specht_DecompositionNumber(H,mu,nu);
+  end
+);
+
+InstallMethod(Specht_DecompositionNumber,
+  "internal: for an algebra and two partitions",
+  [IsAlgebraObj,IsList,IsList],
+  function(H,mu,nu) local Pnu, RowAndColumnRemoval;
+
+    ## Next we try row and column removal (James, Theorem 6.18)
+    ## (here fn is either the identity or conjugation).
+    RowAndColumnRemoval:=function(fn) local m,n,i,d1,d2;
+      ## x, mu, and nu as above
+
+      mu:=fn(mu); nu:=fn(nu);
+
+      m:=0; n:=0; i:=1;
+      while i<Length(nu) and i<Length(mu) do
+        m:=m+mu[i]; n:=n+nu[i];
+        if m=n then
+          d2:=DecompositionNumber(H, fn(mu{[i+1..Length(mu)]}),
+                     fn(nu{[i+1..Length(nu)]}));
+          if d2=0 then return d2;
+          elif IsInt(d2) then
+            d1:=DecompositionNumber(H, fn(mu{[1..i]}),fn(nu{[1..i]}));
+            if IsInt(d1) then return d1*d2; fi;
+          fi;
+        fi;
+        i:=i+1;
+      od;
+      return fail;
+    end;
+
+    Pnu:=RowAndColumnRemoval(a->a);
+    if Pnu=fail then Pnu:=RowAndColumnRemoval(ConjugatePartition); fi;
+    return Pnu;
+  end
+);
+
+#F Returns a list of those e-regular partitions mu such that Px-P(mu)
+## has positive coefficients (ie. those partitions mu such that P(mu)
+## could potentially split off Px). Simple minded, but useful.
+InstallMethod(Obstructions,"for a decomposition matrix and a module",
+  [IsDecompositionMatrix,IsAlgebraObjModule],
+  function(d,Px) local obs, mu, Pmu, possibles;
+    obs:=[];
+    if IsHecke(d!.H) then
+      possibles:=Filtered(Px!.parts, mu->IsERegular(Px!.H!.e, mu));
+    else possibles:=Px!.parts;
+    fi;
+    for mu in possibles do
+      if mu<>Px!.parts[Length(Px!.parts)] then
+        Pmu:=MakePIM(d,mu);
+        if Pmu=fail or PositiveCoefficients(Px-Pmu) then Add(obs,mu); fi;
+      fi;
+    od;
+    return obs{[Length(obs),Length(obs)-1..1]};
+  end
+);
 
 ## OPERATIONS OF FORMER SPECHT RECORD ##########################################
 
@@ -625,7 +745,7 @@ InstallMethod(DoubleHook,"for four integers",[IsInt,IsInt,IsInt,IsInt],
     fi;
   end
 ); #DoubleHook
-  
+
 #### RENAMED Omega -> HeckeOmega
 ## Returns p(n) - p(n-1,1) + p(n-2,1^2) - ... + (-1)^(n-1)*p(1^n).
 ## So, S(mu)*Omega(n) is the linear combination of the S(nu)'s where
@@ -664,7 +784,7 @@ InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsInt,IsList],
   end
 );
 
-InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsUnivariatePolynomial,IsList],
+InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsLaurentPolynomial,IsList],
   function(H,m,c,p)
     return Module(H,m,[c],[p]);
   end
@@ -697,7 +817,7 @@ InstallMethod(Collect,"TODO",[IsAlgebraObj,IsString,IsList,IsList],
           else places:=Place(i, places, d);
           fi;
         fi;
-      elif places=[] or not IsBound(places[parts[i][d]]) then  
+      elif places=[] or not IsBound(places[parts[i][d]]) then
         # must be a list
         places[parts[i][d]]:=i;
       else places[parts[i][d]]:=Place(i, places[parts[i][d]], d+1);
@@ -743,28 +863,28 @@ InstallMethod(MakeSpecht,"S()->S()",[IsHeckeSpecht,IsBool],
   function(x,silent) return x; end
 );
 
-## Here I only allow for linear combinations of projectives which 
+## Here I only allow for linear combinations of projectives which
 ## have non-negative coefficients; the reason for this is that I
 ## can't see how to do it otherwise. The problem is that in the
 ## Grothendieck ring there are many ways to write a given linear
 ## combination of Specht modules (or PIMs).
 InstallMethod(MakePIM,"S()->P()",[IsHeckeSpecht,IsBool],
   function(x,silent) local proj;
-    if x=fail or x=0*x then return x; 
+    if x=fail or x=0*x then return x;
     elif x!.parts=[[]] then return Module(x!.H,"P",x!.coeffs[1],[]);
     fi;
-  
+
     proj:=Module(x!.H,"P",0,[]);
-    while x<>false and x<>0*x and 
+    while x<>false and x<>0*x and
     ( not IsHeckeSpecht(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
-      proj:=proj+Module(x!.H,"P",x!.coeffs[Length(x!.parts)], 
+      proj:=proj+Module(x!.H,"P",x!.coeffs[Length(x!.parts)],
                                       x!.parts[Length(x!.parts)]);
       x:=x+MakeSpecht(
                 Module(x!.H,"P",-x!.coeffs[Length(x!.parts)],
                                       x!.parts[Length(x!.parts)]),true);
     od;
-    if x=fail or x<>0*x then 
-      if not silent then 
+    if x=fail or x<>0*x then
+      if not silent then
         Print("# P(<x>), unable to rewrite <x> as a sum of projectives\n");
       fi;
     else return proj;
@@ -774,17 +894,100 @@ InstallMethod(MakePIM,"S()->P()",[IsHeckeSpecht,IsBool],
 );
 
 InstallMethod(MakeSimple,"S()->D()",[IsHeckeSpecht,IsBool],
-  function(x,silent) return x; end ## FIXME
+  function(x,silent) local y, d, simples, r, c;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"D",x.coeffs[1],[]);
+    fi;
+
+    d:=KnownDecompositionMatrix(x!.H,Sum(x!.parts[1]));
+    if d<>fail then
+      y:=MakeSimple(d,x);
+      if y<>fail then return y; fi;
+    fi;
+
+    ## since that didn't work, we use the LLT algorithm when IsBound(H.Pq)
+    if IsZeroCharacteristic(x!.H) and IsHecke(x!.H) then
+      return Sum([1..Length(x!.parts)],
+                 r->x!.coeffs[r]*Specialized(FindSq(x!.H,x!.parts[r])));
+    fi;
+
+    # next, see if we can calculate the answer.
+    d:=Concatenation(x!.H!.HeckeRing,"D");
+    # finally, we can hope that only partitions of e-weight<2 appear in x
+    r:=1; simples:=Module(x!.H,"D",0,[]);
+    while simples<>fail and r <= Length(x!.parts) do
+      if IsSimpleModule(x!.H, x!.parts[r]) then
+        simples:=simples+Module(x!.H,"D",x!.coeffs[r], x!.parts[r]);
+      elif IsERegular(x!.H!.e,x!.parts[r]) and EWeight(x!.H!.e,x!.parts[r])=1
+      then
+        y:=Module(x!.H,"S",1,ECore(x!.H!.e,x!.parts[r]))
+                           * HeckeOmega(x!.H,"S",x!.H!.e);
+        c:=Position(y!.parts,x!.parts[r]); ## >1 since not IsSimpleModule
+        simples:=simples
+                  +Module(x!.H,"D",[1,1],[y!.parts[c],y!.parts[c-1]]);
+      #### elif IsBound(x.operations.(d)) then ## FIXME not needed anymore?
+      ####   simples:=simples+x.operations.(d)(x.parts[r]);
+      else simples:=fail;
+      fi;
+      r:=r+1;
+    od;
+    if simples=fail and not silent then
+      Print("# D(<x>), unable to rewrite <x> as a sum of simples\n");
+      return fail;
+    else return simples;
+    fi;
+  end
 );
 
 ## The P->S functions are quite involved.
-   
-#F Writes x, which is a sum of indecomposables, as a sum of S(nu)'s if 
+
+#F Writes x, which is a sum of indecomposables, as a sum of S(nu)'s if
 ## possible. We first check to see if the decomposition matrix for x is
 ## stored somewhere, and if not we try to calculate what we need. If we
 ## can't do this we return false.
 InstallMethod(MakeSpecht,"P()->S()",[IsHeckePIM,IsBool],
-  function(x,silent) return x; end ## FIXME
+  function(x,silent) local y, c, d, mu, specht;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"S",x!.coeffs[1],[]);
+    fi;
+    d:=KnownDecompositionMatrix(x!.H,Sum(x!.parts[1]));
+    if d<>fail then
+      y:=MakeSpecht(d,x);
+      if y<>fail then return y; fi;
+    fi;
+
+    ## since that didn't work, we use the LLT algorithm when
+    ## IsBound(H.Pq)
+    if IsZeroCharacteristic(x!.H) then
+      if IsHecke(x!.H) or ForAll(x!.parts, c->IsERegular(x!.H!.e,c)) then ## TODO Check redundant?
+        return Sum([1..Length(x!.parts)],c->
+                 x!.coeffs[c]*Specialized(FindPq(x!.H,x!.parts[c])));
+      fi;
+    fi;
+
+    d:=Concatenation(x!.H!.HeckeRing,"S");
+    mu:=1; specht:=Module(x!.H,"S",0,[]);
+    while specht<>fail and mu<=Length(x!.parts) do
+      if IsSimpleModule(x!.H,ConjugatePartition(x!.parts[mu])) then
+        specht:=specht+Module(x!.H,"S",1,x!.parts[mu]);
+      elif EWeight(x!.H!.e,x!.parts[mu])=1 then ## wrap e-hooks onto c
+        c:=Module(x!.H,"S",1,ECore(x!.H!.e, x!.parts[mu]))
+                 * HeckeOmega(x!.H,"S",x!.H!.e);
+        y:=Position(c!.parts, x!.parts[mu]);
+        specht:=specht+Module(x!.H,"S",[1,1],
+                                        [c!.parts[y-1],c!.parts[y]]);
+      #### elif IsBound(H.operations.P.(d)) then ## FIXME not needed anymore?
+      ####   specht:=specht+x.H.operations.P.(d)(x.parts[mu]);
+      else specht:=fail;
+      fi;
+      mu:=mu+1;
+    od;
+    if specht<>fail then return specht;
+    elif not silent then
+      Print("# P(<x>), unable to rewrite <x> as a sum of specht modules\n");
+    fi;
+    return fail;
+  end
 );
 
 InstallMethod(MakePIM,"P()->P()",[IsHeckePIM,IsBool],
@@ -795,7 +998,7 @@ InstallMethod(MakeSimple,"P()->D()",[IsHeckePIM,IsBool],
     function(x,silent)
       x:=MakeSpecht(x,silent);
       if x=fail then return x;
-      else return MakeSimple(x,silent); 
+      else return MakeSimple(x,silent);
       fi;
     end
 );
@@ -805,11 +1008,56 @@ InstallMethod(MakeSimple,"P()->D()",[IsHeckePIM,IsBool],
 ## then try to calculate it directly. If we are unable to do this either
 ## we return fail.
 InstallMethod(MakeSpecht,"D()->S()",[IsHeckeSimple,IsBool],
-  function(x,silent) return x; end ## FIXME
+  function(x,silent) local c, d, y, a;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"S",x.coeffs[1],[]);
+    fi;
+
+    ## look for the decomposition matrix
+    d:=KnownDecompositionMatrix(x!.H,Sum(x!.parts[1]));
+    if d<>fail then
+      y:=MakeSpecht(d,x);
+      if y<>fail then return y; fi;
+    fi;
+
+    ## since that didn't work, we use the LLT algorithm when IsBound(H.Pq)
+    if IsZeroCharacteristic(x!.H) and IsHecke(x!.H) then
+      return Sum([1..Length(x!.parts)],
+                   c->x!.coeffs[c]*Specialized(FindDq(x!.H,x!.parts[c])));
+    fi;
+
+    #### ## Next, see if we can calculate it. ## FIXME not needed anymore?
+    #### d:=Concatenation(H.HeckeRing, "S");
+    #### if IsBound(H.operations.D.(d)) then
+    ####  return H.operations.D.(d)(x,silent);
+    #### fi;
+
+    ## Finally, hope only e-weights<2 are involved.
+    c:=1; d:=true; y:=Module(x!.H,"S",0,[]);
+    while d and c<=Length(x!.parts) do
+      if IsSimpleModule(x!.H, x!.parts[c]) then
+        y:=y+Module(x!.H,"S",x!.coeffs[c],x!.parts[c]);
+      elif IsERegular(x!.H!.e, x!.parts[c]) and EWeight(x!.H!.e,x!.parts[c])=1
+      then ## wrap e-hooks onto c
+        a:=Module(x!.H,"S",1,ECore(x!.H!.e,x!.parts[c]))
+             * HeckeOmega(x!.H,"S",x!.H!.e);
+        a!.parts:=a!.parts{[1..Position(a!.parts, x!.parts[c])]};
+        a!.coeffs:=a!.coeffs{[1..Length(a!.parts)]}*(-1)^(1+Length(a!.parts));
+        y:=y+a;
+      else d:=false;
+      fi;
+      c:=c+1;
+    od;
+    if d<>false then return y;
+    elif not silent then
+      Print("# Unable to calculate D(mu)\n");
+    fi;
+    return fail;
+  end
 );
 
 InstallMethod(MakePIM,"D()->P()",[IsHeckeSimple,IsBool],
-  function(x,silent) 
+  function(x,silent)
       x:=MakeSpecht(x,silent);
       if x=fail then return x;
       else return MakePIM(x,silent);
@@ -821,20 +1069,76 @@ InstallMethod(MakeSimple,"D()->D()",[IsHeckeSimple,IsBool],
   function(x,silent) return x; end
 );
 
+## Finally, change the various conversion functions X()->Y();
+## in fact, we only have to change the four non-trivial ones:
+##   P() <-> S() <-> D().
+
+InstallMethod(MakePIM,"Sq()->Pq()",[IsFockSpecht,IsBool],
+  function(x,silent) local proj;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"Pq",x!.coeffs[1],[]);
+    fi;
+
+    proj:=Module(x!.H,"Pq",0,[]);
+    while x<>0*x and PositiveCoefficients(x) do
+      proj:=proj+Module(x!.H,"Pq",x!.coeffs[Length(x!.parts)],
+                                       x!.parts[Length(x!.parts)]);
+      x:=x-x!.coeffs[Length(x!.parts)]*FindPq(x!.H,x!.parts[Length(x!.parts)]);
+    od;
+    if x=0*x then return proj;
+    elif not silent then
+      Print("# P(<x>), unable to rewrite <x> as a sum of projectives\n");
+    fi;
+    return fail;
+  end
+);
+
+InstallMethod(MakeSimple,"Sq()->Dq()",[IsFockSpecht,IsBool],
+  function(x,silent) local mu;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"Dq",x!.coeffs[1],[]);
+    fi;
+    return Sum([1..Length(x!.parts)],
+      mu->x!.coeffs[mu]*FindSq(x!.H,x!.parts[mu]) );
+  end
+);
+
+InstallMethod(MakeSpecht,"Pq()->Sq()",[IsFockPIM,IsBool],
+  function(x,silent) local mu;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"Sq",x!.coeffs[1],[]);
+    fi;
+
+    return Sum([1..Length(x!.parts)],
+      mu->x!.coeffs[mu]*FindPq(x!.H,x!.parts[mu]) );
+  end
+);
+
+InstallMethod(MakeSpecht,"Dq()->Sq()",[IsFockPIM,IsBool],
+  function(x,silent) local mu;
+    if x=fail or x=0*x then return x;
+    elif x!.parts=[[]] then return Module(x!.H,"Sq",x!.coeffs[1],[]);
+    fi;
+
+    return Sum([1..Length(x!.coeffs)],
+      mu->x!.coeffs[mu]*FindDq(x!.H,x!.parts[mu]) );
+  end
+);
+
 ## ARITHMETICS #################################################################
 InstallMethod(\=,"compare modules",[IsAlgebraObjModule,IsAlgebraObjModule],
-  function(a,b) return a!.H=b!.H and a!.module=b!.module 
+  function(a,b) return a!.H=b!.H and a!.module=b!.module
     and Set(Zip(a!.coeffs,a!.parts))=Set(Zip(b!.coeffs,b!.parts)); end
 );
 
 InstallMethod(\+,"add modules",[IsAlgebraObjModule,IsAlgebraObjModule],
   function(a,b)
     local i, j, ab, x;
-    
+
     if a=fail or b=fail then return false;
-    elif a=0*a then return b; 
-    elif b=0*b then return a; 
-    elif a!.H<>b!.H then 
+    elif a=0*a then return b;
+    elif b=0*b then return a;
+    elif a!.H<>b!.H then
       Error("modules belong to different Grothendieck rings");
     fi;
 
@@ -854,29 +1158,29 @@ InstallMethod(\+,"add modules",[IsAlgebraObjModule,IsAlgebraObjModule],
     while i <=Length(a!.parts) and j <=Length(b!.parts) do
       if a!.parts[i]=b!.parts[j] then
         x:=a!.coeffs[i]+b!.coeffs[j];
-        if x<>0*x then 
-          Add(ab[1],x); 
-          Add(ab[2], a!.parts[i]); 
+        if x<>0*x then
+          Add(ab[1],x);
+          Add(ab[2], a!.parts[i]);
         fi;
         i:=i+1; j:=j+1;
       elif a!.parts[i] < b!.parts[j] then
-        if a!.coeffs[i]<>0*a!.coeffs[i] then 
+        if a!.coeffs[i]<>0*a!.coeffs[i] then
           Add(ab[1], a!.coeffs[i]);
-          Add(ab[2], a!.parts[i]); 
+          Add(ab[2], a!.parts[i]);
         fi;
         i:=i+1;
       else
-        if b!.coeffs[j]<>0*b!.coeffs[j] then 
+        if b!.coeffs[j]<>0*b!.coeffs[j] then
           Add(ab[1], b!.coeffs[j]);
-          Add(ab[2], b!.parts[j]); 
+          Add(ab[2], b!.parts[j]);
         fi;
         j:=j+1;
       fi;
     od;
-    if i <=Length(a!.parts) then 
+    if i <=Length(a!.parts) then
       Append(ab[1], a!.coeffs{[i..Length(a!.coeffs)]});
       Append(ab[2], a!.parts{[i..Length(a!.parts)]});
-    elif j <=Length(b!.parts) then 
+    elif j <=Length(b!.parts) then
       Append(ab[1], b!.coeffs{[j..Length(b!.coeffs)]});
       Append(ab[2], b!.parts{[j..Length(b!.parts)]});
     fi;
@@ -886,18 +1190,18 @@ InstallMethod(\+,"add modules",[IsAlgebraObjModule,IsAlgebraObjModule],
 ); # AddModules
 
 InstallMethod(\-,[IsAlgebraObjModule,IsAlgebraObjModule],
-  function(a,b) 
+  function(a,b)
     if a=fail or b=fail then return fail;
-    else 
+    else
       b:=Module(b!.H, b!.module, -b!.coeffs, b!.parts);
-      return a+b; 
+      return a+b;
     fi;
   end
 ); # SubModules
 
 InstallMethod(\*,"multiply module by scalar",[IsScalar,IsAlgebraObjModule],
   function(n,b)
-    if n = 0 
+    if n = 0
     then return Module(b!.H, b!.module, 0, []);
     else return Module(b!.H, b!.module, n*b!.coeffs, b!.parts);
     fi;
@@ -906,7 +1210,7 @@ InstallMethod(\*,"multiply module by scalar",[IsScalar,IsAlgebraObjModule],
 
 InstallMethod(\*,"multiply module by scalar",[IsAlgebraObjModule,IsScalar],
   function(a,n)
-    if n = 0 
+    if n = 0
     then return Module(a!.H, a!.module, 0, []);
     else return Module(a!.H, a!.module, n*a!.coeffs, a!.parts);
     fi;
@@ -916,7 +1220,7 @@ InstallMethod(\*,"multiply module by scalar",[IsAlgebraObjModule,IsScalar],
 InstallMethod(\*,"multiply specht modules",[IsHeckeSpecht,IsHeckeSpecht],
   function(a,b) local x, y, ab, abcoeff, xy, z;
     if a=fail or b=fail then return false;
-    elif a!.H<>b!.H then 
+    elif a!.H<>b!.H then
       Error("modules belong to different Grothendieck rings");
     fi;
     # a:=MakeSpecht(a,false); # TODO Reconsider?
@@ -951,10 +1255,10 @@ InstallMethod(\*,"multiply simple modules",[IsHeckeSimple,IsHeckeSimple],
     nx:=MakeSimple(x,true);
     if nx<>fail then return nx; else return x; fi;
   end
-); 
+);
 
 InstallMethod(\*,"multiply modules",[IsAlgebraObjModule,IsAlgebraObjModule],
-  function(a,b) 
+  function(a,b)
     return MakeSpecht(a,false) * MakeSpecht(b,false);
   end
 ); # MulModules
@@ -1001,20 +1305,38 @@ InstallMethod(Coefficient, "extract coefficient of a partition from module",
     fi;
   end
 );  # Coefficient
-    
+
 #F Returns true if all coefficients are non-negative
 InstallMethod(PositiveCoefficients, "test if all coefficients are non-negative",
   [IsAlgebraObjModule],
   function(x) local c;
     return ForAll(x!.coeffs, c->c>=0);
   end
-);  # PositiveCoefficients
+);
+
+InstallMethod(PositiveCoefficients,
+  "test if all coefficients of a Fock module are non-negative",
+  [IsFockModule],
+  function(x)
+    return ForAll(x!.coeffs, p->( IsInt(p) and p>=0 ) or
+                      ForAll(CoefficientsOfLaurentPolynomial(p)[1], c->c>=0) );
+  end
+); # PositiveCoefficients
 
 #F Returns true if all coefficients are integral
 InstallMethod(IntegralCoefficients, "test if all coefficients are integral",
   [IsAlgebraObjModule],
   function(x) local c;
     return ForAll(x!.coeffs, c->IsInt(c));
+  end
+);
+
+InstallMethod(IntegralCoefficients,
+  "test if all coefficients of a Fock module are non-negative",
+  [IsFockModule],
+  function(x)
+    return ForAll(x!.coeffs, p-> ( IsInt(p) and p>=0 ) or
+                  ForAll(CoefficientsOfLaurentPolynomial(p)[1], c->IsInt(c)) );
   end
 ); # IntegralCoefficients
 
@@ -1067,7 +1389,7 @@ InstallMethod(SInducedModule,"string-induction on specht modules",
     sinduced:=function(y, n, e, r, i) local ny, j, z;
       ny:=[];
       for j in [i..Length(y)-n+1] do
-        if r=(y[j] - j + 1) mod e then 
+        if r=(y[j] - j + 1) mod e then
           if j=1 or y[j] < y[j-1] then
             z:=StructuralCopy(y);
             z[j]:=z[j] + 1; # only one node of residue r can be added
@@ -1171,14 +1493,14 @@ InstallMethod(RInducedModule, "r-induction for specht modules",
       Error("Induce, r-induction is not defined when e=0.");
     elif ForAny(list,r-> r>=H!.e or r<0) then
       Error("Induce, r-induction is defined only when 0<=r<e.\n");
-    else 
+    else
       for r in list do
         x:=RInducedModule(H,x,H!.e,r);
       od;
       return x;
     fi;
   end
-); 
+);
 
 InstallMethod(RInducedModule, "r-induction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
@@ -1188,7 +1510,7 @@ InstallMethod(RInducedModule, "r-induction for projective indecomposable modules
     nx:=MakePIM(x,false);
     if nx<>fail then return nx; else return x; fi;
   end
-); 
+);
 
 InstallMethod(RInducedModule, "r-induction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
@@ -1209,14 +1531,14 @@ InstallMethod(RRestrictedModule, "r-restriction for specht modules",
       Error("Restrict, r-restriction is not defined when e=0.");
    elif ForAny(list,r-> r>=H!.e or r<0) then
       Error("Restrict, r-restriction is defined only when 0<=r<e.\n");
-    else 
+    else
       for r in list do
         x:=RRestrictedModule(H,x,H!.e,r);
       od;
       return x;
     fi;
   end
-);  
+);
 
 InstallMethod(RRestrictedModule, "r-restriction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
@@ -1226,7 +1548,7 @@ InstallMethod(RRestrictedModule, "r-restriction for projective indecomposable mo
     nx:=MakePIM(x,false);
     if nx<>fail then return nx; else return x; fi;
   end
-);   
+);
 
 InstallMethod(RRestrictedModule, "r-restriction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
@@ -1257,7 +1579,7 @@ InstallMethod(SInducedModule,"string induction for specht modules",
     else return SInducedModule(H, x, H!.e, list[1], list[2]);
     fi;
   end
-);  
+);
 
 InstallMethod(SInducedModule, "string induction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
@@ -1267,7 +1589,7 @@ InstallMethod(SInducedModule, "string induction for projective indecomposable mo
     nx:=MakePIM(x,false);
     if nx<>fail then return nx; else return x; fi;
   end
-);   
+);
 
 InstallMethod(SInducedModule, "string induction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
@@ -1298,7 +1620,7 @@ InstallMethod(SRestrictedModule,"string restriction for specht modules",
     else return SRestrictedModule(H, x, H!.e, list[1], list[2]);
     fi;
   end
-);  
+);
 
 InstallMethod(SRestrictedModule, "string restriction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
@@ -1308,7 +1630,7 @@ InstallMethod(SRestrictedModule, "string restriction for projective indecomposab
     nx:=MakePIM(x,false);
     if nx<>fail then return nx; else return x; fi;
   end
-);   
+);
 
 InstallMethod(SRestrictedModule, "string restriction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
@@ -1329,8 +1651,8 @@ InstallMethod(SRestrictedModule, "string restriction for simple modules",
 InstallMethod(qSInducedModule,"q-induction for modules",
   [IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt],
   function(H,x,s,r) local coeffs, parts, y, z, qsinduced, v;
-    v:=H!.Indeterminate;  
-    
+    v:=H!.Indeterminate;
+
     # add n nodes of residue r to the partition y from the i-th row down
     # here exp is the exponent of the indertminate
     qsinduced:=function(y, n, r, i, exp) local ny, j, z;
@@ -1380,6 +1702,51 @@ InstallMethod(qSInducedModule,"q-induction for modules",
   end
 );  # qSInducedModule
 
+## string-restriction: remove m r's from each partition in x
+## ** should allow restricting s-times also
+InstallMethod(qSRestrictedModule,"q-restriction for modules",
+  [IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt],
+  function(H, x, s, r) local coeffs, parts, z, y, i, e, exp, v, qrestricted;
+    v:=H!.Indeterminate;
+
+    qrestricted:=function(y, n, r, i, exp) local ny, j, z;
+      ny:=[];
+      for j in [i,i-1..n] do
+        if y[j]>0 and r=(y[j]+1-j) mod H.e and (j=1 or y[j]<y[j-1]) then
+           exp:=exp-n;                 ## an addable node of residue r
+        elif r=(y[j] - j) mod H.e then   ## removeable node of residue r
+          if j=Length(y) or y[j] > y[j+1] then
+            z:=StructuralCopy(y);
+            z[j]:=z[j]-1;
+            if z[j]=0 then Unbind(z[j]); fi;
+            if n=1 then Add(ny, [exp,z]); # no mode nodes to remove
+            else Append(ny, qrestricted(z, n-1, r, j-1, exp));
+            fi;
+            exp:=exp+n;
+          fi;
+        fi;
+      od;
+      return ny;
+    end;
+
+    e:=x!.H!.e;
+    coeffs:=[]; parts:=[];
+    if s=0 then return Module(H,"Sq",1,[]); fi;
+    for y in [1..Length(x.parts)] do
+      if -Length(x!.parts[y]) mod H!.e = r then exp:=-s; else exp:=0; fi;
+      for z in qrestricted(x!.parts[y], s, r, Length(x!.parts[y]), exp) do
+        if z[1]=0 then Add(coeffs, x!.coeffs[y]);
+        else Add(coeffs, x!.coeffs[y]*v^z[1]);
+        fi;
+        Add(parts, z[2]);
+      od;
+    od;
+    if parts=[] then return Module(H,"Sq",0,[]);
+    else return Collect(H, "Sq", coeffs, parts);
+    fi;
+  end
+);  # qSRestrict
+
 ## DECOMPOSITION MATRICES ######################################################
 
 ## The following directory is searched by ReadDecompositionMatrix()
@@ -1414,8 +1781,8 @@ InstallOtherMethod(DecompositionMatrix,"creates a new decomposition matrix",
 ####               return d.operations.P.S(d, d.H.operations.New("P",1,mu));
 ####             end
     );
-    
-    if decompmat then 
+
+    if decompmat then
       return Objectify(DecompositionMatrixType,d);
     else
       return Objectify(CrystalDecompositionMatrixType,d);
@@ -1454,7 +1821,7 @@ InstallMethod(Specialized,"specialise CDM",
     od;
     return sd;
   end
-); 
+);
 
 InstallMethod(Specialized,"specialise CDM",
   [IsCrystalDecompositionMatrix], a->Specialized(a,1)
@@ -1477,7 +1844,7 @@ InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
         Unbind(d!.dimensions);
       fi;
       ## now looks at the image of <Px> under Mullineux
-      if (IsHecke(Px!.H) and IsERegular(Px!.H!.e,Px!.parts[Length(Px!.parts)])) 
+      if (IsHecke(Px!.H) and IsERegular(Px!.H!.e,Px!.parts[Length(Px!.parts)]))
       and Px!.parts[Length(Px!.parts)]<>ConjugatePartition(Px!.parts[1]) then
         mPx:=MullineuxMap(Px);
         if IsBound(d!.d[Position(d!.cols,mPx!.parts[Length(Px!.parts)])])
@@ -1496,7 +1863,250 @@ InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
     d!.d[c]:=rec(coeffs:=Px!.coeffs,
                 parts:=List(Px!.parts,r->Position(d!.rows,r)) );
   end
-); 
+);
+
+#F This function checks to see whether Px is indecomposable using the
+## decomposition matrix d. The basic idea is to loop through all of the
+## (e-regular, unless IsSpecht=false) projectives Py in Px such that Px-Py
+## has non-negative coefficients and to then apply the q-Schaper theorem
+## and induce simples, together with a few other tricks to decide
+## whether ir not Py slits off. If yes, then we move on; if we can't
+## decide (or don't know the value of Py), we spit the dummy and return
+## false, printing a "message from our sponsor" explaining why we failed
+## if called from outside InducedModule(). If we can count for all
+## projectives then we return true. Note that in this case the value
+## of Px may have changed, but we update the original value of px=Px
+## before leaving (whether we return false or true).
+InstallMethod(IsNewIndecomposable, "checks whether the given module is indecomposable",
+  [IsAlgebraObj, IsDecompositionMatrix,IsAlgebraObjModule,IsDecompositionMatrix,IsList],
+  function(H, d,px,oldd,Mu)
+    local Px,nu,regs,Py,y,z,a,b,n,mu,m,M,Message;
+
+    if px=fail and px=0*px then return false; fi;
+
+    if Mu=fail then Message:=Ignore;
+    else Message:=Print;
+    fi;
+
+    Px:=px; Py:=true; # strip PIMs from the top of Px
+    while Py<>fail and Px<>0*Px do
+      Py:=MakePIM(d,Px!.parts[Length(Px!.parts)]);
+      if Py<>fail then Px:=Px-Px!.coeffs[Length(Px!.parts)]*Py; fi;
+    od;
+    if Px=0*Px then
+      Message("# This module is a sum of known indecomposables.\n");
+      return false;
+    fi;
+    if IntegralCoefficients(Px / Px!.coeffs[Length(Px!.parts)]) then
+      Px:=Px / Px!.coeffs[Length(Px!.parts)];
+   fi;
+
+    regs:=Obstructions(d,Px);
+    if Mu<>fail then regs:=Filtered(regs,mu->mu<Mu); fi;
+
+    for y in regs do   ## loop through projectives that might split
+
+      if IsHecke(H) and MullineuxMap(H!.e,ConjugatePartition(Px!.parts[1]))
+      <>Px!.parts[Length(Px!.parts)] then
+        Py:=true;  ## strip any known indecomposables off the bottom of Px
+        while Py<>fail and Px<>0*Px do
+          Py:=MakePIM(d,ConjugatePartition(Px!.parts[1]));
+          if Py<>fail and IsERegular(Py!.H!.e,Py!.parts[Length(Py!.parts)]) then
+            Px:=Px-Px!.coeffs[1]*MullineuxMap(Py);
+          else Py:=fail;
+          fi;
+        od;
+      fi;
+
+      m:=0;            ## lower and upper bounds on decomposition the number
+      if Px=0*Px then M:=0;
+      else M:=Coefficient(Px,y)/Px!.coeffs[Length(Px!.parts)];
+      fi;
+      if M<>0 then Py:=MakePIM(d,y); fi;
+
+      if not ( m=M or Px!.parts[Length(Px!.parts)]>=y ) then
+        if Py=fail then
+          Message("# The multiplicity of S(", TightStringList(y),
+            ") in <Px> is zero; however, S(", TightStringList(y),
+            ") is not known\n");
+          px!.coeffs:=Px!.coeffs; px!.parts:=Px!.parts; return false;
+        else
+          Px:=Px-Coefficient(Px,y)*Py;
+          if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",1);fi;
+          M:=0;
+        fi;
+      fi;
+
+      if Px<>0*Px and IntegralCoefficients(Px/Px!.coeffs[Length(Px!.parts)]) then
+        Px:=Px/Px!.coeffs[Length(Px!.parts)];
+      fi;
+
+      ## remember that Px.coeffs[Length(Px.parts)] could be greater than 1
+      if m<>M and (Coefficient(Px,y) mod Px!.coeffs[Length(Px!.parts)])<>0 then
+        if Py=fail then
+          Message("# <Px> is not indecomposable, as at least ",
+            Coefficient(Px,y) mod Px!.coeffs[Length(Px!.parts)], " copies of P(",
+            TightStringList(y), ") split off.\n# However, P(",
+            TightStringList(y), ") is not known\n");
+          px!.coeffs:=Px!.coeffs; px!.parts:=Px!.parts; return fail;
+        else
+          ## this is at least projective; perhaps more still come off though
+          Px:=Px-(Coefficient(Px,y) mod Px!.coeffs[Length(Px!.parts)])*Py;
+          if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",2);fi;
+          if IntegralCoefficients(Px/Px!.coeffs[Length(Px!.parts)]) then
+            Px:=Px/Px!.coeffs[Length(Px!.parts)];
+          fi;
+        fi;
+      fi;
+
+      ## At this point the coefficient of Sx in Px divides the coefficient of
+      ## Sy in Px. If Py splits off then it does so in multiples of
+      ## (Px:Sx)=Px.coeffs[Length(Px.parts)].
+      if m<>M and (Py=fail
+        or PositiveCoefficients(Px-Px!.coeffs[Length(Px!.parts)]*Py))
+      then
+        ## use the q-Schaper theorem to test whether Sy is contained in Px
+        M:=Minimum(M,InnerProduct(Px/Px!.coeffs[Length(Px!.parts)],
+                                  Schaper(H, y)));
+        if M=0 then # NO!
+          ## Px-(Px:Sy)Py is still projective so substract Py if it is
+          ## known. If Py=false (ie. not known), then at least we know
+          ## that Px is not indecomposable, even though we couldn't
+          ## calculate Py.
+          if Py=fail then
+            Message("# The multiplicity of S(", TightStringList(y),
+              ") in P(", TightStringList(Px!.parts[Length(Px!.parts)]),
+             ") is zero;\n#  however, P(", TightStringList(y),
+             ") is not known.\n");
+            px!.coeffs:=Px!.coeffs; px!.parts:=Px!.parts; return false;
+          else
+            Px:=Px-Coefficient(Px,y)*Py;
+            if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",3);
+            fi;
+          fi;
+        elif Px!.coeffs[Length(Px!.parts)]<>Coefficient(Px,y) then
+          ## We know that (Px:Sy)>=m>0, but perhaps some Py's still split off
+
+          m:=1;
+          if m=M then
+            if Coefficient(Px,y)<>m*Px!.coeffs[Length(Px!.parts)] then
+              if Py=fail then
+                Message("# The multiplicity of S(", TightStringList(y),
+                    ") in P(",TightStringList(Px!.parts[Length(Px!.parts)]),
+                    ") is ", m, "however, P(",TightStringList(y),
+                    ") is unknown.\n");
+                px!.coeffs:=Px!.coeffs; px!.parts:=Px!.parts;
+                return false;
+              else
+                Px:=Px-(Coefficient(Px,y)-Px!.coeffs[Length(Px!.parts)]*m)*Py;
+                if not PositiveCoefficients(Px) then
+                  BUG("IsNewIndecomposable",4);
+                fi;
+              fi;
+            fi;
+          fi;
+
+          if m<>M then
+            ## see if we can calculate this decomposition number (this uses
+            ## row and column removal)
+            a:=DecompositionNumber(Px.H, y, Px.parts[Length(Px.parts)]);
+            if a<>false then
+              if Px.coeffs[Length(Px.parts)]*a=Coefficient(Px,y) then m:=a; M:=a;
+              elif Py<>false then
+                ## precisely this many Py's come off
+                Px:=Px-(Coefficient(Px,y)-Px.coeffs[Length(Px.parts)]*a)*Py;
+                m:=a; M:=a; # upper and lower bounds are equal
+                if not PositiveCoefficients(Px) then
+                  BUG("IsNewIndecomposable",5);
+                fi;
+              fi;
+            fi;
+          fi;
+
+          if m<>M and Py=false then ## nothing else we can do
+            Message("# The multiplicity of S(", TightStringList(y),
+                    ") in P(",TightStringList(Px.parts[Length(Px.parts)]),
+                    ") is at least ", m, " and at most ", M,
+                    ";\n# however, P(",TightStringList(y),") is unknown.\n");
+            px.coeffs:=Px.coeffs; px.parts:=Px.parts;
+            return false;
+          fi;
+
+          if m<>M then
+            ## Maybe the Mullineux map can lower M...
+            M:=Minimum(M,Coefficient(Px,
+                 Py!.parts[Length(Py!.parts)]/Px!.coeffs[Length(Px!.parts)]));
+            if Coefficient(Px,y)>M*Px!.coeffs[Length(Px!.parts)] then
+              Px:=Px-(Coefficient(Px,y)-M*Px!.coeffs[Length(Px!.parts)])*Py;
+            fi;
+            while m<M and not
+            PositiveCoefficients(Px-(Px!.coeffs[Length(Px!.parts)]*(M-m))*Py) do
+              m:=m+1;
+            od;
+          fi;
+#### FIXME
+#          ## finally, we take a look at inducing the simples in oldd
+#          if m<>M and oldd<>false then
+#            if not IsBound(oldd!.simples) then ## we have to first induce them
+#              oldd!.simples:=[];
+#              if IsBound(oldd.ind) then       ## defined in InducedModule()
+#                for mu in [1..Length(oldd.cols)] do
+#                  a:=oldd.operations.Invert(oldd,oldd.cols[mu]);
+#                  if a<>false then
+#                    for n in [1..H.e] do  ## induce simples of oldd
+#                      z:=Sum([1..Length(a.coeffs)],b->a.coeffs[b]
+#                           *oldd.ind[Position(oldd.rows,a.parts[b])][n]);
+#                      if z<>0*z then Add(oldd.simples,z);fi;
+#                    od;
+#                  fi;
+#                od;
+#              else   ## do everything by hand
+#                for mu in [1..Length(oldd.cols)] do
+#                  a:=oldd.operations.Invert(oldd,oldd.cols[mu]);
+#                  if a<>false then
+#                    for n in [0..H.e-1] do
+#                      z:=InducedModule(a,H.e,n);
+#                      if z<>0*z then Add(oldd.simples,z); fi;
+#                    od;
+#                  fi;
+#                od;
+#              fi;
+#            fi;
+#            mu:=Length(oldd.simples);
+#            while mu >0 and m<M do
+#              z:=oldd.simples[mu];
+#              if y=regs[Length(regs)]
+#              or Lexicographic(z.parts[1],Py.parts[Length(Py.parts)]) then
+#                a:=InnerProduct(z,Py);
+#                if a<>0 then
+#                  b:=InnerProduct(z,Px)/Px.coeffs[Length(Px.parts)];
+#                  m:=Maximum(m,M-Int(b/a));
+#                fi;
+#              fi;
+#              mu:=mu-1;
+#            od;
+#            if Coefficient(Px,y)>M*Px.coeffs[Length(Px.parts)] then
+#              Px:=Px-(Coefficient(Px,y)-M*Px.coeffs[Length(Px.parts)])*Py;
+#            fi;
+#          fi;
+#          if m<>M then ## nothing else we can do
+#            px.coeffs:=Px.coeffs; px.parts:=Px.parts;
+#            Message("# The multiplicity of S(", TightStringList(y),
+#                ") in P(",TightStringList(Px.parts[Length(Px.parts)]),
+#                ") is at least ", m, " and at most ", M, ".\n");
+#            return false;
+#          fi;
+        fi;   ## q-Schaper test
+      fi;
+    od;
+    if Px=0*Px then
+      Message("# This module is a sum of known indecomposables.\n");
+      return false;
+    elif Px!.coeffs[Length(Px!.parts)]<>1 then BUG("IsNewIndecomposable",6);
+    else px!.coeffs:=Px!.coeffs; px!.parts:=Px!.parts; return true;
+   fi;
+  end
+);  # IsNewIndecomposable
 
 #P A front end to d.operations.AddIndecomposable. This funciton adds <Px>
 ## into the decomposition matrix <d> and checks that it is compatible with
@@ -1505,7 +2115,7 @@ InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
 InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
   [IsDecompositionMatrix,IsHeckeSpecht],
   function(d, Px)
-    if Position(d!.cols, Px!.parts[Length(Px!.parts)])=fail then 
+    if Position(d!.cols, Px!.parts[Length(Px!.parts)])=fail then
       Print("# The projective P(",TightStringList(Px!.parts[Length(Px!.parts)]),
             ") is not listed in <D>\n");
     else AddIndecomposable(d,Px,true);
@@ -1526,23 +2136,25 @@ InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
 InstallMethod(ReadDecompositionMatrix, "load matrix from library",
   [IsAlgebraObj,IsInt,IsBool],
   function(H, n, crystal) local d, file, SpechtDirectory;
-    
+
     if not IsBound(SpechtDirectory) then SpechtDirectory:=""; fi;
-  
-    if crystal then 
-      if IsBound(H!.CrystalMatrices[n]) then 
-        d:=H!.CrystalMatrices[n]; 
+
+    if crystal then
+      if IsBound(H!.CrystalMatrices[n]) then
+        d:=H!.CrystalMatrices[n];
         if d=fail and H!.info.SpechtDirectory=SpechtDirectory then
           return fail;
-        elif d<>fail and ForAll([1..Length(d!.cols)],c->IsBound(d!.d[c])) 
-        then return d; 
+        elif d<>fail and ForAll([1..Length(d!.cols)],c->IsBound(d!.d[c]))
+        then return d;
         fi;
       fi;
       file:=Concatenation("e",String(H!.e),"crys.",String(n));
     else
       file:=Concatenation(H!.HeckeRing,".",String(n));
     fi;
-    return ReadDecompositionMatrix(H,file,crystal);
+    d:=ReadDecompositionMatrix(H,file,crystal);
+    if crystal then H!.CrystalMatrices[n]:=d; fi;
+    return d;
   end
 );
 
@@ -1552,18 +2164,18 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
     local msg, file, M, d, c, parts, coeffs, p, x, r, cm, rm;
 
     A_Specht_Decomposition_Matrix:=fail; ## just in case
-    
+
     file:=Filename([Directory("."),SpechtDirectory,H!.info.Library],str);
     if crystal then
       msg:="ReadCrystalMatrix-";
-    else 
+    else
       msg:="ReadDecompositionMatrix-";
     fi;
 
     d:=fail;
-  
+
     if file <> fail then Read(file); fi;
-  
+
     if A_Specht_Decomposition_Matrix<>fail then   ## extract matrix from M
       M:=A_Specht_Decomposition_Matrix;
       A_Specht_Decomposition_Matrix:=fail;
@@ -1590,7 +2202,7 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
                 if IsInt(x[rm]) then Add(coeffs,x[rm]);
                 else
                   p:=LaurentPolynomialByCoefficients(
-                    FamilyObj(One(H!.info.Indeterminate)),
+                    FamilyObj(1),
                     x[rm]{[2..Length(x[rm])]},x[rm]);
                   Add(coeffs,p);
                 fi;
@@ -1626,7 +2238,6 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
         od;
       fi;
     fi;
-    if crystal then H!.CrystalMatrices[n]:=d; fi;
     return d;
   end
 ); # ReadDecompositionMatrix
@@ -1635,21 +2246,21 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
 ## internal lists and return it if it is known.
 ## NOTE: this function does not use the crystal basis to calculate the
 ## decomposition matrix because it is called by the various conversion
-## functions X->Y which will only need a small part of the matrix in 
+## functions X->Y which will only need a small part of the matrix in
 ## general. The function FindDecompositionMatrix() also uses the crystal
 ## basis.
 InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
   [IsAlgebraObj,IsInt],
   function(H,n)
     local d, x, r, c;
-  
-    if IsBound(H!.DecompositionMatrices[n]) then 
+
+    if IsBound(H!.DecompositionMatrices[n]) then
       d:=H!.DecompositionMatrices[n];
-      if ( d<>fail and ForAll([1..Length(d!.cols)],c->IsBound(d!.d[c])) ) 
+      if ( d<>fail and ForAll([1..Length(d!.cols)],c->IsBound(d!.d[c])) )
       or H!.info.SpechtDirectory=SpechtDirectory then return d;
       elif H!.info.SpechtDirectory<>SpechtDirectory then
         for x in [1..Length(H!.DecompositionMatrices)] do
-          if IsBound(H!.DecompositionMatrices[x]) and 
+          if IsBound(H!.DecompositionMatrices[x]) and
           H!.DecompositionMatrices[x]=fail then
             Unbind(H!.DecompositionMatrices[x]);
           fi;
@@ -1661,12 +2272,12 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
     ## next we look for crystal matrices
     if d=fail and IsHecke(H) and IsZeroCharacteristic(H) then #FIXME overloading
       d:=ReadDecompositionMatrix(H,n,true);
-      if d<>fail then d:=Specialized(d); fi; #TODO
+      if d<>fail then d:=Specialized(d); fi;
     fi;
 
-    if d=fail and n<2*H!.e then   
+    if d=fail and n<2*H!.e then
       ## decomposition matrix can be calculated
-      r:=Partitions(n); 
+      r:=Partitions(n);
       if IsHecke(H) then c:=ERegularPartitions(H!.e,n); #FIXME overloading
       else c:=r;
       fi;
@@ -1674,7 +2285,7 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
 
       for x in [1..Length(d!.cols)] do
         if IsECore(H,d!.cols[x]) then    ## an e-core
-          AddIndecomposable(d, #TODO
+          AddIndecomposable(d,
             Module(H,"S",1,d!.cols[x]),false);
         elif IsSimpleModule(H,d!.cols[x]) then ## first e-weight 1 partition
           c:=Module(H,"S",1,ECore(H,d!.cols[x]) )
@@ -1683,7 +2294,7 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
             AddIndecomposable(d,
                   Module(H,"S",[1,1],c!.parts{[r-1,r]}),false);
           od;
-          if IsSchur(H) then 
+          if IsSchur(H) then
             AddIndecomposable(d,
               Module(H,"S",1,c!.parts[1]),false);
           fi;
@@ -1723,17 +2334,17 @@ InstallMethod(FindDecompositionMatrix,"find or calculate CDM",
 
 ## Retrieves or calculates the crystal basis element Pq(mu)
 InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
-  [IsAlgebraObj,IsList], 
-  function(H,mu) local  n, c, CDM, i, r, s, x, v, val,coeffs;
+  [IsAlgebraObj,IsList],
+  function(H,mu) local  n, c, CDM, i, r, s, x, v, val,coeffs,tmp;
     v:=H!.Indeterminate;
-    
+
     if mu=[] then return Module(H,"Sq",v^0,[]); fi;
     n:=Sum(mu);
 
     ## first we see if we have already calculated Pq(mu)
     if not IsBound(H!.CrystalMatrices[n]) or H!.CrystalMatrices[n]=fail then
       x:=ReadDecompositionMatrix(H,n,true);
-      if x=fail then 
+      if x=fail then
         H!.CrystalMatrices[n]:=DecompositionMatrix(H,
           Partitions(n), ERegularPartitions(H!.e,n), false);
       fi;
@@ -1751,10 +2362,10 @@ InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
       x:=Module(H,"Sq",v^0,ECore(H!.e,mu))
                  * HeckeOmega(H,"Sq",H!.e);
       r:=Position(x!.parts,mu);
-      if r=1 then 
+      if r=1 then
         x!.parts:=x!.parts{[1]};
         x!.coeffs:=[v^0];
-      else 
+      else
         x!.parts:=x!.parts{[r-1,r]};
         x!.coeffs:=[v,v^0];
       fi;
@@ -1775,28 +2386,30 @@ InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
           i:=i+1;
         od;
         if r=(mu[i]-i) mod H!.e then
-          s:=s+1; 
-          mu[i]:=mu[i]-1; 
+          s:=s+1;
+          mu[i]:=mu[i]-1;
           i:=i+1;
         else i:=Length(mu)+1;
         fi;
       od;
       if mu[Length(mu)]=0  then Unbind( mu[Length(mu)] ); fi;
-      x:=qSInducedModule(H, FindPq(mu), s, r);
+      x:=qSInducedModule(H, FindPq(H,mu), s, r);
       n:=1;
       while n<Length(x!.parts) do
-        ## FIXME valuation and coefficients
-        if x!.coeffs[Length(x!.parts)-n].valuation>0 then n:=n+1;
+        tmp:=CoefficientsOfLaurentPolynomial(x!.coeffs[Length(x!.parts)-n]);
+        if tmp[2]>0 then n:=n+1;
         else
-          r := StructuralCopy( x.coeffs[Length(x.parts)-n] );
-          mu:=x.parts[Length(x.parts)-n];
-          if Length(r.coefficients) < 1-r.coefficients then
-            Append(r.coefficients,
-              List([1..Length(r.coefficients)-1-r.valuation], i->0));
+          r := StructuralCopy( x!.coeffs[Length(x!.parts)-n] );
+          tmp:=ShallowCopy(CoefficientsOfLaurentPolynomial(r));
+          mu:=x!.parts[Length(x!.parts)-n];
+          if Length(tmp[1]) < 1-tmp[1] then
+            Append(tmp[1],
+              List([1..Length(tmp[1])-1-tmp[2]], i->0));
           fi;
-          r.coefficients := r.coefficients{[1..1-r.valuation]};
-          Append(r.coefficients, Reversed(r.coefficients{[1..-r.valuation]}));
-          x := x-r*FindPq(mu);
+          tmp[1] := tmp[1]{[1..1-tmp[2]]};
+          Append(tmp[1], Reversed(tmp[1]{[1..-tmp[2]]}));
+          r:=LaurentPolynomialByCoefficients(FamilyObj(1),tmp[1],tmp[2]);
+          x := x-r*FindPq(H,mu);
           if mu in x!.parts then n:= n+1; fi;
         fi;
       od;
@@ -1808,7 +2421,7 @@ InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
     fi;
 
     ## having found x we add it to CDM
-    CDM!.d[c]:=rec(coeffs:=x!.coeffs, 
+    CDM!.d[c]:=rec(coeffs:=x!.coeffs,
                   parts:=List(x!.parts, r->Position(CDM!.rows,r)) );
 
     ## for good measure we also add the Mullineux image of Pq(mu) to CDM
@@ -1817,7 +2430,9 @@ InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
     if c<>n then             ## not self-image under MullineuxMap
       r:=List(x!.coeffs*v^0, i->Value(i,v^-1));     ## v -> v^-1
       for i in [Length(r),Length(r)-1..1] do   ## multiply by r[1]
-        r[i].valuation:=r[i].valuation-r[1].valuation; #FIXME valuation
+        tmp:=ShallowCopy(CoefficientsOfLaurentPolynomial(r[i]));
+        tmp[2]:=tmp[2]-CoefficientsOfLaurentPolynomial(r[1])[2];
+        r[i]:=LaurentPolynomialByCoefficients(FamilyObj(1),tmp[1],tmp[2]);
       od;
       s:=List(x!.parts, mu->Position(CDM!.rows,ConjugatePartition(mu)));
       SortParallel(s,r);
@@ -1827,4 +2442,66 @@ InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
   end
 ); # FindPq
 
+## Strictly speaking the functions Sq() and Dq() are superfluous as
+## these functions could be carried out by the decomposition matrix
+## operations; however the point is that the crystal matrices are
+## allowed to have missing columns, and if any needed columns missing
+## these functions calculate them on the fly via using Pq().
+
+## writes S(mu), from the Fock space, as a sum of D(nu)
+InstallMethod(FindSq,"write Sq(mu) as sum of Dq(mu)",
+  [IsAlgebraObj,IsList],
+  function(H,mu) local x, r, CDM, n;
+    n:=Sum(mu);
+
+    ## we need the list of e-regular partitions. as we will have to
+    ## create CrystalMatrices[n] anyway, we get the columns from there.
+    if not IsBound(H!.CrystalMatrices[n]) or H!.CrystalMatrices[n]=fail then
+      r:=Partitions(n);
+      H!.CrystalMatrices[n]:=DecompositionMatrix(H,
+        r, ERegularPartitions(H!.e,n), false);
+    fi;
+    CDM:=H!.CrystalMatrices[n];
+
+    x:=Module(H,"Dq",0,[]);
+    r:=Length(CDM!.cols);
+    mu:=Position(CDM!.rows,mu);
+    while r>0 and CDM!.cols[r]>=CDM!.rows[mu] do
+      if not IsBound(CDM!.d[r]) then FindPq(H,CDM!.cols[r]); fi;
+      n:=Position(CDM!.d[r].parts,mu);
+      if n<>fail then
+        x:=x+Module(H,"Dq",CDM!.d[r].coeffs[n],CDM!.cols[r]);
+      fi;
+      r:=r-1;
+    od;
+    return x;
+  end
+);
+
+## write D(mu), from the Fock space, as a sum of S(nu)
+InstallMethod(FindDq, "write Dq(mu) as sum of Sq(mu)",
+  [IsAlgebraObj,IsList],
+  function(H,mu) local inv, x, c, CDM;
+    inv:=Module(H,"Sq",1,mu);
+    x:=Module(H,"Dq",1,mu)-FindSq(H,mu);
+    CDM:=H!.CrystalMatrices[Sum(mu)];
+    c:=Position(CDM!.cols,mu);
+
+    if IsBound(CDM!.inverse[c]) then
+      return Module(H,"Sq",CDM!.inverse[c].coeffs,
+                                List(CDM!.inverse[c].parts,c->CDM!.cols[c]));
+    fi;
+
+    while x<>0*x do
+      c:=Length(x!.parts);
+      inv:=inv+Module(H,"Sq",x!.coeffs[c],x!.parts[c]);
+      x:=x-x!.coeffs[c]*FindSq(H,x!.parts[c]);
+    od;
+
+    ## now place answer back in CDM
+    CDM!.inverse[Position(CDM!.cols,mu)]:=rec(coeffs:=inv!.coeffs,
+             parts:=List(inv!.parts,c->Position(CDM!.cols,c)) );
+    return inv;
+  end
+); # FindDq
 
