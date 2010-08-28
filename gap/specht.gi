@@ -3633,7 +3633,7 @@ InstallMethod(FindPq,"finds the crystal basis element Pq(mu)",
     if c<>n then             ## not self-image under MullineuxMap
       r:=List(x!.coeffs*v^0, i->Value(i,v^-1));     ## v -> v^-1
       for i in [Length(r),Length(r)-1..1] do   ## multiply by r[1]
-        tmp:=CoefficientsOfLaurentPolynomial(r[i]);
+        tmp:=ShallowCopy(CoefficientsOfLaurentPolynomial(r[i]));
         tmp[2]:=tmp[2]-CoefficientsOfLaurentPolynomial(r[1])[2];
         r[i]:=LaurentPolynomialByCoefficients(FamilyObj(1),tmp[1],tmp[2]);
       od;
