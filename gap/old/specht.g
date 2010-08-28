@@ -38,7 +38,7 @@
 
 ## 2.1: April 1996:
 ##  - Added a filename argument to SaveDecompositionMatrix and made it
-##    save the non-decomposition matrices under (more) sensible names; the 
+##    save the non-decomposition matrices under (more) sensible names; the
 ##    later is done using the existence of a record component d.matname.
 ##    Need to do something here about reading such matrices in (this can be
 ##    done using DecompositionMatrix)..
@@ -55,11 +55,11 @@
 ##    the projective module to have positive coefficients (and fixed bug in
 ##    matrix ops).
 
-## 2.0: March 1996: 
+## 2.0: March 1996:
 ##   - LLT algorithm implemented for calculating crystal basis of
 ##     the Fock space and hence by specialization the decomposition
 ##     matrices for all Hecke algebras over fields of characteristic
-##     zero; most of the work is done by the internal function Pq(). 
+##     zero; most of the work is done by the internal function Pq().
 ##     This required a new set of 'module' types ("Pq", "Sq", and "Dq"),
 ##     with correspondining operation sets H.operations.X. In particular,
 ##     these include q-induction and q-restriction, effectively allowing
@@ -73,7 +73,7 @@
 ##     readable notation. eg. S(1,1,1,1)->S(1^4). (see SpechtPrintFn).
 ##   - reversed order of parts and coeffs records in H.S(), d.d etc;
 ##     these lists are now sets which improves use of Position().
-##   - reorganised the Specht function and the record H() which it returns; 
+##   - reorganised the Specht function and the record H() which it returns;
 ##     in particular added H.info.
 ##   - extended SInducedModule() and SRestrict to allow multiple inducing and
 ##     restricting (all residues).
@@ -95,17 +95,17 @@ end;
 
 ######################################################################
 
-## Here is a description of the structure of the main records used 
+## Here is a description of the structure of the main records used
 ## in SPECHT
 
 ## 1. Specht()
 ## Specht() is the main function in specht.g, it returns a record 'H'
-## which represents the family of Hecke algebras, or Schur algebras, 
-## corresponding to some fixed field <R> and parameter <q>. 'H' has 
+## which represents the family of Hecke algebras, or Schur algebras,
+## corresponding to some fixed field <R> and parameter <q>. 'H' has
 ## the components:
 ##   IsSpecht      : is either 'true' or 'false' depending on whether
 ##                   'H' is a Hecke algebra or Schur algebra resp.
-##   S(), P(), D() : these three functions return records which 
+##   S(), P(), D() : these three functions return records which
 ##                   represent Specht modules, PIMs, and simple
 ##                   'H' modules repectively. These functions exist
 ##                   only when 'H' is a Hecke algebra record.
@@ -132,22 +132,22 @@ end;
 ##                       or "Dq" ("S" and "D" are used even for Schur
 ##                       algebras), coeffs is an integer or a *set* of
 ##                       integers and parts is a partition or a *set* of
-##                       partitions. In any programs the use of New is 
-##                       better than H.S(mu), for example, because the 
-##                       function names are different for Hecke and Schur 
-##                       algebras. Note that coeffs and parts must be 
-##                       ordered reverse lexicographically (ie. they are 
+##                       partitions. In any programs the use of New is
+##                       better than H.S(mu), for example, because the
+##                       function names are different for Hecke and Schur
+##                       algebras. Note that coeffs and parts must be
+##                       ordered reverse lexicographically (ie. they are
 ##                       *sets*).
 ##                     Collect: like New() except that  coeffs and parts
 ##                       need not be sets (and may contain repeats).
 ##                     NewDecompositionMatrix : creates a decomposition
 ##                       matrix.
-##                     ReadDecompositionMatrix : reads, and returns, a 
+##                     ReadDecompositionMatrix : reads, and returns, a
 ##                       decomposition matrix file.
 ##                     KnownDecompositionMatrix : returns a decomposition
 ##                       matrix of a given size; will either extract this
 ##                       matrix from Specht's internal lists or call
-##                       ReadDecompositionMatrix(), or try to calculate 
+##                       ReadDecompositionMatrix(), or try to calculate
 ##                       the decomposition matrix (without using the
 ##                       crystalized decomposition matrices).
 ##                     FindDecompositionMatrix : like KnownDM except that
@@ -188,14 +188,14 @@ end;
 ##                 (so, for example, S('x') rewrites 'x' as a linear
 ##                 combination of Specht modules).
 ## 'x'.operations is a pointer to 'H'.operations.('x'.module).
-## 
+##
 ## 3. DecompositionMatrices
 ## Decomposition matrices 'd' in Specht are represented as records with the
 ## following components:
-##   
+##
 ##   d : a list, indexed by d.cols, where each entry is a record
 ##       corresponding to a column of 'd'; this record has components
-##       two * sets* coeffs and parts, where parts is the index of the 
+##       two * sets* coeffs and parts, where parts is the index of the
 ##       corresponding partition in d.rows.
 ##   rows : the *set* of the partitions which make up the rows or 'd'.
 ##   cols : the *set* of the partitions which make up the rows or 'd'.
@@ -227,12 +227,12 @@ end;
 ##         SimpleDimension(H,n) -> prints all again
 ##         SimpleDimension(H,mu) or SimpleDimension(d,mu) -> dim D(mu)
 SimpleDimension:=function(arg) local d, mu, r, c, x, collabel, M, cols;
-  if IsDecompositionMatrix(arg[1]) then 
+  if IsDecompositionMatrix(arg[1]) then
     d:=arg[1]; mu:=Flat(arg{[2..Length(arg)]});
   elif IsRec(arg[1]) and IsBound(arg[1].IsSpecht) and Length(arg)>1 then
     mu:=Flat(arg{[2..Length(arg)]});
     d:=arg[1].operations.FindDecompositionMatrix(Sum(mu));
-    if d=false then 
+    if d=false then
       Print("# SimpleDimension(H,n), the decomposition matrix of H_n is ",
             "not known.\n");
       return false;
@@ -243,10 +243,10 @@ SimpleDimension:=function(arg) local d, mu, r, c, x, collabel, M, cols;
           "or SimpleDimension(<d>|<H>,<mu>)");
   fi;
 
-  if not d.H.IsSpecht then 
+  if not d.H.IsSpecht then
     Print("# SimpleDimension() not implemented for Schur algebras\n");
     return false;
-  elif mu=[] then 
+  elif mu=[] then
     cols:=Copy(d.cols);
     if d.H.Ordering=Lexicographic then
       cols:=cols{[Length(cols),Length(cols)-1..1]};
@@ -255,10 +255,10 @@ SimpleDimension:=function(arg) local d, mu, r, c, x, collabel, M, cols;
     cols:=List(cols, c->Position(d.cols,c));
     collabel:=List([1..Length(cols)], c->LabelPartition(d.cols[cols[c]]));
     M:=Maximum(List(collabel, Length))+1;
- 
+
     for c in [1..Length(cols)] do
       Print(String(collabel[c],-M),": ");
-      if IsBound(d.dimensions[cols[c]]) then 
+      if IsBound(d.dimensions[cols[c]]) then
         Print(d.dimensions[cols[c]],"\n");
       else
         x:=d.H.D(d,d.cols[cols[c]]);
@@ -271,12 +271,12 @@ SimpleDimension:=function(arg) local d, mu, r, c, x, collabel, M, cols;
       fi;
     od;
   else
-    c:=Position(d.cols,mu); 
-    if c=false then 
+    c:=Position(d.cols,mu);
+    if c=false then
       Print("# SimpleDimension(<d>,<mu>), <mu> is not in <d>.cols\n");
       return false;
     else
-      if not IsBound(d.dimensions[c]) then 
+      if not IsBound(d.dimensions[c]) then
         x:=d.H.D(d,d.cols[c]);
         if x=false then return false;
         else d.dimensions[c]:=Sum([1..Length(x.parts)],
@@ -304,16 +304,16 @@ ERegulars:=function(x) local y, regs, len, r;
 
   if IsDecompositionMatrix(x) then
     regs:=rec(operations:=x.operations);
-    for y in RecFields(x) do 
+    for y in RecFields(x) do
       if not y in ["d","rows","labels"] then regs.(y):=x.(y); fi;
     od;
-    regs.d:=[]; 
+    regs.d:=[];
     for y in [1..Length(x.cols)] do
       if IsBound(x.d[y]) then
         regs.d[y]:=rec(parts:=[], coeffs:=[]);
         for r in [1..Length(x.d[y].parts)] do
           len:=Position(x.cols,x.rows[x.d[y].parts[r]]);
-          if len<>false then 
+          if len<>false then
             Add(regs.d[y].parts,len);
             Add(regs.d[y].coeffs,x.d[y].coeffs[r]);
           fi;
@@ -348,7 +348,7 @@ IsSimpleModule:=function(arg) local H,mu, mud, simple, r, c, v;
   fi;
 
   H:=arg[1]; mu:=Flat(arg{[2..Length(arg)]});
-  if not IsERegular(H.e,mu) then return false; 
+  if not IsERegular(H.e,mu) then return false;
   elif mu=[] then return true; fi;
 
   mud:=ConjugatePartition(mu);
@@ -360,14 +360,14 @@ IsSimpleModule:=function(arg) local H,mu, mud, simple, r, c, v;
   od;
   return simple;
 end; #IsSimpleModule
-  
+
 #F Split an element up into compontents which have the same core.
 ## Usage: SplitECores(x) - returns as list of all block components
 ##        SplitECores(x,lambda) - returns a list with (i) core lambda,
 ## (ii) the same core as lambda, or (iii) the same core as the first
 ## element in lambda if IsSpecht(lambda).
 SplitECores:=function(arg) local cores, c, cpos, y, cmp;
-  if arg=[] or arg[1]=false then return []; 
+  if arg=[] or arg[1]=false then return [];
   elif not IsSpecht(arg[1]) then
     Error("usage, SplitECores(<x>), SplitECores(<x>,<mu>), or ",
               "SplitECores(<x>,<y>)");
@@ -379,8 +379,8 @@ SplitECores:=function(arg) local cores, c, cpos, y, cmp;
     for y in [1..Length(arg[1].parts)] do
       c:=ECore(arg[1].H.e, arg[1].parts[y]);
       cpos:=Position(cores, c);
-      if cpos=false then 
-        Add(cores, c); 
+      if cpos=false then
+        Add(cores, c);
         cpos:=Length(cores);
         cmp[cpos]:=[[],[]];
       fi;
@@ -391,15 +391,15 @@ SplitECores:=function(arg) local cores, c, cpos, y, cmp;
       cmp[y]:=arg[1].H.operations.New(arg[1].module,cmp[y][1],cmp[y][2]);
     od;
   else
-    if Length(arg)=2 and IsSpecht(arg[2]) then 
+    if Length(arg)=2 and IsSpecht(arg[2]) then
       c:=ECore(arg[2].H.e, arg[2].parts[Length(arg[1].parts)]);
     else c:=ECore(arg[1].H.e, Flat(arg{[2..Length(arg)]}));
     fi;
     cmp:=[ [],[] ];
     for y in [1..Length(arg[1].parts)] do
-      if ECore(arg[1].H.e, arg[1].parts[y])=c then 
-        Add(cmp[1], arg[1].coeffs[y]); 
-        Add(cmp[2], arg[1].parts[y]); 
+      if ECore(arg[1].H.e, arg[1].parts[y])=c then
+        Add(cmp[1], arg[1].coeffs[y]);
+        Add(cmp[2], arg[1].parts[y]);
       fi;
     od;
     cmp:=arg[1].H.operations.New(arg[1].module, cmp[1], cmp[2]);
@@ -409,13 +409,13 @@ end; #SplitECores
 
 #F This function returns the image of <mu> under the Mullineux map using
 ## the Kleshcehev(-James) algorihm, or the supplied decomposition matrix.
-## Alternatively, given a "module" x it works out the image of x under 
+## Alternatively, given a "module" x it works out the image of x under
 ## Mullineux.
 ## Usage:  MullineuxMap(e|H|d, mu) or MullineuxMap(x)
 MullineuxMap:=function(arg) local e, mu, x, v, module;
   if Length(arg)=1 and IsSpecht(arg[1]) then   ## MullineuxMap(x)
-    x:=arg[1]; 
-    if x=false or not IsERegular(x.H.e,x.parts[Length(x.parts)]) then   
+    x:=arg[1];
+    if x=false or not IsERegular(x.H.e,x.parts[Length(x.parts)]) then
       Print("# The Mullineux map is defined only for e-regular partitions\n");
       return false;
     fi;
@@ -433,12 +433,12 @@ MullineuxMap:=function(arg) local e, mu, x, v, module;
              List(x.parts,ConjugatePartition) );
       fi;
     elif Length(x.module)=1 then
-      return Sum([1..Length(x.coeffs)], 
+      return Sum([1..Length(x.coeffs)],
                mu->x.H.operations.New(x.module,x.coeffs[mu],
                      MullineuxMap(x.H.e,x.parts[mu])));
     else
       v:=x.H.info.Indeterminate;
-      return Sum([1..Length(x.coeffs)], 
+      return Sum([1..Length(x.coeffs)],
                mu->x.H.operations.New(x.module,
                      Value(v^-EWeight(x.H.e,x.parts[mu])*x.coeffs[mu]),
                      MullineuxMap(x.H.e,x.parts[mu])));
@@ -447,7 +447,7 @@ MullineuxMap:=function(arg) local e, mu, x, v, module;
     e:=arg[1];
     if IsRec(e) then
       if IsBound(e.e) then e:=e.e; elif IsBound(e.H) then e:=e.H.e; fi;
-    fi; 
+    fi;
     if IsInt(e) then
       mu:=Flat(arg{[2..Length(arg)]});
       if not IsERegular(e,mu) then                     ## q-Schur algebra
@@ -470,12 +470,12 @@ MullineuxMap:=function(arg) local e, mu, x, v, module;
 end;
 
 #F Calculates the Specht modules in sum_{i>0}S^lambda(i) using the
-## q-analogue of Schaper's theorem. 
+## q-analogue of Schaper's theorem.
 ## Uses H.valuation.
 ##   Usage:  Schaper(H,mu);
 Schaper:=function(arg)
   local H, mu, mud, schaper, hooklen, c, row, r, s, v;
-  
+
   if arg=[] or not ( IsRec(arg[1]) and IsBound(arg[1].valuation) ) then
     Error("usage, Schaper(<H>,<mu>)");
   fi;
@@ -497,7 +497,7 @@ Schaper:=function(arg)
     for row in [1..mud[1]] do
       for r in [row+1..mud[1]] do
         if mu[row] >=c and mu[r] >=c then
-          v:=H.valuation(hooklen[row][c]) 
+          v:=H.valuation(hooklen[row][c])
                 - H.valuation(hooklen[r][c]);
           if v<>0 then
             s:=AddRimHook(RemoveRimHook(mu,r,c,mud),row,hooklen[r][c]);
@@ -527,7 +527,7 @@ SchaperMatrix:=function(d) local r, C, c, coeff, sh, shmat;
     sh:=Schaper(d.H,d.rows[r]);
     for c in [C..Length(d.cols)] do
       coeff:=InnerProduct(sh,d.P(d,d.cols[c]));
-      if coeff<>false and coeff<>0*coeff then 
+      if coeff<>false and coeff<>0*coeff then
         Add(shmat.d[c].parts,r);
         Add(shmat.d[c].coeffs,coeff);
       fi;
@@ -572,7 +572,7 @@ DecompositionNumber:=function(x,mu,nu) local Pnu, RowAndColumnRemoval;
     if Pnu<>false then return Coefficient(Pnu,mu); fi;
     x:=x.H;
   elif IsRec(x) and IsBound(x.IsSpecht) then
-    Pnu:=x.operations.P.S(x.operations.New("P",1,nu),true);  
+    Pnu:=x.operations.P.S(x.operations.New("P",1,nu),true);
     if Pnu<>false then return Coefficient(Pnu,mu); fi;
   else Error("usage, DecompositionMatrix(<d> or <H>, <mu>, <nu>)");
   fi;
@@ -586,15 +586,15 @@ DecompositionNumber:=function(x,mu,nu) local Pnu, RowAndColumnRemoval;
     ## x, mu, and nu as above
 
     mu:=fn(mu); nu:=fn(nu);
-  
-    m:=0; n:=0; i:=1; 
+
+    m:=0; n:=0; i:=1;
     while i<Length(nu) and i<Length(mu) do
       m:=m+mu[i]; n:=n+nu[i];
-      if m=n then 
+      if m=n then
         d2:=DecompositionNumber(x, fn(mu{[i+1..Length(mu)]}),
                    fn(nu{[i+1..Length(nu)]}));
         if d2=0 then return d2;
-        elif IsInt(d2) then 
+        elif IsInt(d2) then
           d1:=DecompositionNumber(x, fn(mu{[1..i]}),fn(nu{[1..i]}));
           if IsInt(d1) then return d1*d2; fi;
         fi;
@@ -614,7 +614,7 @@ end;
 ## could potentially split off Px). Simple minded, but useful.
 Obstructions:=function(d,Px) local obs, mu, Pmu, possibles;
   obs:=[];
-  if d.H.IsSpecht then 
+  if d.H.IsSpecht then
     possibles:=Filtered(Px.parts, mu->IsERegular(Px.H.e, mu));
   else possibles:=Px.parts;
   fi;
@@ -631,7 +631,7 @@ end;
 ## if <Px> contains an indecomposable not listed in <d> and false
 ## otherwise. Note that the value of <Px> may well be changed by
 ## this function. If the argument <mu> is used then we assume
-## that all of the decomposition numbers down given by <Px> down to 
+## that all of the decomposition numbers down given by <Px> down to
 ## <mu> are correct. Note also that if d is the decomposition matrix
 ## for H(Sym_{r+1}) then the decomposition matrix for H(Sym_r) is passed
 ## to IsNewDecompositionMatrix.
@@ -643,7 +643,7 @@ IsNewIndecomposable:=function(arg) local d, oldd, mu;
   not (IsDecompositionMatrix(arg[1]) and IsSpecht(arg[2]) ) then
     Error("usage, IsNewIndecomposable(<d>,<Px> [,<mu>]");
   fi;
-   
+
   d:=arg[1];
   if Length(arg)=2 then mu:=true;
   else mu:=arg{[3..Length(arg)]};
@@ -658,7 +658,7 @@ end;
 ## inserts it if it is not.
 AddIndecomposable:=function(d, Px)
   if IsSpecht(Px) and Px.module="S" and IsDecompositionMatrix(d) then
-    if Position(d.cols, Px.parts[Length(Px.parts)])=false then 
+    if Position(d.cols, Px.parts[Length(Px.parts)])=false then
       Print("# The projective P(",TightStringList(Px.parts[Length(Px.parts)]),
             ") is not listed in <D>\n");
     else d.operations.AddIndecomposable(d,Px,true);
@@ -671,7 +671,7 @@ end; # AddIndecomposable
 RemoveIndecomposable:=function(arg) local d, r, c;
   d:=arg[1];
   c:=Position(d.cols, Flat(arg{[2..Length(arg)]}));
-  if c=false then 
+  if c=false then
     Print("RemoveIndecomposable(<d>,<mu>), <mu> is not listed in <d>\n");
   else Unbind(d.d[c]);
   fi;
@@ -682,7 +682,7 @@ MissingIndecomposables:=function(d) local c, missing;
   missing:=List([1..Length(d.cols)], c->not IsBound(d.d[c]) );
   if true in missing then
     Print("The following projectives are missing from <d>:\n  ");
-    for c in [Length(missing),Length(missing)-1..1] do 
+    for c in [Length(missing),Length(missing)-1..1] do
       if missing[c] then Print("  ", d.cols[c]); fi;
     od;
     Print("\n");
@@ -696,12 +696,12 @@ end; # MissingIndecomposables
 ##   DecompositionMatrix(H, n [,ordering]);
 ##   DecompositionMatrix(H, <file>) ** force Specht() to read <file>
 DecompositionMatrix:=function(arg) local H, d, Px, c, n;
-  if arg=[] or not (IsRec(arg[1]) and IsBound(arg[1].IsSpecht)) 
+  if arg=[] or not (IsRec(arg[1]) and IsBound(arg[1].IsSpecht))
   or Length(arg)=1 or Length(arg)>3 then
     Error("usage, DecompositionMatrix(<H>, <n>|<file> [,Ordering])");
   fi;
   H:=arg[1];
-  
+
   if IsString(arg[2]) then
     if IsBound(arg[3]) and IsFunc(arg[3]) then H.Ordering:=arg[3]; fi;
     d:=H.operations.ReadDecompositionMatrix(arg[2],false);
@@ -715,8 +715,8 @@ DecompositionMatrix:=function(arg) local H, d, Px, c, n;
     n:=arg[2];
     if IsBound(arg[3]) and IsFunc(arg[3]) then H.Ordering:=arg[3]; fi;
     d:=H.operations.FindDecompositionMatrix(n);
-    
-    if d=false then 
+
+    if d=false then
       if H.p>0 and n>2*H.e then  ## no point even trying
         Print("# This decomposition matrix is not known; use ",
               "CalculateDecompositionMatrix()\n# or ",
@@ -733,8 +733,8 @@ DecompositionMatrix:=function(arg) local H, d, Px, c, n;
       for c in [1..Length(d.cols)] do
         if not IsBound(d.d[c]) then
           Px:=H.operations.P.S(H.operations.New("P",1,d.cols[c]),true);
-          if Px<>false then d.operations.AddIndecomposable(d,Px,false); 
-          else Print("# Projective indecomposable P(", 
+          if Px<>false then d.operations.AddIndecomposable(d,Px,false);
+          else Print("# Projective indecomposable P(",
                      TightStringList(d.cols[c]),") not known.\n");
           fi;
         fi;
@@ -743,7 +743,7 @@ DecompositionMatrix:=function(arg) local H, d, Px, c, n;
     fi;
   fi;
   if d<>false then   ## can't risk corrupting the internal matrix lists
-    d:=ShallowCopy(d);    
+    d:=ShallowCopy(d);
   fi;
   return d;
 end;  ## DecompositionMatrix
@@ -822,7 +822,7 @@ InvertDecompositionMatrix:=function(d) local inverse, c, r;
     if IsBound(d.inverse[c]) then
       inverse.d[c]:=rec(parts:=[], coeffs:=[]);
       for r in [1..c] do
-        if IsBound(d.inverse[r]) and c in d.inverse[r].parts then 
+        if IsBound(d.inverse[r]) and c in d.inverse[r].parts then
           Add(inverse.d[c].parts,r);
           Add(inverse.d[c].coeffs,
               d.inverse[r].coeffs[Position(d.inverse[r].parts,c)]);
@@ -834,7 +834,7 @@ InvertDecompositionMatrix:=function(d) local inverse, c, r;
   inverse.matname:="Inverse matrix";
   return inverse;
 end;
-  
+
 #P Saves a full decomposition matrix; actually, only the d, rows, and cols
 ## records components are saved and the rest calculated when read back in.
 ## The decomposition matrices are saved in the following format:
@@ -844,7 +844,7 @@ end;
 ## decomposition numbers d1,...,dk (if di is a polynomial then it is saved
 ## as a list [di.valuation,<sequence of di.coffcients]; in particular we
 ## don't save the polynomial name).
-## Usage: SaveDecompositionMatrix(<d>) 
+## Usage: SaveDecompositionMatrix(<d>)
 ##    or  SaveDecompositionMatrix(<d>,<filename>);
 SaveDecompositionMatrix:=function(arg)
   local d,TightList,n,file,SaveDm,size, r, c,str;
@@ -867,18 +867,18 @@ SaveDecompositionMatrix:=function(arg)
 
   size:=SizeScreen();    ## SizeScreen(0 shouldn't affect PrintTo()
   SizeScreen([80,40]);  ## but it does; this is our protection.
-  
+
   TightList:=function(list) local l, str;
     str:="[";
-    for l in list{[1..Length(list)]} do 
-      if IsList(l) then 
-        Print(str); 
+    for l in list{[1..Length(list)]} do
+      if IsList(l) then
+        Print(str);
         TightList(l);
-      else Print(str,l); 
+      else Print(str,l);
       fi;
       str:=",";
     od;
-    Print("]"); 
+    Print("]");
   end;
 
   if d=false then Error("SaveDecompositionMatrix(<d>), d=false!!!\n");
@@ -889,7 +889,7 @@ SaveDecompositionMatrix:=function(arg)
   fi;
 
   SaveDm:=function()
-    Print("## This is a GAP library file generated by \n## SPECHT ", 
+    Print("## This is a GAP library file generated by \n## SPECHT ",
           d.H.info.version, "\n\n## This file contains ");
     if IsBound(d.matname) then
       Print("a(n) ", d.matname, " for n = ", Sum(d.rows[1]),"\n");
@@ -897,10 +897,10 @@ SaveDecompositionMatrix:=function(arg)
       if not d.IsDecompositionMatrix then Print("the crystallized "); fi;
       Print("the decomposition matrix\n## of the ");
       if d.H.IsSpecht then
-        if d.H.e<>d.H.p then Print("Hecke algebra of "); 
+        if d.H.e<>d.H.p then Print("Hecke algebra of ");
         else Print("symmetric group ");
         fi;
-      else Print("q-Schur algebra of "); 
+      else Print("q-Schur algebra of ");
       fi;
       Print("Sym(",n,") over a field\n## ");
       if d.H.p=0 then Print("of characteristic 0 with ");
@@ -918,14 +918,14 @@ SaveDecompositionMatrix:=function(arg)
         for r in d.d[c].coeffs do
           if IsPolynomial(r) then
           Print(str,"[",r.valuation,",",TightStringList(r.coefficients),"]");
-          else Print(str,r); 
+          else Print(str,r);
           fi;
           str:=",";
         od;
         for r in d.d[c].parts do
           Print(str,r);
         od;
-        Print("]"); 
+        Print("]");
         str:=",[";
       fi;
     od;
@@ -942,7 +942,7 @@ SaveDecompositionMatrix:=function(arg)
   InfoRead1("#I* ", ReadIndent, "SaveDecompositionMatrix( \"",
             file, "\")\n");
   PrintTo(file,SaveDm());
-  
+
   ## now we put d into DecompositionMatrices
   if not IsBound(d.matname) then d.operations.Store(d,n); fi;
 
@@ -960,7 +960,7 @@ AdjustmentMatrix:=function(dp,d) local ad, c, x;
   ad.matname:="Adjustment matrix";
   c:=1;
   while ad<>false and c<=Length(d.cols) do
-    if IsBound(dp.cols[c]) then 
+    if IsBound(dp.cols[c]) then
       x:=dp.P(dp, dp.cols[c]);
       x.H:=d.H;
       x:=d.H.P(d,x);
@@ -972,8 +972,8 @@ AdjustmentMatrix:=function(dp,d) local ad, c, x;
   od;
   return ad;
 end;
-   
-## Returns the a GAP matrix for the decomposition matrix <d>. Note that 
+
+## Returns the a GAP matrix for the decomposition matrix <d>. Note that
 ## the rows and columns and <d> are ordered according to H.info.Ordering.
 MatrixDecompositionMatrix:=function(d) local r,c, rows, cols, m;
   rows:=Copy(d.rows);
@@ -1035,7 +1035,7 @@ DecompositionMatrixMatrix:=function(H,m,n) local r, c, rows, cols, d;
      for r in [1..Length(rows)] do
        if m[rows[r]][cols[c]]<>0*m[rows[r]][cols[c]] then ## maybe polynomial
          Add(d.d[c].parts, r);
-         Add(d.d[c].coeffs, m[rows[r]][cols[c]]); 
+         Add(d.d[c].coeffs, m[rows[r]][cols[c]]);
        fi;
      od;
      if d.d[c].parts=[] then Unbind(d.d[c]); fi;
@@ -1049,17 +1049,17 @@ end;
 ## little more than a wrapper for the funcions S(), P(), and D().
 ## Originally, I had these as external functions, but decided that it
 ## was better to tie these functions to e=H.e as strongly as possible.
-Specht:=function(arg) 
-  local H, a, i, 
-        Handler, AddModules, MultiplyModules, PrintModule, 
+Specht:=function(arg)
+  local H, a, i,
+        Handler, AddModules, MultiplyModules, PrintModule,
         InducedModule, sinduced, SInducedModule, qsinduced, qSInducedModule,
         RestrictedModule, srestricted, SRestrictedModule, qrestricted,
-        qSRestrictedModule, InnerProduct, Coefficient, PositiveCoefficients, 
-        IntegralCoeffucuents, PositiveCrystalCoefficients, 
-        IntegralCrystalCoefficients, PrintDecompositionMatrix, 
-        CrystalMatrices, CrystalMatrixOps, DecompositionMatrices, 
+        qSRestrictedModule, InnerProduct, Coefficient, PositiveCoefficients,
+        IntegralCoeffucuents, PositiveCrystalCoefficients,
+        IntegralCrystalCoefficients, PrintDecompositionMatrix,
+        CrystalMatrices, CrystalMatrixOps, DecompositionMatrices,
         DecompositionMatrixOps, v, Pq, Sq, Dq, HSC, BUG;
-  
+
   ## This function is described above. It interprets the function calls
   ## H.X(*) where X = S(), P() or D().
   Handler:=function(module, arg) local usage,mu,d,z,n;
@@ -1087,7 +1087,7 @@ Specht:=function(arg)
     if not ForAll(mu,z->IsInt(z)) then usage(); fi;
     z:=Copy(mu);
     Sort(mu, function(a,b) return a>b;end); # non-increasing
-    if mu<>z then 
+    if mu<>z then
       Print("## ",module,"(mu), warning <mu> is not a partition.\n");
     fi;
     if Length(mu)>0 and mu[Length(mu)]<0 then
@@ -1116,11 +1116,11 @@ Specht:=function(arg)
   ## operations record which in turn will contain all of the functions
   ## for operations on the various modules S(), P() and D().
   H:=rec(IsSpecht:=true,
-  
+
     S:=function(arg) return Handler("S",arg); end,
     P:=function(arg) return Handler("P",arg); end,
     D:=function(arg) return Handler("D",arg); end,
-    
+
     ## bits and pieces about H
     info:=rec(version:=SPECHT.Version),
 
@@ -1132,7 +1132,7 @@ Specht:=function(arg)
 
       ## for ordering the rows of the decomposition matrices
       ## (as it is common to all decomposition matrices it lives here)
-    
+
       Print:=function(x)
         if H.IsSpecht then Print("Specht("); else Print("Schur("); fi;
         Print("e=", x.e, ", ");
@@ -1141,7 +1141,7 @@ Specht:=function(arg)
         else Print("W(), P(), F()");
         fi;
         if IsBound(H.Pq) then Print(", Pq()"); fi;
-        if H.p<>H.e and H.p<>0 then 
+        if H.p<>H.e and H.p<>0 then
           Print(", HeckeRing=\"", H.HeckeRing, "\")");
         else Print(")");
         fi;
@@ -1160,7 +1160,7 @@ Specht:=function(arg)
         fi;
         return K;
       end,
-    
+
       DoubleHook:=function(n,x,y,a) local s, i;
         s:=[x];
         if y<>0 then Add(s,y); fi;
@@ -1173,7 +1173,7 @@ Specht:=function(arg)
         else return [];
         fi;
       end,
-    
+
       ## Returns p(n) - p(n-1,1) + p(n-2,1^2) - ... + (-1)^(n-1)*p(1^n).
       ## So, S(mu)*Omega(n) is the linear combination of the S(nu)'s where
       ## nu is obtained by wrapping an n-hook onto mu and attaching the
@@ -1182,7 +1182,7 @@ Specht:=function(arg)
         return H.operations.New(module,List([1..n],x->(-1)^(x)),
                          List([1..n],x->H.operations.Hook(n,x)));
       end,
-    
+
       New:=function(m, c, p)
         if IsInt(c) or IsPolynomial(c) then
           return rec(H:=H,module:=m,coeffs:=[c],parts:=[p],
@@ -1191,7 +1191,7 @@ Specht:=function(arg)
                         operations:=H.operations.(m));
         fi;
       end,
-    
+
       ## Takes two lists, one containing coefficients and the other the
       ## corresponding partitions, and orders them lexicogrphcailly collecting
       ## like terms on the way. We use a variation on quicksort which is
@@ -1199,7 +1199,7 @@ Specht:=function(arg)
       ## different integers this can lead to an error - which we don't catch).
       Collect:=function(module, coeffs, parts)
         local newx, i, Place, Unplace, places;
-    
+
         ## inserting parts[i] into places. if parts[i]=[p1,p2,...] then
         ## we insert it into places at places[p1][[p2][...] stopping
         ## at the fist empty position (say places[p1], or places[p1][p2]
@@ -1218,14 +1218,14 @@ Specht:=function(arg)
               else places:=Place(i, places, d);
               fi;
             fi;
-          elif places=[] or not IsBound(places[parts[i][d]]) then  
+          elif places=[] or not IsBound(places[parts[i][d]]) then
             # must be a list
             places[parts[i][d]]:=i;
           else places[parts[i][d]]:=Place(i, places[parts[i][d]], d+1);
           fi;
           return places;
         end;
-    
+
         Unplace:=function(places) local p, newp, np;
           newp:=[[],[]];
           for p in places do
@@ -1240,7 +1240,7 @@ Specht:=function(arg)
           od;
           return newp;
         end;
-    
+
        if parts=[] then return H.operations.New(module,0,[]);
        elif Length(parts)=1 then return H.operations.New(module,coeffs,parts);
        else places:=[];
@@ -1251,7 +1251,7 @@ Specht:=function(arg)
           fi;
         fi;
       end  ## H.operations.Collect
-    
+
     ) ## H.operations(); although we are not quite finished with it yet:
   );  ## H:=rec(...)
 
@@ -1266,7 +1266,7 @@ Specht:=function(arg)
         if IsPrime(a) then H.p:=a;
         else Error("Specht(<e>,<p>), <p> must be a prime number");
         fi;
-        if H.e=H.p then 
+        if H.e=H.p then
           H.HeckeRing:=Concatenation("p",String(H.p),"sym");
           ## return the exponent of the maximum power of p dividing x
           H.valuation:=function(x) local i;
@@ -1300,7 +1300,7 @@ Specht:=function(arg)
       H.valuation:=a;
       if not IsBound(H.HeckeRing) then H.HeckeRing:="unknown"; fi;
       if not IsBound(H.e) then
-        H.e:=1; 
+        H.e:=1;
         while H.valuation(H.e)=0 do H.e:=H.e+1; od;
       fi;
     elif IsString(a) then H.HeckeRing:=a;
@@ -1359,7 +1359,7 @@ Specht:=function(arg)
   sinduced:=function(y, n, e, r, i) local ny, j, z;
     ny:=[];
     for j in [i..Length(y)-n+1] do
-      if r=(y[j] - j + 1) mod e then 
+      if r=(y[j] - j + 1) mod e then
         if j=1 or y[j] < y[j-1] then
           z:=Copy(y);
           z[j]:=z[j] + 1; # only one node of residue r can be added
@@ -1481,7 +1481,7 @@ Specht:=function(arg)
     else return x.coeffs[pos];
     fi;
   end;
-    
+
   #F Returns true if all coefficients are non-negative
   PositiveCoefficients:=function(x) local c;
     return ForAll(x.coeffs, c->c>=0);
@@ -1497,9 +1497,9 @@ Specht:=function(arg)
   ## with coefficient Zero.
   AddModules:=function(a,b) local i, j, ab, x;
     if a=false or b=false then return false;
-    elif a=0*a then return b; 
-    elif b=0*b then return a; 
-    elif a.H<>b.H then 
+    elif a=0*a then return b;
+    elif b=0*b then return a;
+    elif a.H<>b.H then
       Error("modules belong to different Grothendieck rings");
     fi;
 
@@ -1507,8 +1507,8 @@ Specht:=function(arg)
       if Length(a.module)<>Length(b.module) then
         Error("AddModule(<a>,<b>): can only add modules of same type.");
       fi;
-      a:=a.operations.S(a,false);  
-      b:=b.operations.S(b,false); 
+      a:=a.operations.S(a,false);
+      b:=b.operations.S(b,false);
       if a=false or b=false then return false;fi;
     fi;
 
@@ -1519,36 +1519,36 @@ Specht:=function(arg)
     while i <=Length(a.parts) and j <=Length(b.parts) do
       if a.parts[i]=b.parts[j] then
         x:=a.coeffs[i]+b.coeffs[j];
-        if x<>0*x then 
-          Add(ab[1],x); 
-          Add(ab[2], a.parts[i]); 
+        if x<>0*x then
+          Add(ab[1],x);
+          Add(ab[2], a.parts[i]);
         fi;
         i:=i+1; j:=j+1;
       elif a.parts[i] < b.parts[j] then
-        if a.coeffs[i]<>0*a.coeffs[i] then 
+        if a.coeffs[i]<>0*a.coeffs[i] then
           Add(ab[1], a.coeffs[i]);
-          Add(ab[2], a.parts[i]); 
+          Add(ab[2], a.parts[i]);
         fi;
         i:=i+1;
       else
-        if b.coeffs[j]<>0*b.coeffs[j] then 
+        if b.coeffs[j]<>0*b.coeffs[j] then
           Add(ab[1], b.coeffs[j]);
-          Add(ab[2], b.parts[j]); 
+          Add(ab[2], b.parts[j]);
         fi;
         j:=j+1;
       fi;
     od;
-    if i <=Length(a.parts) then 
+    if i <=Length(a.parts) then
       Append(ab[1], a.coeffs{[i..Length(a.coeffs)]});
       Append(ab[2], a.parts{[i..Length(a.parts)]});
-    elif j <=Length(b.parts) then 
+    elif j <=Length(b.parts) then
       Append(ab[1], b.coeffs{[j..Length(b.coeffs)]});
       Append(ab[2], b.parts{[j..Length(b.parts)]});
     fi;
     if ab=[[],[]] then ab:=[ [0],[[]] ]; fi;
     return H.operations.New(a.module, ab[1], ab[2]);
   end;  # AddModules
-    
+
   MultiplyModules:=function(a,b) local x, y, ab, abcoeff, xy, z;
     if a=false or b=false then return false;
     elif a=0 or b=0 then return H.operations.New(b.module,0,[]);
@@ -1556,9 +1556,9 @@ Specht:=function(arg)
       return H.operations.New(b.module, a*b.coeffs, b.parts);
     elif not ( IsRec(b) and IsBound(b.H) ) then
       return H.operations.New(a.module, b*a.coeffs, a.parts);
-    elif a.coeffs=[0] or b.coeffs=[0] then 
+    elif a.coeffs=[0] or b.coeffs=[0] then
       return H.operations.New(b.module,0,[]);
-    elif a.H<>b.H then 
+    elif a.H<>b.H then
       Error("modules belong to different Grothendieck rings");
     fi;
     a:=a.operations.S(a,false);
@@ -1577,7 +1577,7 @@ Specht:=function(arg)
     else return H.operations.Collect(b.module, ab[1], ab[2]);
     fi;
   end;  # MultiplyModules
-    
+
   ## The Print function for the "module" elements.
   PrintModule:=function(module, a) local x, len, n, star;
     if IsBound(a.name) then Print(a.name,"\n");
@@ -1601,7 +1601,7 @@ Specht:=function(arg)
             if Length(a.coeffs[x].coefficients)=1 then
               if a.coeffs[x].valuation=0 then
                 if a.coeffs[x].coefficients=[-1] then Print(" - ");
-                elif a.coeffs[x].coefficients[1]<0 then 
+                elif a.coeffs[x].coefficients[1]<0 then
                   Print(a.coeffs[x].coefficients[1],star);
                 else
                   if x<Length(a.parts) then Print(" + "); fi;
@@ -1610,12 +1610,12 @@ Specht:=function(arg)
                   fi;
                 fi;
               else
-                if x<Length(a.parts) and a.coeffs[x].coefficients[1]>0 then 
+                if x<Length(a.parts) and a.coeffs[x].coefficients[1]>0 then
                   Print(" + ");
                 fi;
                 Print(a.coeffs[x],star);
               fi;
-            elif a.coeffs[x].coefficients[Length(a.coeffs[x].coefficients)]<0 
+            elif a.coeffs[x].coefficients[Length(a.coeffs[x].coefficients)]<0
             then Print(" - (",-a.coeffs[x],")", star);
             else
               if x<Length(a.parts) then Print(" + "); fi;
@@ -1634,14 +1634,14 @@ Specht:=function(arg)
       fi;
     fi;
   end;  # PrintModule
-    
+
   H.operations.S:=rec(
     \+:=function(a,b) return AddModules(a,b); end,
-    \-:=function(a,b) 
+    \-:=function(a,b)
       if a=false or b=false then return false;
-      else 
+      else
         b:=Copy(b); b.coeffs:=-b.coeffs;
-        return AddModules(a,b); 
+        return AddModules(a,b);
       fi;
     end,
     \*:=function(a,b) return MultiplyModules(a,b); end,
@@ -1650,18 +1650,18 @@ Specht:=function(arg)
       else return b.H.operations.New(b.module, b.coeffs/n, b.parts);
       fi;
     end,
-    
+
     Print:=function(x)
       if x.H.IsSpecht then PrintModule("S",x);
       else PrintModule("W",x);
       fi;
     end,
-    
+
     Coefficient:=Coefficient,
     PositiveCoefficients:=PositiveCoefficients,
     IntegralCoefficients:=IntegralCoefficients,
     InnerProduct:=InnerProduct,
-    
+
     ## Induction and restriction; for S()
     InducedModule:=function(x, list) local r;
       if x=false or x=0*x then return x;
@@ -1670,7 +1670,7 @@ Specht:=function(arg)
         Error("Induce, r-induction is not defined when e=0.");
       elif ForAny(list,r-> r>=H.e or r<0) then
         Error("Induce, r-induction is defined only when 0<=r<e.\n");
-      else 
+      else
         for r in list do
           x:=InducedModule(x,H.e,r);
         od;
@@ -1685,7 +1685,7 @@ Specht:=function(arg)
         Error("Restrict, r-restriction is not defined when e=0.");
      elif ForAny(list,r-> r>=H.e or r<0) then
         Error("Restrict, r-restriction is defined only when 0<=r<e.\n");
-      else 
+      else
         for r in list do
           x:=RestrictedModule(x,H.e,r);
         od;
@@ -1728,75 +1728,75 @@ Specht:=function(arg)
       else return SRestrictedModule(x, H.e, list[1], list[2]);
       fi;
     end,
-      
+
     ## Finally the conversion functions S(), P() and D(). All take
     ## a linear combination of Specht modules and return corresponding
     ## linear combinations of Specht, indecomposables, and simples resp.
     ## If they have a problem they return false and print an error
     ## message unless silent=true.
-    
+
     S:=function(x, silent) return x; end,             # S() -> S()
-    
-    ## Here I only allow for linear combinations of projectives which 
+
+    ## Here I only allow for linear combinations of projectives which
     ## have non-negative coefficients; the reason for this is that I
     ## can't see how to do it otherwise. The problem is that in the
     ## Grothendieck ring there are many ways to write a given linear
     ## combination of Specht modules (or PIMs).
     P:=function(x, silent) local proj;                # S() -> P()
-      if x=false or x=0*x then return x; 
+      if x=false or x=0*x then return x;
       elif x.parts=[[]] then return H.operations.New("P",x.coeffs[1],[]);
       fi;
-    
+
       proj:=H.operations.New("P",0,[]);
-      while x<>false and x<>0*x and 
+      while x<>false and x<>0*x and
       ( not H.IsSpecht or IsERegular(H.e,x.parts[Length(x.parts)]) ) do
-        proj:=proj+H.operations.New("P",x.coeffs[Length(x.parts)], 
+        proj:=proj+H.operations.New("P",x.coeffs[Length(x.parts)],
                                         x.parts[Length(x.parts)]);
         x:=x+H.operations.P.S(
                   H.operations.New("P",-x.coeffs[Length(x.parts)],
                                         x.parts[Length(x.parts)]),true);
       od;
-      if x=false or x<>0*x then 
-        if not silent then 
+      if x=false or x<>0*x then
+        if not silent then
           Print("# P(<x>), unable to rewrite <x> as a sum of projectives\n");
         fi;
       else return proj;
       fi;
       return false;
-    end, 
-    
+    end,
+
     D:=function(x,silent) local y, d, simples, r, c;  # S() -> D()
       if x=false or x=0*x then return x;
       elif x.parts=[[]] then return H.operations.New("D",x.coeffs[1],[]);
       fi;
-      
+
       d:=H.operations.KnownDecompositionMatrix(Sum(x.parts[1]));
-      if d<>false then 
-        y:=d.operations.S.D(d,x); 
+      if d<>false then
+        y:=d.operations.S.D(d,x);
         if y<>false then return y; fi;
       fi;
-    
+
       ## since that didn't work, we use the LLT algorithm when IsBound(H.Pq)
       if IsBound(H.Pq) and H.IsSpecht then
-        return Sum([1..Length(x.parts)], 
-                   r->x.coeffs[r]*Specialized(Sq(x.parts[r]))); 
+        return Sum([1..Length(x.parts)],
+                   r->x.coeffs[r]*Specialized(Sq(x.parts[r])));
       fi;
 
       # next, see if we can calculate the answer.
       d:=Concatenation(H.HeckeRing,"D");
       # finally, we can hope that only partitions of e-weight<2 appear in x
-      r:=1; simples:=H.operations.New("D",0,[]); 
+      r:=1; simples:=H.operations.New("D",0,[]);
       while simples<>false and r <= Length(x.parts) do
         if IsSimpleModule(x.H, x.parts[r]) then
           simples:=simples+H.operations.New("D",x.coeffs[r], x.parts[r]);
-        elif IsERegular(x.H.e,x.parts[r]) and EWeight(x.H.e,x.parts[r])=1 
+        elif IsERegular(x.H.e,x.parts[r]) and EWeight(x.H.e,x.parts[r])=1
         then
           y:=H.operations.New("S",1,ECore(x.H.e,x.parts[r]))
                              * H.operations.Omega("S",x.H.e);
           c:=Position(y.parts,x.parts[r]); ## >1 since not IsSimpleModule
           simples:=simples
                     +H.operations.New("D",[1,1],[y.parts[c],y.parts[c-1]]);
-        elif IsBound(x.operations.(d)) then 
+        elif IsBound(x.operations.(d)) then
           simples:=simples+x.operations.(d)(x.parts[r]);
         else simples:=false;
         fi;
@@ -1809,24 +1809,24 @@ Specht:=function(arg)
       fi;
     end
   );   ## H.operations.S
-    
+
   H.operations.P:=rec(
     \+:=function(a,b) return AddModules(a,b); end,
-    \-:=function(a,b) 
+    \-:=function(a,b)
       if a=false or b=false then return false;
-      else 
+      else
         b:=Copy(b); b.coeffs:=-b.coeffs;
         return AddModules(a,b);
       fi;
     end,
     \*:=function(a,b) local x, nx;
-      if not( IsRec(a) and IsBound(a.module) ) then 
+      if not( IsRec(a) and IsBound(a.module) ) then
         return H.operations.New(b.module,a*b.coeffs,b.parts);
-      elif a.module=b.module then 
+      elif a.module=b.module then
         x:=MultiplyModules(a.operations.S(a,false),b.operations.S(b,false));
         nx:=x.operations.P(x,true);
         if nx<>false then return nx; else return x; fi;
-      else   
+      else
         return MultiplyModules(a.operations.S(a,false),
                                b.operations.S(b,false));
       fi;
@@ -1839,53 +1839,53 @@ Specht:=function(arg)
     PositiveCoefficients:=PositiveCoefficients,
     IntegralCoefficients:=IntegralCoefficients,
     InnerProduct:=InnerProduct,
-  
+
     InducedModule:=function(x,list) local nx;
       x:=H.operations.S.InducedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.P(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     SInducedModule:=function(x,list) local nx;
       x:=H.operations.S.SInducedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.P(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     RestrictedModule:=function(x,list) local nx;
       x:=H.operations.S.RestrictedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.P(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     SRestrictedModule:=function(x,list) local nx;
       x:=H.operations.S.SRestrictedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.P(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     ## Next the functions S(), P(), and D(). The P->S functions are
     ## quite involved.
-   
-    #F Writes x, which is a sum of indecomposables, as a sum of S(nu)'s if 
+
+    #F Writes x, which is a sum of indecomposables, as a sum of S(nu)'s if
     ## possible. We first check to see if the decomposition matrix for x is
     ## stored somewhere, and if not we try to calculate what we need. If we
     ## can't do this we return false.
     S:=function(x,silent) local y, c, d, mu, specht;     # P() -> S()
-      if x=false or x=0*x then return x; 
+      if x=false or x=0*x then return x;
       elif x.parts=[[]] then return H.operations.New("S",x.coeffs[1],[]);
       fi;
       d:=H.operations.KnownDecompositionMatrix(Sum(x.parts[1]));
-      if d<>false then 
-        y:=d.operations.P.S(d,x); 
+      if d<>false then
+        y:=d.operations.P.S(d,x);
         if y<>false then return y; fi;
       fi;
-    
-      ## since that didn't work, we use the LLT algorithm when 
+
+      ## since that didn't work, we use the LLT algorithm when
       ## IsBound(H.Pq)
       if IsBound(H.Pq) then
         if H.IsSpecht or ForAll(x.parts, c->IsERegular(H.e,c)) then
@@ -1893,46 +1893,46 @@ Specht:=function(arg)
                    x.coeffs[c]*Specialized(Pq(x.parts[c])));
         fi;
       fi;
-      
+
       d:=Concatenation(H.HeckeRing,"S");
       mu:=1; specht:=H.operations.New("S",0,[]);
       while specht<>false and mu<=Length(x.parts) do
-        if IsSimpleModule(H,ConjugatePartition(x.parts[mu])) then 
+        if IsSimpleModule(H,ConjugatePartition(x.parts[mu])) then
           specht:=specht+H.operations.New("S",1,x.parts[mu]);
-        elif EWeight(x.H.e,x.parts[mu])=1 then ## wrap e-hooks onto c 
+        elif EWeight(x.H.e,x.parts[mu])=1 then ## wrap e-hooks onto c
           c:=H.operations.New("S",1,ECore(x.H.e, x.parts[mu]))
-                   * H.operations.Omega("S",x.H.e); 
+                   * H.operations.Omega("S",x.H.e);
           y:=Position(c.parts, x.parts[mu]);
           specht:=specht+H.operations.New("S",[1,1],
                                           [c.parts[y-1],c.parts[y]]);
-        elif IsBound(H.operations.P.(d)) then 
-          specht:=specht+x.H.operations.P.(d)(x.parts[mu]); 
-        else specht:=false; 
+        elif IsBound(H.operations.P.(d)) then
+          specht:=specht+x.H.operations.P.(d)(x.parts[mu]);
+        else specht:=false;
         fi;
         mu:=mu+1;
       od;
-      if specht<>false then return specht; 
-      elif not silent then 
+      if specht<>false then return specht;
+      elif not silent then
         Print("# P(<x>), unable to rewrite <x> as a sum of projectives\n");
       fi;
       return false;
-    end, 
-     
+    end,
+
     P:=function(x,silent) return x; end,                   # P() -> P()
 
     D:=function(x,silent)                                  # P() -> D()
       x:=x.operations.S(x,silent);
       if x=false then return x;
-      else return x.operations.D(x,silent); 
+      else return x.operations.D(x,silent);
       fi;
     end
   );    ## H.operations.P()
-    
+
   H.operations.D:=rec(
     \+:=function(a,b) return AddModules(a,b); end,
-    \-:=function(a,b) 
+    \-:=function(a,b)
       if a=false or b=false then return false;
-      else 
+      else
         b:=Copy(b); b.coeffs:=-b.coeffs;
         return AddModules(a,b);
 
@@ -1957,42 +1957,42 @@ Specht:=function(arg)
       else PrintModule("F",x);
       fi;
     end,
-    
+
     Coefficient:=Coefficient,
     PositiveCoefficients:=PositiveCoefficients,
     IntegralCoefficients:=IntegralCoefficients,
     InnerProduct:=InnerProduct,
-    
+
     InducedModule:=function(x,list) local nx;
       x:=H.operations.S.InducedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.D(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     RestrictedModule:=function(x,list) local nx;
       x:=H.operations.S.RestrictedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.D(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     SInducedModule:=function(x,list) local nx;
       x:=H.operations.S.SInducedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.D(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     SRestrictedModule:=function(x,list) local x,nx;
       x:=H.operations.S.SRestrictedModule(x.operations.S(x,false),list);
       if x=false or x=0*x then return x; fi;
       nx:=x.operations.D(x,false);
       if nx<>false then return nx; else return x; fi;
     end,
-    
+
     ## Next the functions S(), P(), and D().
-    
+
     #F Writes D(mu) as a sum of S(nu)'s if possible. We first check to see
     ## if the decomposition matrix for Sum(mu) is stored in the library, and
     ## then try to calculate it directly. If we are unable to do this either
@@ -2001,35 +2001,35 @@ Specht:=function(arg)
       if x=false or x=0*x then return x;
       elif x.parts=[[]] then return H.operations.New("S",x.coeffs[1],[]);
       fi;
-    
+
       ## look for the decomposition matrix
       d:=H.operations.KnownDecompositionMatrix(Sum(x.parts[1]));
-      if d<>false then 
-        y:=d.operations.D.S(d,x); 
+      if d<>false then
+        y:=d.operations.D.S(d,x);
         if y<>false then return y; fi;
       fi;
-    
+
       ## since that didn't work, we use the LLT algorithm when IsBound(H.Pq)
       if IsBound(H.Pq) and H.IsSpecht then
         return Sum([1..Length(x.parts)],
                      c->x.coeffs[c]*Specialized(Dq(x.parts[c])));
       fi;
-    
+
       ## Next, see if we can calculate it.
       d:=Concatenation(H.HeckeRing, "S");
-      if IsBound(H.operations.D.(d)) then 
-        return H.operations.D.(d)(x,silent); 
+      if IsBound(H.operations.D.(d)) then
+        return H.operations.D.(d)(x,silent);
       fi;
-    
+
       ## Finally, hope only e-weights<2 are involved.
       c:=1; d:=true; y:=H.operations.New("S",0,[]);
       while d and c<=Length(x.parts) do
-        if IsSimpleModule(H, x.parts[c]) then 
+        if IsSimpleModule(H, x.parts[c]) then
           y:=y+H.operations.New("S",x.coeffs[c],x.parts[c]);
-        elif IsERegular(x.H.e, x.parts[c]) and EWeight(x.H.e,x.parts[c])=1 
+        elif IsERegular(x.H.e, x.parts[c]) and EWeight(x.H.e,x.parts[c])=1
         then ## wrap e-hooks onto c
           a:=H.operations.New("S",1,ECore(x.H.e,x.parts[c]))
-               * H.operations.Omega("S",x.H.e); 
+               * H.operations.Omega("S",x.H.e);
           a.parts:=a.parts{[1..Position(a.parts, x.parts[c])]};
           a.coeffs:=a.coeffs{[1..Length(a.parts)]}*(-1)^(1+Length(a.parts));
           y:=y+a;
@@ -2037,20 +2037,20 @@ Specht:=function(arg)
         fi;
         c:=c+1;
       od;
-      if d<>false then return y; 
+      if d<>false then return y;
       elif not silent then
         Print("# Unable to calculate D(mu)\n");
       fi;
       return false;
     end,  # H.operations.D.S()
                                    # D() -> P()
-    P:=function(x,silent) 
+    P:=function(x,silent)
       x:=x.operations.S(x,silent);
       if x=false then return x;
       else return x.operations.P(x,silent);
       fi;
     end,
-    
+
     D:=function(x,silent) return x; end                     # D() -> D()
   );  ## H.operations.D
 
@@ -2063,9 +2063,9 @@ Specht:=function(arg)
   H.info.SpechtDirectory:=SpechtDirectory;
 
   ## This record will hold any decomposition matrices which Specht()
-  ## (or rather its derivatives) read in. This used to be a public 
+  ## (or rather its derivatives) read in. This used to be a public
   ## record; it is now private because q-Schur algebra matrices and
-  ## Hecke algebra matrices might need to coexist. 
+  ## Hecke algebra matrices might need to coexist.
   DecompositionMatrices:=[];
 
   ## This list will hold the crystallized decomposition matrices (p=0)
@@ -2092,10 +2092,10 @@ Specht:=function(arg)
   PrintDecompositionMatrix:=function(d, tex)
     local rows, cols, r, c, col, len, endBit, sep, M, label, rowlabel,
           spacestr, dotstr, PrintFn;
-     
+
     ## if have to fix up the ordering before printing d
-    rows:=Copy(d.rows); 
-    cols:=Copy(d.cols); 
+    rows:=Copy(d.rows);
+    cols:=Copy(d.cols);
     if H.Ordering=Lexicographic then
       rows:=rows{[Length(rows),Length(rows)-1..1]};
       cols:=cols{[Length(cols),Length(cols)-1..1]};
@@ -2114,13 +2114,13 @@ Specht:=function(arg)
       Print("$$\\begin{array}{l|*{", Length(d.cols)+1,"}{l}}\n");
       sep:="&";
       endBit:=function(i) Print("\\\\\n"); end;
-    
+
       ## gangely work around to tex 1^10 properly as 1^{10} etc.
-      label:=function(i) local str, bad, l; 
+      label:=function(i) local str, bad, l;
         bad:=Filtered(Collected(d.rows[i]),l->l[2]>9);
         if bad=[] then Print(rowlabel[i]);
         else # assume no conflicts as 1^10 and 1^101
-          str:=Copy(rowlabel[i]); 
+          str:=Copy(rowlabel[i]);
           IsString(str);   ## seems to be necessary...
           for l in bad do
             str:=ReplacedString(str,
@@ -2132,25 +2132,25 @@ Specht:=function(arg)
         Print("&");
       end;
     else
-      PrintFn:=x->Print(String(x,len)); 
+      PrintFn:=x->Print(String(x,len));
       if tex=0 then sep:=" "; else sep:="#";fi;
       endBit:=function(i) if i<>Length(d.rows) then Print("\n"); fi; end;
 
       M:=-Maximum( List(rows, r->Length(rowlabel[r])) );
       label:=function(i) Print(String(rowlabel[i],M),"| ");end;
-    
+
       ## used to be able to print the dimensions at the end of the row.
-      # if false then 
+      # if false then
       #   endBit:=function(i) Print(" ", String(d.dim[i],-10),"\n");end;
       # fi;
     fi;
-    
-    ## Find out how wide the columns have to be (very expensive for 
-    ## crystallized matrices - also slightly incorrect as String(<poly>) 
+
+    ## Find out how wide the columns have to be (very expensive for
+    ## crystallized matrices - also slightly incorrect as String(<poly>)
     ## returns such wonders as (2)*v rather than 2*v).
     if tex<>2 then
-      if tex=1 then len:=0; 
-      else 
+      if tex=1 then len:=0;
+      else
         len:=1;
         for i in d.d do
           if i.coeffs<>[] then
@@ -2159,7 +2159,7 @@ Specht:=function(arg)
           fi;
         od;
       fi;
-      spacestr:=String("",len); 
+      spacestr:=String("",len);
       dotstr:=String(".",len);
     else
       spacestr:="#";
@@ -2167,11 +2167,11 @@ Specht:=function(arg)
     fi;
     col:=0;
     for r in rows do
-      label(r); 
+      label(r);
       if d.rows[r] in d.cols then col:=col+1; fi;
       for c in [1..Length(cols)] do
         if IsBound(d.d[cols[c]]) and r in d.d[cols[c]].parts then
-          PrintFn(d.d[cols[c]].coeffs[Position(d.d[cols[c]].parts,r)]);  
+          PrintFn(d.d[cols[c]].coeffs[Position(d.d[cols[c]].parts,r)]);
           if c<>cols[1] then Print(sep); fi;
         elif c<=col then Print(dotstr, sep);
         else Print(spacestr, sep);
@@ -2205,7 +2205,7 @@ Specht:=function(arg)
           Unbind(d.dimensions);
         fi;
         ## now looks at the image of <Px> under Mullineux
-        if (Px.H.IsSpecht or IsERegular(Px.H.e,Px.parts[Length(Px.parts)])) 
+        if (Px.H.IsSpecht or IsERegular(Px.H.e,Px.parts[Length(Px.parts)]))
         and Px.parts[Length(Px.parts)]<>ConjugatePartition(Px.parts[1]) then
           mPx:=MullineuxMap(Px);
           if IsBound(d.d[Position(d.cols,mPx.parts[Length(Px.parts)])])
@@ -2236,7 +2236,7 @@ Specht:=function(arg)
       P:=function(d,x) local nx, r, c, P, S;      # S() -> P()
         if x=false or x=0*x then return x; fi;
         if d.IsDecompositionMatrix then P:="P"; S:="S";
-        else P:="Pq"; S:="Sq"; 
+        else P:="Pq"; S:="Sq";
         fi;
 
         nx:=x.H.operations.New(P,0,[]);
@@ -2274,7 +2274,7 @@ Specht:=function(arg)
         return nx;
       end
     ),  #S()
-    
+
     P:=rec(
       S:=function(d,x) local S, nx, y, r, c;     # P() -> S()
         if x=false or x=0*x then return x; fi;
@@ -2294,7 +2294,7 @@ Specht:=function(arg)
 
       D:=function(d,x) return d.operations.S.D(d,d.operations.P.S(d,x)); end
     ),  # P()
-    
+
     ## writes D(mu) as a linear combination of S(nu)'s if possible
     Invert:=function(d,mu) local c, S, D, inv, smu, l;
       if d.IsDecompositionMatrix then S:="S"; D:="D";
@@ -2302,8 +2302,8 @@ Specht:=function(arg)
       fi;
 
       c:=Position(d.cols,mu);
-      if c=false then return false; 
-      elif IsBound(d.inverse[c]) then 
+      if c=false then return false;
+      elif IsBound(d.inverse[c]) then
         return H.operations.New(S,d.inverse[c].coeffs,
                       List(d.inverse[c].parts,l->d.cols[l]));
       fi;
@@ -2318,11 +2318,11 @@ Specht:=function(arg)
       od;
       if smu=false then return false; fi;
 
-      d.inverse[c]:=rec(coeffs:=inv.coeffs,  
+      d.inverse[c]:=rec(coeffs:=inv.coeffs,
                     parts:=List(inv.parts,l->Position(d.cols,l)));
       return inv;
     end,
-     
+
     D:=rec(
       S:=function(d,x) local S, nx, y, c, inv;    # D() -> S()
         if x=false or x=0*x then return x; fi;
@@ -2331,37 +2331,37 @@ Specht:=function(arg)
         nx:=H.operations.New(S,0,[]);
         for y in [1..Length(x.parts)] do
           c:=Position(d.cols,x.parts[y]);
-          if c=false then return false; fi; 
+          if c=false then return false; fi;
           inv:=d.operations.Invert(d,x.parts[y]);
-          if inv=false then return inv; 
+          if inv=false then return inv;
           else nx:=nx+x.coeffs[y]*inv;
           fi;
         od;
         return nx;
       end,
-      P:=function(d,x) 
-        return d.operations.S.P(d,d.operations.D.S(d,x)); 
+      P:=function(d,x)
+        return d.operations.S.P(d,d.operations.D.S(d,x));
       end,
       D:=function(d,x) return x; end       # D() -> D()
     )  # D()
 
   ); ## end of crystallized matrix operations
 
-  ## And now the operations for normal decomposition matrices (we still 
+  ## And now the operations for normal decomposition matrices (we still
   ## have to add a few functions to CrystalMatrixOps).
   DecompositionMatrixOps:=Copy(CrystalMatrixOps);
   DecompositionMatrixOps.name:="DecompositionMatrixOps";
 
   ## Used by SaveDecompositionMatrix to update DecompositionMatrices[]
-  DecompositionMatrixOps.Store:=function(d,n) 
-    DecompositionMatrices[n]:=d; 
+  DecompositionMatrixOps.Store:=function(d,n)
+    DecompositionMatrices[n]:=d;
   end;
 
   #F This function checks to see whether Px is indecomposable using the
   ## decomposition matrix d. The basic idea is to loop through all of the
-  ## (e-regular, unless IsSpecht=false) projectives Py in Px such that Px-Py 
-  ## has non-negative coefficients and to then apply the q-Schaper theorem 
-  ## and induce simples, together with a few other tricks to decide 
+  ## (e-regular, unless IsSpecht=false) projectives Py in Px such that Px-Py
+  ## has non-negative coefficients and to then apply the q-Schaper theorem
+  ## and induce simples, together with a few other tricks to decide
   ## whether ir not Py slits off. If yes, then we move on; if we can't
   ## decide (or don't know the value of Py), we spit the dummy and return
   ## false, printing a "message from our sponsor" explaining why we failed
@@ -2369,11 +2369,11 @@ Specht:=function(arg)
   ## projectives then we return true. Note that in this case the value
   ## of Px may have changed, but we update the original value of px=Px
   ## before leaving (whether we return false or true).
-  DecompositionMatrixOps.IsNewIndecomposable:=function(d,px,oldd,Mu) 
+  DecompositionMatrixOps.IsNewIndecomposable:=function(d,px,oldd,Mu)
     local Px,nu,regs,Py,y,z,a,b,n,mu,m,M,Message;
-  
+
     if px=false and px=0*px then return false; fi;
-  
+
     if Mu=false then Message:=Ignore;
     else Message:=Print;
     fi;
@@ -2385,17 +2385,17 @@ Specht:=function(arg)
     od;
     if Px=0*Px then
       Message("# This module is a sum of known indecomposables.\n");
-      return false; 
+      return false;
     fi;
-    if IntegralCoefficients(Px/Px.coeffs[Length(Px.parts)]) then 
-      Px:=Px/Px.coeffs[Length(Px.parts)]; 
+    if IntegralCoefficients(Px/Px.coeffs[Length(Px.parts)]) then
+      Px:=Px/Px.coeffs[Length(Px.parts)];
    fi;
-    
+
     regs:=Obstructions(d,Px);
     if IsList(Mu) then regs:=Filtered(regs,mu->mu<Mu); fi;
-    
+
     for y in regs do   ## loop through projectives that might split
-    
+
       if H.IsSpecht and MullineuxMap(H.e,ConjugatePartition(Px.parts[1]))
       <>Px.parts[Length(Px.parts)] then
         Py:=true;  ## strip any known indecomposables off the bottom of Px
@@ -2410,93 +2410,93 @@ Specht:=function(arg)
 
       m:=0;            ## lower and upper bounds on decomposition the number
       if Px=0*Px then M:=0;
-      else M:=Coefficient(Px,y)/Px.coeffs[Length(Px.parts)]; 
+      else M:=Coefficient(Px,y)/Px.coeffs[Length(Px.parts)];
       fi;
-      if M<>0 then Py:=d.P(d,y); fi;     
-      
+      if M<>0 then Py:=d.P(d,y); fi;
+
       if not ( m=M or Px.parts[Length(Px.parts)]>=y ) then
-        if Py=false then 
+        if Py=false then
           Message("# The multiplicity of S(", TightStringList(y),
             ") in <Px> is zero; however, S(", TightStringList(y),
             ") is not known\n");
           px.coeffs:=Px.coeffs; px.parts:=Px.parts; return false;
-        else 
-          Px:=Px-Coefficient(Px,y)*Py; 
+        else
+          Px:=Px-Coefficient(Px,y)*Py;
           if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",1);fi;
           M:=0;
         fi;
       fi;
-      
-      if Px<>0*Px and IntegralCoefficients(Px/Px.coeffs[Length(Px.parts)]) then 
-        Px:=Px/Px.coeffs[Length(Px.parts)]; 
+
+      if Px<>0*Px and IntegralCoefficients(Px/Px.coeffs[Length(Px.parts)]) then
+        Px:=Px/Px.coeffs[Length(Px.parts)];
       fi;
-  
+
       ## remember that Px.coeffs[Length(Px.parts)] could be greater than 1
-      if m<>M and (Coefficient(Px,y) mod Px.coeffs[Length(Px.parts)])<>0 then 
-        if Py=false then 
-          Message("# <Px> is not indecomposable, as at least ", 
+      if m<>M and (Coefficient(Px,y) mod Px.coeffs[Length(Px.parts)])<>0 then
+        if Py=false then
+          Message("# <Px> is not indecomposable, as at least ",
             Coefficient(Px,y) mod Px.coeffs[Length(Px.parts)], " copies of P(",
             TightStringList(y), ") split off.\n# However, P(",
             TightStringList(y), ") is not known\n");
           px.coeffs:=Px.coeffs; px.parts:=Px.parts; return false;
         else
           ## this is at least projective; perhaps more still come off though
-          Px:=Px-(Coefficient(Px,y) mod Px.coeffs[Length(Px.parts)])*Py; 
+          Px:=Px-(Coefficient(Px,y) mod Px.coeffs[Length(Px.parts)])*Py;
           if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",2);fi;
-          if IntegralCoefficients(Px/Px.coeffs[Length(Px.parts)]) then 
+          if IntegralCoefficients(Px/Px.coeffs[Length(Px.parts)]) then
             Px:=Px/Px.coeffs[Length(Px.parts)];
           fi;
         fi;
       fi;
-      
-      ## At this point the coefficient of Sx in Px divides the coefficient of 
-      ## Sy in Px. If Py splits off then it does so in multiples of 
+
+      ## At this point the coefficient of Sx in Px divides the coefficient of
+      ## Sy in Px. If Py splits off then it does so in multiples of
       ## (Px:Sx)=Px.coeffs[Length(Px.parts)].
-      if m<>M and (Py=false 
-        or PositiveCoefficients(Px-Px.coeffs[Length(Px.parts)]*Py)) 
+      if m<>M and (Py=false
+        or PositiveCoefficients(Px-Px.coeffs[Length(Px.parts)]*Py))
       then
         ## use the q-Schaper theorem to test whether Sy is contained in Px
         M:=Minimum(M,InnerProduct(Px/Px.coeffs[Length(Px.parts)],
                                   Schaper(H, y)));
         if M=0 then # NO!
-          ## Px-(Px:Sy)Py is still projective so substract Py if it is 
-          ## known. If Py=false (ie. not known), then at least we know 
+          ## Px-(Px:Sy)Py is still projective so substract Py if it is
+          ## known. If Py=false (ie. not known), then at least we know
           ## that Px is not indecomposable, even though we couldn't
           ## calculate Py.
-          if Py=false then 
+          if Py=false then
             Message("# The multiplicity of S(", TightStringList(y),
-              ") in P(", TightStringList(Px.parts[Length(Px.parts)]), 
-             ") is zero;\n#  however, P(", TightStringList(y), 
+              ") in P(", TightStringList(Px.parts[Length(Px.parts)]),
+             ") is zero;\n#  however, P(", TightStringList(y),
              ") is not known.\n");
             px.coeffs:=Px.coeffs; px.parts:=Px.parts; return false;
-          else 
-            Px:=Px-Coefficient(Px,y)*Py; 
-            if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",3); 
+          else
+            Px:=Px-Coefficient(Px,y)*Py;
+            if not PositiveCoefficients(Px) then BUG("IsNewIndecomposable",3);
             fi;
           fi;
         elif Px.coeffs[Length(Px.parts)]<>Coefficient(Px,y) then
           ## We know that (Px:Sy)>=m>0, but perhaps some Py's still split off
-  
-          m:=1;       
+
+          m:=1;
           if m=M then
             if Coefficient(Px,y)<>m*Px.coeffs[Length(Px.parts)] then
               if Py=false then
                 Message("# The multiplicity of S(", TightStringList(y),
-                    ") in P(",TightStringList(Px.parts[Length(Px.parts)]), 
+                    ") in P(",TightStringList(Px.parts[Length(Px.parts)]),
                     ") is ", m, "however, P(",TightStringList(y),
                     ") is unknown.\n");
                 px.coeffs:=Px.coeffs; px.parts:=Px.parts;
                 return false;
               else
                 Px:=Px-(Coefficient(Px,y)-Px.coeffs[Length(Px.parts)]*m)*Py;
-                if not PositiveCoefficients(Px) then 
+                if not PositiveCoefficients(Px) then
                   BUG("IsNewIndecomposable",4);
                 fi;
               fi;
             fi;
           fi;
-  
-          if m<>M then 
+
+          if m<>M then
             ## see if we can calculate this decomposition number (this uses
             ## row and column removal)
             a:=DecompositionNumber(Px.H, y, Px.parts[Length(Px.parts)]);
@@ -2504,21 +2504,21 @@ Specht:=function(arg)
               if Px.coeffs[Length(Px.parts)]*a=Coefficient(Px,y) then m:=a; M:=a;
               elif Py<>false then
                 ## precisely this many Py's come off
-                Px:=Px-(Coefficient(Px,y)-Px.coeffs[Length(Px.parts)]*a)*Py; 
+                Px:=Px-(Coefficient(Px,y)-Px.coeffs[Length(Px.parts)]*a)*Py;
                 m:=a; M:=a; # upper and lower bounds are equal
-                if not PositiveCoefficients(Px) then 
+                if not PositiveCoefficients(Px) then
                   BUG("IsNewIndecomposable",5);
                 fi;
               fi;
             fi;
           fi;
-    
+
           if m<>M and Py=false then ## nothing else we can do
             Message("# The multiplicity of S(", TightStringList(y),
                     ") in P(",TightStringList(Px.parts[Length(Px.parts)]),
-                    ") is at least ", m, " and at most ", M, 
+                    ") is at least ", m, " and at most ", M,
                     ";\n# however, P(",TightStringList(y),") is unknown.\n");
-            px.coeffs:=Px.coeffs; px.parts:=Px.parts; 
+            px.coeffs:=Px.coeffs; px.parts:=Px.parts;
             return false;
           fi;
 
@@ -2529,7 +2529,7 @@ Specht:=function(arg)
             if Coefficient(Px,y)>M*Px.coeffs[Length(Px.parts)] then
               Px:=Px-(Coefficient(Px,y)-M*Px.coeffs[Length(Px.parts)])*Py;
             fi;
-            while m<M and not 
+            while m<M and not
             PositiveCoefficients(Px-(Px.coeffs[Length(Px.parts)]*(M-m))*Py) do
               m:=m+1;
             od;
@@ -2565,10 +2565,10 @@ Specht:=function(arg)
             mu:=Length(oldd.simples);
             while mu >0 and m<M do
               z:=oldd.simples[mu];
-              if y=regs[Length(regs)] 
-              or Lexicographic(z.parts[1],Py.parts[Length(Py.parts)]) then 
+              if y=regs[Length(regs)]
+              or Lexicographic(z.parts[1],Py.parts[Length(Py.parts)]) then
                 a:=InnerProduct(z,Py);
-                if a<>0 then 
+                if a<>0 then
                   b:=InnerProduct(z,Px)/Px.coeffs[Length(Px.parts)];
                   m:=Maximum(m,M-Int(b/a));
                 fi;
@@ -2594,7 +2594,7 @@ Specht:=function(arg)
       return false;
     elif Px.coeffs[Length(Px.parts)]<>1 then BUG("IsNewIndecomposable",6);
     else px.coeffs:=Px.coeffs; px.parts:=Px.parts; return true;
-    fi; 
+    fi;
   end;  # IsNewIndecomposable
 
   ## Given a decomposition matrix induce it to find as many columns as
@@ -2607,52 +2607,52 @@ Specht:=function(arg)
   ## in the second form new columns are added to d{n+1}.
   DecompositionMatrixOps.Induced:=function(arg)
     local d, newd, mu, nu, Px, Py, n,r;
-  
+
     d:=arg[1];
     if not (IsBound(d.IsDecompositionMatrix) and d.IsDecompositionMatrix=true)
     then Error("InducedDecompositionMatrix(d): ",
                  "<d> must be a decomposition matrix.");
     fi;
-  
+
     n:=Sum(d.rows[1])+1;
     if n>8 then                            ## print dots to let the user
       PrintTo("*stdout*","# Inducing.");   ## know something is happening.
     fi;
-     
+
     nu:=Partitions(n);
-    if not d.H.IsSpecht then 
+    if not d.H.IsSpecht then
       newd:=H.operations.NewDecompositionMatrix(nu, nu, true);
     else newd:=H.operations.NewDecompositionMatrix(nu,
                 ERegularPartitions(H.e,n),true);
     fi;
-  
+
     ## add any P(mu)'s with EWeight(mu)<=1 or P(mu)=S(mu) <=> S(mu')=D(mu')
     for mu in newd.cols do
       if EWeight(H.e,mu)<=1 then
-        newd.operations.AddIndecomposable(newd, 
+        newd.operations.AddIndecomposable(newd,
            H.operations.P.S(H.operations.New("P",1,mu),true),false);
       elif IsSimpleModule(H,ConjugatePartition(mu)) then
-        newd.operations.AddIndecomposable(newd, 
+        newd.operations.AddIndecomposable(newd,
            H.operations.New("S",1,mu),false);
       fi;
     od;
-        
-    ## next we r-induce all of the partitions in d so we can just add 
+
+    ## next we r-induce all of the partitions in d so we can just add
     ## them up as we need them later.
     ## (note that this InducedModule() is Specht()'s and not the generic one)
     d.ind:=List(d.rows, mu->List([0..d.H.e-1],
               r->InducedModule(H.operations.New("S",1,mu),H.e,r)));
-    
+
     if n<9 then n:=Length(d.cols)+1; fi; ## fudge for user friendliness
-  
+
     for mu in [1..Length(d.cols)] do
       if IsBound(d.d[mu]) then
         for r in [1..d.H.e] do   ## really the e-residues; see ind above
           ## Here we calculate InducedModule(P(mu),H.e,r).
           Px:=Sum([1..Length(d.d[mu].parts)],
-                     nu->d.d[mu].coeffs[nu]*d.ind[d.d[mu].parts[nu]][r]); 
+                     nu->d.d[mu].coeffs[nu]*d.ind[d.d[mu].parts[nu]][r]);
           if d.operations.IsNewIndecomposable(newd,Px,d,false) then
-            if IsERegular(Px.H.e,Px.parts[Length(Px.parts)]) then   
+            if IsERegular(Px.H.e,Px.parts[Length(Px.parts)]) then
               # can apply MullineuxMap
               nu:=ConjugatePartition(Px.parts[1]);
               if nu<>MullineuxMap(d.H.e,Px.parts[Length(Px.parts)]) then
@@ -2660,7 +2660,7 @@ Specht:=function(arg)
                 BUG("Induce", 7, "nu = ", nu, ", Px = ", Px);
               else   ## place the Mullineux image of Px as well
                 newd.operations.AddIndecomposable(newd,MullineuxMap(Px),false);
-              fi; 
+              fi;
             fi;
             newd.operations.AddIndecomposable(newd,Px,false);
           fi;
@@ -2669,12 +2669,12 @@ Specht:=function(arg)
       fi;
     od;
     Unbind(d.ind); Unbind(d.simples); ## maybe we should leave these.
-  
+
     if n>8 then Print("\n"); fi;
     MissingIndecomposables(newd);
     return newd;
   end; # DecompositionMatrixOps.Induce
-      
+
   ## Finally, we can define the creation function for decomposition matrices
   ## (note that NewDM() does not add the partition labels to the decomp.
   ## matrix; this used to be done here but now happens in PrintDM() because
@@ -2683,8 +2683,8 @@ Specht:=function(arg)
   ## **NOTE: we assume when extracting entries from d that d.rows is
   ## ordered lexicographically. If this is not the case then addition
   ## will not work properly.
-  H.operations.NewDecompositionMatrix:=function(rows, cols, decompmat) 
-    if decompmat then 
+  H.operations.NewDecompositionMatrix:=function(rows, cols, decompmat)
+    if decompmat then
       return rec(d:=[],      # matrix entries
              rows:=rows, # matrix rows
              cols:=cols, # matrix cols
@@ -2706,7 +2706,7 @@ Specht:=function(arg)
              end);
     fi;
   end;   ## end of H.operations.NewDecompositonMatrix
-      
+
   ## This function will read the file "n" if n is a string; otherwise
   ## it will look for the relevant file for H(Sym_n). If crystal=true
   ## this will be a crystal decomposition matrix, otherwise it will be
@@ -2719,22 +2719,22 @@ Specht:=function(arg)
   ## immediately. We try and read the file first...
   H.operations.ReadDecompositionMatrix:=function(n, crystal)
     local msg, file, M, d, c, parts, coeffs, p, x, r, cm, rm;
-  
-    if crystal then 
+
+    if crystal then
       if IsString(n) then file:=n;
       else
-        if IsBound(CrystalMatrices[n]) then 
-          d:=CrystalMatrices[n]; 
+        if IsBound(CrystalMatrices[n]) then
+          d:=CrystalMatrices[n];
           if d=false and H.info.SpechtDirectory=SpechtDirectory then
             return false;
-          elif d<>false and ForAll([1..Length(d.cols)],c->IsBound(d.d[c])) 
-          then return d; 
+          elif d<>false and ForAll([1..Length(d.cols)],c->IsBound(d.d[c]))
+          then return d;
           fi;
         fi;
         file:=Concatenation("e",String(H.e),"crys.",String(n));
       fi;
       msg:="ReadCrystalMatrix-";
-    else 
+    else
       msg:="ReadDecompositionMatrix-";
       if IsString(n) then file:=n;
       else file:=Concatenation(H.HeckeRing,".",String(n));
@@ -2743,15 +2743,15 @@ Specht:=function(arg)
 
     A_Specht_Decomposition_Matrix:=false;  ## just in case.
     d:=false;
-  
+
     if not ReadPath("",file,"",Concatenation(msg,"CurrentDirectory")) then
-      if SpechtDirectory="" or not 
+      if SpechtDirectory="" or not
       ReadPath(SpechtDirectory,file,"",Concatenation(msg,"SpechtDirectory"))
       then
         ReadPath(H.info.Library,file,"",Concatenation(msg,"SpechtLibrary"));
       fi;
     fi;
-  
+
     if A_Specht_Decomposition_Matrix<>false then   ## extract matrix from M
       M:=A_Specht_Decomposition_Matrix;
       A_Specht_Decomposition_Matrix:=false;
@@ -2822,19 +2822,19 @@ Specht:=function(arg)
   ## internal lists and return it if it is known.
   ## NOTE: this function does not use the crystal basis to calculate the
   ## decomposition matrix because it is called by the various conversion
-  ## functions X->Y which will only need a small part of the matrix in 
+  ## functions X->Y which will only need a small part of the matrix in
   ## general. The function FindDecompositionMatrix() also uses the crystal
   ## basis.
   H.operations.KnownDecompositionMatrix:=function(n)
     local d, x, r, c;
-  
-    if IsBound(DecompositionMatrices[n]) then 
+
+    if IsBound(DecompositionMatrices[n]) then
       d:=DecompositionMatrices[n];
-      if ( d<>false and ForAll([1..Length(d.cols)],c->IsBound(d.d[c])) ) 
+      if ( d<>false and ForAll([1..Length(d.cols)],c->IsBound(d.d[c])) )
       or H.info.SpechtDirectory=SpechtDirectory then return d;
       elif H.info.SpechtDirectory<>SpechtDirectory then
         for x in [1..Length(DecompositionMatrices)] do
-          if IsBound(DecompositionMatrices[x]) and 
+          if IsBound(DecompositionMatrices[x]) and
           DecompositionMatrices[x]=false then
             Unbind(DecompositionMatrices[x]);
           fi;
@@ -2849,9 +2849,9 @@ Specht:=function(arg)
       if d<>false then d:=Specialized(d); fi;
     fi;
 
-    if d=false and n<2*H.e then   
+    if d=false and n<2*H.e then
       ## decomposition matrix can be calculated
-      r:=Partitions(n); 
+      r:=Partitions(n);
       if H.IsSpecht then c:=ERegularPartitions(H.e,n);
       else c:=r;
       fi;
@@ -2868,7 +2868,7 @@ Specht:=function(arg)
             d.operations.AddIndecomposable(d,
                   H.operations.New("S",[1,1],c.parts{[r-1,r]}),false);
           od;
-          if not H.IsSpecht then 
+          if not H.IsSpecht then
             d.operations.AddIndecomposable(d,
             H.operations.New("S",1,c.parts[1]),false);
           fi;
@@ -2899,12 +2899,12 @@ Specht:=function(arg)
     fi;
     return d;
   end;
- 
+
   #########################################################################
   ## Next, for fields of characteristic 0, we implement the LLT algorithm.
   ## Whenever a crystal basis element of the Fock space is calculated we
   ## store it in the relevant decomposition matrix n CrystalMatrices[].
-  ## The actual LLT algorithm is contained in the function Pq (should 
+  ## The actual LLT algorithm is contained in the function Pq (should
   ## really be called Pv...), but there are also functions Sq and Dq as
   ## well. These functions work as follows:
   ##   Pq(mu) -> sum_nu d_{nu,mu} S(nu)
@@ -2927,7 +2927,7 @@ Specht:=function(arg)
     ## next define the handling function H.Pq() - cut from Handler()
     HSC:=function(module,arg) local mu, z;
       mu:=Flat(arg);
-      if not ForAll(mu,z->IsInt(z)) then 
+      if not ForAll(mu,z->IsInt(z)) then
         Error("usage: H.", module, "(<mu1,mu2,...>)\n");
       fi;
 
@@ -2941,10 +2941,10 @@ Specht:=function(arg)
       fi;
       z:=Position(mu,0);
       if z<>false then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
-  
+
       if module<>"Sq" then
         if not IsERegular(H.e,mu) then
-          Error("Pq(mu): <mu>=[",TightStringList(mu), 
+          Error("Pq(mu): <mu>=[",TightStringList(mu),
                 "] must be ", H.e,"-regular\n\n");
         else return Pq(mu);
         fi;
@@ -3030,7 +3030,7 @@ Specht:=function(arg)
       od;
       return ny;
     end;
-  
+
     ## string-restriction: remove m r's from each partition in x
     ## ** should allow restricting s-times also
     qSRestrictedModule:=function(x, s, r) local coeffs, parts, z, y, i, e, exp;
@@ -3040,7 +3040,7 @@ Specht:=function(arg)
       for y in [1..Length(x.parts)] do
         if -Length(x.parts[y]) mod H.e = r then exp:=-s; else exp:=0; fi;
         for z in qrestricted(x.parts[y], s, r, Length(x.parts[y]), exp) do
-          if z[1]=0 then Add(coeffs, x.coeffs[y]); 
+          if z[1]=0 then Add(coeffs, x.coeffs[y]);
           else Add(coeffs, x.coeffs[y]*v^z[1]);
           fi;
           Add(parts, z[2]);
@@ -3054,14 +3054,14 @@ Specht:=function(arg)
     #######################################################################
     ## Retrieves or calculates the crystal basis element Pq(mu)
     Pq:=function(mu) local  n, c, CDM, i, r, s, x;
-  
+
       if mu=[] then return H.operations.New("Sq",v^0,[]); fi;
       n:=Sum(mu);
-  
+
       ## first we see if we have already calculated Pq(mu)
       if not IsBound(CrystalMatrices[n]) or CrystalMatrices[n]=false then
         x:=H.operations.ReadDecompositionMatrix(n,true);
-        if x=false then 
+        if x=false then
           CrystalMatrices[n]:=H.operations.NewDecompositionMatrix(
             Partitions(n), ERegularPartitions(H.e,n), false);
         fi;
@@ -3079,10 +3079,10 @@ Specht:=function(arg)
         x:=H.operations.New("Sq",v^0,ECore(H.e,mu))
                    * H.operations.Omega("Sq",H.e);
         r:=Position(x.parts,mu);
-        if r=1 then 
+        if r=1 then
           x.parts:=x.parts{[1]};
           x.coeffs:=[v^0];
-        else 
+        else
           x.parts:=x.parts{[r-1,r]};
           x.coeffs:=[v,v^0];
         fi;
@@ -3103,8 +3103,8 @@ Specht:=function(arg)
             i:=i+1;
           od;
           if r=(mu[i]-i) mod H.e then
-            s:=s+1; 
-            mu[i]:=mu[i]-1; 
+            s:=s+1;
+            mu[i]:=mu[i]-1;
             i:=i+1;
           else i:=Length(mu)+1;
           fi;
@@ -3135,7 +3135,7 @@ Specht:=function(arg)
       fi;
 
       ## having found x we add it to CDM
-      CDM.d[c]:=rec(coeffs:=x.coeffs, 
+      CDM.d[c]:=rec(coeffs:=x.coeffs,
                     parts:=List(x.parts, r->Position(CDM.rows,r)) );
 
       ## for good measure we also add the Mullineux image of Pq(mu) to CDM
@@ -3156,7 +3156,7 @@ Specht:=function(arg)
     ## Strictly speaking the functions Sq() and Dq() are superfluous as
     ## these functions could be carried out by the decomposition matrix
     ## operations; however the point is that the crystal matrices are
-    ## allowed to have missing columns, and if any needed columns missing 
+    ## allowed to have missing columns, and if any needed columns missing
     ## these functions calculate them on the fly via using Pq().
 
     ## writes S(mu), from the Fock space, as a sum of D(nu)
@@ -3164,10 +3164,10 @@ Specht:=function(arg)
 
       n:=Sum(mu);
 
-      ## we need the list of e-regular partitions. as we will have to 
+      ## we need the list of e-regular partitions. as we will have to
       ## create CrystalMatrices[n] anyway, we get the columns from there.
       if not IsBound(CrystalMatrices[n]) or CrystalMatrices[n]=false then
-        r:=Partitions(n); 
+        r:=Partitions(n);
         CrystalMatrices[n]:=H.operations.NewDecompositionMatrix(
           r, ERegularPartitions(H.e,n), false);
       fi;
@@ -3179,7 +3179,7 @@ Specht:=function(arg)
       while r>0 and CDM.cols[r]>=CDM.rows[mu] do
         if not IsBound(CDM.d[r]) then Pq(CDM.cols[r]); fi;
         n:=Position(CDM.d[r].parts,mu);
-        if n<>false then 
+        if n<>false then
           x:=x+H.operations.New("Dq",CDM.d[r].coeffs[n],CDM.cols[r]);
         fi;
         r:=r-1;
@@ -3207,19 +3207,19 @@ Specht:=function(arg)
       od;
 
       ## now place answer back in CDM
-      CDM.inverse[Position(CDM.cols,mu)]:=rec(coeffs:=inv.coeffs, 
+      CDM.inverse[Position(CDM.cols,mu)]:=rec(coeffs:=inv.coeffs,
                parts:=List(inv.parts,c->Position(CDM.cols,c)) );
       return inv;
     end;
 
     ## Now that we have our functions Pq(), Sq(), and Dq() we define the
-    ## operations records for the Fock space elements. The basic operation 
+    ## operations records for the Fock space elements. The basic operation
     ## set is the same as for 'ordinary' modules
 
     H.operations.Sq:=Copy(H.operations.S);
     H.operations.Pq:=Copy(H.operations.P);
     H.operations.Dq:=Copy(H.operations.D);
-   
+
     ## however there are a few obvious differences
 
     H.operations.Sq.InducedModule:=function(x, list) local r;
@@ -3228,7 +3228,7 @@ Specht:=function(arg)
         Error("Induce, r-induction is not defined when e=0.");
       elif ForAny(list,r-> r>=H.e or r<0) then
         Error("Induce, r-induction is defined only when 0<=r<e.\n");
-      else 
+      else
         for r in list do   ## we could do slightly better here
           x:= qSInducedModule(x,1,r);
         od;
@@ -3245,7 +3245,7 @@ Specht:=function(arg)
     end;
 
     H.operations.Sq.SInducedModule:=function(x, list) local r;
-      if Length(list)=1 then 
+      if Length(list)=1 then
         list:=list[1];
         if list=0 then return H.operations.New("Sq",1,[]); fi;
         while list > 0 do
@@ -3384,7 +3384,7 @@ Specht:=function(arg)
 
       proj:=H.operations.New("Pq",0,[]);
       while x<>0*x and PositiveCrystalCoefficients(x) do
-        proj:=proj+H.operations.New("Pq",x.coeffs[Length(x.parts)], 
+        proj:=proj+H.operations.New("Pq",x.coeffs[Length(x.parts)],
                                          x.parts[Length(x.parts)]);
         x:=x-x.coeffs[Length(x.parts)]*Pq(x.parts[Length(x.parts)]);
       od;
@@ -3406,7 +3406,7 @@ Specht:=function(arg)
       if x=false or x=0*x then return x;
       elif x.parts=[[]] then return H.operations.New("Sq",x.coeffs[1],[]);
       fi;
-     
+
       return Sum([1..Length(x.parts)], mu->x.coeffs[mu]*Pq(x.parts[mu]) );
     end;
 
@@ -3439,38 +3439,38 @@ Specht:=function(arg)
     ## Called via D(linear comb. S(nu)). This is quite horrible; we just
     ## have a list of the simples in each Specht module.
     H.operations.S.e2p0D:=function(mu) local mumod, m;
-  
+
       if Length(mu)>4 or (Length(mu)>2 and not IsERegular(2,mu)) then
         return false;
       fi;
-  
+
       mumod:=List(mu, m->m mod 2);
       if Length(mu)=1 then return H.operations.Collect("D",1,mu);
       elif Length(mu)=2 then
-        if (mu[1] + mu[2]) mod 2<>0 then 
-          return H.operations.Collect("D",1,mu); 
-        else 
+        if (mu[1] + mu[2]) mod 2<>0 then
+          return H.operations.Collect("D",1,mu);
+        else
           return H.operations.Collect("D",[1,1],[ mu,[mu[1]+1, mu[2]-1] ]);
         fi;
       elif Length(mu)=3 then
         if mumod=[0,0,0] or mumod=[1,1,1] then
-          return H.operations.Collect("D",[1,1,1,1], 
+          return H.operations.Collect("D",[1,1,1,1],
             [ [mu[1]+2,mu[2],mu[3]-2],
               [mu[1]+1,mu[2]-1,mu[3]],[mu[1],mu[2]+1,mu[3]-1], mu]);
         elif mumod=[0,0,1] or mumod=[1,1,0] then
           return H.operations.Collect("D",[1,1,1,1],
            [ [mu[1]+1,mu[2]+1,mu[3]-2],[mu[1]+1,mu [2],mu[3]-1],
              [mu[1]+1,mu[2]-1,mu[3]],mu] );
-        elif mumod=[0,1,0] or mumod=[1,0,1] then 
+        elif mumod=[0,1,0] or mumod=[1,0,1] then
           return H.operations.Collect("D",1,mu);
         elif mumod=[0,1,1] or mumod=[1,0,0] then
-          return H.operations.Collect("D",[1,1,1,1], 
+          return H.operations.Collect("D",[1,1,1,1],
             [ [mu[1]+2,mu[2]-1,mu[3]-1],[mu[1]+1,mu[2],mu[3]-1],
               [mu[1],mu[2]+1,mu[3]-1], mu] );
         fi;
       elif Length(mu)=4 then
         if mumod=[0,0,0,0] or mumod=[1,1,1,1] then
-          return H.operations.Collect("D", 
+          return H.operations.Collect("D",
             [1,1,2,1,1,1,1,1,2,1,1,1,1,1,1,1],
             [ [mu[1]+3,mu[2]+1,mu[3]-1,mu[4]-3],
               [mu[1]+3,mu[2]-1,mu[3]-1,mu[4]-1],
@@ -3483,13 +3483,13 @@ Specht:=function(arg)
               [mu[1],mu[2]+2,mu[3],mu[4]-2], [mu[1],mu[2]+1,mu[3]-1,mu[4]],
               [mu[1],mu[2],mu[3]+1,mu[4]-1], mu] );
         elif mumod=[0,0,0,1] or mumod=[1,1,1,0] then
-          m:=H.operations.Collect("D",[1,1,1,1,1,1,1,1], 
+          m:=H.operations.Collect("D",[1,1,1,1,1,1,1,1],
               [ [mu[1]+1,mu[2]+2,mu[3]-1,mu[4]-2],
               [mu[1]+1,mu[2]+1,mu[3],mu[4]-2],[mu[1]+1,mu[2]+1,mu[3]-2,mu[4]],
               [mu[1]+1,mu[2],mu[3]-1,mu[4]],[mu[1]+1,mu[2],mu[3]+1,mu[4]-2],
               [mu[1]+1,mu[2],mu[3],mu[4]-1],
               [mu[1]+1,mu[2]-1,mu[3],mu[4]], mu] );
-          if mu{[3,4]}=[2,1] then 
+          if mu{[3,4]}=[2,1] then
             return m+H.operations.Collect("D",1,[mu[1]+2,mu[2]+1]);
           else return m;
           fi;
@@ -3501,21 +3501,21 @@ Specht:=function(arg)
                [mu[1]+1,mu[2],mu[3]-1,mu[4]],[mu[1]+1,mu[2],mu[3]+1,mu[4]-2],
                [mu[1]+1,mu[2],mu[3],mu[4]-1],[mu[1]+1,mu[2]-1,mu[3],mu[4]],
                mu] );
-          if mu{[3,4]}=[2,1] then 
+          if mu{[3,4]}=[2,1] then
             return m+H.operations.Collect("D",1,[mu[1]+1,mu[2]+2]);
           else return m;
-          fi;    
+          fi;
         elif mumod=[0,0,1,1] or mumod=[1,1,0,0] then
           return H.operations.Collect("D",[1,1,1,2,1,1,1,1,1,1,1,2,1,1,1,1],
             [ [mu[1]+3,mu[2],mu[3],mu[4]-3], [mu[1]+3,mu[2],mu[3]-2,mu[4]-1],
               [mu[1]+2,mu[2]-1,mu[3]+1,mu[4]-2],
               [mu[1]+2,mu[2]+1,mu[3]-1,mu[4]-2],
               [mu[1]+2,mu[2]-1,mu[3],mu[4]-1],[mu[1]+2,mu[2]-1,mu[3]-1,mu[4]],
-              [mu[1]+1,mu[2]+2,mu[3],mu[4]-3], 
+              [mu[1]+1,mu[2]+2,mu[3],mu[4]-3],
               [mu[1]+1,mu[2]+2,mu[3]-2,mu[4]-1],
               [mu[1]+1,mu[2]+1,mu[3]-1,mu[4]-1],
-              [mu[1]+1,mu[2],mu[3]+1,mu[4]-2], [mu[1]+1,mu[2],mu[3]-1,mu[4]], 
-              [mu[1]+1,mu[2],mu[3],mu[4]-1], [mu[1],mu[2]+1,mu[3]+1,mu[4]-2], 
+              [mu[1]+1,mu[2],mu[3]+1,mu[4]-2], [mu[1]+1,mu[2],mu[3]-1,mu[4]],
+              [mu[1]+1,mu[2],mu[3],mu[4]-1], [mu[1],mu[2]+1,mu[3]+1,mu[4]-2],
               [mu[1],mu[2]+1,mu[3],mu[4]-1], [mu[1],mu[2]+1,mu[3]-1,mu[4]],
                mu]  );
         elif mumod=[0,1,0,0] or mumod=[1,0,1,1] then
@@ -3525,12 +3525,12 @@ Specht:=function(arg)
               [mu[1]+1,mu[2],mu[3],mu[4]-1],[mu[1],mu[2]+2,mu[3]-1,mu[4]-1],
               [mu[1],mu[2]+1,mu[3],mu[4]-1],[mu[1],mu[2],mu[3]+1,mu[4]-1],
                mu] );
-        elif mumod=[0,1,0,1] or mumod=[1,0,1,0] then 
+        elif mumod=[0,1,0,1] or mumod=[1,0,1,0] then
           return H.operations.Collect("D",1,mu);
-        elif mumod=[0,1,1,0] or mumod=[1,0,0,1] then 
+        elif mumod=[0,1,1,0] or mumod=[1,0,0,1] then
           return H.operations.Collect("D",[1,1,1,2,1,1,1,1,1,1,1,2,1,1,1,1],
             [ [mu[1]+3,mu[2],mu[3],mu[4]-3], [mu[1]+3,mu[2],mu[3]-2,mu[4]-1],
-              [mu[1]+2,mu[2]-1,mu[3]+1,mu[4]-2], 
+              [mu[1]+2,mu[2]-1,mu[3]+1,mu[4]-2],
               [mu[1]+2,mu[2]+1,mu[3]-1,mu[4]-2],
               [mu[1]+2,mu[2]-1,mu[3],mu[4]-1],
               [mu[1]+2,mu[2]-1,mu[3]-1,mu[4]],
@@ -3539,24 +3539,24 @@ Specht:=function(arg)
               [mu[1]+1,mu[2],mu[3]+1,mu[4]-2],
               [mu[1]+1,mu[2],mu[3],mu[4]-1],[mu[1]+1,mu[2],mu[3]-1,mu[4]],
               [mu[1],mu[2]+1,mu[3]+1,mu[4]-2],[mu[1],mu[2]+1,mu[3],mu[4]-1],
-              [mu[1],mu[2]+1,mu[3]-1,mu[4]],[mu[1],mu[2],mu[3]+1,mu[4]-1], 
+              [mu[1],mu[2]+1,mu[3]-1,mu[4]],[mu[1],mu[2],mu[3]+1,mu[4]-1],
                mu] );
         elif mumod=[0,1,1,1] or mumod=[1,0,0,0] then
-          return H.operations.Collect("D",[1,1,1,1,1,1,1,1], 
+          return H.operations.Collect("D",[1,1,1,1,1,1,1,1],
            [ [mu[1],mu[2],mu[3]+1,mu[4]-1],
              [mu[1]+2,mu[2]+1,mu[3]-1,mu[4]-2],[mu[1]+2,mu[2],mu[3],mu[4]-2],
              [mu[1]+2,mu[2]-1,mu[3]-1,mu[4]],[mu[1]+1,mu[2],mu[3]-1,mu[4]],
-             [mu[1],mu[2]+2,mu[3],mu[4]-2],[mu[1],mu[2]+1,mu[3]-1,mu[4]], 
+             [mu[1],mu[2]+2,mu[3],mu[4]-2],[mu[1],mu[2]+1,mu[3]-1,mu[4]],
               mu] );
         fi;
       fi;
     end;     ## e2p0D()
 
     ## here arg=lambda is a "staircase" partition (see [JM1]), and this
-    ## function computes the corresponding PIM. 
-    H.operations.P.e2p0SingleRegular:=function(arg) 
+    ## function computes the corresponding PIM.
+    H.operations.P.e2p0SingleRegular:=function(arg)
       local lambda,c,mu,x,pim,i,q;
-  
+
       lambda:=Flat(arg);
       if not IsERegular(2,lambda) then return false; fi;
       c:=ECore(2,lambda);
@@ -3577,7 +3577,7 @@ Specht:=function(arg)
           fi;
         fi;
       od;
-  
+
       mu:=Collected(InverseLittlewoodRichardsonRule(mu));
       pim:=H.operations.New("S",0,[]);
       for x in mu do
@@ -3586,13 +3586,13 @@ Specht:=function(arg)
       od;
       return pim;
     end;  # H.operations.P.e2p0SingleRegular
-  
+
     ## given a singular partition mu this expands S(mu) into a sum of regular
-    ## Specht modules S(nu). e=2 only though... 
+    ## Specht modules S(nu). e=2 only though...
     ## ***** undocumented and unused
-    H.operations.P.e2p0ExpandSingular:=function(arg) 
+    H.operations.P.e2p0ExpandSingular:=function(arg)
       local Twos, Vert, x, y, ymu, i;
-  
+
       Vert:=function(mu) local mud, vmu, i, v;
         mud:=ConjugatePartition(mu);
         vmu:=[];
@@ -3614,20 +3614,20 @@ Specht:=function(arg)
         until v=0;
         return [ConjugatePartition(mud), vmu];
       end;
-  
+
       Twos:=function(t)
         return H.operations.New("S",(-1)^t,[2*t])
            +Sum([0..t-1], i->H.operations.New("S",(-1)^i,[t+i,t-i]) );
       end;
-  
+
       if Length(arg)=1 and IsSpecht(arg[1]) then x:=arg[1];
       else
         y:=Flat(arg);
         ymu:=Vert(y);
-        x:=H.operations.New("S",1,y) 
+        x:=H.operations.New("S",1,y)
             - H.operations.New("S",1,ymu[1])*Product(ymu[2], i->Twos(i));
       fi;
-  
+
       repeat
         y:=1;
         while y<=Length(x.parts)  and IsERegular(x.H.e,x.parts[y]) do
@@ -3640,17 +3640,17 @@ Specht:=function(arg)
         fi;
       until y>Length(x.parts);
       return x;
-    end; # H.e2p0ExpandSingular 
-  
+    end; # H.e2p0ExpandSingular
+
     ## (Theorem) formulae for the PIMS of the two part partitions when e=2
     H.operations.P.e2p0S_two:=function(k, l)
       local pim, x, y, a, n, k2, l2, ltop, K, L, lambda,
             pimfn, eveneven, Oddeven, OddOdd;
-  
+
       Oddeven:=function(x,y,a)
         if y=0 then
           if x mod 2=k2 then pim:=pim+H.operations.New("S",1,
-                                    H.operations.DoubleHook(n,x,y,a)); 
+                                    H.operations.DoubleHook(n,x,y,a));
           fi;
         else
           if x mod 2=l2 then
@@ -3659,35 +3659,35 @@ Specht:=function(arg)
                 +H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
             fi;
           elif x mod 2=k2 and y mod 2=k2 then
-            if a mod 2=l2 then 
+            if a mod 2=l2 then
               pim:=pim
-                +H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a)); 
+                +H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
             fi;
-          else 
+          else
             pim:=pim
               +H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
           fi;
         fi;
       end;
-  
+
       OddOdd:=function(x,y,a)
-        if y=0 then 
+        if y=0 then
           pim:=pim+H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
         else
           if x mod 2<>y mod 2 then
-            if a mod 2=x mod 2 then 
+            if a mod 2=x mod 2 then
               pim:=pim
-                +H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a)); 
+                +H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
             fi;
-          elif x<>y or x mod 2=0 then 
-            pim:=pim 
+          elif x<>y or x mod 2=0 then
+            pim:=pim
               + H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
           fi;
         fi;
       end;
-  
+
       eveneven:=function(x,y,a)
-        if y=0 then 
+        if y=0 then
           pim:=pim+H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
         else
           if a=k-x and a=l+1-y then lambda:=0;
@@ -3697,7 +3697,7 @@ Specht:=function(arg)
             fi;
             if x mod 2<>y mod 2 then
               if a mod 2=x mod 2 then
-                pim:=pim+lambda       
+                pim:=pim+lambda
                 * H.operations.New("S",1,H.operations.DoubleHook(n,x,y,a));
               fi;
             else pim:=pim+lambda
@@ -3706,10 +3706,10 @@ Specht:=function(arg)
           fi;
         fi;
       end;
-  
+
       n:=k + l;
       pim:=H.operations.New("S",0,[]);
-  
+
       k2:=k mod 2; l2:=l mod 2;
       if k2<>l2 then
         pimfn:=Oddeven;
@@ -3737,7 +3737,7 @@ Specht:=function(arg)
           fi;
         end;
       fi;
-  
+
       for x in [2..k] do
         if x > l then pimfn(x,0,0); fi;
         for y in [2..Minimum(ltop,x)] do
@@ -3748,10 +3748,10 @@ Specht:=function(arg)
       od;
       return pim;
     end;  # P.e2p0S_two
-  
+
     H.operations.P.e2p0S_three:=function(k,l,m) local th, mum;
       mum:=[k mod 2, l mod 2, m mod 2];
-  
+
       if mum=[0,0,0] then
         th:=RestrictedModule(SRestrictedModule(SRestrictedModule(
            H.operations.P.e2p0SingleRegular(k+1,l+2,m+3,2,1),H.e,5,0),
@@ -3761,7 +3761,7 @@ Specht:=function(arg)
         ## The following use of Schaper's theorem seems to resolve it.
         mum:=th-SRestrictedModule(
                   H.operations.P.e2p0SingleRegular(k-2,l-1,m,3,2,1),H.e,3,1);
-          if H.operations.S.InnerProduct(mum,Schaper(th.H, 
+          if H.operations.S.InnerProduct(mum,Schaper(th.H,
                         H.operations.Hook(k+l+m,k-2,m,m,3)))=0 then
             Print("# Warning: the projective P(",k,",",l,",",m,") is partly ",
                   "conjectural.\n");
@@ -3788,7 +3788,7 @@ Specht:=function(arg)
           th:=RestrictedModule(SRestrictedModule(
                H.operations.P.e2p0SingleRegular(k,l,m,2,1),H.e,2,0),H.e,1);
           if m>2 then
-            if m > 4 then 
+            if m > 4 then
               th:=th-RestrictedModule(
                        H.operations.P.e2p0SingleRegular(k,l,m-2,2,1),H.e,0);
             fi;
@@ -3827,25 +3827,25 @@ Specht:=function(arg)
         fi;
       fi;
     end; # H.operations.P.e2p0S_three
-  
+
     # the case e=2: P->S
     H.operations.P.e2p0S:=function(mu) local n, i, j;
       if not IsERegular(2,mu) then return false; fi;
-  
+
       n:=Sum(mu);
       if Length(mu)=1 then  # mu=(n)
-        if n mod 2=0 then 
-          return H.operations.Collect("S",List([1..n], i->1), 
+        if n mod 2=0 then
+          return H.operations.Collect("S",List([1..n], i->1),
                        List([1..n],i->H.operations.Hook(n,n-i+1)));
-        else 
-          return H.operations.Collect("S",List([0..(n-1)/2],i->1), 
+        else
+          return H.operations.Collect("S",List([0..(n-1)/2],i->1),
                            List([0..(n-1)/2],i->H.operations.Hook(n,n-2*i)));
         fi;
       elif Length(mu)=2 then return H.operations.P.e2p0S_two(mu[1], mu[2]);
-      elif Length(mu)=3 then 
+      elif Length(mu)=3 then
         return H.operations.P.e2p0S_three(mu[1],mu[2],mu[3]);
       fi;
-      
+
       ## If we have a "staircase partition", or a restriction of one then
       ## [JM1] tells us how to construct P(mu). This first bit gets most
       ## of them, and we get the remainder by sending ourselves back into
@@ -3855,14 +3855,14 @@ Specht:=function(arg)
         while mu[i-1]=mu[i]+1 do i:=i-1; od;  # note, mu not a 2-core => i>1
         if Length(mu)+4>=2*i and IsSimpleModule(H, mu{[1..i-1]}) then
           if (Length(mu) mod 2)=(mu[1] mod 2) then
-            if Length(mu)+3>=2*i 
+            if Length(mu)+3>=2*i
               then return H.operations.P.e2p0SingleRegular(mu);
             else i:=1;
             fi;
           fi;
           mu:=Copy(mu);
-          for j in [i..Length(mu)] do 
-            mu[j]:=mu[j]+1; 
+          for j in [i..Length(mu)] do
+            mu[j]:=mu[j]+1;
           od;
           Add(mu,1);
           return SRestrictedModule(H.operations.P.e2p0SingleRegular(mu),H.e,
@@ -3875,18 +3875,18 @@ Specht:=function(arg)
       return false;
     end;  # P.e2p0S()
   fi;
-       
+
   return H;
 end;  ## end of Specht()
 
 ## The record returned by Schur() is essentially identical to that returned
 ## by Specht(). The only differences are superficial; namely, the functions
-## are called H.W, H.P, and H.F rather than H.S, H.P, and H.D and 
-## H.IsSpecht is false rather than true. Even though these names are 
-## different the value of S.X(x).module is still "S", "P", or "D" and 
-## H.operations() contains ## records S, P, and D respectively. 
+## are called H.W, H.P, and H.F rather than H.S, H.P, and H.D and
+## H.IsSpecht is false rather than true. Even though these names are
+## different the value of S.X(x).module is still "S", "P", or "D" and
+## H.operations() contains ## records S, P, and D respectively.
 ## Consequently if you want to create either Specht() or Schur() 'modules'
-## in a function it is best not to do this via S.X(*) but instead to use 
+## in a function it is best not to do this via S.X(*) but instead to use
 ## the more explicit H.operations.New(*) if you want to these functions to
 ##  work for both the Hecke and q-Schur algebras.
 Schur:=function(arg) local schur;
