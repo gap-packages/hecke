@@ -47,16 +47,16 @@ InstallGlobalFunction(MakeDispatcherFunc,
     local nameop, filters, oper, disp, newarg, i, p, ps;
 
     nameop := Concatenation(name,"Op");
-    
+
     for i in [1..Length(pos)] do
-      if pos[i] = 0 then 
+      if pos[i] = 0 then
         ## Print(nameop,":",filts[i],"\n"); ## DEBUG
         DeclareOperation(nameop,filts[i]);
       else ## pos is assumed to be positive and <= Length(filts)+1;
         filters := Concatenation(filts[i]{[1..pos[i]-1]},
           [IsList],filts[i]{[pos[i]..Length(filts[i])]});
         if Length(filters) <> l[i]
-        then Error("usage, number of filters does not correspond",
+        then Error("usage, number of filters does not correspond ",
           "to the given argument list length");
         fi;
         ## Print(">>",nameop,":",filters,"\n"); ## DEBUG
@@ -65,16 +65,25 @@ InstallGlobalFunction(MakeDispatcherFunc,
     od;
     oper := ValueGlobal(nameop);
     disp := function(arg)
+      if fail in arg then return fail; fi;
       ps := Positions(l,Length(arg));
       for p in ps do
 				if p<>fail and (pos[p]=0 or IsList(arg[pos[p]])) then
         	## Print("Do call ",oper,"(",arg,")\n"); ## DEBUG
-        	return CallFuncList(oper,arg);
+        	if pos[p]<>0 then
+        	  arg[pos[p]]:=Flat(arg[pos[p]]); # StructuralCopy would probably also do it here
+        	  filters := Concatenation(filts[p]{[1..pos[p]-1]},
+              [IsList],filts[p]{[pos[p]..Length(filts[p])]});
+          else filters:=filts[p];
+        	fi;
+        	if ForAll([1..Length(arg)],i -> filters[i](arg[i])) then
+        	  return CallFuncList(oper,arg);
+        	fi;
 				fi;
 			od;
       p := 1; ## first entry ist the default entry
       newarg := Concatenation(arg{[1..pos[p]-1]},
-        [arg{[pos[p]..pos[p]+(Length(arg)-l[p])]}],
+        [Flat(arg{[pos[p]..pos[p]+(Length(arg)-l[p])]})],
         arg{[pos[p]+(Length(arg)-l[p])+1..Length(arg)]});
       ## Print(">> Do call ",oper,"(",newarg,")\n"); ## DEBUG
       return CallFuncList(oper,newarg);
@@ -82,3 +91,4 @@ InstallGlobalFunction(MakeDispatcherFunc,
     BindGlobal(name,disp);
   end
 );
+

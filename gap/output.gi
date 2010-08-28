@@ -127,7 +127,7 @@ InstallMethod(ModuleString, "generic module output", [IsAlgebraObjModule,IsBool]
       str:=StringFold(str,["0",star,a!.module,"()"]);
     else
       for x in [Length(a!.parts),Length(a!.parts)-1..1] do
-        if IsPolynomial(a!.coeffs[x]) then
+        if IsLaurentPolynomial(a!.coeffs[x]) then
           tmp := CoefficientsOfLaurentPolynomial(a!.coeffs[x]);
           coefficients := tmp[1];
           valuation := tmp[2];
@@ -344,12 +344,12 @@ InstallMethod(TightStringList, "ergonomic list output", [IsList],
 );
 
 ## Keep ourselves honest when inducing decomposition matrices
-InstallMethod(BUGOp,"hopefully noone will see this function ;-)",
+InstallMethod(BUGOp,"hopefully, no-one will ever see this function ;-)",
   [IsString,IsInt],
-  function(msg,pos) BUG(msg,pos,[]); end
+  function(msg,pos) BUGOp(msg,pos,[]); end
 );
 
-InstallMethod(BUGOp,"hopefully noone will see this function ;-)",
+InstallMethod(BUGOp,"hopefully, no-one will ever see this function ;-)",
   [IsString,IsInt,IsList],
   function(msg,pos,list) local a;
      PrintTo("*errout*",

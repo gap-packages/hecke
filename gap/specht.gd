@@ -42,16 +42,15 @@ DeclareCategory("IsHeckeModule", IsAlgebraObjModule);
 DeclareCategory("IsHeckeSpecht", IsHeckeModule);
 DeclareCategory("IsHeckePIM", IsHeckeModule);
 DeclareCategory("IsHeckeSimple", IsHeckeModule);
-##
 DeclareCategory("IsFockModule", IsHeckeModule);
 DeclareCategory("IsFockSpecht", IsHeckeSpecht);
 DeclareCategory("IsFockPIM", IsHeckePIM);
 DeclareCategory("IsFockSimple", IsHeckeSimple);
 ##
-DeclareCategory("IsSchurModule", IsAlgebraObjModule);
-DeclareCategory("IsSchurWeyl", IsSchurModule);
-DeclareCategory("IsSchurPIM", IsSchurModule);
-DeclareCategory("IsSchurSimple", IsSchurModule);
+DeclareCategory("IsSchurModule", IsHeckeModule);
+DeclareCategory("IsSchurWeyl", IsHeckeSpecht);
+DeclareCategory("IsSchurPIM", IsHeckePIM);
+DeclareCategory("IsSchurSimple", IsHeckeSimple);
 
 BindGlobal("HeckeSpechtType", NewType(AlgebraObjFamily, IsHeckeSpecht));
 BindGlobal("HeckePIMType", NewType(AlgebraObjFamily, IsHeckePIM));
@@ -75,11 +74,6 @@ DeclareOperation("Schur", [IsInt,IsInt]);
 DeclareOperation("Schur", [IsInt,IsInt,IsFunction]);
 DeclareOperation("Schur", [IsInt,IsInt,IsFunction,IsString]);
 
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsList]);
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsAlgebraObjModule]);
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsList]);
-DeclareOperation("NewModule",[IsAlgebraObj,IsString,IsDecompositionMatrix,IsAlgebraObjModule]);
-
 MakeDispatcherFunc("Hook",[[IsInt]],[2],[2]);
 DeclareOperation("DoubleHook",[IsInt,IsInt,IsInt,IsInt]);
 DeclareOperation("HeckeOmega",[IsAlgebraObj,IsString,IsInt]);
@@ -88,12 +82,30 @@ DeclareOperation("Module",[IsAlgebraObj,IsString,IsLaurentPolynomial,IsList]);
 DeclareOperation("Module",[IsAlgebraObj,IsString,IsList,IsList]);
 DeclareOperation("Collect",[IsAlgebraObj,IsString,IsList,IsList]);
 
-DeclareOperation("MakeSpecht",[IsAlgebraObjModule,IsBool]);
-DeclareOperation("MakePIM",[IsAlgebraObjModule,IsBool]);
-DeclareOperation("MakeSimple",[IsAlgebraObjModule,IsBool]);
-DeclareOperation("MakeSpecht",[IsDecompositionMatrix,IsAlgebraObjModule]);
-DeclareOperation("MakePIM",[IsDecompositionMatrix,IsAlgebraObjModule]);
-DeclareOperation("MakeSimple",[IsDecompositionMatrix,IsAlgebraObjModule]);
+MakeDispatcherFunc("MakeSpecht",
+[[IsAlgebraObj],
+ [IsDecompositionMatrix],
+ [IsDecompositionMatrix,IsAlgebraObjModule],
+ [IsAlgebraObjModule],
+ [IsAlgebraObjModule,IsBool]],
+ [2,2,0,0,0],[2,2,2,1,2]);
+MakeDispatcherFunc("MakePIM",
+[[IsAlgebraObj],
+ [IsDecompositionMatrix],
+ [IsDecompositionMatrix,IsAlgebraObjModule],
+ [IsAlgebraObjModule],
+ [IsAlgebraObjModule,IsBool]],
+ [2,2,0,0,0],[2,2,2,1,2]);
+MakeDispatcherFunc("MakeSimple",
+[[IsAlgebraObj],
+ [IsDecompositionMatrix],
+ [IsDecompositionMatrix,IsAlgebraObjModule],
+ [IsAlgebraObjModule],
+ [IsAlgebraObjModule,IsBool]],
+ [2,2,0,0,0],[2,2,2,1,2]);
+MakeDispatcherFunc("MakePIMSpecht",[[IsDecompositionMatrix]],[2],[2]);
+MakeDispatcherFunc("MakeFockSpecht",[[IsAlgebraObj]],[2],[2]);
+MakeDispatcherFunc("MakeFockPIM",[[IsAlgebraObj]],[2],[2]);
 
 DeclareOperation("InnerProduct",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("Coefficient",[IsAlgebraObjModule,IsList]);
@@ -113,8 +125,14 @@ DeclareOperation("SetOrdering",[IsAlgebraObj,IsFunction]);
 DeclareOperation("SpechtPartitions",[IsHeckeSpecht]);
 DeclareOperation("SpechtCoefficients",[IsHeckeSpecht]);
 
+MakeDispatcherFunc("SimpleDimension",
+  [[IsDecompositionMatrix],[IsAlgebraObj],[IsAlgebraObj,IsInt],[IsDecompositionMatrix]],
+  [2,                       2,             0,                   0],
+  [2,                       2,             2,                   1]
+);
 DeclareOperation("ListERegulars",[IsAlgebraObjModule]);
-## DeclareProperty("IsERegular",[IsDecompositionMatrix]); ## TODO
+DeclareOperation("ERegulars",[IsAlgebraObjModule]);
+DeclareOperation("ERegulars",[IsDecompositionMatrix]);
 MakeDispatcherFunc("SplitECores",
 	[[IsAlgebraObjModule],[IsAlgebraObjModule],[IsAlgebraObjModule,IsHeckeSpecht]],
 	[ 2									 , 0									,	0],
@@ -131,12 +149,28 @@ DeclareOperation("DecompositionNumber",[IsDecompositionMatrix,IsList,IsList]);
 DeclareOperation("DecompositionNumber",[IsAlgebraObj,IsList,IsList]);
 DeclareOperation("Specht_DecompositionNumber",[IsAlgebraObj,IsList,IsList]);
 DeclareOperation("Obstructions",[IsDecompositionMatrix,IsAlgebraObjModule]);
+MakeDispatcherFunc("IsNewIndecomposable",
+  [[IsAlgebraObj,IsDecompositionMatrix,IsAlgebraObjModule,IsDecompositionMatrix],
+   [IsDecompositionMatrix,IsAlgebraObjModule],
+   [IsDecompositionMatrix,IsAlgebraObjModule]],
+   [5,3,0],[5,3,2]);
+MakeDispatcherFunc("RemoveIndecomposable",[[IsDecompositionMatrix]],[2],[2]);
+DeclareOperation("MissingIndecomposables",[IsDecompositionMatrix]);
+DeclareOperation("CalculateDecompositionMatrix",[IsAlgebraObj,IsInt]);
+DeclareOperation("CrystalDecompositionMatrix",[IsAlgebraObj,IsInt]);
+DeclareOperation("CrystalDecompositionMatrix",[IsAlgebraObj,IsInt,IsFunction]);
+DeclareOperation("InducedDecompositionMatrix",[IsDecompositionMatrix]);
+DeclareOperation("InvertDecompositionMatrix",[IsDecompositionMatrix]);
+DeclareOperation("SaveDecompositionMatrix",[IsDecompositionMatrix,IsString]);
+DeclareOperation("SaveDecompositionMatrix",[IsDecompositionMatrix]);
+DeclareOperation("AdjustmentMatrix",[IsDecompositionMatrix,IsDecompositionMatrix]);
+DeclareOperation("MatrixDecompositionMatrix",[IsDecompositionMatrix]);
+DeclareOperation("DecompositionMatrixMatrix",[IsAlgebraObj,IsMatrix,IsInt]);
 
 DeclareOperation("RInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
 DeclareOperation("SInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
 DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
 DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
-
 DeclareOperation("RInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("SInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
@@ -144,12 +178,15 @@ DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
 DeclareOperation("qSInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
 DeclareOperation("qSRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
 
+DeclareOperation("\=",[IsDecompositionMatrix,IsDecompositionMatrix]);
+DeclareOperation("Store",[IsDecompositionMatrix,IsInt]);
 DeclareOperation("Specialized",[IsCrystalDecompositionMatrix,IsInt]);
 DeclareOperation("Specialized",[IsCrystalDecompositionMatrix]);
+DeclareOperation("Specialized",[IsFockModule,IsInt]);
+DeclareOperation("Specialized",[IsFockModule]);
+DeclareOperation("Invert",[IsDecompositionMatrix,IsList]);
 DeclareOperation("AddIndecomposable",[IsDecompositionMatrix,IsAlgebraObjModule,IsBool]);
 DeclareOperation("AddIndecomposable",[IsDecompositionMatrix,IsAlgebraObjModule]);
-DeclareOperation("IsNewIndecomposable",
-  [IsAlgebraObj,IsDecompositionMatrix,IsAlgebraObjModule,IsDecompositionMatrix,IsList]);
 
 DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsString,IsBool]);
 DeclareOperation("ReadDecompositionMatrix",[IsAlgebraObj,IsInt,IsBool]);

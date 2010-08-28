@@ -22,5 +22,5 @@ DeclareOperation("DecompositionMatrixString",[IsDecompositionMatrix,IsBool]);
 DeclareOperation("LabelPartition",[IsList]);
 DeclareOperation("StringPartition",[IsList]);
 DeclareOperation("TightStringList",[IsList]);
-MakeDispatcherFunc("BUG",[[IsString,IsInt],[IsString,IsInt]],[0,3],[3,3]);
+MakeDispatcherFunc("BUG",[[IsString,IsInt],[IsString,IsInt]],[3,0],[3,3]);
 
