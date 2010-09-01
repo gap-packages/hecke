@@ -12,14 +12,14 @@ BindGlobal("SemiStandardTableauType",
 BindGlobal("StandardTableauType",
   NewType(TableauFamily, IsStandardTableau));
 
-DeclareOperation("Tableau", [IsList]); ##Constructor
+MakeDispatcherFunc("Tableau", [[]],[1],[1]); ##Constructor
 
 DeclareOperation("Specht_PrettyPrintTableau",[IsTableau]); ## use ViewObj instead
 
-DeclareOperation("SemiStandardTableaux",[IsList,IsList]);
-DeclareOperation("SemiStandardTableaux",[IsList]);
-DeclareOperation("StandardTableaux",[IsList]);
+MakeDispatcherFunc("SemiStandardTableaux",[[IsList],[]],[2,1],[2,1]);
+MakeDispatcherFunc("StandardTableaux",[[]],[1],[1]);
 
 DeclareOperation("ConjugateTableau", [IsTableau]);
 DeclareOperation("TypeTableau", [IsTableau]);
 DeclareOperation("ShapeTableau", [IsTableau]);
+

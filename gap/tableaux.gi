@@ -12,46 +12,46 @@
 ##   - Translated to GAP4
 
 ## July 1997
-##   o fixed a bug (reported by Schmuel Zelikson) in 
+##   o fixed a bug (reported by Schmuel Zelikson) in
 ##     SemiStandardTableau(); added Type and Shape
 ##     functions for tableaux and allowed the type of
-##     a tableau to be a composition which has parts 
+##     a tableau to be a composition which has parts
 ##     which are zero.
 
 ## March 1996
 
 #F constructor of Young tableaux
-InstallMethod(Tableau, "tableau constructor",[IsList],
+InstallMethod(TableauOp, "tableau constructor",[IsList],
   function(tab)
     local isSemiStandardTab, isStandardTab;
 
     isSemiStandardTab := function(tab)
       local d, r, c;
-      
+
       d:=List([1..Length(tab[1])], r->[]);
       for r in [1..Length(tab)] do
         for c in [1..Length(tab[r])] do
           d[c][r]:=tab[r][c];
         od;
       od;
-      return ForAll(tab, r->r=SortedList(r)) 
+      return ForAll(tab, r->r=SortedList(r))
         and ForAll(d, r->IsSet(r));
     end;
 
     ## assuming semistandardness already been checked
-    isStandardTab := function(tab) 
+    isStandardTab := function(tab)
       return ForAll(tab, r->IsSet(r));
     end;
 
     ## validity checks ##
-    if ForAll(tab, x -> IsList(x) and 
-        not ForAll(x, y-> ##not IsBound(y) or ## TODO: desirable 
+    if ForAll(tab, x -> IsList(x) and
+        not ForAll(x, y-> ##not IsBound(y) or ## TODO: desirable
             IsInt(y))) then
       Error("argument must be a list of lists of integers.");
     elif IsSortedList(Reversed(List(tab,Length)))=false then
       Error("row lengths must decrease ...");
     fi;
-    ## ############### ## 
+    ## ############### ##
 
     if isSemiStandardTab(tab) then
       if isStandardTab(tab) then
@@ -61,7 +61,7 @@ InstallMethod(Tableau, "tableau constructor",[IsList],
       fi;
     else
       return Objectify(TableauType,[tab]);
-    fi; 
+    fi;
   end
 );
 
@@ -71,7 +71,7 @@ InstallMethod(PrintObj,"for tableaux",[IsTableau],
 );
 
 InstallMethod(
-  Specht_PrettyPrintTableau, 
+  Specht_PrettyPrintTableau,
   [IsTableau],
   function(tab)
     local t, r, c, str;
@@ -92,8 +92,8 @@ InstallMethod(
   DisplayString,
   "for tableaux",
   [IsStandardTableau],
-  function(tab) 
-    return Concatenation("Standard ",Specht_PrettyPrintTableau(tab)); 
+  function(tab)
+    return Concatenation("Standard ",Specht_PrettyPrintTableau(tab));
   end
 );
 
@@ -101,8 +101,8 @@ InstallMethod(
   DisplayString,
   "for tableaux",
   [IsSemiStandardTableau],
-  function(tab) 
-    return Concatenation("Semi-Standard ",Specht_PrettyPrintTableau(tab)); 
+  function(tab)
+    return Concatenation("Semi-Standard ",Specht_PrettyPrintTableau(tab));
   end
 );
 
@@ -128,8 +128,8 @@ InstallMethod(ViewObj,"for tableaux",[IsTableau],
 #F the dual tableaux of t = [ [t_1, t_2, ...], [t_k, ...], ... ]
 InstallMethod(
   ConjugateTableau,
-  [IsTableau],      
-  function(tab) 
+  [IsTableau],
+  function(tab)
     local  t, d, r, c;
 
     t:=tab![1];
@@ -149,11 +149,11 @@ InstallMethod(
 ## otherwise only those semistandard nu-tableaux of type mu is returned.
 ##   Nodes are placed recursively via FillTableau in such a way so as
 ## so avoid repeats.
-InstallMethod(SemiStandardTableaux, [IsList,IsList],
-  function(nu,mu) 
+InstallMethod(SemiStandardTableauxOp, [IsList,IsList],
+  function(nu,mu)
     local FillTableau, ss, i;
 
-    #F FillTableau adds upto <n>nodes of weight <i> into the tableau <t> on 
+    #F FillTableau adds upto <n>nodes of weight <i> into the tableau <t> on
     ## or below its <row>-th row (similar to the Littlewood-Richardson rule).
     FillTableau:=function(t, i, n, row)
       local max, nn, nodes, nt, r;
@@ -174,7 +174,7 @@ InstallMethod(SemiStandardTableaux, [IsList,IsList],
       for r in [row..Length(t)] do
         if Length(t[r]) < nu[r] then
           if r = 1 then max:=nu[1]-Length(t[1]);
-          elif Length(t[r-1]) > Length(t[r]) and t[r-1][Length(t[r]+1)]<i 
+          elif Length(t[r-1]) > Length(t[r]) and t[r-1][Length(t[r]+1)]<i
                and Length(t[r-1])>=n then
             max:=Position(t[r-1], i);
             if max=fail then max:=Length(t[r-1])-Length(t[r]); #no i in t[r-1]
@@ -191,9 +191,9 @@ InstallMethod(SemiStandardTableaux, [IsList,IsList],
             FillTableau(nt, i, n - nn, r + 1);
           od;
         fi;
-      od; 
+      od;
       r:=Length(t);
-      if r < Length(nu)  and n <= nu[r+1] and n <= Length(t[r]) 
+      if r < Length(nu)  and n <= nu[r+1] and n <= Length(t[r])
       and t[r][n] < i  then
         Add(t, List([1..n], nn->i));
         if i < Length(mu) then FillTableau(t, i+1, mu[i+1], 1);
@@ -207,7 +207,7 @@ InstallMethod(SemiStandardTableaux, [IsList,IsList],
     fi;
 
     ## no semi-standard nu-tableau with content mu
-    if Dominates(mu, nu) then    
+    if Dominates(mu, nu) then
       if mu<>nu then return [];
       else return [Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)))];
       fi;
@@ -220,8 +220,8 @@ InstallMethod(SemiStandardTableaux, [IsList,IsList],
   end   ## SemiStandardTableaux
 );
 
-InstallMethod(SemiStandardTableaux, [IsList],
-  function(nu) 
+InstallMethod(SemiStandardTableauxOp, [IsList],
+  function(nu)
     local ss, i, mu;
 
     ss:=[];
@@ -232,18 +232,19 @@ InstallMethod(SemiStandardTableaux, [IsList],
               [ Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)) )]);
           return ss;
         fi;
-      else 
+      else
           Append(ss,SemiStandardTableaux(nu,mu));
       fi;
     od;
+    return ss;
   end
 );
 
 #F Standard tableau of shape ([nu,] mu)
-InstallMethod(StandardTableaux,[IsList],
-  function(lam) 
+InstallMethod(StandardTableauxOp,[IsList],
+  function(lam)
     local i;
-    return SemiStandardTableaux(lam, List([1..Sum(lam)], i->1) );
+    return SemiStandardTableauxOp(lam, List([1..Sum(lam)], i->1) );
   end
 );
 
@@ -252,7 +253,7 @@ InstallMethod(StandardTableaux,[IsList],
 InstallMethod(TypeTableau,[IsTableau],
   function(tab)
     local t;
-    
+
     t:=Flat(tab![1]);
     Append(t, [1..Maximum(t)]);
     t:=Collected(t);

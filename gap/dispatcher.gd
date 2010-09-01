@@ -71,7 +71,7 @@ InstallGlobalFunction(MakeDispatcherFunc,
 				if p<>fail and (pos[p]=0 or IsList(arg[pos[p]])) then
         	## Print("Do call ",oper,"(",arg,")\n"); ## DEBUG
         	if pos[p]<>0 then
-        	  arg[pos[p]]:=Flat(arg[pos[p]]); # StructuralCopy would probably also do it here
+        	  arg[pos[p]]:=StructuralCopy(arg[pos[p]]);
         	  filters := Concatenation(filts[p]{[1..pos[p]-1]},
               [IsList],filts[p]{[pos[p]..Length(filts[p])]});
           else filters:=filts[p];
@@ -81,12 +81,19 @@ InstallGlobalFunction(MakeDispatcherFunc,
         	fi;
 				fi;
 			od;
-      p := 1; ## first entry ist the default entry
-      newarg := Concatenation(arg{[1..pos[p]-1]},
-        [Flat(arg{[pos[p]..pos[p]+(Length(arg)-l[p])]})],
-        arg{[pos[p]+(Length(arg)-l[p])+1..Length(arg)]});
-      ## Print(">> Do call ",oper,"(",newarg,")\n"); ## DEBUG
-      return CallFuncList(oper,newarg);
+      for p in [1..Length(filts)] do ## first come first served ;-)
+        if pos[p] = 0 then continue; fi; ## already tested - not working
+        newarg := Concatenation(arg{[1..pos[p]-1]},
+          [Flat(arg{[pos[p]..pos[p]+(Length(arg)-l[p])]})],
+          arg{[pos[p]+(Length(arg)-l[p])+1..Length(arg)]});
+    	  filters := Concatenation(filts[p]{[1..pos[p]-1]},
+          [IsList],filts[p]{[pos[p]..Length(filts[p])]});
+        ## Print(">> Do call ",oper,"(",newarg,")\n"); ## DEBUG
+      	if ForAll([1..Length(newarg)],i -> filters[i](newarg[i])) then
+      	  return CallFuncList(oper,newarg);
+      	fi;
+      od;
+      ## TODO: Error message
     end;
     BindGlobal(name,disp);
   end
