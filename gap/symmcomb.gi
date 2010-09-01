@@ -41,7 +41,7 @@
 InstallMethod(
   LexicographicOp,
   "for two partitions",
-  [IsList,IsList],      
+  [IsList,IsList],
   function(lambda,mu) return lambda=mu or lambda>mu; end
 ); # LexicographicOp
 
@@ -50,7 +50,7 @@ InstallMethod(
 InstallMethod(
   LengthLexicographicOp,
   "for two partitions",
-  [IsList,IsList],      
+  [IsList,IsList],
   function(mu,nu)
     if Length(mu)=Length(nu) then
       return mu=nu or mu>nu;
@@ -63,7 +63,7 @@ InstallMethod(
 InstallMethod(
   ReverseDominanceOp,
   "for two partitions",
-  [IsList,IsList],      
+  [IsList,IsList],
   function(nu,mu) local i, Mu, Nu;
     if Length(nu)=Length(mu) then
       i:=Length(mu);
@@ -85,7 +85,7 @@ InstallMethod(
 InstallMethod(
   DominatesOp,
   "for two partitions",
-  [IsList,IsList],      
+  [IsList,IsList],
   function(mu, nu) local i, m, n;
     if nu=mu then return true;
     elif Sum(nu)=0 then return true;
@@ -105,9 +105,9 @@ InstallMethod(
 ## The coonjugate partition to arg.
 #F ConjugatePartition(mu);  -mu is a sequence or a list
 InstallMethod(
-  ConjugatePartitionOp,  
+  ConjugatePartitionOp,
   "for partition",
-  [IsList],      
+  [IsList],
   function(arg) local part, d, l, dl, x;
     part:=Flat(arg);
     d:=[];
@@ -126,7 +126,7 @@ InstallMethod(
 
 #F The Littlewood-Richardson Rule.
 ## the algorithm has (at least), one obvious improvement in that it should
-## collect like terms using something like H.operations.Collect after wrapping 
+## collect like terms using something like H.operations.Collect after wrapping
 ## on each row of beta.
 InstallMethod(
   LittlewoodRichardsonRuleOp,
@@ -181,7 +181,7 @@ InstallMethod(
     if alpha=[] or alpha=[0] then return [ beta ];
     elif beta=[] or beta=[0] then return [ alpha ];
     elif Length(beta)*Sum(beta) > Length(alpha)*Sum(alpha) then
-      return LittlewoodRichardsonRuleOp(beta, alpha); 
+      return LittlewoodRichardsonRuleOp(beta, alpha);
     else
       lrr:=Place(rec(lam:=StructuralCopy(alpha),# partition
                    new:=List(alpha, i->0)),  # new nodes added from this row
@@ -202,15 +202,15 @@ InstallMethod(
   end
 ); # LittlewoodRichardsonRuleOp
 
-#F Not used anywhere, but someone might want it. It wouldn't be too hard 
+#F Not used anywhere, but someone might want it. It wouldn't be too hard
 ## to write something more efficient, but...
 InstallMethod(
   LittlewoodRichardsonCoefficientOp,
   "for three partitions", ##TODO Better description here
-  [IsList,IsList,IsList],  
-  function(lambda,mu,nu) 
+  [IsList,IsList,IsList],
+  function(lambda,mu,nu)
     local x;
-  
+
     if Sum(nu)<>Sum(mu)+Sum(lambda) then return 0;
     else return Length(Filtered(LittlewoodRichardsonRuleOp(lambda,mu),x->x=nu));
     fi;
@@ -322,7 +322,7 @@ InstallMethod(
 
     return Dim(part);
   end
-); 
+);
 
 InstallMethod(
   SpechtDimensionOp,
@@ -341,7 +341,7 @@ InstallMethod(
 InstallMethod(
   BetaNumbersOp,
   "for partitions",
-  [IsList],  
+  [IsList],
   function(mu)
     return mu + [Length(mu)-1, Length(mu)-2..0];
   end
@@ -351,7 +351,7 @@ InstallMethod(
 ## returns a set of the beta numbers for the partition mu
 ## InstallMethod(
 ##   BetaSetOp,
-##   [IsList], 
+##   [IsList],
 ##   function(mu)
 ##     if mu=[] then return [0];
 ##     else return Reversed(mu) + [0..Length(mu)-1];
@@ -363,11 +363,11 @@ InstallMethod(
 InstallMethod(
   PartitionBetaSetOp,
   "for beta sets",
-  [IsList], 
+  [IsList],
   function(beta) local i;
     if beta[Length(beta)]=Length(beta)-1 then return []; fi;
     beta:=beta-[0..Length(beta)-1];
-    if beta[1]=0 then 
+    if beta[1]=0 then
       beta:=beta{[First([1..Length(beta)],i->beta[i]>0)..Length(beta)]};
     fi;
     return Reversed(beta);
@@ -377,12 +377,12 @@ InstallMethod(
 
 ## **** undocumented
 ## The runners for a partition on an abacus; a multiple of e-runners
-## is returned  
+## is returned
 #F EAbacusRunners(mu);  -mu is a list
 InstallMethod(
   EAbacusRunnersOp,
   "for an integer and a partition",
-  [IsInt,IsList],  
+  [IsInt,IsList],
   function(e,mu) local i, j, k, aba, beta;
     aba:=List([1..e], i->[]);
     if mu=[] or mu=[0] then return aba; fi;
@@ -390,8 +390,8 @@ InstallMethod(
     ## first we find a set of beta numbers for mu; we want an e-multiple
     ## of (strictly) decreasing beta numbers for mu.
     beta:=BetaNumbersOp(mu);
-    
-    if Length(beta) mod e <> 0 then ## now add beta numbers back to get 
+
+    if Length(beta) mod e <> 0 then ## now add beta numbers back to get
       i:=-Length(beta) mod e;       ## an e-multiple of beta numbers
       beta:=beta+i;
       Append(beta,[i-1,i-2..0]);
@@ -401,7 +401,7 @@ InstallMethod(
       Add(aba[ (i mod e)+1 ], Int(i/e) );
     od;
     return aba;
-  end 
+  end
 ); # EAbacusRunnersOp
 
 #F ECore(e,mu), ECore(H,mu); -mu is a sequence or a list
@@ -411,7 +411,7 @@ InstallMethod(
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local core, beta, i, j;
-    if e=0 then return mu; fi;  
+    if e=0 then return mu; fi;
     beta:=List(EAbacusRunnersOp(e,mu), i->Length(i));
     beta:=beta - Minimum(beta);  # remove all fully occupied rows
     if Maximum(beta)=0 then return [];
@@ -428,7 +428,7 @@ InstallMethod(
         i:=First([1..Length(core)], i->core[i]<>i-1);
         core:=core{[i..Length(core)]}-i+1;
       fi;
-      
+
       ## finally, we unravel the beta numbers of our core
       core:=List([1..Length(core)],i->core[i]-i+1);
       return core{[Length(core),Length(core)-1..1]};
@@ -562,7 +562,7 @@ InstallMethod(
 ); # EAbacusOp
 
 ## combine a quotient and core to give a partition using abacuses.
-#F CombineEQuotientECore(e,quot,core);  
+#F CombineEQuotientECore(e,quot,core);
 ##   <quot> is a list of e-partitions and <core> is a partition.
 InstallMethod(
 	CombineEQuotientECoreOp,
@@ -623,7 +623,7 @@ InstallMethod(
       return ForAll([1..Length(mu)-e], i->mu[i]<>mu[i+e]);
     fi;
 	end
-); 
+);
 
 InstallMethod(
 	IsERegularOp,
@@ -682,12 +682,13 @@ InstallMethod(
     if mu=[] then Print("\n");
     else
       for i in [1..Length(mu)] do
-        for j in [1..mu[i]] do 
-          Print(String((j-i) mod e,4)); 
+        for j in [1..mu[i]] do
+          Print(String((j-i) mod e,4));
         od;
         Print("\n");
       od;
     fi;
+    return true;
 	end
 );
 
@@ -696,7 +697,7 @@ InstallMethod(
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		EResidueDiagramOp(OrderOfQ(H),mu);
+		return EResidueDiagramOp(OrderOfQ(H),mu);
 	end
 );
 
@@ -715,10 +716,11 @@ InstallMethod(
         EResidueDiagramOp(e, r[2]);
       od;
       if Length(rs) > 1 then
-        Print("# There are ", Length(rs), " ", e, 
+        Print("# There are ", Length(rs), " ", e,
                 "-regular partitions.\n");
       fi;
     fi;
+    return true;
 	end
 ); # EResidueDiagramOp
 
@@ -731,15 +733,15 @@ InstallMethod(
 	function(e,mu) local ladder, r, c, C, k;
     ladder:=List(mu,r->List([1..r],c->0));
 
-    for r in [2..Length(mu)] do  
+    for r in [2..Length(mu)] do
       for c in [1..mu[r]] do
         k:=r-(e-1)*Int(r/(e-1));
         if k<1 then k:=k+e-1; fi;
         while k<r do
           C:=c+(r-k)/(e-1);
           if IsBound(ladder[k][C]) then k:=k+e-1;
-          else 
-            ladder[k][C]:=0; 
+          else
+            ladder[k][C]:=0;
             Unbind(ladder[r][c]);
             k:=r;
           fi;
@@ -759,9 +761,9 @@ InstallMethod(
 	end
 ); # ETopLadderOp
 
-#P hook lengths in a diagram mod e 
+#P hook lengths in a diagram mod e
 ## *** undocumented: useful when lookng at the q-Schaper theorem
-InstallMethod( 
+InstallMethod(
 	EHookDiagramOp, ##TODO Naming?
 	"for an integer and a partition",
 	[IsInt,IsList],
@@ -773,6 +775,7 @@ InstallMethod(
       od;
       Print("\n");
     od;
+    return true;
 	end
 );
 
@@ -781,14 +784,14 @@ InstallMethod(
 	"for an algebra and a partition",
 	[IsAlgebraObj,IsList],
 	function(H,mu)
-		EHookDiagramOp(OrderOfQ(H),mu);
+		return EHookDiagramOp(OrderOfQ(H),mu);
 	end
 ); # EHookDiagramOp
 
 #P hook length diagram
 InstallMethod(
 	HookLengthDiagramOp,
-	"for an integer and a partition",
+	"for a partition",
 	[IsList],
 	function(mu) local mud, i, j;
     mud:=ConjugatePartitionOp(mu);
@@ -798,10 +801,11 @@ InstallMethod(
       od;
       Print("\n");
     od;
+    return true;
 	end
 ); # HookLengthDiagramOp
 
-#F Returns the numbers of the rows which end in one of Kleshchev's 
+#F Returns the numbers of the rows which end in one of Kleshchev's
 ## "normal nodes" (see [LLT] or one of Kleshchev's papers for a description).
 ##   usage: NormalNodes(H|e, mu [,i]);
 InstallMethod(
@@ -813,9 +817,9 @@ InstallMethod(
     res:=List([1..e], i->0);          ## tally of #removable-#addable r-nodes
     for i in [1..Length(mu)] do
       r:=(mu[i]-i) mod e;
-      r:=r+1; 
+      r:=r+1;
       if i=Length(mu) or mu[i]>mu[i+1] then  ## removable r-node
-        if res[r]=0 then Add(normalnodes[r],i); 
+        if res[r]=0 then Add(normalnodes[r],i);
         else res[r]:=res[r]+1;
         fi;
       fi;
@@ -900,7 +904,7 @@ InstallMethod(
 	end
 ); # RemoveNormalNodesOp
 
-#F Returns the numbers of the rows which end in one of Kleshchev's 
+#F Returns the numbers of the rows which end in one of Kleshchev's
 ## "good nodes" (see [LLT] or one of Kleshchev's papers for a description).
 ## Basically, reading from the top down, count +1 for a *removable* node
 ## of residue r and -1 for an *addable* node of residue r. The last
@@ -918,9 +922,9 @@ InstallMethod(
     res:=List([1..e], i->0);          ## tally of #removable-#addable r-nodes
     for i in [1..Length(mu)] do
       r:=(mu[i]-i) mod e;
-      r:=r+1; 
+      r:=r+1;
       if i=Length(mu) or mu[i]>mu[i+1] then  ## removable r-node
-        if res[r]=0 then goodnodes[r]:=i; 
+        if res[r]=0 then goodnodes[r]:=i;
         else res[r]:=res[r]+1;
         fi;
       fi;
@@ -989,12 +993,12 @@ InstallMethod(
       repeat
         if r=(mu[row]-row) mod e and (row=Length(mu) or mu[row]>mu[row+1])
         then
-           if res=0 then 
+           if res=0 then
              if mu[row]=1 then Unbind(mu[row]);
              else mu[row]:=mu[row]-1;
              fi;
              Add(goodnodeseq, r);
-           else res:=res+1; 
+           else res:=res+1;
            fi;
          elif r=(mu[row]+1-row) mod e and mu[row]<mu[row-1] then ## addable
            res:=res-1;
@@ -1025,7 +1029,7 @@ InstallMethod(
       Error("GoodNodeSequence(<e>,<mu>): <mu> must be <e>-regular\n");
     fi;
 
-    if mu=[1] then gnss:=[ [0] ]; 
+    if mu=[1] then gnss:=[ [0] ];
     else
       gnss:=[];
       for r in GoodNodesOp(e,mu) do
@@ -1035,7 +1039,7 @@ InstallMethod(
           if nu[r]=0 then Unbind(nu[r]); fi;
           res:=(mu[r]-r) mod e;
           for s in GoodNodeSequencesOp(e,nu) do
-            Add(s,res); 
+            Add(s,res);
             Add(gnss, s);
           od;
         fi;
@@ -1067,7 +1071,7 @@ InstallMethod(
       row:=0;
       res:=0;
       for i in [1..Length(mu)] do
-        if r=(mu[i]-i) mod e and (i=Length(mu) or mu[i]>mu[i+1]) and res<0 
+        if r=(mu[i]-i) mod e and (i=Length(mu) or mu[i]>mu[i+1]) and res<0
         then res:=res+1;
         elif r=(mu[i]+1-i) mod e and (i=1 or mu[i]<mu[i-1]) then
           if res=0 then row:=i; fi;
@@ -1115,7 +1119,7 @@ InstallMethod(
 	end
 ); # GoodNodeLatticePathOp
 
-#F GoodNodeLatticePath: returns the list of all paths in the good partition 
+#F GoodNodeLatticePath: returns the list of all paths in the good partition
 ## lattice from the empty partition to <mu>.
 InstallMethod(
 	GoodNodeLatticePathsOp,
@@ -1173,12 +1177,12 @@ InstallMethod(
 ## the algorithms is basically to shuffle the first column hooks lengths;
 ## this is a reformulation of Mullineux's approach.
 ## e.g. if e=3 and mu=[4,3,2] then we do the following:
-##    betanums =  [6, 4, 2, 0] 
-##             -> [4, 3, 1, 0] :6->4, 4->3 ( we want 2 but can only 
+##    betanums =  [6, 4, 2, 0]
+##             -> [4, 3, 1, 0] :6->4, 4->3 ( we want 2 but can only
 ##                                           remove 1 more node as e=3 )
 ##             -> [3, 2, 1, 0].
 ## To get the Mullineux symbols we record the number of beads removed at
-## each stage and also the number of signiciant numbers in the previous 
+## each stage and also the number of signiciant numbers in the previous
 ## beta number (i.e. the numebr of rows); here we get
 ##                  5, 3, 1
 ##                  3, 2, 1
@@ -1188,7 +1192,7 @@ InstallMethod(
 	[IsInt,IsList],
 	function(e,mu) local betaset, newbetaset, tally, difference,i,ms;
 		if mu=[] or mu=[0] then return [ [0],[0] ];
-    elif IsList(mu[1]) then mu:=mu[1]; 
+    elif IsList(mu[1]) then mu:=mu[1];
     fi;
     betaset:=BetaSet(mu);
     ms:=[ [],[] ];
@@ -1212,7 +1216,7 @@ InstallMethod(
       betaset:=newbetaset;
       if not IsSet(betaset) then return fail; fi; ## can happen?
       if betaset[1]=0 then
-        if betaset[Length(betaset)]=Length(betaset)-1 then 
+        if betaset[Length(betaset)]=Length(betaset)-1 then
           betaset:=[];
         else
           i:=First([1..Length(betaset)], i->betaset[i]<>i-1);
@@ -1233,7 +1237,7 @@ InstallMethod(
 	end
 ); # MullineuxSymbolOp
 
-#F given a Mullineux Symbol <ms> and an integer <e>, return the corresponding 
+#F given a Mullineux Symbol <ms> and an integer <e>, return the corresponding
 ## <e>-regular partition.
 InstallMethod(
 	PartitionMullineuxSymbolOp,
@@ -1254,7 +1258,7 @@ InstallMethod(
           if tally=0 then tally:=e; fi;
           ms[1][i]:=ms[1][i]-tally;
         fi;
-        if betaN=Length(betaset) then 
+        if betaN=Length(betaset) then
           betaset[betaN]:=betaset[betaN]+tally;
           tally:=0;
         else
@@ -1284,7 +1288,7 @@ InstallMethod(
 	end
 ); # PartitionMullineuxSymbolOp
 
-#F removes the rim hook from mu which corresponding to the 
+#F removes the rim hook from mu which corresponding to the
 ## (row,cols)-th hook.
 InstallMethod(
 	RemoveRimHookOp,
@@ -1315,7 +1319,7 @@ InstallMethod(
   end
 ); # RemoveRimHookOp
 
-#F Returns the partition obtained from mu by adding a rim hook with 
+#F Returns the partition obtained from mu by adding a rim hook with
 ## foot in row <row>, of length of length <h>. The empty partition []
 ## is returned if the resulting diagram is not a partition.
 InstallMethod(
@@ -1330,10 +1334,10 @@ InstallMethod(
     fi;
     while r > 1 and h > 0 do
       h:=h-nu[r-1]+nu[r]-1;
-      if h > 0 then 
-        nu[r]:=nu[r-1]+1; 
+      if h > 0 then
+        nu[r]:=nu[r-1]+1;
         r:=r-1;
-      elif h < 0 then 
+      elif h < 0 then
         nu[r]:=h+nu[r-1]+1;
       fi;
     od;

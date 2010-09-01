@@ -10,8 +10,8 @@
 #############################################################################
 
 ReadPackage("specht","gap/global.gd");
+ReadPackage("specht","gap/dispatcher.gd");
 ReadPackage("specht","gap/specht.gd");
 ReadPackage("specht","gap/output.gd");
-ReadPackage("specht","gap/dispatcher.gd");
 ReadPackage("specht","gap/symmcomb.gd");
 ReadPackage("specht","gap/tableaux.gd");

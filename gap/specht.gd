@@ -108,7 +108,7 @@ MakeDispatcherFunc("MakeFockSpecht",[[IsAlgebraObj]],[2],[2]);
 MakeDispatcherFunc("MakeFockPIM",[[IsAlgebraObj]],[2],[2]);
 
 DeclareOperation("InnerProduct",[IsAlgebraObjModule,IsAlgebraObjModule]);
-DeclareOperation("Coefficient",[IsAlgebraObjModule,IsList]);
+MakeDispatcherFunc("Coefficient",[[IsAlgebraObjModule]],[2],[2]);
 DeclareOperation("PositiveCoefficients",[IsAlgebraObjModule]);
 DeclareOperation("IntegralCoefficients",[IsAlgebraObjModule]);
 
@@ -139,9 +139,9 @@ MakeDispatcherFunc("SplitECores",
 	[ 2									 , 1									,	2]);
 MakeDispatcherFunc("IsSimpleModule", [[IsAlgebraObj]],[2],[2]);
 MakeDispatcherFunc("MullineuxMap",
-	[[IsAlgebraObj],[IsInt],[IsAlgebraObjModule],[IsDecompositionMatrix]],
-	[ 2						 , 2		 , 0									, 2											],
-	[ 2						 , 2		 , 1									, 2											]);
+	[[IsAlgebraObj],[IsInt],[IsDecompositionMatrix],[IsAlgebraObjModule],],
+	[ 2						 , 2		 , 2                     , 0								 ],
+	[ 2						 , 2		 , 2                     , 1								 ]);
 MakeDispatcherFunc("Schaper", [[IsAlgebraObj]],[2],[2]);
 DeclareOperation("SchaperMatrix",[IsDecompositionMatrix]);
 
@@ -167,14 +167,22 @@ DeclareOperation("AdjustmentMatrix",[IsDecompositionMatrix,IsDecompositionMatrix
 DeclareOperation("MatrixDecompositionMatrix",[IsDecompositionMatrix]);
 DeclareOperation("DecompositionMatrixMatrix",[IsAlgebraObj,IsMatrix,IsInt]);
 
-DeclareOperation("RInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
-DeclareOperation("SInducedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
-DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]);
-DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]);
-DeclareOperation("RInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
-DeclareOperation("SInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
-DeclareOperation("RRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
-DeclareOperation("SRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsList]);
+MakeDispatcherFunc("RInducedModule",
+[[IsAlgebraObjModule],
+ [IsAlgebraObj,IsAlgebraObjModule],
+ [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]],[2,3,0],[2,3,4]);
+MakeDispatcherFunc("RRestrictedModule",
+[[IsAlgebraObjModule],
+ [IsAlgebraObj,IsAlgebraObjModule],
+ [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt]],[2,3,0],[2,3,4]);
+MakeDispatcherFunc("SInducedModule",
+[[IsAlgebraObjModule],
+ [IsAlgebraObj,IsAlgebraObjModule],
+ [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]],[2,3,0],[2,3,5]);
+MakeDispatcherFunc("SRestrictedModule",
+[[IsAlgebraObjModule],
+ [IsAlgebraObj,IsAlgebraObjModule],
+ [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt]],[2,3,0],[2,3,5]);
 DeclareOperation("qSInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
 DeclareOperation("qSRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
 

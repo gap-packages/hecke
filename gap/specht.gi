@@ -415,13 +415,13 @@ InstallMethod(SimpleDimensionOp,
         fi;
       fi;
     od;
-    return ();
+    return true;
   end
 );
 
 InstallMethod(SimpleDimensionOp,
   "simple dimensions of a partition from decomposition matrix",
-  [IsAlgebraObj,IsList],
+  [IsDecompositionMatrix,IsList],
   function(d,mu) local c, x;
     c:=Position(d!.cols,mu);
     if c=fail then
@@ -664,7 +664,7 @@ InstallMethod(MullineuxMapOp,
   "for algebras: image of <mu> under the Mullineux map",
   [IsAlgebraObj,IsList],
   function(H,mu)
-    MullineuxMapOp(H!.e,mu);
+    return MullineuxMapOp(H!.e,mu);
   end
 );
 
@@ -673,16 +673,17 @@ InstallMethod(MullineuxMapOp,
   [IsDecompositionMatrix,IsList],
   function(d,mu) local e, x;
     e := d!.H!.e;
-      if not IsERegular(e,mu) then                     ## q-Schur algebra
-        Error("# The Mullineux map is defined only for e-regular ",
-              "partitions\n");
-      fi;
-      x:=d!.H!.P(d,mu);
-      if x=fail or x=0*x then
-        Print("MullineuxMap(<d>,<mu>), P(<d>,<mu>) not known\n");
-        return fail;
-      else return ConjugatePartition(x!.parts[1]);
-      fi;
+    if not IsERegular(e,mu) then                     ## q-Schur algebra
+      Error("# The Mullineux map is defined only for e-regular ",
+            "partitions\n");
+    fi;
+    x:=d!.H!.P(d,mu);
+    if x=fail or x=0*x then
+      Print("MullineuxMap(<d>,<mu>), P(<d>,<mu>) not known\n");
+      return fail;
+    else return ConjugatePartition(x!.parts[1]);
+    fi;
+    return true;
   end
 ); # MullineuxMap
 
@@ -1174,15 +1175,21 @@ InstallMethod(SaveDecompositionMatrix,
 
     TightList:=function(list) local l, str;
       str:="[";
-      for l in list{[1..Length(list)]} do
+      for l in list{[1..Length(list)-1]} do
         if IsList(l) then
-          Print(str);
-          TightList(l);
-        else Print(str,l);
+          l:=TightList(l);
+          str:=Concatenation(str,l);
+        else str:=Concatenation(str,String(l));
         fi;
-        str:=",";
+        str:=Concatenation(str,",");
       od;
-      Print("]");
+      l:=list[Length(list)];
+      if IsList(l) then
+        l:=TightList(l);
+        str:=Concatenation(str,l);
+      else str:=Concatenation(str,String(l));
+      fi;
+      return Concatenation(str,"]");
     end;
 
     if d=fail then Error("SaveDecompositionMatrix(<d>), d=fail!!!\n"); fi;
@@ -1229,8 +1236,8 @@ InstallMethod(SaveDecompositionMatrix,
           str:=",[";
         fi;
       od;
-      AppendTo(file,"],rows:=",TightStringList(d!.rows));
-      AppendTo(file,",cols:=",TightStringList(d!.cols));
+      AppendTo(file,"],rows:=",TightList(d!.rows));
+      AppendTo(file,",cols:=",TightList(d!.cols));
       if IsCrystalDecompositionMatrix(d) then
         AppendTo(file,",crystal:=true");
       fi;
@@ -1536,7 +1543,7 @@ InstallMethod(MakeSpechtOp,"S[q]()->S[q]()",[IsDecompositionMatrix,IsHeckeSpecht
 ## Grothendieck ring there are many ways to write a given linear
 ## combination of Specht modules (or PIMs).
 InstallMethod(MakePIMOp,"S()->P()",[IsHeckeSpecht,IsBool],
-  function(x,silent) local proj;
+  function(x,silent) local proj, tmp;
     if x=fail or x=0*x then return x;
     elif x!.parts=[[]] then return Module(x!.H,"P",x!.coeffs[1],[]);
     fi;
@@ -1546,9 +1553,10 @@ InstallMethod(MakePIMOp,"S()->P()",[IsHeckeSpecht,IsBool],
     ( not IsHecke(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
       proj:=proj+Module(x!.H,"P",x!.coeffs[Length(x!.parts)],
                                       x!.parts[Length(x!.parts)]);
-      x:=x+MakeSpechtOp(
+      tmp:=MakeSpechtOp(
                 Module(x!.H,"P",-x!.coeffs[Length(x!.parts)],
                                       x!.parts[Length(x!.parts)]),true);
+      if tmp<>fail then x:=x+tmp; else x:=fail; fi;
     od;
     if x=fail or x<>0*x then
       if not silent then
@@ -1914,10 +1922,6 @@ InstallMethod(MakeSpechtOp,"H.S(mu)",[IsAlgebraObj,IsList],
       z:=Position(mu,0);
       if z<>fail then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
     fi;
-    if IsHecke(H) and not IsERegular(H!.e,mu) then
-      Error("S(mu): <mu>=[",TightStringList(mu),
-              "] must be ", H!.e,"-regular\n\n");
-    fi;
     return Module(H,"S", 1, mu);
   end
 );
@@ -1938,10 +1942,6 @@ InstallMethod(MakeSpechtOp,"H.S(d,mu)",[IsDecompositionMatrix,IsList],
       z:=Position(mu,0);
       if z<>fail then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
     fi;
-    if IsHecke(d!.H) and not IsERegular(d!.H!.e,mu) then
-      Error("S(mu): <mu>=[",TightStringList(mu),
-              "] must be ", d!.H!.e,"-regular\n\n");
-    fi;
     return MakeSimpleOp(d,Module(d!.H,"S", 1, mu));
   end
 );
@@ -1961,10 +1961,6 @@ InstallMethod(MakePIMOp,"H.P(mu)",[IsAlgebraObj,IsList],
       fi;
       z:=Position(mu,0);
       if z<>fail then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
-    fi;
-    if IsHecke(H) and not IsERegular(H!.e,mu) then
-      Error("P(mu): <mu>=[",TightStringList(mu),
-              "] must be ", H!.e,"-regular\n\n");
     fi;
     return Module(H,"P", 1, mu);
   end
@@ -2106,7 +2102,8 @@ InstallMethod(MakeFockPIMOp,"H.Pq(mu)",[IsAlgebraObj,IsList],
 ## ARITHMETICS #################################################################
 InstallMethod(\=,"compare modules",[IsAlgebraObjModule,IsAlgebraObjModule],
   function(a,b) return a!.H=b!.H and a!.module=b!.module
-    and Set(Zip(a!.coeffs,a!.parts))=Set(Zip(b!.coeffs,b!.parts)); end
+    and Length(a!.parts)=Length(b!.parts) and Length(a!.coeffs)=Length(b!.coeffs)
+    and ForAll(Zip(a!.coeffs,a!.parts),a->a in Zip(b!.coeffs,b!.parts)); end
 );
 
 InstallMethod(\+,"add modules",[IsAlgebraObjModule,IsAlgebraObjModule],
@@ -2274,7 +2271,7 @@ InstallMethod(InnerProduct,"inner product of modules",
 );  # InnerProduct
 
 #F Returns the Coefficient of p in x
-InstallMethod(Coefficient, "extract coefficient of a partition from module",
+InstallMethod(CoefficientOp, "extract coefficient of a partition from module",
   [IsAlgebraObjModule,IsList],
   function(x,p) local pos;
     pos:=Position(x!.parts, p);
@@ -2325,7 +2322,7 @@ InstallMethod(IntegralCoefficients,
 ## modules; conversations are done in H.operations.X.Y() as necessary.
 
 ## r-induction: on Specht modules:
-InstallMethod(RInducedModule, "r-induction on specht modules",
+InstallMethod(RInducedModuleOp, "r-induction on specht modules",
   [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt],
   function(H, a, e, r) local ind, x, i, j, np;
     ind:=[[],[]];
@@ -2360,7 +2357,7 @@ InstallMethod(RInducedModule, "r-induction on specht modules",
 ## write H.operations.X.SInduce to as to make this choice for us, or
 ## do q-induction always, setting v=1 afterwards, but this seems the
 ## better choice.
-InstallMethod(SInducedModule,"string-induction on specht modules",
+InstallMethod(SInducedModuleOp,"string-induction on specht modules",
   [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt],
   function(H, x, e, s, r) local coeffs, parts, y, z, sinduced;
     # add n nodes of residue r to the partition y from the i-th row down
@@ -2404,7 +2401,7 @@ InstallMethod(SInducedModule,"string-induction on specht modules",
 );  # SInducedModule
 
 ## r-restriction
-InstallMethod(RRestrictedModule,"r-restriction on specht modules",
+InstallMethod(RRestrictedModuleOp,"r-restriction on specht modules",
   [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt],
   function(H, a, e, r) local ind, x, i, j, np;
     ind:=[[],[]];
@@ -2427,7 +2424,7 @@ InstallMethod(RRestrictedModule,"r-restriction on specht modules",
 ); #RRestrictedModule
 
 ## string-restriction: remove m r's from each partition in x
-InstallMethod(SRestrictedModule,"string-restriction on specht modules",
+InstallMethod(SRestrictedModuleOp,"string-restriction on specht modules",
   [IsAlgebraObj,IsHeckeSpecht,IsInt,IsInt,IsInt],
   function(H,x,e,s,r) local coeffs, parts, y, i, srestricted;
     ## remove n nodes from y from the ith row down
@@ -2462,7 +2459,7 @@ InstallMethod(SRestrictedModule,"string-restriction on specht modules",
 );  # SRestrictedModule
 
 ## Induction and restriction; for S()
-InstallMethod(RInducedModule, "r-induction for specht modules",
+InstallMethod(RInducedModuleOp, "r-induction for specht modules",
   [IsAlgebraObj, IsHeckeSpecht, IsList],
   function(H, x, list) local r;
     if x=fail or x=0*x then return x;
@@ -2480,7 +2477,7 @@ InstallMethod(RInducedModule, "r-induction for specht modules",
   end
 );
 
-InstallMethod(RInducedModule, "r-induction for projective indecomposable modules",
+InstallMethod(RInducedModuleOp, "r-induction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
   function(H, x, list) local nx;
     x:=RInducedModule(H,MakeSpechtOp(x,false),list);
@@ -2490,7 +2487,7 @@ InstallMethod(RInducedModule, "r-induction for projective indecomposable modules
   end
 );
 
-InstallMethod(RInducedModule, "r-induction for simple modules",
+InstallMethod(RInducedModuleOp, "r-induction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
   function(H, x, list) local nx;
     x:=RInducedModule(H,MakeSpechtOp(x,false),list);
@@ -2500,7 +2497,7 @@ InstallMethod(RInducedModule, "r-induction for simple modules",
   end
 );
 
-InstallMethod(RInducedModule, "r-induction for Fock space specht modules",
+InstallMethod(RInducedModuleOp, "r-induction for Fock space specht modules",
   [IsAlgebraObj,IsFockSpecht,IsList],
   function(H, x, list) local r;
     if list=[] then return Sum([0..H!.e-1],r->qSInducedModule(H,x,1,r));
@@ -2517,7 +2514,7 @@ InstallMethod(RInducedModule, "r-induction for Fock space specht modules",
   end
 );
 
-InstallMethod(RInducedModule,
+InstallMethod(RInducedModuleOp,
   "r-induction for Fock space projective indecomposable modules",
   [IsAlgebraObj,IsFockPIM,IsList],
   function(H,x,list)
@@ -2525,7 +2522,7 @@ InstallMethod(RInducedModule,
   end
 );
 
-InstallMethod(RInducedModule,
+InstallMethod(RInducedModuleOp,
   "r-induction for Fock space simple modules",
   [IsAlgebraObj,IsFockSimple,IsList],
   function(H,x,list)
@@ -2533,7 +2530,7 @@ InstallMethod(RInducedModule,
   end
 ); # RInducedModule
 
-InstallMethod(RRestrictedModule, "r-restriction for specht modules",
+InstallMethod(RRestrictedModuleOp, "r-restriction for specht modules",
   [IsAlgebraObj, IsHeckeSpecht, IsList],
   function(H, x, list) local r;
     if x=fail or x=0*x then return x;
@@ -2551,7 +2548,7 @@ InstallMethod(RRestrictedModule, "r-restriction for specht modules",
   end
 );
 
-InstallMethod(RRestrictedModule, "r-restriction for projective indecomposable modules",
+InstallMethod(RRestrictedModuleOp, "r-restriction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
   function(H, x, list) local nx;
     x:=RRestrictedModule(H,MakeSpechtOp(x,false),list);
@@ -2561,7 +2558,7 @@ InstallMethod(RRestrictedModule, "r-restriction for projective indecomposable mo
   end
 );
 
-InstallMethod(RRestrictedModule, "r-restriction for simple modules",
+InstallMethod(RRestrictedModuleOp, "r-restriction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
   function(H, x, list) local nx;
     x:=RRestrictedModule(H,MakeSpechtOp(x,false),list);
@@ -2571,7 +2568,7 @@ InstallMethod(RRestrictedModule, "r-restriction for simple modules",
   end
 );
 
-InstallMethod(RRestrictedModule, "r-restriction for Fock space specht modules",
+InstallMethod(RRestrictedModuleOp, "r-restriction for Fock space specht modules",
   [IsAlgebraObj,IsFockSpecht,IsList],
   function(H, x, list) local r;
     if list=[] then return Sum([0..H!.e-1],r->qSRestrictedModule(H,x,1,r));
@@ -2580,7 +2577,7 @@ InstallMethod(RRestrictedModule, "r-restriction for Fock space specht modules",
     elif ForAny(list,r-> r>=H!.e or r<0) then
       Error("Restrict, r-restriction is defined only when 0<=r<e.\n");
     else
-      for r in list do   ## we could do sliprojective indecomposableghtly better here
+      for r in list do   ## we could do slightly better here
         x:= qSRestrictedModule(H,x,1,r);
       od;
       return x;
@@ -2588,7 +2585,7 @@ InstallMethod(RRestrictedModule, "r-restriction for Fock space specht modules",
   end
 );
 
-InstallMethod(RRestrictedModule,
+InstallMethod(RRestrictedModuleOp,
   "r-restriction for Fock space projective indecomposable modules",
   [IsAlgebraObj,IsFockPIM,IsList],
   function(H,x,list)
@@ -2596,7 +2593,7 @@ InstallMethod(RRestrictedModule,
   end
 );
 
-InstallMethod(RRestrictedModule,
+InstallMethod(RRestrictedModuleOp,
   "r-restriction for Fock space simple modules",
   [IsAlgebraObj,IsFockSimple,IsList],
   function(H,x,list)
@@ -2604,7 +2601,7 @@ InstallMethod(RRestrictedModule,
   end
 ); # RRestrictedModule
 
-InstallMethod(SInducedModule,"string induction for specht modules",
+InstallMethod(SInducedModuleOp,"string induction for specht modules",
   [IsAlgebraObj, IsHeckeSpecht, IsList],
   function(H, x, list) local r;
     if x=fail or x=0*x then return x;
@@ -2625,7 +2622,7 @@ InstallMethod(SInducedModule,"string induction for specht modules",
   end
 );
 
-InstallMethod(SInducedModule, "string induction for projective indecomposable modules",
+InstallMethod(SInducedModuleOp, "string induction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
   function(H, x, list) local nx;
     x:=SInducedModule(H,MakeSpechtOp(x,false),list);
@@ -2635,7 +2632,7 @@ InstallMethod(SInducedModule, "string induction for projective indecomposable mo
   end
 );
 
-InstallMethod(SInducedModule, "string induction for simple modules",
+InstallMethod(SInducedModuleOp, "string induction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
   function(H, x, list) local nx;
     x:=SInducedModule(H,MakeSpechtOp(x,false),list);
@@ -2645,7 +2642,7 @@ InstallMethod(SInducedModule, "string induction for simple modules",
   end
 );
 
-InstallMethod(SInducedModule, "string induction for Fock space specht modules",
+InstallMethod(SInducedModuleOp, "string induction for Fock space specht modules",
   [IsAlgebraObj,IsFockSpecht,IsList],
   function(H, x, list) local r;
     if Length(list)=1 then
@@ -2665,7 +2662,7 @@ InstallMethod(SInducedModule, "string induction for Fock space specht modules",
   end
 );
 
-InstallMethod(SInducedModule,
+InstallMethod(SInducedModuleOp,
   "string induction for Fock space projective indecomposable modules",
   [IsAlgebraObj,IsFockPIM,IsList],
   function(H,x,list)
@@ -2673,7 +2670,7 @@ InstallMethod(SInducedModule,
   end
 );
 
-InstallMethod(SInducedModule,
+InstallMethod(SInducedModuleOp,
   "string induction for Fock space simple modules",
   [IsAlgebraObj,IsFockSimple,IsList],
   function(H,x,list)
@@ -2681,7 +2678,7 @@ InstallMethod(SInducedModule,
   end
 ); # SInducedModule
 
-InstallMethod(SRestrictedModule,"string restriction for specht modules",
+InstallMethod(SRestrictedModuleOp,"string restriction for specht modules",
   [IsAlgebraObj, IsHeckeSpecht, IsList],
   function(H, x, list) local r;
     if x=fail or x=0*x then return x;
@@ -2702,7 +2699,7 @@ InstallMethod(SRestrictedModule,"string restriction for specht modules",
   end
 );
 
-InstallMethod(SRestrictedModule, "string restriction for projective indecomposable modules",
+InstallMethod(SRestrictedModuleOp, "string restriction for projective indecomposable modules",
   [IsAlgebraObj, IsHeckePIM, IsList],
   function(H, x, list) local nx;
     x:=SRestrictedModule(H,MakeSpechtOp(x,false),list);
@@ -2712,7 +2709,7 @@ InstallMethod(SRestrictedModule, "string restriction for projective indecomposab
   end
 );
 
-InstallMethod(SRestrictedModule, "string restriction for simple modules",
+InstallMethod(SRestrictedModuleOp, "string restriction for simple modules",
   [IsAlgebraObj, IsHeckeSimple, IsList],
   function(H, x, list) local nx;
     x:=SRestrictedModule(H,MakeSpechtOp(x,false),list);
@@ -2722,7 +2719,7 @@ InstallMethod(SRestrictedModule, "string restriction for simple modules",
   end
 );
 
-InstallMethod(SRestrictedModule, "string restriction for Fock space specht modules",
+InstallMethod(SRestrictedModuleOp, "string restriction for Fock space specht modules",
   [IsAlgebraObj,IsFockSpecht,IsList],
   function(H, x, list) local r;
     if Length(list)=1 then
@@ -2742,7 +2739,7 @@ InstallMethod(SRestrictedModule, "string restriction for Fock space specht modul
   end
 );
 
-InstallMethod(SRestrictedModule,
+InstallMethod(SRestrictedModuleOp,
   "string restriction for Fock space projective indecomposable modules",
   [IsAlgebraObj,IsFockPIM,IsList],
   function(H,x,list)
@@ -2750,11 +2747,43 @@ InstallMethod(SRestrictedModule,
   end
 );
 
-InstallMethod(SRestrictedModule,
+InstallMethod(SRestrictedModuleOp,
   "string restriction for Fock space simple modules",
   [IsAlgebraObj,IsFockSimple,IsList],
   function(H,x,list)
     return MakeSimpleOp(SRestrictedModule(H,MakeSpechtOp(x,false),list),false);
+  end
+); #SRestrictedModule
+
+InstallMethod(RInducedModuleOp,
+  "toplevel r-induction",
+  [IsAlgebraObjModule,IsList],
+  function(x,list)
+    return RInducedModuleOp(x!.H,x,list);
+  end
+); #RInducedModule
+
+InstallMethod(RRestrictedModuleOp,
+  "toplevel r-restriction",
+  [IsAlgebraObjModule,IsList],
+  function(x,list)
+    return RRestrictedModuleOp(x!.H,x,list);
+  end
+); #RRestrictedModule
+
+InstallMethod(SInducedModuleOp,
+  "toplevel string induction",
+  [IsAlgebraObjModule,IsList],
+  function(x,list)
+    return SInducedModuleOp(x!.H,x,list);
+  end
+); #SInducedModule
+
+InstallMethod(SRestrictedModuleOp,
+  "toplevel string restriction",
+  [IsAlgebraObjModule,IsList],
+  function(x,list)
+    return SRestrictedModuleOp(x!.H,x,list);
   end
 ); #SRestrictedModule
 
@@ -3071,7 +3100,7 @@ InstallMethod(IsNewIndecomposableOp, "checks whether the given module is indecom
 
     if px=fail and px=0*px then return false; fi;
 
-    if Mu=[] then Message:=Ignore;
+    if Mu=[] then Message:=Ignore; #TODO
     else Message:=Print;
     fi;
 

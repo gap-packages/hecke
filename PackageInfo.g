@@ -304,7 +304,7 @@ Autoload := true,
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.
 # Keywords := ["Smith normal form", "p-adic", "rational matrix inversion"]
-Keywords := ["Leer"]
+Keywords := ["Hecke decomposition"]
 
 ));
 
