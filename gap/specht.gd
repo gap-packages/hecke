@@ -32,7 +32,7 @@ DeclareProperty("IsZeroCharacteristic", IsAlgebraObj);
 DeclareCategory("IsHecke", IsAlgebraObj);
 BindGlobal("HeckeType", NewType(AlgebraObjFamily, IsHecke));
 ##
-DeclareCategory("IsSchur", IsAlgebraObj);
+DeclareCategory("IsSchur", IsHecke);
 BindGlobal("SchurType", NewType(AlgebraObjFamily, IsSchur));
 
 BindGlobal("DecompositionMatrixType", NewType(AlgebraObjFamily, IsDecompositionMatrix));
@@ -51,6 +51,10 @@ DeclareCategory("IsSchurModule", IsHeckeModule);
 DeclareCategory("IsSchurWeyl", IsHeckeSpecht);
 DeclareCategory("IsSchurPIM", IsHeckePIM);
 DeclareCategory("IsSchurSimple", IsHeckeSimple);
+DeclareCategory("IsFockSchurModule", IsFockModule);
+DeclareCategory("IsFockSchurWeyl", IsFockSpecht);
+DeclareCategory("IsFockSchurPIM", IsFockPIM);
+DeclareCategory("IsFockSchurSimple", IsFockSimple);
 
 BindGlobal("HeckeSpechtType", NewType(AlgebraObjFamily, IsHeckeSpecht));
 BindGlobal("HeckePIMType", NewType(AlgebraObjFamily, IsHeckePIM));
@@ -63,16 +67,23 @@ BindGlobal("HeckeSimpleFockType", NewType(AlgebraObjFamily, IsFockSimple));
 BindGlobal("SchurWeylType", NewType(AlgebraObjFamily, IsSchurWeyl));
 BindGlobal("SchurPIMType", NewType(AlgebraObjFamily, IsSchurPIM));
 BindGlobal("SchurSimpleType", NewType(AlgebraObjFamily, IsSchurSimple));
+##
+BindGlobal("SchurWeylFockType", NewType(AlgebraObjFamily, IsFockSchurWeyl));
+BindGlobal("SchurPIMFockType", NewType(AlgebraObjFamily, IsFockSchurPIM));
+BindGlobal("SchurSimpleFockType", NewType(AlgebraObjFamily, IsFockSchurSimple));
 
 DeclareOperation("Specht", [IsInt]);
 DeclareOperation("Specht", [IsInt,IsInt]);
 DeclareOperation("Specht", [IsInt,IsInt,IsFunction]);
 DeclareOperation("Specht", [IsInt,IsInt,IsFunction,IsString]);
-##
 DeclareOperation("Schur", [IsInt]);
 DeclareOperation("Schur", [IsInt,IsInt]);
 DeclareOperation("Schur", [IsInt,IsInt,IsFunction]);
 DeclareOperation("Schur", [IsInt,IsInt,IsFunction,IsString]);
+DeclareOperation("Specht_GenAlgebra", [IsString,IsInt]);
+DeclareOperation("Specht_GenAlgebra", [IsString,IsInt,IsInt]);
+DeclareOperation("Specht_GenAlgebra", [IsString,IsInt,IsInt,IsFunction]);
+DeclareOperation("Specht_GenAlgebra", [IsString,IsInt,IsInt,IsFunction,IsString]);
 
 MakeDispatcherFunc("Hook",[[IsInt]],[2],[2]);
 DeclareOperation("DoubleHook",[IsInt,IsInt,IsInt,IsInt]);

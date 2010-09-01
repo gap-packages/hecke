@@ -236,9 +236,9 @@
 ## little more than a wrapper for the funcions S(), P(), and D().
 ## Originally, I had these as external functions, but decided that it
 ## was better to tie these functions to e=H.e as strongly as possible.
-InstallMethod(Specht,"generate a Hecke-Algebra object",
-  [IsInt,IsInt,IsFunction,IsString],
-  function(e,p,valuation,HeckeRing)
+InstallMethod(Specht_GenAlgebra,"generate a type-Algebra object",
+  [IsString,IsInt,IsInt,IsFunction,IsString],
+  function(type,e,p,valuation,HeckeRing)
     local H;
     if not IsPrime(p) and p<>0
     then Error("Specht(<e>,<p>,<val>), <p> must be a prime number");
@@ -278,30 +278,34 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
     else H.Indeterminate:=1;
     fi;
 
-    Objectify(HeckeType,H);
+    if type = "Schur" then
+      Objectify(SchurType,H);
+    else
+      Objectify(HeckeType,H);
+    fi;
 
     return H;
   end
 );
 
-InstallMethod(Specht,"generate a Hecke-Algebra object",
-  [IsInt,IsInt,IsFunction],
-  function(e,p,val) local ring;
+InstallMethod(Specht_GenAlgebra,"generate a type-Algebra object",
+  [IsString,IsInt,IsInt,IsFunction],
+  function(type,e,p,val) local ring;
     if not IsPrime(p)
     then Error("Specht(<e>,<p>,<val>), <p> must be a prime number");
     fi;
     if e=p then
       ring:=Concatenation("p",String(p),"sym");
-      return Specht(e,p,val,ring);
+      return Specht_GenAlgebra(type,e,p,val,ring);
     else
-      return Specht(e,p,val,"unknown");
+      return Specht_GenAlgebra(type,e,p,val,"unknown");
     fi;
   end
 );
 
-InstallMethod(Specht,"generate a Hecke-Algebra object",
-  [IsInt,IsInt],
-  function(e,p) local val, ring;
+InstallMethod(Specht_GenAlgebra,"generate a type-Algebra object",
+  [IsString,IsInt,IsInt],
+  function(type,e,p) local val, ring;
     if not IsPrime(p)
     then Error("Specht(<e>,<p>,<val>), <p> must be a prime number");
     fi;
@@ -332,13 +336,13 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
         fi;
       end;
     fi;
-    return Specht(e,p,val,ring);
+    return Specht_GenAlgebra(type,e,p,val,ring);
   end
 );
 
-InstallMethod(Specht,"generate a Hecke-Algebra object",
-  [IsInt],
-  function(e) local val;
+InstallMethod(Specht_GenAlgebra,"generate a type-Algebra object",
+  [IsString,IsInt],
+  function(type,e) local val;
       if e=0 then val:=x->x;
       else
         val:=function(x)
@@ -347,8 +351,33 @@ InstallMethod(Specht,"generate a Hecke-Algebra object",
           fi;
         end;
       fi;
-      return Specht(e,0,val,Concatenation("e",String(e), "p0"));
+      return Specht_GenAlgebra(type,e,0,val,Concatenation("e",String(e), "p0"));
   end
+);
+
+InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt],
+  function(e) return Specht_GenAlgebra("Specht",e); end
+);
+InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt,IsInt],
+  function(e,p) return Specht_GenAlgebra("Specht",e,p); end
+);
+InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt,IsInt,IsFunction],
+  function(e,p,val) return Specht_GenAlgebra("Specht",e,p,val); end
+);
+InstallMethod(Specht,"generate a Hecke-Algebra object",[IsInt,IsInt,IsFunction,IsString],
+  function(e,p,val,ring) return Specht_GenAlgebra("Specht",e,p,val,ring); end
+);
+InstallMethod(Schur,"generate a Schur-Algebra object",[IsInt],
+  function(e) return Specht_GenAlgebra("Schur",e); end
+);
+InstallMethod(Schur,"generate a Schur-Algebra object",[IsInt,IsInt],
+  function(e,p) return Specht_GenAlgebra("Schur",e,p); end
+);
+InstallMethod(Schur,"generate a Schur-Algebra object",[IsInt,IsInt,IsFunction],
+  function(e,p,val) return Specht_GenAlgebra("Schur",e,p,val); end
+);
+InstallMethod(Schur,"generate a Schur-Algebra object",[IsInt,IsInt,IsFunction,IsString],
+  function(e,p,val,ring) return Specht_GenAlgebra("Schur",e,p,val,ring); end
 );
 
 InstallImmediateMethod(Characteristic, IsAlgebraObj, 0,
@@ -388,7 +417,7 @@ InstallMethod(SpechtPartitions,"reading access to S.parts",[IsHeckeSpecht],
 InstallMethod(SimpleDimensionOp,
   "all simple dimensions from decomposition matrix",[IsDecompositionMatrix],
   function(d) local cols, collabel, M, c, x;
-    if not IsHecke(d!.H) then
+    if not not IsSchur(d!.H) then
       Print("# SimpleDimension() not implemented for Schur algebras\n");
       return fail;
     fi;
@@ -623,7 +652,7 @@ InstallMethod(MullineuxMapOp,"image of x under Mullineux",[IsAlgebraObjModule],
       return fail;
     fi;
     if x=fail or x=0*x then return fail; fi;
-    if x!.module{[1]}="S" then
+    if IsHeckeSpecht(x) then
       if Length(x!.module)=1 then
         return Collect(x!.H,x!.module,x!.coeffs,
                  List(x!.parts, ConjugatePartition));
@@ -788,7 +817,7 @@ InstallMethod(DecompositionNumber,"for an algebra and two partitions",
   function(H,mu,nu) local Pnu;
     Pnu:=MakeSpechtOp(Module(H,"P",1,nu),true);
     if Pnu<>fail then return Coefficient(Pnu,mu); fi;
-    if IsHecke(H) and not IsERegular(H!.e, nu) then
+    if not IsSchur(H) and not IsERegular(H!.e, nu) then
       Error("DecompositionNumber(H,mu,nu), <nu> is not ",H!.e,"-regular");
     fi;
     return Specht_DecompositionNumber(H,mu,nu);
@@ -837,7 +866,7 @@ InstallMethod(Obstructions,"for a decomposition matrix and a module",
   [IsDecompositionMatrix,IsAlgebraObjModule],
   function(d,Px) local obs, mu, Pmu, possibles;
     obs:=[];
-    if IsHecke(d!.H) then
+    if not IsSchur(d!.H) then
       possibles:=Filtered(Px!.parts, mu->IsERegular(Px!.H!.e, mu));
     else possibles:=Px!.parts;
     fi;
@@ -928,7 +957,7 @@ InstallOtherMethod(DecompositionMatrix,"for an algebra and an integer",
               "\n");
         return d;
       fi;
-      if IsHecke(H) then c:=ERegularPartitions(H!.e,n);
+      if not IsSchur(H) then c:=ERegularPartitions(H!.e,n);
       else c:=Partitions(n);
       fi;
       d:=DecompositionMatrix(H,Partitions(n),c,true);
@@ -991,7 +1020,7 @@ InstallOtherMethod(DecompositionMatrix,
 InstallMethod(CalculateDecompositionMatrix,"for an algebra and an integer",
   [IsAlgebraObj,IsInt],
   function(H,n) local d, c, Px;
-    if IsHecke(H) then c:=ERegularPartitions(H!.e,n);
+    if not IsSchur(H) then c:=ERegularPartitions(H!.e,n);
     else c:=Partitions(n);
     fi;
     d:=DecompositionMatrix(H,Partitions(n),c,true);
@@ -1012,7 +1041,7 @@ InstallMethod(CalculateDecompositionMatrix,"for an algebra and an integer",
 InstallMethod(CrystalDecompositionMatrix,"for an algebra and an integer",
   [IsAlgebraObj,IsInt],
   function(H,n) local d, Px, c;
-    if not IsZeroCharacteristic(H) or not IsHecke(H) then
+    if not IsZeroCharacteristic(H) or not not IsSchur(H) then
       Error("Crystal decomposition matrices are defined only ",
 		         "for Hecke algebras\n         with H!.p=0\n");
     fi;
@@ -1064,7 +1093,7 @@ InstallMethod(InducedDecompositionMatrix,"induce from decomposition matrix",
     fi;
 
     nu:=Partitions(n);
-    if not IsHecke(d!.H) then
+    if IsSchur(d!.H) then
       newd:=DecompositionMatrix(d!.H, nu, nu, true);
     else newd:=DecompositionMatrix(d!.H, nu,
                 ERegularPartitions(d!.H!.e,n),true);
@@ -1202,7 +1231,7 @@ InstallMethod(SaveDecompositionMatrix,
       else
         if IsCrystalDecompositionMatrix(d) then AppendTo(file,"the crystallized "); fi;
         AppendTo(file,"the decomposition matrix\n## of the ");
-        if IsHecke(d!.H) then
+        if not IsSchur(d!.H) then
           if d!.H!.e<>d!.H!.p then AppendTo(file,"Hecke algebra of ");
           else AppendTo(file,"symmetric group ");
           fi;
@@ -1432,12 +1461,18 @@ InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
     ## TODO: Argument tests!?
     module := rec(H:=H,module:=m,coeffs:=c,parts:=p);
 
-    if m = "S" and IsHecke(H) then Objectify(HeckeSpechtType,module);
-    elif m = "P" and IsHecke(H) then Objectify(HeckePIMType,module);
-    elif m = "D" and IsHecke(H) then Objectify(HeckeSimpleType,module);
-    elif m = "Sq" and IsHecke(H) then Objectify(HeckeSpechtFockType,module);
-    elif m = "Pq" and IsHecke(H) then Objectify(HeckePIMFockType,module);
-    elif m = "Dq" and IsHecke(H) then Objectify(HeckeSimpleFockType,module);
+    if m = "S" and not IsSchur(H) then Objectify(HeckeSpechtType,module);
+    elif m = "P" and not IsSchur(H) then Objectify(HeckePIMType,module);
+    elif m = "D" and not IsSchur(H) then Objectify(HeckeSimpleType,module);
+    elif m = "Sq" and not IsSchur(H) then Objectify(HeckeSpechtFockType,module);
+    elif m = "Pq" and not IsSchur(H) then Objectify(HeckePIMFockType,module);
+    elif m = "Dq" and not IsSchur(H) then Objectify(HeckeSimpleFockType,module);
+    elif m = "W" or m = "S" then Objectify(SchurWeylType,module); module!.module:="W";
+    elif m = "P" then Objectify(SchurPIMType,module);
+    elif m = "F" or m = "D" then Objectify(SchurSimpleType,module); module!.module:="F";
+    elif m = "Wq" or m = "Sq" then Objectify(SchurWeylFockType,module); module!.module:="Wq";
+    elif m = "Pq" then Objectify(SchurPIMFockType,module);
+    elif m = "Fq" or m = "Dq" then Objectify(SchurSimpleFockType,module); module!.module:="Fq";
     fi;
 
     return module;
@@ -1446,6 +1481,12 @@ InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
 InstallTrueMethod(IsFockModule,IsFockSpecht);
 InstallTrueMethod(IsFockModule,IsFockPIM);
 InstallTrueMethod(IsFockModule,IsFockSimple);
+InstallTrueMethod(IsSchurModule,IsSchurWeyl);
+InstallTrueMethod(IsSchurModule,IsSchurPIM);
+InstallTrueMethod(IsSchurModule,IsSchurSimple);
+InstallTrueMethod(IsFockSchurModule,IsFockSchurWeyl);
+InstallTrueMethod(IsFockSchurModule,IsFockSchurPIM);
+InstallTrueMethod(IsFockSchurModule,IsFockSchurSimple);
 
 InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsInt,IsList],
   function(H,m,c,p)
@@ -1550,7 +1591,7 @@ InstallMethod(MakePIMOp,"S()->P()",[IsHeckeSpecht,IsBool],
 
     proj:=Module(x!.H,"P",0,[]);
     while x<>fail and x<>0*x and
-    ( not IsHecke(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
+    ( not not IsSchur(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
       proj:=proj+Module(x!.H,"P",x!.coeffs[Length(x!.parts)],
                                       x!.parts[Length(x!.parts)]);
       tmp:=MakeSpechtOp(
@@ -1600,7 +1641,7 @@ InstallMethod(MakeSimpleOp,"S()->D()",[IsHeckeSpecht,IsBool],
     fi;
 
     ## since that didn't work, we use the LLT algorithm when IsBound(H.Pq)
-    if IsZeroCharacteristic(x!.H) and IsHecke(x!.H) then
+    if IsZeroCharacteristic(x!.H) and not IsSchur(x!.H) then
       return Sum([1..Length(x!.parts)],
                  r->x!.coeffs[r]*Specialized(FindSq(x!.H,x!.parts[r])));
     fi;
@@ -1679,7 +1720,7 @@ InstallMethod(MakeSpechtOp,"P()->S()",[IsHeckePIM,IsBool],
     ## since that didn't work, we use the LLT algorithm when
     ## IsBound(H.Pq)
     if IsZeroCharacteristic(x!.H) then
-      if IsHecke(x!.H) or ForAll(x!.parts, c->IsERegular(x!.H!.e,c)) then
+      if not IsSchur(x!.H) or ForAll(x!.parts, c->IsERegular(x!.H!.e,c)) then
         return Sum([1..Length(x!.parts)],c->
                  x!.coeffs[c]*Specialized(FindPq(x!.H,x!.parts[c])));
       fi;
@@ -1770,7 +1811,7 @@ InstallMethod(MakeSpechtOp,"D()->S()",[IsHeckeSimple,IsBool],
     fi;
 
     ## since that didn't work, we use the LLT algorithm when IsBound(H.Pq)
-    if IsZeroCharacteristic(x!.H) and IsHecke(x!.H) then
+    if IsZeroCharacteristic(x!.H) and not IsSchur(x!.H) then
       return Sum([1..Length(x!.parts)],
                    c->x!.coeffs[c]*Specialized(FindDq(x!.H,x!.parts[c])));
     fi;
@@ -1982,7 +2023,7 @@ InstallMethod(MakePIMOp,"H.P(d,mu)",[IsDecompositionMatrix,IsList],
       z:=Position(mu,0);
       if z<>fail then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
     fi;
-    if IsHecke(d!.H) and not IsERegular(d!.H!.e,mu) then
+    if not IsSchur(d!.H) and not IsERegular(d!.H!.e,mu) then
       Error("P(mu): <mu>=[",TightStringList(mu),
               "] must be ", d!.H!.e,"-regular\n\n");
     fi;
@@ -2006,7 +2047,7 @@ InstallMethod(MakeSimpleOp,"H.D(mu)",[IsAlgebraObj,IsList],
       z:=Position(mu,0);
       if z<>fail then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
     fi;
-    if IsHecke(H) and not IsERegular(H!.e,mu) then
+    if not IsSchur(H) and not IsERegular(H!.e,mu) then
       Error("D(mu): <mu>=[",TightStringList(mu),
               "] must be ", H!.e,"-regular\n\n");
     fi;
@@ -2030,7 +2071,7 @@ InstallMethod(MakeSimpleOp,"H.D(d,mu)",[IsDecompositionMatrix,IsList],
       z:=Position(mu,0);
       if z<>fail then mu:=mu{[1..z-1]}; fi;  ## remove any zeros from mu
     fi;
-    if IsHecke(d!.H) and not IsERegular(d!.H!.e,mu) then
+    if not IsSchur(d!.H) and not IsERegular(d!.H!.e,mu) then
       Error("D(mu): <mu>=[",TightStringList(mu),
               "] must be ", d!.H!.e,"-regular\n\n");
     fi;
@@ -3060,7 +3101,7 @@ InstallMethod(AddIndecomposable,"fill out entries of decomposition matrix",
         Unbind(d!.dimensions);
       fi;
       ## now looks at the image of <Px> under Mullineux
-      if (IsHecke(Px!.H) and IsERegular(Px!.H!.e,Px!.parts[Length(Px!.parts)]))
+      if (not IsSchur(Px!.H) and IsERegular(Px!.H!.e,Px!.parts[Length(Px!.parts)]))
       and Px!.parts[Length(Px!.parts)]<>ConjugatePartition(Px!.parts[1]) then
         mPx:=MullineuxMap(Px);
         if IsBound(d!.d[Position(d!.cols,mPx!.parts[Length(Px!.parts)])])
@@ -3118,11 +3159,12 @@ InstallMethod(IsNewIndecomposableOp, "checks whether the given module is indecom
    fi;
 
     regs:=Obstructions(d,Px);
-    if Mu<>[] then regs:=Filtered(regs,mu->mu<Mu); fi;
 
+    if Mu<>[] then regs:=Filtered(regs,mu->mu<Mu); fi;
+    regs:=Obstructions(d,Px);
     for y in regs do   ## loop through projectives that might split
 
-      if IsHecke(H) and MullineuxMap(H!.e,ConjugatePartition(Px!.parts[1]))
+      if not IsSchur(H) and MullineuxMap(H!.e,ConjugatePartition(Px!.parts[1]))
       <>Px!.parts[Length(Px!.parts)] then
         Py:=true;  ## strip any known indecomposables off the bottom of Px
         while Py<>fail and Px<>0*Px do
@@ -3139,7 +3181,6 @@ InstallMethod(IsNewIndecomposableOp, "checks whether the given module is indecom
       else M:=Coefficient(Px,y)/Px!.coeffs[Length(Px!.parts)];
       fi;
       if M<>0 then Py:=MakePIMSpechtOp(d,y); fi;
-
       if not ( m=M or Px!.parts[Length(Px!.parts)]>=y ) then
         if Py=fail then
           Message("# The multiplicity of S(", TightStringList(y),
@@ -3396,10 +3437,10 @@ InstallMethod(ReadDecompositionMatrix, "load matrix from library",
       M:=A_Specht_Decomposition_Matrix;
       A_Specht_Decomposition_Matrix:=fail;
       r:=Set(M.rows); c:=Set(M.cols);
-      if IsHecke(H) and r=c then
+      if not IsSchur(H) and r=c then
         d:=DecompositionMatrix(H,r,
               Filtered(c,x->IsERegular(H!.e,x)),not IsBound(M.crystal));
-      elif IsHecke(H) then
+      elif not IsSchur(H) then
         d:=DecompositionMatrix(H,r,c,not IsBound(M.crystal));
       else
         d:=DecompositionMatrix(H,r,r,not IsBound(M.crystal));
@@ -3486,7 +3527,7 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
     d:=ReadDecompositionMatrix(H,n,false);
 
     ## next we look for crystal matrices
-    if d=fail and IsHecke(H) and IsZeroCharacteristic(H) then #FIXME overloading
+    if d=fail and not IsSchur(H) and IsZeroCharacteristic(H) then #FIXME overloading
       d:=ReadDecompositionMatrix(H,n,true);
       if d<>fail then d:=Specialized(d); fi;
     fi;
@@ -3494,7 +3535,7 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
     if d=fail and n<2*H!.e then
       ## decomposition matrix can be calculated
       r:=Partitions(n);
-      if IsHecke(H) then c:=ERegularPartitions(H!.e,n); #FIXME overloading
+      if not IsSchur(H) then c:=ERegularPartitions(H!.e,n); #FIXME overloading
       else c:=r;
       fi;
       d:=DecompositionMatrix(H, r, c, true);
@@ -3530,7 +3571,7 @@ InstallMethod(FindDecompositionMatrix,"find or calculate CDM",
   [IsAlgebraObj,IsInt],
   function(H,n) local d,c;
     d:=KnownDecompositionMatrix(H,n);
-    if d=fail and IsHecke(H) and IsZeroCharacteristic(H) then #FIXME overloading
+    if d=fail and not IsSchur(H) and IsZeroCharacteristic(H) then #FIXME overloading
       d:=DecompositionMatrix(H,
               Partitions(n),ERegularPartitions(H!.e,n),false);
       for c in [1..Length(d!.cols)] do
