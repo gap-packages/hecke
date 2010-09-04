@@ -165,7 +165,7 @@ gap&gt; for n in [6..14] do
 &gt;    od;
 </Example>
 
-The function <Q>InducedDecompositionMatrix</Q> contains almost every trick
+The function <C>InducedDecompositionMatrix</C> contains almost every trick
 for computing decomposition matrices (except using the spin groups).
 I would be very happy to hear of any improvements.<P/>
 

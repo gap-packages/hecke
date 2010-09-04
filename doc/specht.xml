@@ -2,6 +2,7 @@
 
 <!DOCTYPE Book SYSTEM "gapdoc.dtd"
   [<!ENTITY Specht "<Package>Woodpecker</Package>">,
+   <!ENTITY specht "<Package>specht</Package>">,
    <!ENTITY OldSpecht "<Package>Specht</Package> <M>2.4</M>">]>
 
 <!--
@@ -16,8 +17,8 @@
 <Book Name="specht">
 
 <TitlePage>
-    <Title>GAP 4 Package <Package>specht</Package></Title>
-    <Subtitle>Woodpecker - a port of specht to GAP 4</Subtitle>
+    <Title>GAP 4 Package &specht;</Title>
+    <Subtitle>&Specht; - a port of &OldSpecht; to GAP 4</Subtitle>
     <Version>
       <#Include SYSTEM "../VERSION">
     </Version>
