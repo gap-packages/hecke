@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE Book SYSTEM "gapdoc.dtd"
+  [<!ENTITY Specht "<Package>Woodpecker</Package>">,
+   <!ENTITY OldSpecht "<Package>Specht</Package> <M>2.4</M>">]>
+
+<!--
+
+      specht.xml          specht package documentation
+                                                              Dmitriy Traytel
+
+  Copyright (C) 2010, Dmitriy Traytel
+
+-->
+
+<Book Name="specht">
+
+<TitlePage>
+    <Title>GAP 4 Package <Package>specht</Package></Title>
+    <Subtitle>Woodpecker - a port of specht to GAP 4</Subtitle>
+    <Version>
+      <#Include SYSTEM "../VERSION">
+    </Version>
+  <Author>Dmitriy Traytel
+    <!--<Address>
+    Hasenberglstr. 19,
+    80935 München,
+    Germany
+    </Address>-->
+    <Email>traytel@in.tum.de</Email>
+    <Homepage>http://home.in.tum.de/&tilde;traytel</Homepage>
+  </Author>
+  <Date>September 2010</Date>
+
+<Copyright>
+  &copyright; 2010 by Dmitriy Traytel<P/>
+
+  This package may be distributed under the terms and conditions of the
+  GNU Public License Version 2 or higher.
+</Copyright>
+
+</TitlePage>
+
+<!--  TableOfContents  . . . . . .  generate a table of contents   -->
+<TableOfContents/>
+
+<!--  The only chapter of the book  -->
+<Body>
+<#Include SYSTEM "intro.xml">
+<#Include SYSTEM "install.xml">
+<#Include SYSTEM "functionality.xml">
+</Body>
+
+<Bibliography Databases="specht"/>
+
+<!--  And finally an index as well   -->
+<TheIndex/>
+
+</Book>
+
