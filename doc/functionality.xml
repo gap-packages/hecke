@@ -18,7 +18,7 @@ The stucture...
 </Section>
 
 <Section>
-<Heading>Manual description</Heading>
+<Heading>Specht functions</Heading>
 
 <ManSection>
 <Meth Name="Specht" Label="for an integer" Arg="e"/>
@@ -57,7 +57,7 @@ There is also a method <Ref Oper="Schur"/> for doing calculations with
 the <M>q</M>-Schur algebra. See <Ref Oper="DecompositionMatrix"/>,
 and <Ref Oper="CrystalDecompositionMatrix"/>.<P/>
 
-This function requires the package &specht; (see <Ref Func="LoadPackage"/>).
+This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 <!-- TODO -->
 </Description>
 </ManSection>
@@ -113,7 +113,7 @@ currently <C>MakeFockPIM(</C><M>\mu</M><C>)</C> is implemented only for
 <M>e</M>-regular partitions.<P/>
 
 See also <Ref Oper="Specht"/>.
-This function requires the package &specht; (see <Ref Func="LoadPackage"/>).
+This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -197,7 +197,7 @@ to induce a decomposition matrix. See also
 <Ref Oper="SaveDecompositionMatrix"/> and
 <Ref Oper="IsNewIndecomposable"/>, <Ref Oper="Specht"/>, <Ref Oper="Schur"/>,
 and <Ref Oper="CrystalDecompositionMatrix"/>. This function requires the
-package &specht; (see <Ref Func="LoadPackage"/>).
+package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -257,7 +257,7 @@ gap&gt; Display(last);
 
 See also <Ref Oper="Specht"/>, <Ref Oper="Schur"/>,
 <Ref Oper="DecompositionMatrix"/> and <Ref Oper="Specialized"/>. This
-function requires the package &specht; (see <Ref Func="LoadPackage"/>).
+function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -278,7 +278,7 @@ gap&gt; H:=Specht(6);; DecompositionNumber(H,[6,4,2],[6,6]);
 0
 </Example>
 
-This function requires the package &specht; (see <Ref Func="LoadPackage"/>).
+This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <Subsection Label="partitions">
@@ -433,7 +433,7 @@ Pq(6,2)
 
 See also <Ref Oper="SInducedModule"/>, <Ref Oper="RRestrictedModule"/> and
 <Ref Oper="SRestrictedModule"/>. This function requires the package &specht;
-(see <Ref Func="LoadPackage"/>).
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -466,7 +466,7 @@ elements of the Fock space (see <Ref Oper="Specht"/>), in which case the
 quantum analogue of induction is used.<P/>
 
 See also <Ref Oper="RInducedModule"/>. This function requires the
-package &specht; (see <Ref Func="LoadPackage"/>).
+package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -514,7 +514,7 @@ of the generator <M>E_i</M> of <M>U_q(\widehat{sl_e})</M> on <M>\mathcalF</M>
 
 See also <Ref Oper="RInducedModule"/>, <Ref Oper="SInducedModule"/> and
 <Ref Oper="SRestrictedModule"/>. This function requires the package &specht;
-(see <Ref Func="LoadPackage"/>).
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -537,7 +537,102 @@ P(4^2)
 
 See also <Ref Oper="RInducedModule"/>, <Ref Oper="SInducedModule"/> and
 <Ref Oper="RRestrictedModule"/>. This function requires the package &specht;
-(see <Ref Func="LoadPackage"/>).
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
+</Description>
+</ManSection>
+</Section>
+<!--######################################################################-->
+<Section>
+<Heading>Semi-standard and standard tableaux</Heading>
+These functions are not really part of &Specht; proper; however they are
+related and may well be of use to someone. Tableaux are represented
+by objects, that can be constructed from a list of lists.
+<!--######################################################################-->
+<ManSection>
+<Meth Name="Tableau" Arg="tab"/>
+<Returns>tableau object corresponding to the given list of lists</Returns>
+<Description>
+This is the constructor for tableau objects. The first entry of the given
+argument list is the list corresponding to the first row of the tableau.
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="SemiStandardTableaux" Arg="mu, nu"/>
+<Returns>list of the semistandard <M>\mu</M>-tableaux of type <M>\nu</M>
+<Cite Key="JK"/></Returns>
+<Description>
+<M>\mu</M> a partition, <M>\nu</M> a composition.
+<Example>
+gap&gt; SizeScreen([80,20]);; Display(SemiStandardTableaux([4,3],[1,1,1,2,2]));
+[ Tableau( [ [ 1, 2, 3, 4 ], [ 4, 5, 5 ] ] ), Tableau( [ [ 1, 2, 3, 5 ], [ 4, 4, 5 ] ] ),
+  Tableau( [ [ 1, 2, 4, 4 ], [ 3, 5, 5 ] ] ), Tableau( [ [ 1, 2, 4, 5 ], [ 3, 4, 5 ] ] ),
+  Tableau( [ [ 1, 3, 4, 4 ], [ 2, 5, 5 ] ] ), Tableau( [ [ 1, 3, 4, 5 ], [ 2, 4, 5 ] ] ) ]
+</Example>
+See also <Ref Oper="StandardTableaux"/>. This function requires the package
+&specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="StandardTableaux" Arg="mu"/>
+<Returns>list of the standard <M>\mu</M>-tableaux</Returns>
+<Description>
+<M>\mu</M> a partition
+<Example>
+gap&gt; SizeScreen([80,20]);; Display(StandardTableaux(4,2));
+[ Tableau( [ [ 1, 2, 3, 4 ], [ 5, 6 ] ] ), Tableau( [ [ 1, 2, 3, 5 ], [ 4, 6 ] ] ),
+  Tableau( [ [ 1, 2, 3, 6 ], [ 4, 5 ] ] ), Tableau( [ [ 1, 2, 4, 5 ], [ 3, 6 ] ] ),
+  Tableau( [ [ 1, 2, 4, 6 ], [ 3, 5 ] ] ), Tableau( [ [ 1, 2, 5, 6 ], [ 3, 4 ] ] ),
+  Tableau( [ [ 1, 3, 4, 5 ], [ 2, 6 ] ] ), Tableau( [ [ 1, 3, 4, 6 ], [ 2, 5 ] ] ),
+  Tableau( [ [ 1, 3, 5, 6 ], [ 2, 4 ] ] ) ]
+</Example>
+See also <Ref Oper="SemiStandardTableaux"/>. This function requires the package
+&specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="ConjugatTableau" Arg="tab"/>
+<Returns>tableau obtained from <M>tab</M> by interchangings its rows and
+columns</Returns>
+<Description>
+<Example>
+gap&gt; Display(ConjugateTableau(Tableau([ [ 1, 3, 5, 6 ], [ 2, 4 ] ])));
+Standard Tableau:
+1	2
+3	4
+5
+6
+</Example>
+This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="ShapeTableau" Arg="tab"/>
+<Returns>the partition (or composition) obtained from <M>tab</M></Returns>
+<Description>
+<Example>
+gap&gt; ShapeTableau( Tableau([ [ 1, 1, 2, 3 ], [ 4, 5 ] ]) );
+[ 4, 2 ]
+</Example>
+This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="TypeTableau" Arg="tab"/>
+<Returns>the type of the (semistandard) tableau <M>tab</M></Returns>
+<Description>
+The type of a tableau is, the composition <M>\sigma=
+(\sigma_1,\sigma_2,\ldots)</M> where <M>\sigma_i</M> is
+the number of entries in <M>tab</M> which are equal to <M>i</M>.
+<Example>
+gap&gt; List(SemiStandardTableaux([5,4,2],[4,3,0,1,3]),TypeTableau);
+[ [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ] ]
+</Example>
+This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference" BookName="Reference"/>).
 </Description>
 </ManSection>
 </Section>
