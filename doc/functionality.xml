@@ -1601,107 +1601,269 @@ This section contains functions for manipulating partitions and
 also several useful orderings on the set of partitions.
 <!--######################################################################-->
 <ManSection>
-<Meth Name="ECore" Arg=""/>
-<Returns></Returns>
+<Meth Name="ECore" Arg="e|H, mu"/>
+<Returns>the <M>e</M>-core of the partition <M>\mu</M>.</Returns>
+<Meth Name="EAbacus" Arg="e|H, mu"/>
 <Description>
+The <M>e</M>-core of a partition <M>\mu</M> is what remains after as many
+rim <M>e</M>-hooks as possible have been removed from the diagram of
+<M>\mu</M> (that this is well defined is not obvious; see <Cite Key="JK"/>).
+
+<Example>
+gap&gt; H:=Specht(6);; ECore(H,16,8,6,5,3,1);
+[ 4, 3, 1, 1 ]
+</Example>
+
+The <M>e</M>-core is calculated here using James'; notation of an
+<E>abacus</E> there is also an <Ref Oper="EAbacus"/> function; but it is
+more <Q>pretty</Q> than useful.<P/>
+
+See also <Ref Oper="IsECore"/>, <Ref Oper="EQuotient"/> and
+<Ref Oper="EWeight"/>.  This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="IsECore" Arg=""/>
-<Returns></Returns>
+<Meth Name="IsECore" Arg="e|H, mu"/>
+<Returns><K>true</K> if <M>\mu</M> is an <M>e</M>-core and <K>false</K>
+otherwise.</Returns>
 <Description>
+See also <Ref Oper="ECore"/>. This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="EQuotient" Arg=""/>
-<Returns></Returns>
+<Meth Name="EQuotient" Arg="e|H, mu"/>
+<Returns>the <M>e</M>-quotient of <M>\mu</M>; this is a sequence of <M>e</M>
+partitions whose definition can be found in <Cite Key="JK"/>.</Returns>
 <Description>
+<Example>
+gap&gt; H:=Specht(8);; EQuotient(H,22,18,16,12,12,1,1);
+[ [ 1, 1 ], [  ], [  ], [  ], [  ], [ 2, 2 ], [  ], [ 1 ] ]
+</Example>
+
+See also <Ref Oper="ECore"/> and <Ref Oper="CombineEQuotientECore"/>.
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="CombineEQuotientECore" Arg=""/>
-<Returns></Returns>
+<Meth Name="CombineEQuotientECore" Arg="e|H, q, C"/>
+<Returns>the partition which has <M>e</M>-quotient <M>q</M> and <M>e</M>
+-core <M>C</M>.</Returns>
 <Description>
+A partition is uniquely determined by its <M>e</M>-quotient and its <M>e</M>
+-core (see <Ref Oper="EQuotient"/> and <Ref Oper="ECore"/>).
+
+<Example>
+gap&gt; H:=Specht(11);; mu:=[100,98,57,43,12,1];;
+gap&gt; Q:=EQuotient(H,mu);
+[ [ 9 ], [  ], [  ], [  ], [  ], [  ], [ 3 ], [ 1 ], [ 9 ], [  ], [ 5 ] ]
+gap&gt; C:=ECore(H,mu);
+[ 7, 2, 2, 1, 1, 1 ]
+gap&gt; CombineEQuotientECore(H,Q,C);
+[ 100, 98, 57, 43, 12, 1 ]
+</Example>
+
+See also <Ref Oper="ECore"/> and  <Ref Oper="EQuotient"/>.  This function
+requires the package &specht; (see
+<Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="EWeight" Arg=""/>
-<Returns></Returns>
+<Meth Name="EWeight" Arg="e|H, mu"/>
 <Description>
+The <M>e</M>-weight of a partition is the number of <M>e</M>-hooks which
+must be removed from the partition to reach the <M>e</M>-core
+(see <Ref Oper="ECore"/>).
+
+<Example>
+gap&gt; EWeight(6,[16,8,6,5,3,1]);
+5
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="ERegularPartitions" Arg=""/>
-<Returns></Returns>
+<Meth Name="ERegularPartitions" Arg="e|H, n"/>
+<Returns>the list of <M>e</M>-regular partitions of <M>n</M>, ordered
+reverse lexicographically (see <Ref Oper="Lexicographic"/>).</Returns>
 <Description>
+A  partition <M>\mu=(\mu_1,\mu_2,\ldots)</M> is <E><M>e</M>-regular</E> if
+there is no integer <M>i</M> such that
+<M>\mu_i=\mu_{i+1}=\cdots=\mu_{i+e-1}&gt;0</M>.
+
+<Example>
+gap&gt; H:=Specht(3);; ERegularPartitions(H,6);
+[ [ 2, 2, 1, 1 ], [ 3, 2, 1 ], [ 3, 3 ], [ 4, 1, 1 ], [ 4, 2 ], [ 5, 1 ],
+  [ 6 ] ]
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="IsERegular" Arg=""/>
-<Returns></Returns>
+<Meth Name="IsERegular" Arg="e|H, mu"/>
+<Returns><K>true</K> if <M>\mu</M> is <M>e</M>-regular and <K>false</K>
+otherwise.</Returns>
 <Description>
+This functions requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="ConjugatePartition" Arg=""/>
-<Returns></Returns>
+<Meth Name="ConjugatePartition" Arg="mu"/>
+<Returns>the partition whose diagram is obtained by interchanging the
+rows and columns in the diagram of <M>\mu</M>.</Returns>
 <Description>
+<Example>
+gap&gt; ConjugatePartition(6,4,3,2);
+[ 4, 4, 3, 2, 1, 1 ]
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="BetaSet" Arg=""/>
-<Returns></Returns>
+<Meth Name="BetaSet" Arg="mu"/>
+<Returns>a <E>set</E> of beta numbers (i.e. first column hook
+lengths; see <Cite Key="JK"/>) corresponding to the partition
+<M>\mu</M>.</Returns>
 <Description>
+<Example>
+gap&gt; BetaSet([5,4,2,2]);
+[ 2, 3, 6, 8 ]
+</Example>
+
+See also <Ref Oper="PartitionBetaSet"/>. This function requires
+the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="PartitionBetaSet" Arg=""/>
-<Returns></Returns>
+<Meth Name="PartitionBetaSet" Arg="bn"/>
+<Returns>the partitions corresponding to the given set of beta numbers
+<M>bn</M>.Note in particular that <M>bn</M> must be a set of integers.
+</Returns>
 <Description>
+<Example>
+gap&gt; PartitionBetaSet([ 2, 3, 6, 8 ]);
+[ 5, 4, 2, 2 ]
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="ETopLadder" Arg=""/>
-<Returns></Returns>
+<Meth Name="ETopLadder" Arg="e|H, mu"/>
 <Description>
+The ladders in the diagram of a partition are the lines connecting nodes
+of constant <M>e</M>-residue, having slope <M>e-1</M>
+(see <Cite Key="JK"/>). A new partition can be obtained from <M>\mu</M> by
+sliding all nodes up to the highest possible rungs on their ladders.
+</Description>
+<Returns>the partition obtained in this way; it is automatically
+<M>e</M>-regular (this partition is denoted <M>\mu^R</M> in
+<Cite Key="JK"/>).</Returns>
+<Description>
+<Example>
+gap&gt; H:=Specht(4);;
+gap&gt; ETopLadder(H,1,1,1,1,1,1,1,1,1,1);
+[ 4, 3, 3 ]
+gap&gt; ETopLadder(6,1,1,1,1,1,1,1,1,1,1);
+[ 2, 2, 2, 2, 2 ]
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="Dominates" Arg=""/>
-<Returns></Returns>
+<Meth Name="Dominates" Arg="mu, nu"/>
+<Returns><K>true</K> if either <M>\mu</M>=<M>\nu</M> or
+<M>\forall i\geq 1: \sum_{j=1}^i\mu_j\geq\sum_{j=1}^i\nu_j</M>
+and <K>false</K> otherwise.</Returns>
 <Description>
+The dominance ordering is an important partial order in the representation
+theory of Hecke algebra because <M>d_{\mu\nu}=0</M> unless <M>\nu</M>
+dominates <M>\mu</M>.
+<Example>
+gap&gt; Dominates([5,4],[4,4,1]);
+true
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="LengthLexicographic" Arg=""/>
-<Returns></Returns>
+<Meth Name="LengthLexicographic" Arg="mu, nu"/>
+<Returns><K>true</K> if the length of <M>\mu</M> is less than the length of
+<M>\nu</M> or if the length of <M>\mu</M> equals the length of <M>\nu</M>
+and <C>Lexicographic(</C><M>\mu, \nu</M><C>)</C>.</Returns>
 <Description>
+<Example>
+gap&gt; p:=Partitions(6);;Sort(p,LengthLexicographic); p;
+[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ],
+  [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ]
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="Lexicographic" Arg=""/>
-<Returns></Returns>
+<Meth Name="Lexicographic" Arg="mu, nu"/>
+<Returns><K>true</K> if <M>\mu</M> is lexicographically greater than or
+equal to <M>\nu</M>.</Returns>
 <Description>
+<Example>
+gap&gt; p:=Partitions(6);;Sort(p,Lexicographic); p;
+[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 4, 1, 1 ], [ 3, 3 ], [ 3, 2, 1 ],
+  [ 3, 1, 1, 1 ], [ 2, 2, 2 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ],
+  [ 1, 1, 1, 1, 1, 1 ] ]
+</Example>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="ReverseDominance" Arg=""/>
-<Returns></Returns>
+<Meth Name="ReverseDominance" Arg="mu, nu"/>
+<Returns><K>true</K> if <M>\forall i&gt;0:
+\sum_{j\geq i}\mu_j > \sum_{j\geq i}\nu_j</M>.</Returns>
 <Description>
+This is another total order on partitions which extends the dominance
+ordering (see <Ref Oper="Dominates"/>).
+<Example>
+gap&gt; p:=Partitions(6);;Sort(p,ReverseDominance); p;
+[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ],
+  [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ]
+</Example>
+
+This is the ordering used by James in the appendix of his Springer
+lecture notes book.<P/>
+
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
 </ManSection>
 </Section>
