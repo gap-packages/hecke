@@ -82,7 +82,7 @@ InstallGlobalFunction(MakeDispatcherFunc,
 				fi;
 			od;
       for p in [1..Length(filts)] do ## first come first served ;-)
-        if pos[p] = 0 then continue; fi; ## already tested - not working
+        if pos[p] = 0 or l[p] > Length(arg) then continue; fi; ## not working
         newarg := Concatenation(arg{[1..pos[p]-1]},
           [Flat(arg{[pos[p]..pos[p]+(Length(arg)-l[p])]})],
           arg{[pos[p]+(Length(arg)-l[p])+1..Length(arg)]});

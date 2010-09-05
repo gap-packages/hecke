@@ -1123,7 +1123,7 @@ InstallMethod(InducedDecompositionMatrix,"induce from decomposition matrix",
           ## Here we calculate InducedModule(P(mu),H.e,r).
           Px:=Sum([1..Length(d!.d[mu].parts)],
                      nu->d!.d[mu].coeffs[nu]*d!.ind[d!.d[mu].parts[nu]][r]);
-          if IsNewIndecomposableOp(d!.H,newd,Px,d,[]) then
+          if IsNewIndecomposableOp(d!.H,newd,Px,d,[fail]) then
             if IsERegular(Px!.H!.e,Px!.parts[Length(Px!.parts)]) then
               # can apply MullineuxMap
               nu:=ConjugatePartition(Px!.parts[1]);
@@ -3141,7 +3141,7 @@ InstallMethod(IsNewIndecomposableOp, "checks whether the given module is indecom
 
     if px=fail and px=0*px then return false; fi;
 
-    if Mu=[] then Message:=Ignore; #TODO
+    if Mu=[fail] then Message:=Ignore;
     else Message:=Print;
     fi;
 
