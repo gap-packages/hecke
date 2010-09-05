@@ -342,14 +342,14 @@ accurately, their image in the Grothendieck ring).</Returns>
 <Description>
 There is an natural embedding of <M>H(S_n)</M> in <M>H(S_{n+1})</M>
 which in the usual way lets us define an <E>induced</E>
-<M>H(S_{n+1})</M>-module for every <M>H(S_n)</M>-module.
+<M>H(S_{n+1})</M>-module for every <M>H(S_n)</M>-module.<P/>
 
 There is also a function <Ref Oper="SInducedModule"/> which
 provides a much faster way of <M>r</M>-inducing <M>s</M> times (and inducing
-<M>s</M> times).
+<M>s</M> times).<P/>
 
 Let <M>\mu</M> be a partition. Then the induced module
-<C>InducedModule(S(</C><M>\mu</M><C>))</C> is easy to describe: it has the
+<C>RInducedModule(S(</C><M>\mu</M><C>))</C> is easy to describe: it has the
 same composition factors as <M>\sum S(\nu)</M>
 where <M>\nu</M> runs over all partitions whose diagrams can be obtained by
 adding a single node to the diagram of <M>\mu</M>.
@@ -372,7 +372,172 @@ induces this linear combination of Specht modules. If possible &Specht; then
 rewrites the induced module back in the original basis. Note that in the last
 example above, the decomposition matrix for <M>S_{15}</M> is not known by
 &Specht; this is why <Ref Oper="RInducedModule"/> was unable to rewrite this
-module in the <M>D</M>-basis.
+module in the <M>D</M>-basis.<P/>
+
+<E><M>r</M>-Induction</E><P/>
+
+Two Specht modules <M>S(\mu)</M> and <M>S(\nu)</M> belong to the same block
+if and only if the corresponding partitions <M>\mu</M> and <M>\nu</M> have
+the same <M>e</M>-core <Cite Key="JM2"/>  (see <Ref Oper="ECore"/>). Because
+the <M>e</M>-core of a partition is determined by its (multiset of) <M>e</M>
+-residues, if <M>S(\mu)</M> and <M>S(\nu)</M> appear in
+<C>RInducedModule(S(</C><M>\tau</M><C>))</C>, for some partition
+<M>\tau</M>, then <M>S(\mu)</M> and <M>S(nu)</M> belong to the same block if
+and only if <M>\mu</M> and <M>\nu</M> can be obtained by adding a node of the
+same <M>e</M>-residue to the diagram of <M>\tau</M>. The second form of
+<Ref Oper="RInducedModule"/> allows one to induce <Q>within blocks</Q> by
+only adding nodes of some fixed <M>e</M>-residue <M>r</M>; this is known as
+<E>r-induction</E>. Note that <M>0\leq r&lt;e</M>.<P/>
+
+<Example>
+gap&gt; H:=Specht(4);; Display(RInducedModule(MakeSpecht(H,5,2,1)));
+S(6,2,1)+S(5,3,1)+S(5,2^2)+S(5,2,1^2)
+gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),0));
+0*S()
+gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),1));
+S(6,2,1)+S(5,3,1)+S(5,2,1^2)
+gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),2));
+0*S()
+gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),3));
+S(5,2^2)
+</Example>
+
+The function <Ref Oper="EResidueDiagram"/>, prints the diagram
+of <M>\mu</M>, labeling each node with its <M>e</M>-residue. A quick check of
+this diagram confirms the answers above.
+
+<Example>
+gap&gt; EResidueDiagram(H,5,2,1);
+  0  1  2  3  0
+  3  0
+  2
+true
+</Example>
+
+<E><Q>Quantized</Q> induction</E><P/>
+
+When <Ref Oper="RInducedModule"/> is applied to the canonical basis elements
+<C>MakeFockPIM(</C><M>\mu</M><C>)</C> (or more generally elements of the Fock
+space; see <Ref Oper="Specht"/>), a <Q>quantum analogue</Q> of induction is
+applied. More precisely, the function
+<C>InducedModule(</C><M>*,i</M><C>)</C> corresponds to the action of the
+generator <M>F_i</M> of the quantum group <M>U_q(\widehat{sl_e})</M> on
+<M>\mathcal{F}</M> <Cite Key="LLT"/>.
+
+<Example>
+gap&gt; H:=Specht(3);; x:=RInducedModule(MakeFockPIM(H,4,2),1,2);;
+gap&gt; Display(x); Display(MakePIM(x));
+Sq(6,2)+vSq(4^2)+v^2Sq(4,2^2)
+Pq(6,2)
+</Example>
+
+See also <Ref Oper="SInducedModule"/>, <Ref Oper="RRestrictedModule"/> and
+<Ref Oper="SRestrictedModule"/>. This function requires the package &specht;
+(see <Ref Func="LoadPackage"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="SInducedModule" Arg="x, s"/>
+<Meth Name="SInducedModule" Label="for residues"
+  Arg="x, s, r"/>
+<Description>
+The function <Ref Oper="SInducedModule"/>, standing for <Q>string
+induction</Q>, provides a more efficient way of <M>r</M>-inducing <M>s</M>
+times (and a way of inducing <M>s</M> times if the residue <M>r</M> is
+omitted); <M>r</M>-induction is explained in "<Ref Oper="RInducedModule"/>.
+
+<Example>
+gap&gt; H:=Specht(4);; Display(SInducedModule(MakePIM(H,5,2,1),3));
+P(8,2,1) + 3P(7,3,1) + 2P(7,2^2) + 6P(6,3,2) + 6P(6,3,1^2) + 3P(6,2,1^3) + 2P(5,3^2) + P(5,2^2,1^2)
+gap&gt; Display(SInducedModule(MakePIM(H,5,2,1),3,1));
+P(6,3,1^2)
+gap&gt; Display(RInducedModule(MakePIM(H,5,2,1),1,1,1));
+6P(6,3,1^2)
+</Example>
+
+Note that the multiplicity of each summand of
+<C>RInducedModule(</C><M>x,r,\ldots,r</M><C>)</C>
+is divisible by <M>s!</M> and that <Ref Oper="SInducedModule"/> divides by
+this constant.<P/>
+
+As with <Ref Oper="RInducedModule"/> this function can also be applied to
+elements of the Fock space (see <Ref Oper="Specht"/>), in which case the
+quantum analogue of induction is used.<P/>
+
+See also <Ref Oper="RInducedModule"/>. This function requires the
+package &specht; (see <Ref Func="LoadPackage"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="RRestrictedModule" Arg="x"/>
+<Meth Name="RRestrictedModule" Label="for residues"
+  Arg="x r1[, r2, ...]"/>
+<Returns>the corresponding module for <M>H(S_{n-1})</M> when given a module
+<M>x</M> for <M>H(S_n)</M></Returns>
+<Description>
+The restriction of the Specht module <M>S(\mu)</M> is the linear combination
+of Specht modules <M>\sum S(\nu)</M> where <M>\nu</M> runs over the
+partitions whose diagrams are obtained by deleting a node from the diagram of
+<M>\mu</M>. If only nodes of residue <M>r</M> are deleted then this
+corresponds to first restricting <M>S(\mu)</M> and then taking one of the
+block components of the restriction; this process
+is known as <E><M>r</M>-restriction</E> (cf. <M>r</M>-induction in
+<Ref Oper="RInducedModule"/>).<P/>
+
+There is also a function <Ref Oper="SRestrictedModule"/> which provides a
+faster way of <M>r</M>-restricting <M>s</M> times (and restricting
+<M>s</M> times).<P/>
+
+When more than one residue if given to <Ref Oper="RRestrictedModule"/> it
+returns <C>RRestrictedModule(</C><M>x,r_1,r_2,\ldots,r_k</M><C>)</C>=
+  <C>RRestrictedModule(
+    RRestrictedModule(</C><M>x,r_1</M><C>)</C><M>,r_2,\ldots,r_k</M><C>)</C>
+(cf. <Ref Oper="RInducedModule"/>).
+
+<Example>
+gap&gt; H:=Specht(6);; Display(RRestrictedModule(MakePIM(H,5,3,2,1),4));
+2P(4,3,2,1)
+gap&gt; Display(RRestrictedModule(MakeSimple(H,5,3,2),1));
+D(5,2^2)
+</Example>
+
+<E><Q>Quantized</Q> restriction</E><P/>
+
+As with <Ref Oper="RInducedModule"/>, when <Ref Oper="RRestrictedModule"/> is
+applied to the canonical basis elements <C>MakeFockPIM(</C><M>\mu</M><C>)</C>
+a quantum analogue of restriction is applied; this time,
+<C>RestrictedModule(</C><M>*,i</M><C>)</C> corresponds to the action
+of the generator <M>E_i</M> of <M>U_q(\widehat{sl_e})</M> on <M>\mathcalF</M>
+<Cite Key="LLT"/>.<P/>
+
+See also <Ref Oper="RInducedModule"/>, <Ref Oper="SInducedModule"/> and
+<Ref Oper="SRestrictedModule"/>. This function requires the package &specht;
+(see <Ref Func="LoadPackage"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Meth Name="SRestrictedModule" Arg="x, s"/>
+<Meth Name="SRestrictedModule" Label="for residues"
+  Arg="x, s, r"/>
+<Description>
+As with <Ref Oper="SInducedModule"/> this function provides a more efficient way of
+<M>r</M>-restricting <M>s</M> times, or restricting <M>s</M> times if the
+residue <M>r</M> is omitted (cf. <Ref Oper="SInducedModule"/>).
+
+
+<Example>
+gap&gt; H:=Specht(6);; Display(SRestrictedModule(MakeSpecht(H,4,3,2),3));
+3S(4,2) + 2S(4,1^2) + 3S(3^2) + 6S(3,2,1) + 2S(2^3)
+gap&gt; Display(SRestrictedModule(MakePIM(H,5,4,1),2,4));
+P(4^2)
+</Example>
+
+See also <Ref Oper="RInducedModule"/>, <Ref Oper="SInducedModule"/> and
+<Ref Oper="RRestrictedModule"/>. This function requires the package &specht;
+(see <Ref Func="LoadPackage"/>).
 </Description>
 </ManSection>
 </Section>
