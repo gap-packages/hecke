@@ -144,13 +144,13 @@ contained in the libraries, is a way of <Q>inducing</Q> decomposition
 matrices. This makes it fairly easy to calculate the associated
 decomposition matrices for <Q>small</Q> <M>n</M>. For example, the &Specht;
 libraries contain the decomposition matrices for the symmetric groups
-$S_n$ over fields of characteristic 3 for $n&lt;15$.  These matrices
-were calculated by &Specht; using the following commands:
+<M>S_n</M> over fields of characteristic <M>3</M> for <M>n&lt;15</M>.
+These matrices were calculated by &Specht; using the following commands:
 
 <Example>
 gap> H:=Specht(3,3);   # e=3, 'R' field of characteristic 3
 &lt;Hecke algebra with e = 3&gt;
-gap> d:=DecompositionMatrix(H,5);  # known for $n&lt;2e$
+gap> d:=DecompositionMatrix(H,5);  # known for n&lt;2e
 &lt;7x5 decomposition matrix&gt;
 gap&gt; Display(last);
 5    | 1
