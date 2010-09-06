@@ -2,7 +2,7 @@
 
 <!DOCTYPE Book SYSTEM "gapdoc.dtd"
   [<!ENTITY Specht "<Package>Woodpecker</Package>">,
-   <!ENTITY specht "<Package>specht</Package>">,
+   <!ENTITY specht "<Package>woodpecker</Package>">,
    <!ENTITY OldSpecht "<Package>Specht</Package> <M>2.4</M>">]>
 
 <!--

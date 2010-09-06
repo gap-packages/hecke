@@ -13,13 +13,108 @@ This chapter gives examples for the usage of this package.
 <Heading>Specht functionality</Heading>
 
 <Section>
-<Heading>Structural design</Heading>
-The stucture...
-</Section>
+<Heading>Porting notes</Heading>
+Porting the &OldSpecht; package to &GAP; 4 have not influenced the algorithms
+but required a completely new object oriented design of the underlying data
+structures. In &GAP; 3 records were used to represent algebra objects, modules
+and decomposition matrices of &OldSpecht;. Further functions were stored inside
+of such records to provide name safety.<P/>
 
+In &Specht; objects represent all the data that was named above. The overloading
+mechanism allows to make the former record-intern functions available on the
+toplevel. The operation selection mechanism of &GAP; 4 allows to concentrate on
+the computation code instead of dealing with different possible argument inputs.
+<P/>
+Since variable argument length operations are not yet supported by &GAP; 4 we
+introduced an own dispatcher facility to enable the former possibility of
+passing patrition arguments as sequences of integers
+(see <Ref Sect="partitions"/>).<P/>
+
+<ManSection>
+<Heading>Structure of &Specht;</Heading>
+<Description>
+The data structure hierarchy in &GAP; 4 is defined through filters and their
+dependencies.
+</Description>
+<Filt Name="IsAlgebraObj"/>
+<Filt Name="IsHecke"/>
+<Filt Name="IsSchur"/>
+<Description>
+<Ref Filt="IsAlgebraObj"/> is a generic filter for the objects returned by the
+functions <Ref Oper="Specht"/> and <Ref Oper="Schur"/>. Concretely,
+<Ref Oper="Specht"/> returns an <Ref Filt="IsHecke"/> object (automatically also
+an <Ref Filt="IsAlgebraObj"/> object). For design reasons <Ref Filt="IsSchur"/>
+is a subfilter of <Ref Filt="IsHecke"/>. This allows to use the same functions
+for Schur-algebras as for Hecke-algebras with minor restrictions.
+</Description>
+<Filt Name="IsAlgebraObjModule"/>
+<Filt Name="IsHeckeModule"/>
+<Filt Name="IsHeckeSpecht"/>
+<Filt Name="IsHeckePIM"/>
+<Filt Name="IsHeckeSimple"/>
+<Filt Name="IsFockModule"/>
+<Filt Name="IsFockSpecht"/>
+<Filt Name="IsFockPIM"/>
+<Filt Name="IsFockSimple"/>
+<Filt Name="IsSchurModule"/>
+<Filt Name="IsSchurWeyl"/>
+<Filt Name="IsSchurPIM"/>
+<Filt Name="IsSchurSimple"/>
+<Filt Name="IsFockSchurModule"/>
+<Filt Name="IsFockSchurWeyl"/>
+<Filt Name="IsFockSchurPIM"/>
+<Filt Name="IsFockSchurSimple"/>
+<Description>
+The hierarchy of module objects is more complex. On top we have the filter
+<Ref Filt="IsAlgebraObjModule"/>. Its direct descendant
+<Ref Filt="IsHeckeModule"/> has <Ref Filt="IsHeckeSpecht"/>,
+<Ref Filt="IsHeckePIM"/>, <Ref Filt="IsHeckeSimple"/>,
+<Ref Filt="IsFockModule"/> and <Ref Filt="IsSchurModule"/> as subfilters. Again
+the last two have no mathematical sense but are technically comfortable.
+The filter <Ref Filt="IsFockModule"/> is superfilter of
+<Ref Filt="IsFockSpecht"/>, <Ref Filt="IsFockPIM"/>, <Ref Filt="IsFockSimple"/>
+and <Ref Filt="IsFockSchurModule"/>. Analogously <Ref Filt="IsSchurModule"/> is
+superfilter of <Ref Filt="IsSchurWeyl"/>, <Ref Filt="IsSchurPIM"/>,
+<Ref Filt="IsSchurSimple"/> and <Ref Filt="IsFockSchurModule"/> which itself is
+superfilter of <Ref Filt="IsFockSchurWeyl"/>, <Ref Filt="IsFockSchurPIM"/>,
+<Ref Filt="IsFockSchurSimple"/>. Further there are subfilter relations between
+<Ref Filt="IsFockSpecht"/> and <Ref Filt="IsHeckeSpecht"/> etc.,
+<Ref Filt="IsFockSchurWeyl"/> and <Ref Filt="IsFockSpecht"/> etc.,
+<Ref Filt="IsFockSchurWeyl"/> and <Ref Filt="IsSchurWeyl"/> etc.,
+<Ref Filt="IsSchurWeyl"/> and <Ref Filt="IsHeckeSpecht"/> etc. filters.
+</Description>
+<Filt Name="IsDecompositionMatrix"/>
+<Filt Name="IsCrystalDecompositionMatrix"/>
+<Description>
+For decomposition matrices we use the filter <Ref Filt="IsDecompositionMatrix"/>
+and its subfilter <Ref Filt="IsCrystalDecompositionMatrix"/>.
+</Description>
+</ManSection>
+<Subsection>
+<Heading>Renamings</Heading>
+To keep things as backward compatible as possible, we tried not to change names
+and function signatures. But for the former <C>H.***</C>- and
+<C>H.operations.***</C>-style functions it just makes more sense to use toplevel
+functions (especially when the <M>H</M> is not explicitly needed inside of the
+called operation). Thus, here is an overview of some important changes:
+<Table Align="|c|c|">
+<Row><Item>&GAP; 3</Item><Item>&GAP; 4</Item></Row><HorLine/>
+<Row><Item><C>H.S</C></Item><Item><Ref Oper="MakeSpecht"/></Item></Row><HorLine/>
+<Row><Item><C>H.P</C></Item><Item><Ref Oper="MakePIM"/></Item></Row><HorLine/>
+<Row><Item><C>H.D</C></Item><Item><Ref Oper="MakeSimple"/></Item></Row><HorLine/>
+<Row><Item><C>H.Sq</C></Item><Item><Ref Oper="MakeFockSpecht"/></Item></Row><HorLine/>
+<Row><Item><C>H.Pq</C></Item><Item><Ref Oper="MakeFockPIM"/></Item></Row><HorLine/>
+<Row><Item><C>S.W</C></Item><Item><Ref Oper="MakeSpecht"/></Item></Row><HorLine/>
+<Row><Item><C>S.F</C></Item><Item><Ref Oper="MakeSimple"/></Item></Row><HorLine/>
+<Row><Item><C>InducedModule</C></Item><Item><Ref Oper="RInducedModule"/></Item></Row><HorLine/>
+<Row><Item><C>RestrictedModule</C></Item><Item><Ref Oper="RRestrictedModule"/></Item></Row><HorLine/>
+<Row><Item><C>H.operations.New</C></Item><Item><C>Module</C></Item></Row><HorLine/>
+<Row><Item><C>H.operations.Collect</C></Item><Item><C>Collect</C></Item></Row><HorLine/>
+</Table>
+</Subsection>
+</Section>
 <Section>
 <Heading>Specht functions</Heading>
-
 <ManSection>
 <Meth Name="Specht" Label="for an integer" Arg="e"/>
 <Meth Name="Specht" Label="for two integers" Arg="e, p"/>
@@ -57,8 +152,318 @@ There is also a method <Ref Oper="Schur"/> for doing calculations with
 the <M>q</M>-Schur algebra. See <Ref Oper="DecompositionMatrix"/>,
 and <Ref Oper="CrystalDecompositionMatrix"/>.<P/>
 
-This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
-<!-- TODO -->
+This function requires the package &specht;
+(see <Ref Func="LoadPackage" BookName="Reference"/>).
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Heading>Simple information accessing</Heading>
+<Description>
+We allow to read/store some information from/in the algebra object returned
+by <Ref Oper="Specht"/> using the following functions.
+</Description>
+<Meth Name="OrderOfQ" Arg="H"/>
+<Description>
+Provides reading access to <M>e</M> that is stored in <M>H</M>.
+</Description>
+<Meth Name="Characteristic" Arg="H"/>
+<Description>
+Provides reading access to <M>p</M> that is stored in <M>H</M>.
+</Description>
+<Meth Name="SetOrdering" Arg="H, Ordering"/>
+<Description>
+Provides writing access to <M>Ordering</M> that is stored in <M>H</M>.
+The ordering influences the way how decomposition matrices are printed.
+</Description>
+<Var Name="SpechtDirectory"/>
+<Description>
+Setting this global variable the user can tell &Specht; where to find
+decomposition matrices that are not in the library and also not in the current
+directory. By default this variable is set to the current directory.
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Heading>The functions MakeSpecht, MakePIM and MakeSimple</Heading>
+<Description>
+The functions MakeSpecht, MakePIM and MakeSimple return objects belonging
+to the filter <Ref Filt="IsAlgebraObjModule"/> which correspond
+to Specht modules (<Ref Filt="IsHeckeSpecht"/>),
+projective indecomposable modules (<Ref Filt="IsHeckePIM"/>) and simple
+modules (<Ref Filt="IsHeckeSimple"/>) respectively. &Specht; allows
+manipulation of arbitrary linear combinations of these <Q>modules</Q>,
+as well as a way of inducing and restricting them, <Q>multiplying</Q> them
+and converting between these three natural bases of the Grothendieck ring.
+Multiplication of modules corresponds to taking a tensor productand then
+inducing (thus giving a module for a larger Hecke algebra). Each of these
+three functions can be called in four different ways, as we now describe.
+</Description>
+<Meth Name="MakeSpecht" Arg="H, mu"/>
+<Meth Name="MakePIM" Arg="H, mu"/>
+<Meth Name="MakeSimple" Arg="H, mu"/>
+<Description>
+In the first form, <M>\mu</M> is a partition
+(either a list, or a sequence of integers) and the corresponding
+Specht module, PIM, or simple module (respectively), is returned.
+
+<Example>
+gap&gt; H:=Specht(5);; MakePIM(H,4,3,2);; Display(last);
+P(4,3,2)
+</Example>
+</Description>
+<Meth Name="MakeSpecht" Label="for a module" Arg="x"/>
+<Meth Name="MakePIM" Label="for a module" Arg="x"/>
+<Meth Name="MakeSimple" Label="for a module" Arg="x"/>
+<Description>
+Here, <M>x</M> is an <M>H</M>-module. In this form, <Ref Oper="MakeSpecht"/>
+rewrites <M>x</M> as a linear combination of Specht modules, if possible.
+Similarly, <Ref Oper="MakePIM"/> and <Ref Oper="MakeSimple"/> rewrite
+<M>x</M> as a linear combination of PIMs and simple modules
+respectively. These conversions require knowledge of the relevant
+decomposition matrix of <M>H</M>; if this is not known then <K>fail</K> is
+returned (over fields of characteristic zero, all of the decomposition
+matrices are known via the algorithm of <Cite Key="LLT"/>; various other
+decomposition matrices are included with &Specht;). For example,
+<C>MakeSpecht(MakePIM(</C><M>H, \mu</M><C>))</C> returns <M>\sum_\nu
+d_{\nu\mu} S(\nu)</M> or <K>fail</K> if some of these decomposition
+multiplicities are not known.
+
+<Example>
+gap&gt; Display( MakeSimple( MakePIM(H,4,3,2) ) );
+D(5,3,1) + 2D(4,3,2) + D(2^4,1)
+gap&gt; Display( MakeSpecht( MakeSimple( MakeSpecht(H,1,1,1,1,1) ) ) );
+ - S(5) + S(4,1) - S(3,1^2) + S(2,1^3)
+</Example>
+
+As the last example shows, &Specht; does not always behave as expected.
+The reason for this is that Specht modules indexed by <M>e</M>-singular
+partitions can always be written as a linear combination of Specht
+modules which involve only <M>e</M>-regular partitions. As such, it is not
+always clear when two elements are equal in the Grothendieck ring.
+Consequently, to test whether two modules are equal you should first
+rewrite both modules in the <M>D</M>-basis; this is <E>not</E> done by
+&Specht; because it would be very inefficient.
+</Description>
+<Meth Name="MakeSpecht" Label="for a decomposition matrix" Arg="d, mu"/>
+<Meth Name="MakePIM" Label="for a decomposition matrix" Arg="d, mu"/>
+<Meth Name="MakeSimple" Label="for a decomposition matrix" Arg="d, mu"/>
+<Description>
+In the third form, <M>d</M> is a decomposition matrix and <M>\mu</M> is a
+partition. This is useful when you are trying to calculate a new
+decomposition matrix <M>d</M> because it allows you to do calculations using
+the known entries of <M>d</M> to deduce information about the unknown ones.
+When used in this way, <Ref Oper="MakePIM"/> and <Ref Oper="MakeSimple"/>
+use <M>d</M> to rewrite <M>P(\mu)</M> and <M>D(\mu)</M> respectively as a
+linear combination of Specht modules and <Ref Oper="MakeSpecht"/> uses
+<M>d</M> to write <M>S(\mu)</M> as a linear combination of simple
+modules. If the values of the unknown entries in <M>d</M> are needed,
+<K>fail</K> is returned.
+
+<Example>
+gap&gt; H:=Specht(3,3);;   # e = 3, p = 3 = characteristic of 'R'
+gap&gt;  d:=InducedDecompositionMatrix(DecompositionMatrix(H,14));;
+# Inducing....
+The following projectives are missing from &lt;d&gt;:
+    [ 15 ]  [ 8, 7 ]
+gap&gt; Display(MakePIM(d,4,3,3,2,2,1));
+S(4,3^2,2^2,1) + S(4,3^2,2,1^3) + S(4,3,2^3,1^2) + S(3^3,2^2,1^2)
+gap&gt; Display(MakeSpecht(d,7, 3, 3, 2));
+D(11,2,1^2) + D(10,3,1^2) + D(8,5,1^2) + D(8,3^2,1) + D(7,6,1^2) + D(7,3^2,2)
+gap&gt; Display(MakeSimple(d,14,1));
+fail
+</Example>
+
+The final example returned <K>fail</K> because the partitions <M>(14,1)</M>
+and <M>(15)</M> have the same <M>3</M>-core (and <M>P(15)</M> is missing
+from <M>d</M>).
+</Description>
+<Meth Name="MakeSpecht" Label="for a decomposition matrix and a module"
+  Arg="d, x"/>
+<Meth Name="MakePIM" Label="for a decomposition matrix and a module"
+  Arg="d, x"/>
+<Meth Name="MakeSimple" Label="for a decomposition matrix and a module"
+  Arg="d, x"/>
+<Description>
+In the final form, <M>d</M> is a decomposition matrix and <M>x</M> is a
+module. All three functions rewrite <M>x</M> in their respective basis using
+<M>d</M>. Again this is only useful when you are trying to calculate a new
+decomposition matrix because, for any <Q>known</Q> decomposition matrix
+<M>d</M>, <C>MakeSpecht(</C><M>x</M><C>)</C> and <C>MakeSpecht(</C><M>d,
+x</M><C>)</C> are equivalent (and similarly for <Ref Oper="MakePIM"/> and
+<Ref Oper="MakeSimple"/>).
+
+<Example>
+gap&gt; Display(MakeSpecht(d, MakeSimple(d,10,5) ));
+ - S(13,2) + S(10,5)
+</Example>
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Heading>Decomposition numbers of the symmetric groups</Heading>
+<Description>
+The last example looked at Hecke algebras with parameter <M>q=1</M> and
+<M>R</M> a field of characteristic <M>3</M> (so <M>e=3</M>); that is,
+the group algebra of the symmetric group over a field of characteristic
+<M>3</M>. More, generally, the command <C>Specht(</C><M>p,p</M><C>)</C>
+can be used to consider the group algebras of the symmetric groups over
+fields of characteristic <M>p</M> (i.e. <M>e=p</M> and <M>R</M> a field of
+characteristic <M>p</M>).
+
+For example, the dimensions of the simple modules of <M>S_6</M>
+over fields of characteristic <M>5</M> can be computed as follows:
+
+<Example>
+gap&gt; H:=Specht(5,5);; SimpleDimension(H,6);
+6       : 1
+5,1     : 5
+4,2     : 8
+4,1^2   : 10
+3^2     : 5
+3,2,1   : 8
+3,1^3   : 10
+2^3     : 5
+2^2,1^2 : 1
+2,1^4   : 5
+true
+</Example>
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Heading>Hecke algebras over fields of positive characteristic</Heading>
+<Description>
+To consider Hecke algebras defined over arbitrary fields <Ref Oper="Specht"/>
+must also be supplied with a <E>valuation map</E> <M>val</M> as an argument.
+The function <M>val</M> is a map from some PID into the natural numbers; at
+present it is needed only by functions which rely (at least implicitly),
+upon the <M>q</M>-analogue of Schaper's theorem. In general, <M>val</M>
+depends upon <M>q</M> and the characteristic of <M>R</M>; full details can
+be found in <Cite Key="JM2"/>.
+
+Over fields of characteristic zero and in the symmetric group case, the
+function <M>val</M> is automatically defined by <Ref Oper="Specht"/>. When
+<M>R</M> is a field of characteristic zero, <M>val([i]_q)</M> is <M>1</M> if
+<M>e</M> divides <M>i</M> and <M>0</M> otherwise (this is the valuation map
+associated to the prime ideal in <M>&CC;[v]</M> generated by the
+<M>e</M>-th cyclotomic polynomial). When <M>q=1</M> and <M>R</M> is a field
+of characteristic <M>p</M>, <M>val</M> is the usual <M>p</M>-adic
+valuation map.
+
+As another example, if <M>q=4</M> and <M>R</M> is a field of characteristic
+<M>5</M> (so <M>e=2</M>), then the valuation map sends the integer <M>x</M>
+to <M>\nu_5([4]_x)</M> where <M>[4]_x</M> is interpreted as an integer and
+<M>\nu_5</M> is the usual <M>5</M>-adic valuation. To consider this Hecke
+algebra one could proceed as follows:
+
+<Example>
+gap&gt; val:=function(x) local v;
+>       x:=Sum([0..x-1],v->4^v);  # x-&gt;[x]_q
+>       v:=0; while x mod 5=0 do x:=x/5; v:=v+1; od;
+>       return v;
+>     end;;
+gap&gt; H:=Specht(2,5,val,"e2q4");; Display(H);
+Specht(e=2, p=5, S(), P(), D(), HeckeRing="e2q4")
+</Example>
+
+Notice the string <Q>e2q4</Q> which was also passed to <Ref Oper="Specht"/>
+in this example. Although it is not strictly necessary, it is a good idea
+when using a <Q>non-standard</Q> valuation map <M>val</M> to specify the
+value of <M>HeckeRing</M>. This string is used for internal
+bookkeeping by &Specht;; in particular, it is used to determine filenames
+when reading and saving decomposition matrices. If a <Q>standard</Q>
+valuation map is used then <M>HeckeRing</M> is set to the string
+<Q>e&lt;e&gt;p&lt;p&gt;</Q>; otherwise it defaults to <Q>unknown</Q>.
+The function <Ref Oper="SaveDecompositionMatrix"/> will not save any
+decomposition matrix for any Hecke algebra <M>H</M> with
+<M>HeckeRing=</M><Q>unknown</Q>.
+</Description>
+</ManSection>
+<!--######################################################################-->
+<ManSection>
+<Heading>The Fock space and Hecke algebras over fields of characteristic zero
+</Heading>
+<Description>
+For Hecke algebras <M>H</M> defined over fields of characteristic zero
+Lascoux, Leclerc and Thibon <Cite Key="LLT"/> have described an easy,
+inductive, algorithm for calculating the decomposition matrices of <M>H</M>.
+Their algorithm really calculates the <E>canonical basis</E>, or (global)
+<E>crystal basis</E> of the Fock space; results of Grojnowski-Lusztig
+<Cite Key="Gr"/> show that computing this basis is equivalent to computing
+the decomposition matrices of <M>H</M> (see also <Cite Key="A"/>).<P/>
+
+The <E>Fock space</E> <M>\mathcal{F}</M> is an (integrable) module for the
+quantum group <M>U_q(\widehat{sl}_{e})</M> of the affine special linear
+group. <M>\mathcal{F}</M> is a free <M>&CC;[v]</M>-module with basis the set
+of all Specht modules <M>S(\mu)</M> for all partitions <M>\mu</M> of all
+integers<P/><M>\mathcal{F}=
+\bigoplus_{n\geq0}\bigoplus_{\mu\vdash n}&CC;[v]S(\mu)</M><P/>here <M>v</M>
+is an indeterminate over the integers (or strictly, <M>&CC;</M>) that is
+stored in the algebra object produced by <Ref Oper="Specht"/>. The canonical
+basis elements <M>Pq(\mu)</M> for the <M>U_q(\widehat{sl}_e)</M>-submodule
+of <M>\mathcal{F}</M> generated by the <M>0</M>-partition are indexed by
+<M>e</M>-regular partitions <M>\mu</M>. Moreover, under
+<E>specialization</E>, <M>Pq(\mu)</M> maps to <M>P(\mu)</M>. An eloquent
+description of the algorithm for computing <M>Pq(\mu)</M> can be found
+in <Cite Key="LLT"/>.<P/>
+
+To access the elements of the Fock space &Specht; provides the functions:
+</Description>
+<Meth Name="MakeFockPIM" Arg="H, mu"/>
+<Meth Name="MakeFockSpecht" Arg="H, mu"/>
+<Description>
+Notice that, unlike <Ref Oper="MakePIM"/> and <Ref Oper="MakeSpecht"/> the
+only arguments which <Ref Oper="MakeFockPIM"/> and
+<Ref Oper="MakeFockSpecht"/> accept are partitions.
+
+The function <Ref Oper="MakeFockPIM"/> computes the canonical basis element
+<M>Pq(\mu)</M> of the Fock space corresponding to the <M>e</M>-regular
+partition <M>\mu</M> (there is a canonical basis -- defined using a larger
+quantum group -- for the whole of the Fock space <Cite Key="LT"/>;
+conjecturally, this basis can be used to compute the decomposition matrices
+for the <M>q</M>-Schur algebra over fields of characteristic zero). The
+second function returns a standard basis element <M>Sq(\mu)</M> of
+<M>\mathcal{F}</M>.
+
+<Example>
+gap&gt; H:=Specht(4);; MakeFockPIM(H,6,2);; Display(last);
+S(6,2) + vSq(5,3)
+gap&gt; RRestrictedModule(last); Display(last);
+Sq(6,1) + ((v^2+1)/v)Sq(5,2) + vSq(4,3)
+gap&gt; MakePIM(last);; Display(last);
+Pq(6,1) + ((v^2+1)/v)Pq(5,2)
+gap&gt; Specialized(last);; Display(last);
+P(6,1)+2P(5,2)
+gap&gt; MakeFockSpecht(H,5,3,2);; Display(last);
+Sq(5,3,2)
+gap&gt; RInducedModule(last,0);; Display(last);
+1/vSq(5,3^2)
+</Example>
+
+The modules returned by <Ref Oper="MakeFockPIM"/> and
+<Ref Oper="MakeFockSpecht"/> behave very much like elements of the
+Grothendieck ring of <M>H</M>; however, they should be considered as
+elements of the Fock space. The key difference is that when induced or
+restricted <Q>quantum</Q> analogues of induction and restriction are used.
+These analogues correspond to the action of <M>U_q(\widehat{sl}_{e})</M>
+on <M>\mathcal{F}</M> <Cite Key="LLT"/>.
+
+In effect, the functions <Ref Oper="MakeFockPIM"/> and
+<Ref Oper="MakeFockSpecht"/> allow computations in the Fock space, using
+the functions <Ref Oper="RInducedModule"/> and
+<Ref Oper="RRestrictedModule"/>. The functions <Ref Oper="MakeSpecht"/>,
+<Ref Oper="MakePIM"/> and <Ref Oper="MakeSimple"/> can also be applied to
+elements of the Fock space, in which case they have the expected effect.
+In addition, any element of the Fock space can be specialized to give the
+corresponding element of the Grothendieck ring of <M>H</M> (it is because of
+this correspondence that we do not make a distinction between elements of
+the Fock space and the Grothendieck ring of <M>H</M>).
+
+When working over fields of characteristic zero &Specht; will
+automatically calculate any canonical basis elements that it needs for
+computations in the Grothendieck ring of <M>H</M>. If you are not interested
+in the canonical basis elements you need never work with them directly.
 </Description>
 </ManSection>
 <!--######################################################################-->
@@ -74,10 +479,12 @@ This function behaves almost identically to the function
 <Ref Oper="Specht"/>, the only difference being that the belonging modules
 are printed as <Q>W</Q>, <Q>P</Q>, <Q>F</Q> and that they correspond to the
 <M>q</M>-Weyl modules, the projective decomposable modules, and the simple
-modules of the <M>q</M>-Schur algebra respectively. Note that our labeling
-of these modules is non-standard, following that used by James in
-<Cite Key="J"/>. The standard labeling can be obtained from ours by
-replacing all partitions by their conjugates.<P/>
+modules of the <M>q</M>-Schur algebra respectively. Note that the
+<C>Make***</C>-functions (i.e. <Ref Oper="MakeSpecht"/> is used to generate
+<M>q</M>-Weyl modules). Further, note that our labeling of these modules
+is non-standard, following that used by James in <Cite Key="J"/>. The
+standard labeling can be obtained from ours by replacing all partitions
+by their conjugates.<P/>
 
 Almost all of the functions in &Specht; which accept a Hecke algebra object
 <M>H</M> will also accept the object <M>S</M> returned by <Ref Oper="Schur"/>
@@ -107,8 +514,8 @@ gap&gt; Display(last);
 </Example>
 
 Note that when <M>S</M> is defined over a field of characteristic zero then
-the functions <Ref Oper="MakeFockWeyl"/> and <Ref Oper="MakeFockPIM"/> will
-calculate the canonical basis elements (see <Ref Oper="Specht"/>);
+the functions <Ref Oper="MakeFockSpecht"/> and <Ref Oper="MakeFockPIM"/>
+will calculate the canonical basis elements (see <Ref Oper="Specht"/>);
 currently <C>MakeFockPIM(</C><M>\mu</M><C>)</C> is implemented only for
 <M>e</M>-regular partitions.<P/>
 
@@ -509,7 +916,7 @@ D(5,2^2)
 As with <Ref Oper="RInducedModule"/>, when <Ref Oper="RRestrictedModule"/> is
 applied to the canonical basis elements <C>MakeFockPIM(</C><M>\mu</M><C>)</C>
 a quantum analogue of restriction is applied; this time,
-<C>RestrictedModule(</C><M>*,i</M><C>)</C> corresponds to the action
+<C>RRestrictedModule(</C><M>*,i</M><C>)</C> corresponds to the action
 of the generator <M>E_i</M> of <M>U_q(\widehat{sl_e})</M> on <M>\mathcalF</M>
 <Cite Key="LLT"/>.<P/>
 
@@ -1490,7 +1897,7 @@ package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 <Meth Name="EResidueDiagram" Label="for modules" Arg="x"/>
 <Description>
 The <M>e</M>-residue of the <M>(i,j)</M>-th node in the diagram of a
-partition <M>\mu</M> is <M>(j-i)\bmod e</M>$. <C>EResidueDiagram(</C><M>e,
+partition <M>\mu</M> is <M>(j-i)\bmod e</M>. <C>EResidueDiagram(</C><M>e,
 \mu</M><C>)</C> prints the diagram of the partition <M>\mu</M> replacing
 each node with its <M>e</M>-residue.
 
