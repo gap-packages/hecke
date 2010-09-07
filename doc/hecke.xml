@@ -7,14 +7,14 @@
 
 <!--
 
-      specht.xml          specht package documentation
+      hecke.xml          hecke package documentation
                                                               Dmitriy Traytel
 
   Copyright (C) 2010, Dmitriy Traytel
 
 -->
 
-<Book Name="specht">
+<Book Name="hecke">
 
 <TitlePage>
     <Title>GAP 4 Package &specht;</Title>
@@ -52,7 +52,7 @@
 <#Include SYSTEM "functionality.xml">
 </Body>
 
-<Bibliography Databases="specht"/>
+<Bibliography Databases="hecke"/>
 
 <!--  And finally an index as well   -->
 <TheIndex/>

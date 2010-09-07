@@ -1,4 +1,17 @@
+#######################################################################
+##                                                                   ##
+##   Hecke - tableaux.gi : Young tableaux                            ##
+##                                                                   ##
+##     This file contains functions for generating all kinds of      ##
+##     young tableaux                                                ##
+##                                                                   ##
+##     Dmitriy Traytel                                               ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
+##                                                                   ##
+#######################################################################
 
+## Hecke 1.0: June 2010:
+##   - initial
 
 BindGlobal("TableauFamily",NewFamily("TableauFamily"));
 

@@ -1,5 +1,5 @@
 #######################################################################
-##  SPECHT - specht.g : the kernel of SPECHT                         ##
+##  Hecke - specht.gd : the kernel of Hecke                          ##
 ##                                                                   ##
 ##     A GAP package for calculating the decomposition numbers of    ##
 ##     Hecke algebras of type A (over fields of characteristic       ##
@@ -12,9 +12,12 @@
 ##     under the usual licensing agreements and conditions of GAP.   ##
 ##                                                                   ##
 ##     Dmitriy Traytel                                               ##
-##     (heavily using the GAP3-version by Andrew Mathas)             ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
 ##                                                                   ##
 #######################################################################
+
+## Hecke 1.0: August 2010:
+##   - initial
 
 BindGlobal("AlgebraObjFamily", NewFamily("AlgebraObjFamily"));
 DeclareCategory("IsAlgebraObj", IsComponentObjectRep and IsAttributeStoringRep);
@@ -123,7 +126,7 @@ MakeDispatcherFunc("Coefficient",[[IsAlgebraObjModule]],[2],[2]);
 DeclareOperation("PositiveCoefficients",[IsAlgebraObjModule]);
 DeclareOperation("IntegralCoefficients",[IsAlgebraObjModule]);
 
-DeclareOperation("\=",[IsAlgebraObjModule,IsAlgebraObjModule]);
+#DeclareOperation("\=",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\+",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\*",[IsAlgebraObjModule,IsAlgebraObjModule]);
 DeclareOperation("\*",[IsScalar,IsAlgebraObjModule]);
@@ -145,7 +148,7 @@ DeclareOperation("ListERegulars",[IsAlgebraObjModule]);
 DeclareOperation("ERegulars",[IsAlgebraObjModule]);
 DeclareOperation("ERegulars",[IsDecompositionMatrix]);
 MakeDispatcherFunc("SplitECores",
-	[[IsAlgebraObjModule],[IsAlgebraObjModule],[IsAlgebraObjModule,IsHeckeSpecht]],
+	[[IsAlgebraObjModule],[IsAlgebraObjModule],[IsAlgebraObjModule,IsAlgebraObjModule]],
 	[ 2									 , 0									,	0],
 	[ 2									 , 1									,	2]);
 MakeDispatcherFunc("IsSimpleModule", [[IsAlgebraObj]],[2],[2]);
@@ -197,7 +200,7 @@ MakeDispatcherFunc("SRestrictedModule",
 DeclareOperation("qSInducedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
 DeclareOperation("qSRestrictedModule",[IsAlgebraObj,IsAlgebraObjModule,IsInt,IsInt]);
 
-DeclareOperation("\=",[IsDecompositionMatrix,IsDecompositionMatrix]);
+#DeclareOperation("\=",[IsDecompositionMatrix,IsDecompositionMatrix]);
 DeclareOperation("Store",[IsDecompositionMatrix,IsInt]);
 DeclareOperation("Specialized",[IsCrystalDecompositionMatrix,IsInt]);
 DeclareOperation("Specialized",[IsCrystalDecompositionMatrix]);

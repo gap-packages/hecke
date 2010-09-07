@@ -1,3 +1,21 @@
+#######################################################################
+##  Hecke - symmcomb.gd : Combinatorial functions on partitions.     ##
+##                                                                   ##
+##     This file contains most of the combinatorial functions used   ##
+##     by Hecke. Most are standard operations on Young diagrams or   ##
+##     partitions.                                                   ##
+##                                                                   ##
+##     These programs, and the enclosed libraries, are distributed   ##
+##     under the usual licensing agreements and conditions of GAP.   ##
+##                                                                   ##
+##     Dmitriy Traytel                                               ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
+##                                                                   ##
+#######################################################################
+
+## Hecke 1.0: June 2010:
+##   - initial
+
 MakeDispatcherFunc("Lexicographic", [[IsList]],[2],[2]);
 MakeDispatcherFunc("LengthLexicographic", [[IsList]],[2],[2]);
 MakeDispatcherFunc("ReverseDominance", [[IsList]],[2],[2]);

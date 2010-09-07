@@ -856,8 +856,10 @@ times (and a way of inducing <M>s</M> times if the residue <M>r</M> is
 omitted); <M>r</M>-induction is explained in "<Ref Oper="RInducedModule"/>.
 
 <Example>
+gap&gt; SizeScreen([80,20]);;
 gap&gt; H:=Specht(4);; Display(SInducedModule(MakePIM(H,5,2,1),3));
-P(8,2,1) + 3P(7,3,1) + 2P(7,2^2) + 6P(6,3,2) + 6P(6,3,1^2) + 3P(6,2,1^3) + 2P(5,3^2) + P(5,2^2,1^2)
+P(8,2,1) + 3P(7,3,1) + 2P(7,2^2) + 6P(6,3,2) + 6P(6,3,1^2) + 3P(6,2,1^3) + 2P(\
+5,3^2) + P(5,2^2,1^2)
 gap&gt; Display(SInducedModule(MakePIM(H,5,2,1),3,1));
 P(6,3,1^2)
 gap&gt; Display(RInducedModule(MakePIM(H,5,2,1),1,1,1));
@@ -917,7 +919,7 @@ As with <Ref Oper="RInducedModule"/>, when <Ref Oper="RRestrictedModule"/> is
 applied to the canonical basis elements <C>MakeFockPIM(</C><M>\mu</M><C>)</C>
 a quantum analogue of restriction is applied; this time,
 <C>RRestrictedModule(</C><M>*,i</M><C>)</C> corresponds to the action
-of the generator <M>E_i</M> of <M>U_q(\widehat{sl_e})</M> on <M>\mathcalF</M>
+of the generator <M>E_i</M> of <M>U_q(\widehat{sl_e})</M> on <M>\mathcal{F}</M>
 <Cite Key="LLT"/>.<P/>
 
 See also <Ref Oper="RInducedModule"/>, <Ref Oper="SInducedModule"/> and
@@ -1578,7 +1580,7 @@ The sign representation <M>D(1^n)</M> of the Hecke algebra is the (one
 dimensional) representation sending <M>T_w</M> to <M>(-1)^{l(w)}</M>.
 The Hecke algebra <M>H</M> is not a Hopf algebra so there is no well defined
 action of <M>H</M> upon the tensor product of two <M>H</M>-modules; however,
-there is an outer automorphism <M>#</M> of <M>H</M> which corresponds to
+there is an outer automorphism <M>\#</M> of <M>H</M> which corresponds to
 tensoring with <M>D(1^n)</M>. This sends an irreducible module <M>D(\mu)</M>
 to an irreducible <M>D(\mu)^\#\cong D(\mu^\#)</M> for some <M>e</M>-regular
 partition <M>\mu^\#</M>. In the symmetric group case, Mullineux gave a
@@ -1627,7 +1629,7 @@ than the Kleshchev-<Cite Key="LLT"/> result.
 
 </Description>
 <Meth Name="MullineuxMap" Label="for a module" Arg="x"/>
-<Returns>returns <M>x^#</M>, the image of <M>x</M> under <M>#</M>.</Returns>
+<Returns>returns <M>x^\#</M>, the image of <M>x</M> under <M>\#</M>.</Returns>
 <Description>
 Note that the above remarks show that <M>P(\mu)</M>
 is mapped to <M>P(\mu^\#)</M> via the Mullineux map; this observation is
@@ -1710,7 +1712,7 @@ function requires the package &specht;
 <Meth Name="NormalNodes" Arg="e|H, mu"/>
 <Returns>the numbers of the rows of <M>\mu</M> which end in one of
 Kleshchev's <Cite Key="K"/> normal nodes.</Returns>
-<Meth Name="NormalNodes" Arg="e|H, mu, r"/>
+<Meth Name="NormalNodes" Label="for residues" Arg="e|H, mu, r"/>
 <Returns> the rows corresponding to normal nodes of the specified residue.
 </Returns>
 <Description>
@@ -1835,7 +1837,8 @@ coefficients are independent of <M>e</M>; they can be read more easily from
 the computation <M>S(\mu)\otimes S(\nu)</M>.
 
 <Example>
-gap&gt; SizeScreen([80,20]);; H:=Specht(0);; # the generic Hecke algebra with 'R'=*C*['q']
+gap&gt; SizeScreen([80,20]);;
+gap&gt; H:=Specht(0);; # the generic Hecke algebra with R=C[q]
 gap&gt; LittlewoodRichardsonRule([3,2,1],[4,2]);
 [ [ 4, 3, 2, 2, 1 ], [ 4, 3, 3, 1, 1 ], [ 4, 3, 3, 2 ], [ 4, 4, 2, 1, 1 ],
   [ 4, 4, 2, 2 ], [ 4, 4, 3, 1 ], [ 5, 2, 2, 2, 1 ], [ 5, 3, 2, 1, 1 ],
@@ -2388,8 +2391,10 @@ See also <Ref Oper="ECore"/>, <Ref Oper="RInducedModule"/> and
 (resp.  <M>D(\mu)</M>, or <M>P(\mu)</M>).</Returns>
 <Description>
 <Example>
+gap&gt; SizeScreen([80,20]);;
 gap&gt; H:=Specht(3);; x:=MakeSpecht(MakePIM(H,7,3));; Display(x);
-S(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) + S(4,3,2,1)
+S(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) +\
+ S(4,3,2,1)
 gap&gt; Coefficient(x,5,2,2,1);
 1
 </Example>
@@ -2443,9 +2448,12 @@ argument list is the list corresponding to the first row of the tableau.
 <M>\mu</M> a partition, <M>\nu</M> a composition.
 <Example>
 gap&gt; SizeScreen([80,20]);; Display(SemiStandardTableaux([4,3],[1,1,1,2,2]));
-[ Tableau( [ [ 1, 2, 3, 4 ], [ 4, 5, 5 ] ] ), Tableau( [ [ 1, 2, 3, 5 ], [ 4, 4, 5 ] ] ),
-  Tableau( [ [ 1, 2, 4, 4 ], [ 3, 5, 5 ] ] ), Tableau( [ [ 1, 2, 4, 5 ], [ 3, 4, 5 ] ] ),
-  Tableau( [ [ 1, 3, 4, 4 ], [ 2, 5, 5 ] ] ), Tableau( [ [ 1, 3, 4, 5 ], [ 2, 4, 5 ] ] ) ]
+[ Tableau( [ [ 1, 2, 3, 4 ], [ 4, 5, 5 ] ] ),
+  Tableau( [ [ 1, 2, 3, 5 ], [ 4, 4, 5 ] ] ),
+  Tableau( [ [ 1, 2, 4, 4 ], [ 3, 5, 5 ] ] ),
+  Tableau( [ [ 1, 2, 4, 5 ], [ 3, 4, 5 ] ] ),
+  Tableau( [ [ 1, 3, 4, 4 ], [ 2, 5, 5 ] ] ),
+  Tableau( [ [ 1, 3, 4, 5 ], [ 2, 4, 5 ] ] ) ]
 </Example>
 See also <Ref Oper="StandardTableaux"/>. This function requires the package
 &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
@@ -2507,8 +2515,10 @@ The type of a tableau is, the composition <M>\sigma=
 (\sigma_1,\sigma_2,\ldots)</M> where <M>\sigma_i</M> is
 the number of entries in <M>tab</M> which are equal to <M>i</M>.
 <Example>
+gap&gt; SizeScreen([80,20]);;
 gap&gt; List(SemiStandardTableaux([5,4,2],[4,3,0,1,3]),TypeTableau);
-[ [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ] ]
+[ [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ],
+  [ 4, 3, 0, 1, 3 ] ]
 </Example>
 This function requires the package &specht;
 (see <Ref Func="LoadPackage" BookName="Reference" BookName="Reference"/>).

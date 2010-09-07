@@ -1,8 +1,7 @@
 #############################################################################
 ##
-##  PackageInfo.g for the package `leer'
-##                                                            Max Neunhoeffer
-##                                                               Felix Noeske
+##  PackageInfo.g for the package hecke
+##                                                            Dmitriy Traytel
 ##  (created from Frank Lübeck's PackageInfo.g template file)
 ##
 
@@ -19,16 +18,16 @@ SetPackageInfo( rec(
 
 ##  This is case sensitive, use your preferred spelling.
 #
-PackageName := "specht",
+PackageName := "hecke",
 
 ##  This may be used by a default banner or on a Web page, should fit on
 ##  one line.
-Subtitle := "Specht - ported to GAP 4",
+Subtitle := "Hecke - Specht 2.4 ported to GAP 4",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "3.0",
+Version := "1.0",
 ##  Please adjust also the VERSION file in the package directory when
 ##  changing this.
 
@@ -45,8 +44,8 @@ Version := "3.0",
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 #
 ArchiveURL := Concatenation(
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/",
-  "specht/specht"),
+  "http://home.in.tum.de/~traytel/",
+  "hecke/hecke"),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -126,14 +125,9 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "traytel@in.tum.de",
-    WWWHome       := "http://home.in.tum.de/~traytel",
-    PostalAddress := Concatenation( [
-                       "Dmitriy Traytel\n",
-                       "Hasenberglstr. 19\n",
-                       "80935 Munich\n",
-                       "Germany" ] ),
+    WWWHome       := "http://home.in.tum.de/~traytel/hecke",
     Place         := "Munich",
-    Institution   := "TU Munich"
+    Institution   := "Technische Universität München"
   )
 # provide such a record for each author and/or maintainer ...
 
@@ -169,11 +163,11 @@ Status := "dev",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := Concatenation(
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/",
-  "leer/README.leer"),
+  "http://home.in.tum.de/~traytel",
+  "hecke/README.hecke"),
 PackageInfoURL := Concatenation(
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/",
-  "leer/PackageInfo.g"),
+  "http://home.in.tum.de/~traytel",
+  "hecke/PackageInfo.g"),
 
 ##  Here you  must provide a short abstract explaining the package content
 ##  in HTML format (used on the package overview Web page) and an URL
@@ -191,8 +185,8 @@ PackageInfoURL := Concatenation(
 #   package. It has little functionality except for being a package",
 #
 PackageWWWHome := Concatenation(
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/",
-  "leer.html"),
+  "http://home.in.tum.de/~traytel/hecke",
+  "hecke.html"),
 #
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the
@@ -223,11 +217,11 @@ PackageWWWHome := Concatenation(
 # in case of several help books give a list of such records here:
 PackageDoc := rec(
   # use same as in GAP
-  BookName  := "specht",
+  BookName  := "hecke",
   # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
   Archive := Concatenation(
-    "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/",
-    "leer/leerdoc.tar.gz"),
+    "http://home.in.tum.de/~traytel",
+    "hecke/heckedoc.tar.gz"),
   ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
@@ -236,7 +230,7 @@ PackageDoc := rec(
   # a longer title of the book, this together with the book name should
   # fit on a single text line (appears with the '?books' command in GAP)
   # LongTitle := "Elementary Divisors of Integer Matrices",
-  LongTitle := "Specht 3.0 - a port to GAP 4",
+  LongTitle := "Hecke - Specht 2.4 ported to GAP 4",
   # Should this help book be autoloaded when GAP starts up? This should
   # usually be 'true', otherwise say 'false'.
   Autoload  := true
@@ -285,17 +279,17 @@ AvailabilityTest := function()
 ##  when it is not shown. *optional* (note the ~-syntax in this example)
 BannerString := Concatenation(
   "----------------------------------------------------------------\n",
-  "Loading  specht ", ~.Version, "\n",
+  "Loading  hecke ", ~.Version, "\n",
   "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
         " (", ~.Persons[1].WWWHome, ")\n",
-  "For help, type: ?specht package \n",
+  "For help, type: ?hecke package \n",
   "----------------------------------------------------------------\n" ),
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is
 ##  started.  This should usually be 'false'. Say 'true' only if your package
 ##  provides some improvements of the GAP library which are likely to enhance
 ##  the overall system performance for many users.
-Autoload := true,
+Autoload := false,
 
 ##  *Optional*, but recommended: path relative to package root to a file which
 ##  contains as many tests of the package functionality as sensible.
@@ -304,7 +298,7 @@ Autoload := true,
 ##  *Optional*: Here you can list some keyword related to the topic
 ##  of the package.
 # Keywords := ["Smith normal form", "p-adic", "rational matrix inversion"]
-Keywords := ["Hecke decomposition"]
+Keywords := ["Hecke, decomposition matrix, Specht module, Schur,"]
 
 ));
 
