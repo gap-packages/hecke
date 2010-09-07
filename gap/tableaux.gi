@@ -1,16 +1,19 @@
-############################################################
-##                                                        ##
-##   SPECHT This file contains functions for generating   ##
-##     semistandard tableaux                              ##
-##                                                        ##
-##   Dmitriy Traytel                                      ##
-##   (heavily using the GAP3-version by Andrew Mathas)    ##
-##                                                        ##
-############################################################
+#######################################################################
+##                                                                   ##
+##   Hecke - tableaux.gi : Young tableaux                            ##
+##                                                                   ##
+##     This file contains functions for generating all kinds of      ##
+##     young tableaux                                                ##
+##                                                                   ##
+##     Dmitriy Traytel                                               ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
+##                                                                   ##
+#######################################################################
 
-## June 2010:
+## Hecke 1.0: June 2010:
 ##   - Translated to GAP4
 
+## SPECHT Change log
 ## July 1997
 ##   o fixed a bug (reported by Schmuel Zelikson) in
 ##     SemiStandardTableau(); added Type and Shape

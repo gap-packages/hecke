@@ -1,17 +1,18 @@
 #############################################################################
 ##
-##  read.g                specht package
+##  read.g                hecke package
 ##                                                          Dmitriy Traytel
 ##
 ##  Copyright 2010
 ##
-##  Reading the declaration part of the specht package.
+##  Reading the declaration part of the hecke package.
 ##
 #############################################################################
 
-ReadPackage("specht","gap/global.gd");
-ReadPackage("specht","gap/dispatcher.gd");
-ReadPackage("specht","gap/specht.gd");
-ReadPackage("specht","gap/output.gd");
-ReadPackage("specht","gap/symmcomb.gd");
-ReadPackage("specht","gap/tableaux.gd");
+ReadPackage("hecke","gap/global.gd");
+ReadPackage("hecke","gap/dispatcher.gd");
+ReadPackage("hecke","gap/specht.gd");
+ReadPackage("hecke","gap/output.gd");
+ReadPackage("hecke","gap/symmcomb.gd");
+ReadPackage("hecke","gap/tableaux.gd");
+

@@ -1,5 +1,5 @@
 #######################################################################
-##  SPECHT - specht.g : the kernel of SPECHT                         ##
+##  Hecke - specht.gi : the kernel of Hecke                          ##
 ##                                                                   ##
 ##     A GAP package for calculating the decomposition numbers of    ##
 ##     Hecke algebras of type A (over fields of characteristic       ##
@@ -12,14 +12,14 @@
 ##     under the usual licensing agreements and conditions of GAP.   ##
 ##                                                                   ##
 ##     Dmitriy Traytel                                               ##
-##     (heavily using the GAP3-version by Andrew Mathas)             ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
 ##                                                                   ##
 #######################################################################
 
-## 3.0: June 2010:
+## Hecke 1.0: June 2010:
 ##   - Translated to GAP4
 
-## Change log
+## SPECHT Change log
 ## 2.4:
 ##  - fixed more bugs in H.valuation; returned incorrect answers before
 ##    when e=0 or e=p (symmetric group case).
@@ -104,10 +104,10 @@
 ##                   represent Specht modules, PIMs, and simple
 ##                   'H' modules repectively. These functions exist
 ##                   only when 'H' is a Hecke algebra record.
-#### Use NewModule(H,"S",...) instead of H.S(...)
+#### Use MakeSpecht(H,...) instead of H.S(...)
 ##   W(), P(), F() : these are the corresponding functions for Weyl
 ##                   modules, PIMs, and simple modules of Schur algbras.
-#### Use NewModule(H,"W",...) instead of H.W(...)
+#### Use MakeSpecht(S,...) instead of S.W(...)
 ##   info          : this is a record with components
 ##                     version: SPECHT version number,
 ##                     Library: path to SPECHT library files
@@ -122,7 +122,7 @@
 ##                   and accessing decomposition matrix files. The most
 ##                   most important of these are:
 ##                     S, P, D, Pq, Sq, Dq : operations records for modules
-#### TODO
+#### Most functions are now on toplevel
 ##                     New : creation function for modules. Internally
 ##                       modules are created via
 ##                         H.operations.new(module,coeffs,parts)
@@ -136,7 +136,7 @@
 ##                       algebras. Note that coeffs and parts must be
 ##                       ordered reverse lexicographically (ie. they are
 ##                       *sets*).
-#### Use New(H,...) instead of H.operations.New(...)
+#### Use Module(H,...) instead of H.operations.New(...)
 ##                     Collect: like New() except that  coeffs and parts
 ##                       need not be sets (and may contain repeats).
 #### Use Collect(H,...) instead of H.operations.Collect(...)
@@ -166,11 +166,12 @@
 ##                   the q-Schaper theorem.D
 ##   HeckeRing     : bookkeeping string used primarily in searching for
 ##                   library files.
-#### TODO
 ##   Pq(), Sq()    : Functions for computing elements of the Fock space
 ##                   when H.p=0 (used in LLT algorithm). Note that there is
 ##                   no Dq; also unlike their counter parts S(), P(), and
 ##                   D() they accept only partitions as arguments.
+#### Use MakeFockPIM(H,...) instead of H.Pq(...)
+#### Use MakeFockSpecht(H,...) instead of H.Sq(...)
 ##
 ## 2. The module functions S(), P() and D() (and Schur equivalents)
 ## These functions return record 'x' which represents some 'H'--module.
@@ -250,9 +251,9 @@ InstallMethod(Specht_GenAlgebra,"generate a type-Algebra object",
       valuation:=valuation,
       HeckeRing:=HeckeRing,
       ## bits and pieces about H
-      info:=rec(version:=PackageInfo("specht")[1].Version,
+      info:=rec(version:=PackageInfo("hecke")[1].Version,
                 Library:=Directory(
-                  Concatenation(DirectoriesPackageLibrary("specht")[1]![1],"e",
+                  Concatenation(DirectoriesPackageLibrary("hecke")[1]![1],"e",
                   String(e),"/")),
       ## We keep a copy of SpechtDirectory in H so that we have a
       ## chance of finding new decomposition matrices when it changes.
@@ -510,34 +511,31 @@ InstallMethod(ListERegulars,"e-regular partitions of a module",
   end
 ); # ListERegulars
 
-#### FIXME
+
 ##P Print the e-regular partitions in x if IsSpecht(x); on the other hand,
 ### if IsDecompositionMatrix(x) then return the e-regular part of the
 ### decompotion marix.
-#InstallMethod(ERegulars,"e-regular part of the given decomposition matrix",
-#  [IsDecompositionMatrix],
-#  function(d)
-#    regs:=rec(operations:=x.operations);
-#    for y in RecFields(d) do
-#      if not y in ["d","rows","labels"] then regs.(y):=x.(y); fi;
-#    od;
-#    regs.d:=[]; #P returns a list of the e-regular partitions occurring in x
-#    for y in [1..Length(x.cols)] do
-#      if IsBound(x.d[y]) then
-#        regs.d[y]:=rec(parts:=[], coeffs:=[]);
-#        for r in [1..Length(x.d[y].parts)] do
-#          len:=Position(x.cols,x.rows[x.d[y].parts[r]]);
-#          if len<>false then
-#            Add(regs.d[y].parts,len);
-#            Add(regs.d[y].coeffs,x.d[y].coeffs[r]);
-#          fi;
-#        od;
-#      fi;
-#    od;
-#    regs.rows:=regs.cols;
-#    return regs
-#  end
-#);
+InstallMethod(ERegulars,"e-regular part of the given decomposition matrix",
+  [IsDecompositionMatrix],
+  function(d) local regs, y, r, len;
+    regs:=DecompositionMatrix(d!.H,d!.rows,d!.cols,not IsCrystalDecompositionMatrix(d));
+    regs!.d:=[]; #P returns a list of the e-regular partitions occurring in x
+    for y in [1..Length(d!.cols)] do
+      if IsBound(d!.d[y]) then
+        regs!.d[y]:=rec(parts:=[], coeffs:=[]);
+        for r in [1..Length(d!.d[y].parts)] do
+          len:=Position(d!.cols,d!.rows[d!.d[y].parts[r]]);
+          if len<>fail then
+            Add(regs!.d[y].parts,len);
+            Add(regs!.d[y].coeffs,d!.d[y].coeffs[r]);
+          fi;
+        od;
+      fi;
+    od;
+    regs!.rows:=regs!.cols;
+    return regs;
+  end
+);
 
 InstallMethod(ERegulars, "print e-regular partitions of a module",
   [IsAlgebraObjModule],
@@ -624,7 +622,7 @@ InstallMethod(SplitECoresOp,"for a module and a partition",
 );
 
 InstallMethod(SplitECoresOp,"for a module and a specht module",
-  [IsAlgebraObjModule,IsHeckeSpecht], ## TODO Is this really only for specht modules?
+  [IsAlgebraObjModule,IsAlgebraObjModule],
   function(x,s) local c, cpos, y, cmp;
     c:=ECore(s!.H!.e, s!.parts[Length(x!.parts)]);
     cmp:=[ [],[] ];
@@ -1224,7 +1222,7 @@ InstallMethod(SaveDecompositionMatrix,
     if d=fail then Error("SaveDecompositionMatrix(<d>), d=fail!!!\n"); fi;
 
     SaveDm:=function(file)
-      AppendTo(file,"## This is a GAP library file generated by \n## SPECHT ",
+      AppendTo(file,"## This is a GAP library file generated by \n## Hecke ",
             d!.H!.info.version, "\n\n## This file contains ");
       if IsBound(d!.matname) then
         AppendTo(file,"a(n) ", d!.matname, " for n = ", Sum(d!.rows[1]),"\n");
@@ -1458,7 +1456,6 @@ InstallMethod(HeckeOmega,"for an algebra, a string and an integer",
 InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsList,IsList],
   function(H,m,c,p)
     local module;
-    ## TODO: Argument tests!?
     module := rec(H:=H,module:=m,coeffs:=c,parts:=p);
 
     if m = "S" and not IsSchur(H) then Objectify(HeckeSpechtType,module);
@@ -3531,7 +3528,7 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
     d:=ReadDecompositionMatrix(H,n,false);
 
     ## next we look for crystal matrices
-    if d=fail and not IsSchur(H) and IsZeroCharacteristic(H) then #FIXME overloading
+    if d=fail and not IsSchur(H) and IsZeroCharacteristic(H) then
       d:=ReadDecompositionMatrix(H,n,true);
       if d<>fail then d:=Specialized(d); fi;
     fi;
@@ -3539,7 +3536,7 @@ InstallMethod(KnownDecompositionMatrix,"looks for a known decomposition matrix",
     if d=fail and n<2*H!.e then
       ## decomposition matrix can be calculated
       r:=Partitions(n);
-      if not IsSchur(H) then c:=ERegularPartitions(H!.e,n); #FIXME overloading
+      if not IsSchur(H) then c:=ERegularPartitions(H!.e,n);
       else c:=r;
       fi;
       d:=DecompositionMatrix(H, r, c, true);
@@ -3575,7 +3572,7 @@ InstallMethod(FindDecompositionMatrix,"find or calculate CDM",
   [IsAlgebraObj,IsInt],
   function(H,n) local d,c;
     d:=KnownDecompositionMatrix(H,n);
-    if d=fail and not IsSchur(H) and IsZeroCharacteristic(H) then #FIXME overloading
+    if d=fail and not IsSchur(H) and IsZeroCharacteristic(H) then
       d:=DecompositionMatrix(H,
               Partitions(n),ERegularPartitions(H!.e,n),false);
       for c in [1..Length(d!.cols)] do

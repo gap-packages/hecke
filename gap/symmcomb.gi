@@ -1,5 +1,5 @@
 #######################################################################
-##  SPECHT - symmcomb.g : Combinatorial functions on partitions.     ##
+##  Hecke - symmcomb.gi : Combinatorial functions on partitions.     ##
 ##                                                                   ##
 ##     This file contains most of the combinatorial functions used   ##
 ##     by Specht. Most are standard operations on Young diagrams     ##
@@ -9,13 +9,14 @@
 ##     under the usual licensing agreements and conditions of GAP.   ##
 ##                                                                   ##
 ##     Dmitriy Traytel                                               ##
-##     (heavily using the GAP3-version by Andrew Mathas)             ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
 ##                                                                   ##
 #######################################################################
 
-## 3.0: June 2010:
+## Hecke 1.0: June 2010:
 ##   - Translated to GAP4
 
+## SPECHT Change log
 ## 2.4: October 1997:
 ##  - added funtions MullineuxSymbol, PartitionMullineuxSymbol,
 ##    NormalNodes (plus undocumented friends), BetaSet, PartitionBetaSet.
@@ -206,7 +207,7 @@ InstallMethod(
 ## to write something more efficient, but...
 InstallMethod(
   LittlewoodRichardsonCoefficientOp,
-  "for three partitions", ##TODO Better description here
+  "for three partitions",
   [IsList,IsList,IsList],
   function(lambda,mu,nu)
     local x;
@@ -538,7 +539,7 @@ InstallMethod(
       Print("\n\n");
     else
       mu:=EAbacusRunnersOp(e,mu);
-      m:=Maximum(Flat(mu)) + 1; ## TODO unnecessary Flat?
+      m:=Maximum(Flat(mu)) + 1;
       for i in [0..m] do
         for j in [1..e] do
           if  i in mu[j] then Print("  0");
@@ -764,7 +765,7 @@ InstallMethod(
 #P hook lengths in a diagram mod e
 ## *** undocumented: useful when lookng at the q-Schaper theorem
 InstallMethod(
-	EHookDiagramOp, ##TODO Naming?
+	EHookDiagramOp,
 	"for an integer and a partition",
 	[IsInt,IsList],
 	function(e,mu) local mud, i, j;
@@ -1344,7 +1345,7 @@ InstallMethod(
     if h > 0 then nu[1]:=nu[1] + h; r:=1;
     elif h=0 then return fail;
     fi;
-    return [nu, row - r]; ## TODO is here a flat missing
+    return [nu, row - r];
   end
 ); # AddRimHookOp
 

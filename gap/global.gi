@@ -1,5 +1,5 @@
 #######################################################################
-##  SPECHT - specht.g : the kernel of SPECHT                         ##
+##  Hecke - global.gi : some usefull global functions                ##
 ##                                                                   ##
 ##     A GAP package for calculating the decomposition numbers of    ##
 ##     Hecke algebras of type A (over fields of characteristic       ##
@@ -12,13 +12,16 @@
 ##     under the usual licensing agreements and conditions of GAP.   ##
 ##                                                                   ##
 ##     Dmitriy Traytel                                               ##
-##     (heavily using the GAP3-version by Andrew Mathas)             ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
 ##                                                                   ##
 #######################################################################
 
+## Hecke 1.0: September 2010:
+##   - initial
+
 InstallMethod(\*,"function composition",[IsFunction,IsFunction],
-  function(f,g) 
-    return function(x) return f(g(x)); end; 
+  function(f,g)
+    return function(x) return f(g(x)); end;
   end
 );
 
@@ -57,3 +60,4 @@ InstallMethod(Zip,[IsList,IsList],
     return res;
   end
 );
+

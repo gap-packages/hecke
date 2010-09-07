@@ -1,5 +1,5 @@
 #######################################################################
-##  SPECHT - dispatcher.gi : Compability for variable numbers of     ##
+##  Hecke - dispatcher.gi : Compability for variable numbers of      ##
 ##           arguments                                               ##
 ##                                                                   ##
 ##     This file contains a hack to support a variable number of     ##
@@ -14,11 +14,11 @@
 ##                                                                   ##
 #######################################################################
 
-## 3.0: June 2010:
+## Hecke 1.0: June 2010:
 ##   - initial
 
 ######################################################################
-
+#### Proposed by Max Neunhoeffer
 ## MakeDispatcherFunc := function(name)
 ##   nameop := Concatenation(name,"Op");
 ##   DeclareOperation(nameop,[IsHecke,IsList]);
@@ -93,7 +93,8 @@ InstallGlobalFunction(MakeDispatcherFunc,
       	  return CallFuncList(oper,newarg);
       	fi;
       od;
-      ## TODO: Error message
+      Error("dispatcher could not find an operation ",nameop,
+        " fitting the arguments;\n\t",arg,"\n");
     end;
     BindGlobal(name,disp);
   end

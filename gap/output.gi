@@ -1,5 +1,5 @@
 #######################################################################
-##  SPECHT - output.gi : printing functions                          ##
+##  Hecke - output.gi : printing functions                           ##
 ##                                                                   ##
 ##     A GAP package for calculating the decomposition numbers of    ##
 ##     Hecke algebras of type A (over fields of characteristic       ##
@@ -12,9 +12,12 @@
 ##     under the usual licensing agreements and conditions of GAP.   ##
 ##                                                                   ##
 ##     Dmitriy Traytel                                               ##
-##     (heavily using the GAP3-version by Andrew Mathas)             ##
+##     (heavily using the GAP3-package SPECHT 2.4 by Andrew Mathas)  ##
 ##                                                                   ##
 #######################################################################
+
+## Hecke 1.0: June 2010:
+##   - initial
 
 InstallMethod(PrintObj, "simple algebra output", [IsAlgebraObj],
 	function(x) Print(AlgebraString(x)); end
@@ -353,9 +356,9 @@ InstallMethod(BUGOp,"hopefully, no-one will ever see this function ;-)",
   [IsString,IsInt,IsList],
   function(msg,pos,list) local a;
      PrintTo("*errout*",
-             "\n\n *** You have uncovered a bug in SPECHT's function ",
+             "\n\n *** You have uncovered a bug in Hecke's function ",
               msg,"() - #", pos, "\n *** Please e-mail all possible ",
-              "details to ", PackageInfo("specht")[1].Persons[1].Email,"\n");
+              "details to ", PackageInfo("hecke")[1].Persons[1].Email,"\n");
      for a in list do
        PrintTo("*errout*", a);
      od;
