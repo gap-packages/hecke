@@ -1487,6 +1487,10 @@ InstallTrueMethod(IsSchurModule,IsSchurSimple);
 InstallTrueMethod(IsFockSchurModule,IsFockSchurWeyl);
 InstallTrueMethod(IsFockSchurModule,IsFockSchurPIM);
 InstallTrueMethod(IsFockSchurModule,IsFockSchurSimple);
+InstallTrueMethod(IsSchurModule,IsFockSchurModule);
+InstallTrueMethod(IsSchurWeyl,IsFockSchurWeyl);
+InstallTrueMethod(IsSchurPIM,IsFockSchurPIM);
+InstallTrueMethod(IsSchurSimple,IsFockSchurSimple);
 
 InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsInt,IsList],
   function(H,m,c,p)

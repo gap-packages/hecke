@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE Book SYSTEM "gapdoc.dtd"
-  [<!ENTITY Specht "<Package>Woodpecker</Package>">,
-   <!ENTITY specht "<Package>woodpecker</Package>">,
+  [<!ENTITY Specht "<Package>Hecke</Package>">,
+   <!ENTITY specht "<Package>hecke</Package>">,
    <!ENTITY OldSpecht "<Package>Specht</Package> <M>2.4</M>">]>
 
 <!--
