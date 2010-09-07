@@ -1,6 +1,6 @@
-﻿<!--
+<!--
 
-      functionality.xml            specht package documentation
+      functionality.xml            hecke package documentation
                                                                 Dmitriy Traytel
 
          Copyright (C) 2010, Dmitriy Traytel
@@ -14,7 +14,7 @@ This chapter gives examples for the usage of this package.
 
 <Section>
 <Heading>Porting notes</Heading>
-Porting the &OldSpecht; package to &GAP; 4 have not influenced the algorithms
+Porting the &OldSpecht; package to &GAP; 4 did not influenced the algorithms
 but required a completely new object oriented design of the underlying data
 structures. In &GAP; 3 records were used to represent algebra objects, modules
 and decomposition matrices of &OldSpecht;. Further functions were stored inside
@@ -34,7 +34,7 @@ passing patrition arguments as sequences of integers
 <Heading>Structure of &Specht;</Heading>
 <Description>
 The data structure hierarchy in &GAP; 4 is defined through filters and their
-dependencies.
+dependencies.<P/>
 </Description>
 <Filt Name="IsAlgebraObj"/>
 <Filt Name="IsHecke"/>
@@ -45,7 +45,7 @@ functions <Ref Oper="Specht"/> and <Ref Oper="Schur"/>. Concretely,
 <Ref Oper="Specht"/> returns an <Ref Filt="IsHecke"/> object (automatically also
 an <Ref Filt="IsAlgebraObj"/> object). For design reasons <Ref Filt="IsSchur"/>
 is a subfilter of <Ref Filt="IsHecke"/>. This allows to use the same functions
-for Schur-algebras as for Hecke-algebras with minor restrictions.
+for Schur-algebras as for Hecke-algebras with minor restrictions.<P/>
 </Description>
 <Filt Name="IsAlgebraObjModule"/>
 <Filt Name="IsHeckeModule"/>
@@ -70,8 +70,8 @@ The hierarchy of module objects is more complex. On top we have the filter
 <Ref Filt="IsHeckeModule"/> has <Ref Filt="IsHeckeSpecht"/>,
 <Ref Filt="IsHeckePIM"/>, <Ref Filt="IsHeckeSimple"/>,
 <Ref Filt="IsFockModule"/> and <Ref Filt="IsSchurModule"/> as subfilters. Again
-the last two have no mathematical sense but are technically comfortable.
-The filter <Ref Filt="IsFockModule"/> is superfilter of
+the last two subfilter relations have no mathematical sense but are technically
+comfortable. The filter <Ref Filt="IsFockModule"/> is superfilter of
 <Ref Filt="IsFockSpecht"/>, <Ref Filt="IsFockPIM"/>, <Ref Filt="IsFockSimple"/>
 and <Ref Filt="IsFockSchurModule"/>. Analogously <Ref Filt="IsSchurModule"/> is
 superfilter of <Ref Filt="IsSchurWeyl"/>, <Ref Filt="IsSchurPIM"/>,
@@ -81,7 +81,7 @@ superfilter of <Ref Filt="IsFockSchurWeyl"/>, <Ref Filt="IsFockSchurPIM"/>,
 <Ref Filt="IsFockSpecht"/> and <Ref Filt="IsHeckeSpecht"/> etc.,
 <Ref Filt="IsFockSchurWeyl"/> and <Ref Filt="IsFockSpecht"/> etc.,
 <Ref Filt="IsFockSchurWeyl"/> and <Ref Filt="IsSchurWeyl"/> etc.,
-<Ref Filt="IsSchurWeyl"/> and <Ref Filt="IsHeckeSpecht"/> etc. filters.
+<Ref Filt="IsSchurWeyl"/> and <Ref Filt="IsHeckeSpecht"/> etc. filters.<P/>
 </Description>
 <Filt Name="IsDecompositionMatrix"/>
 <Filt Name="IsCrystalDecompositionMatrix"/>
@@ -161,20 +161,20 @@ This function requires the package &specht;
 <Heading>Simple information accessing</Heading>
 <Description>
 We allow to read/store some information from/in the algebra object returned
-by <Ref Oper="Specht"/> using the following functions.
+by <Ref Oper="Specht"/> using the following functions.<P/>
 </Description>
 <Meth Name="OrderOfQ" Arg="H"/>
 <Description>
-Provides reading access to <M>e</M> that is stored in <M>H</M>.
+Provides reading access to <M>e</M> that is stored in <M>H</M>.<P/>
 </Description>
 <Meth Name="Characteristic" Arg="H"/>
 <Description>
-Provides reading access to <M>p</M> that is stored in <M>H</M>.
+Provides reading access to <M>p</M> that is stored in <M>H</M>.<P/>
 </Description>
 <Meth Name="SetOrdering" Arg="H, Ordering"/>
 <Description>
 Provides writing access to <M>Ordering</M> that is stored in <M>H</M>.
-The ordering influences the way how decomposition matrices are printed.
+The ordering influences the way how decomposition matrices are printed.<P/>
 </Description>
 <Var Name="SpechtDirectory"/>
 <Description>
@@ -197,7 +197,7 @@ as well as a way of inducing and restricting them, <Q>multiplying</Q> them
 and converting between these three natural bases of the Grothendieck ring.
 Multiplication of modules corresponds to taking a tensor productand then
 inducing (thus giving a module for a larger Hecke algebra). Each of these
-three functions can be called in four different ways, as we now describe.
+three functions can be called in four different ways, as we now describe.<P/>
 </Description>
 <Meth Name="MakeSpecht" Arg="H, mu"/>
 <Meth Name="MakePIM" Arg="H, mu"/>
@@ -210,7 +210,7 @@ Specht module, PIM, or simple module (respectively), is returned.
 <Example>
 gap&gt; H:=Specht(5);; MakePIM(H,4,3,2);; Display(last);
 P(4,3,2)
-</Example>
+</Example><P/>
 </Description>
 <Meth Name="MakeSpecht" Label="for a module" Arg="x"/>
 <Meth Name="MakePIM" Label="for a module" Arg="x"/>
@@ -243,7 +243,7 @@ modules which involve only <M>e</M>-regular partitions. As such, it is not
 always clear when two elements are equal in the Grothendieck ring.
 Consequently, to test whether two modules are equal you should first
 rewrite both modules in the <M>D</M>-basis; this is <E>not</E> done by
-&Specht; because it would be very inefficient.
+&Specht; because it would be very inefficient.<P/>
 </Description>
 <Meth Name="MakeSpecht" Label="for a decomposition matrix" Arg="d, mu"/>
 <Meth Name="MakePIM" Label="for a decomposition matrix" Arg="d, mu"/>
@@ -276,7 +276,7 @@ fail
 
 The final example returned <K>fail</K> because the partitions <M>(14,1)</M>
 and <M>(15)</M> have the same <M>3</M>-core (and <M>P(15)</M> is missing
-from <M>d</M>).
+from <M>d</M>).<P/>
 </Description>
 <Meth Name="MakeSpecht" Label="for a decomposition matrix and a module"
   Arg="d, x"/>
@@ -408,7 +408,7 @@ of <M>\mathcal{F}</M> generated by the <M>0</M>-partition are indexed by
 description of the algorithm for computing <M>Pq(\mu)</M> can be found
 in <Cite Key="LLT"/>.<P/>
 
-To access the elements of the Fock space &Specht; provides the functions:
+To access the elements of the Fock space &Specht; provides the functions:<P/>
 </Description>
 <Meth Name="MakeFockPIM" Arg="H, mu"/>
 <Meth Name="MakeFockSpecht" Arg="H, mu"/>
@@ -2471,7 +2471,7 @@ See also <Ref Oper="SemiStandardTableaux"/>. This function requires the package
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="ConjugatTableau" Arg="tab"/>
+<Meth Name="ConjugateTableau" Arg="tab"/>
 <Returns>tableau obtained from <M>tab</M> by interchangings its rows and
 columns</Returns>
 <Description>

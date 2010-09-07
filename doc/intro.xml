@@ -1,6 +1,6 @@
 <!--
 
-     intro.xml            specht package documentation
+     intro.xml            hecke package documentation
                                                                Dmitriy Traytel
 
          Copyright (C) 2010, Dmitriy Traytel
@@ -166,8 +166,7 @@ gap&gt; for n in [6..14] do
 </Example>
 
 The function <C>InducedDecompositionMatrix</C> contains almost every trick
-for computing decomposition matrices (except using the spin groups).
-I would be very happy to hear of any improvements.<P/>
+for computing decomposition matrices (except using the spin groups).<P/>
 
 &Specht; can also be used to calculate the decomposition numbers of the
 <M>q</M>-Schur algebras; although, as yet,  here no additional routines for
@@ -176,13 +175,13 @@ partitions. Such routines will probably be included in a future release,
 together with the (conjectural) algorithm <Cite Key="LT"/> for computing the
 decomposition matrices of the <M>q</M>-Schur algebras over fields of
 characteristic zero.<P/>
-
+<!--
 In the next release of &Specht;, functions for computing the decomposition
 matrices of Hecke algebras of type <E>B</E>, and more generally those of the
 Ariki-Koike algebras will be included. As with the Hecke
 algebra of type <E>A</E>, there is an algorithm for computing the
 decomposition matrices of these algebras when <M>R</M> is a field of
-characteristic zero <Cite Key="M"/>.
+characteristic zero <Cite Key="M"/>.-->
 </Section>
 
 <Section Label="overview">
