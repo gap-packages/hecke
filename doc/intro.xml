@@ -21,7 +21,7 @@ This package contains functions for computing the decomposition matrices
 for Iwahori-Hecke algebras of the symmetric groups. As the (modular)
 representation theory of these algebras closely resembles that of the
 (modular) representation theory of the symmetric groups (indeed, the
-later is a special case of the former) many of the combinatorial tools
+latter is a special case of the former) many of the combinatorial tools
 from the representation theory of the symmetric group are included in
 the package.<P/>
 
@@ -35,14 +35,13 @@ general and its highlights include:
 Hecke algebra <M>H</M> using the three natural bases corresponding to
 the Specht modules, projective indecomposable modules, and simple modules.
 </Item>
-<Item>For Hecke algebras defined over fields of characteristic zero we
-have implemented the algorithm of Lascoux, Leclerc, and Thibon
-<Cite Key="LLT"/> for computing decomposition numbers and
-<Q>crystallized decomposition matrices</Q>. In principle, this gives all of
-the decomposition matrices of Hecke algebras defined over fields of
-characteristic zero.
+<Item>For Hecke algebras defined over fields of characteristic zero,
+the algorithm of Lascoux, Leclerc, and Thibon <Cite Key="LLT"/> for computing
+decomposition numbers and <Q>crystallized decomposition matrices</Q> has been
+implemented. In principle, this gives all of the decomposition matrices of
+Hecke algebras defined over fields of characteristic zero.
 </Item>
-<Item>We provide a way of inducing and restricting modules. In addition,
+<Item>&Specht; provides a way of inducing and restricting modules. In addition,
 it is possible to <Q>induce</Q> decomposition matrices; this function is
 quite effective in calculating the decomposition matrices of Hecke
 algebras for small <M>n</M>.
@@ -71,9 +70,8 @@ included for <M>n&lt;15</M> and for all primes.
 <Heading>The modular representation theory of Hecke algebras</Heading>
 The <Q>modular</Q> representation theory of the Iwahori-Hecke algebras of
 type <E>A</E> was pioneered by Dipper and James <Cite Key="DJ1"/>
-<Cite Key="DJ2"/>; here we briefly outline the theory, referring the reader
-to the references for details. The definition of the Hecke algebra can be
-found in Chapter <Q>Iwahori-Hecke algebras</Q>; see also <Q>Hecke</Q>.<P/>
+<Cite Key="DJ2"/>; here the theory is briefly outlined, referring the reader
+to the references for details.<P/>
 
 Given a commutative integral domain <M>R</M> and a non-zero unit <M>q</M>
 in <M>R</M>, let <M>H=H_{R, q}</M> be the Hecke algebra of the symmetric
@@ -104,18 +102,20 @@ only if <M>\mu</M> and <M>\nu</M> have the same <M>e</M>-core
 <M>e</M> and not directly on <M>R</M> or <M>q</M>.<P/>
 
 Given two partitions <M>\mu</M> and <M>\nu</M>, where <M>\nu</M> is <M>e</M>
--regular, let <M>d_{\mu\nu}</M> be the composition multiplicity of
-<M>D(\nu)</M> in <M>S(\nu)</M>.  The matrix <M>D=(d_{\mu\nu})</M> is the <E>
+-regular, let <M>d_{\mu<Alt Not="LaTeX">,</Alt>\nu}</M> be the composition
+multiplicity of <M>D(\nu)</M> in <M>S(\nu)</M>.  The matrix
+<M>D=(d_{\mu<Alt Not="LaTeX">,</Alt>\nu})</M> is the <E>
 decomposition matrix</E> of <M>H</M>. When the rows and columns are ordered
 in a way compatible with dominance, <M>D</M> is lower unitriangular.<P/>
 
 The indecomposable <M>H</M>-modules <M>P(\nu)</M> are indexed by <M>e</M>
 -regular partitions <M>\nu</M>. By general arguments, <M>P(\nu)</M> has the
-same composition factors as <M>\sum_{\mu} d_{\mu\nu} S(\mu)</M>;
-so these linear combinations of modules become identified in the
+same composition factors as <M>\sum_{\mu} d_{\mu<Alt Not="LaTeX">,</Alt>\nu}
+S(\mu)</M>; so these linear combinations of modules become identified in the
 Grothendieck ring of <M>H</M>. Similarly, <M>D(\nu) =
-\sum_{\mu} d_{\nu\mu}^{-1} S(\mu)</M> in the Grothendieck ring. These
-observations are the basis for many of the computations in &Specht;.
+\sum_{\mu} d_{\nu<Alt Not="LaTeX">,</Alt>\mu}^{-1} S(\mu)</M> in the
+Grothendieck ring. These observations are the basis for many of the
+computations in &Specht;.
 </Section>
 
 <Section Label="examples">
@@ -171,7 +171,7 @@ for computing decomposition matrices (except using the spin groups).<P/>
 &Specht; can also be used to calculate the decomposition numbers of the
 <M>q</M>-Schur algebras; although, as yet,  here no additional routines for
 calculating the projective indecomposables indexed by <M>e</M>-singular
-partitions. Such routines will probably be included in a future release,
+partitions. Such routines may be included in a future release,
 together with the (conjectural) algorithm <Cite Key="LT"/> for computing the
 decomposition matrices of the <M>q</M>-Schur algebras over fields of
 characteristic zero.<P/>
@@ -200,7 +200,7 @@ usage of this package.
 <Heading>&Specht; author's credits</Heading>
 I would like to thank Anne Henke for offering me the interesting project of
 porting &OldSpecht; to the current &GAP; version, Max Neunhöffer for giving
-me an excellent introduction to GAP 4-style of programming and Benjamin
+me an excellent introduction to the &GAP; 4-style of programming and Benjamin
 Wilson for supporting the project and helping me to understand the
 mathematics behind &Specht;.<P/>
 
