@@ -47,7 +47,7 @@ InstallMethod(FoldAfterMapLeft,[IsFunction,IsFunction,IsObject,IsList],
 
 InstallMethod(StringFold,[IsString,IsList],
   function(str,l)
-    return FoldAfterMapLeft(Concatenation,String,str,l);
+    return FoldAfterMapLeft(Concatenation,StringPrint,str,l);
   end
 );
 
