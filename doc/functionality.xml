@@ -483,7 +483,7 @@ in the canonical basis elements you need never work with them directly.
 This function behaves almost identically to the function
 <Ref Oper="Specht"/>, the only difference being that the belonging modules
 are printed as <Q>W</Q>, <Q>P</Q>, <Q>F</Q> and that they correspond to the
-<M>q</M>-Weyl modules, the projective decomposable modules, and the simple
+<M>q</M>-Weyl modules, the projective indecomposable modules, and the simple
 modules of the <M>q</M>-Schur algebra respectively. Note that the
 <C>Make***</C>-functions (i.e. <Ref Oper="MakeSpecht"/> is used to generate
 <M>q</M>-Weyl modules). Further, note that our labeling of these modules
@@ -772,12 +772,12 @@ adding a single node to the diagram of <M>\mu</M>.
 <Example>
 gap&gt; H:=Specht(2,2);;
 gap&gt; Display(RInducedModule(MakeSpecht(H,7,4,3,1)));
-S(8,4,3,1)+S(7,5,3,1)+S(7,4^2,1)+S(7,4,3,2)+S(7,4,3,1^2)
+S(8,4,3,1) + S(7,5,3,1) + S(7,4^2,1) + S(7,4,3,2) + S(7,4,3,1^2)
 gap&gt; Display(RInducedModule(MakePIM(H,5,3,1)));
-P(6,3,1)+2P(5,4,1)+P(5,3,2)
+P(6,3,1) + 2P(5,4,1) + P(5,3,2)
 gap&gt; Display(RInducedModule(MakeSimple(H,11,2,1)));
 # D(&lt;x&gt;), unable to rewrite &lt;x&gt; as a sum of simples
-S(12,2,1)+S(11,3,1)+S(11,2^2)+S(11,2,1^2)
+S(12,2,1) + S(11,3,1) + S(11,2^2) + S(11,2,1^2)
 </Example>
 
 When inducing indecomposable modules and simple modules,
@@ -806,13 +806,13 @@ only adding nodes of some fixed <M>e</M>-residue <M>r</M>; this is known as
 
 <Example>
 gap&gt; H:=Specht(4);; Display(RInducedModule(MakeSpecht(H,5,2,1)));
-S(6,2,1)+S(5,3,1)+S(5,2^2)+S(5,2,1^2)
+S(6,2,1) + S(5,3,1) + S(5,2^2) + S(5,2,1^2)
 gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),0));
-0*S()
+0S()
 gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),1));
-S(6,2,1)+S(5,3,1)+S(5,2,1^2)
+S(6,2,1) + S(5,3,1) + S(5,2,1^2)
 gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),2));
-0*S()
+0S()
 gap&gt; Display(RInducedModule(MakeSpecht(H,5,2,1),3));
 S(5,2^2)
 </Example>
@@ -844,7 +844,7 @@ generator <M>F_i</M> of the quantum group <M>U_q(
 <Example>
 gap&gt; H:=Specht(3);; x:=RInducedModule(MakeFockPIM(H,4,2),1,2);;
 gap&gt; Display(x); Display(MakePIM(x));
-Sq(6,2)+vSq(4^2)+v^2Sq(4,2^2)
+Sq(6,2) + vSq(4^2) + v^2Sq(4,2^2)
 Pq(6,2)
 </Example>
 

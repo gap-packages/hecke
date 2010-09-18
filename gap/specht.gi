@@ -418,7 +418,7 @@ InstallMethod(SpechtPartitions,"reading access to S.parts",[IsHeckeSpecht],
 InstallMethod(SimpleDimensionOp,
   "all simple dimensions from decomposition matrix",[IsDecompositionMatrix],
   function(d) local cols, collabel, M, c, x;
-    if not not IsSchur(d!.H) then
+    if IsSchur(d!.H) then
       Print("# SimpleDimension() not implemented for Schur algebras\n");
       return fail;
     fi;
@@ -1039,7 +1039,7 @@ InstallMethod(CalculateDecompositionMatrix,"for an algebra and an integer",
 InstallMethod(CrystalDecompositionMatrix,"for an algebra and an integer",
   [IsAlgebraObj,IsInt],
   function(H,n) local d, Px, c;
-    if not IsZeroCharacteristic(H) or not not IsSchur(H) then
+    if not IsZeroCharacteristic(H) or IsSchur(H) then
       Error("Crystal decomposition matrices are defined only ",
 		         "for Hecke algebras\n         with H!.p=0\n");
     fi;
@@ -1592,7 +1592,7 @@ InstallMethod(MakePIMOp,"S()->P()",[IsHeckeSpecht,IsBool],
 
     proj:=Module(x!.H,"P",0,[]);
     while x<>fail and x<>0*x and
-    ( not not IsSchur(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
+    ( IsSchur(x!.H) or IsERegular(x!.H!.e,x!.parts[Length(x!.parts)]) ) do
       proj:=proj+Module(x!.H,"P",x!.coeffs[Length(x!.parts)],
                                       x!.parts[Length(x!.parts)]);
       tmp:=MakeSpechtOp(
