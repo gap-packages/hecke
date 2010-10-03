@@ -133,7 +133,7 @@ gap&gt; H:=Specht(4);   # e=4, 'R' a field of characteristic 0
 gap&gt; RInducedModule(MakePIM(H,12,2));
 &lt;direct sum of 5 P-modules&gt;
 gap&gt; Display(last);
-P(13,2)+P(12,3)+P(12,2,1)+P(10,3,2)+P(9,6)
+P(13,2) + P(12,3) + P(12,2,1) + P(10,3,2) + P(9,6)
 </Example>
 
 The <Cite Key="LLT"/> algorithm was applied 24 times during this calculation.
