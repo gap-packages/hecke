@@ -210,7 +210,7 @@
 ##   cols : the *set* of the partitions which make up the rows or 'd'.
 ##   inverse : a list of records containing the inverse of 'd'. These
 ##          records are computed only as needed.
-##   dimensions : a list of the dimenions of the simle modules; again
+##   dimensions : a list of the dimensions of the simle modules; again
 ##          comuted only as needed.
 ##   IsDecompositionMatrix : false if 'd' is a crystallized decomposition
 ##          matrix, and true otherwise.
@@ -973,7 +973,7 @@ InstallOtherMethod(DecompositionMatrix,"for an algebra and an integer",
       Store(d,n);
     fi;
     if d<>fail then   ## can't risk corrupting the internal matrix lists
-      d:=ShallowCopy(d);
+      d:=CopyDecompositionMatrix(d);
     fi;
     return d;
   end
@@ -997,7 +997,7 @@ InstallOtherMethod(DecompositionMatrix,"for an algebra and a filename",
       MissingIndecomposables(d);
     fi;
     if d<>fail then   ## can't risk corrupting the internal matrix lists
-      d:=ShallowCopy(d);
+      d:=CopyDecompositionMatrix(d);
     fi;
     return d;
   end
@@ -1045,7 +1045,7 @@ InstallMethod(CrystalDecompositionMatrix,"for an algebra and an integer",
     fi;
 
     d:=ReadDecompositionMatrix(H,n,true);
-    if d<>fail then d:=ShallowCopy(d);
+    if d<>fail then d:=CopyDecompositionMatrix(d);
     else d:=DecompositionMatrix(H,
                 Partitions(n),ERegularPartitions(H!.e,n),false);
     fi;
@@ -2979,6 +2979,20 @@ InstallMethod(\=, "for decomposition matrices",
     return d1!.d=d2!.d and d1!.cols = d2!.cols and d1!.rows = d2!.rows;
   end
 ); # Equal matrices
+
+InstallMethod(CopyDecompositionMatrix, "for decomposition matrices",
+  [IsDecompositionMatrix],
+  function(d) local newd;
+    newd:=DecompositionMatrix(
+      d!.H, StructuralCopy(d!.rows), StructuralCopy(d!.cols),
+      not IsCrystalDecompositionMatrix(d)
+      );
+    newd!.d:=StructuralCopy(d!.d);
+    newd!.inverse:=StructuralCopy(d!.inverse);
+    newd!.dimensions:=StructuralCopy(d!.dimensions);
+    return newd;
+  end
+); # CopyDecompositionMatrix
 
 ## Used by SaveDecomposition matrix to update CrystalMatrices[]
 InstallMethod(Store,"for crystal decomposition matrices",

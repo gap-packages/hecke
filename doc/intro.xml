@@ -197,8 +197,6 @@ usage of this package.
 <Section Label="credits">
 <Heading>Credits</Heading>
 
-<Subsection Label="newcredits">
-<Heading>&Specht; author's credits</Heading>
 I would like to thank Anne Henke for offering me the interesting project of
 porting &OldSpecht; to the current &GAP; version, Max Neunhöffer for giving
 me an excellent introduction to the &GAP; 4-style of programming and Benjamin
@@ -214,8 +212,7 @@ The lastest version of &Specht; can be obtained from<P/>
 Dmitriy Traytel<P/>
 traytel@in.tum.de<P/>
 Technische Universität München, 2010.
-</Subsection>
-
+<Ignore>
 <Subsection Label="oldcredits">
 <Heading>&OldSpecht; author's credits</Heading>
 I would like to thank Gordon James, Johannes Lipp, and Klaus Lux
@@ -234,6 +231,7 @@ mathas@maths.usyd.edu.au<P/>
 University of Sydney, 1997.<P/>
 (Supported in part by SERC grant GR/J37690)
 </Subsection>
+</Ignore>
 </Section>
 <!-- ############################################################ -->
 

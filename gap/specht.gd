@@ -29,6 +29,7 @@ DeclareCategory("IsCrystalDecompositionMatrix",
 DeclareAttribute("Characteristic", IsAlgebraObj);
 DeclareAttribute("OrderOfQ",IsAlgebraObj);
 DeclareAttribute("OrderOfQ",IsAlgebraObjModule);
+DeclareOperation("CopyDecompositionMatrix",[IsDecompositionMatrix]);
 
 DeclareProperty("IsZeroCharacteristic", IsAlgebraObj);
 
