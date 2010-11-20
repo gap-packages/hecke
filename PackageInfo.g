@@ -33,7 +33,7 @@ Version := "1.0",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 #
-#Date := "20/06/2003",  # not yet released
+Date := "30/10/2010",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -44,8 +44,8 @@ Version := "1.0",
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 #
 ArchiveURL := Concatenation(
-  "http://home.in.tum.de/~traytel/",
-  "hecke/hecke"),
+  "http://home.in.tum.de/~traytel/hecke/",
+  "hecke1.0"),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -85,7 +85,7 @@ ArchiveFormats := ".tar.gz",
 ##
 ##  These entries are *optional*.
 #TextFiles := ["init.g", ......],
-BinaryFiles := ["doc/manual.dvi", "doc/manual.pdf"],
+BinaryFiles := ["doc/manual.pdf"],
 
 
 ##  Information about authors and maintainers. Specify for each person a
@@ -125,7 +125,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "traytel@in.tum.de",
-    WWWHome       := "http://home.in.tum.de/~traytel/hecke",
+    WWWHome       := "http://home.in.tum.de/~traytel/hecke/",
     Place         := "Munich",
     Institution   := "Technische Universität München"
   )
@@ -163,11 +163,11 @@ Status := "dev",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := Concatenation(
-  "http://home.in.tum.de/~traytel",
-  "hecke/README.hecke"),
+  "http://home.in.tum.de/~traytel/hecke/",
+  "README.hecke"),
 PackageInfoURL := Concatenation(
-  "http://home.in.tum.de/~traytel",
-  "hecke/PackageInfo.g"),
+  "http://home.in.tum.de/~traytel/hecke/",
+  "PackageInfo.g"),
 
 ##  Here you  must provide a short abstract explaining the package content
 ##  in HTML format (used on the package overview Web page) and an URL
@@ -179,14 +179,20 @@ PackageInfoURL := Concatenation(
 # AbstractHTML := "This package provides  a collection of functions for \
 # computing the Smith normal form of integer matrices and some related \
 # utilities.",
-#AbstractHTML :=
+AbstractHTML :=
 #  "The <span class=\"pkgname\">Example</span> package, as its name suggests, \
 #   is an example of how to create a <span class=\"pkgname\">GAP</span> \
 #   package. It has little functionality except for being a package",
-#
+"The <span class=\"pkgname\">Hecke</span> package provides functions for \
+calculating decomposition matrices of Hecke algebras of the symmetric groups \
+and q-Schur algebras. Hecke is a port of the \
+<span class=\"pkgname\">GAP 3</span> package \
+<span class=\"Specht 2.4\">Hecke</span> to \
+<span class=\"pkgname\">GAP 4</span>.",
+
 PackageWWWHome := Concatenation(
-  "http://home.in.tum.de/~traytel/hecke",
-  "hecke.html"),
+  "http://home.in.tum.de/~traytel/hecke/",
+  "index.html"),
 #
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the
@@ -220,8 +226,8 @@ PackageDoc := rec(
   BookName  := "hecke",
   # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
   Archive := Concatenation(
-    "http://home.in.tum.de/~traytel",
-    "hecke/heckedoc.tar.gz"),
+    "http://home.in.tum.de/~traytel/hecke",
+    "hecke1.0.tar.gz"),
   ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
@@ -297,8 +303,7 @@ Autoload := false,
 
 ##  *Optional*: Here you can list some keyword related to the topic
 ##  of the package.
-# Keywords := ["Smith normal form", "p-adic", "rational matrix inversion"]
-Keywords := ["Hecke, decomposition matrix, Specht module, Schur,"]
+Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"]
 
 ));
 
