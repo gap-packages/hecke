@@ -1,0 +1,13 @@
+1.4
+    - fixed HTML in PackageInfo.g
+    - fixed a bug (reported by Rudolf Tango) in
+      SemiStandardTableau(): ignore trailing zeros
+      in the type of a tableau
+
+1.3
+    - fixed PackageInfo.g
+1.2
+    - added missing PackageInfo.g file
+    - added changelog
+1.1
+    - set package status to deposited
