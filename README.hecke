@@ -1,4 +1,4 @@
-Hecke 1.0
+Hecke 1.4
 ---------
 Hecke is a port of the GAP 3 package Specht 2.4 to GAP 4. Specht 2.4 was written
 by Andrew Mathas, who allowed me to use his source code as the basis for Hecke.
@@ -7,7 +7,7 @@ AUTHOR
 ------
 Dmitriy Traytel (traytel <at> in <dot> tum <dot> de)
 Technische Universität München
-Munich, October 2010
+Munich, July 2013
 --------------------------------------------------------------------------------
 INSTALLATION
 ------------
