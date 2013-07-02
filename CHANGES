@@ -3,6 +3,8 @@
     - fixed a bug (reported by Rudolf Tango) in
       SemiStandardTableau(): ignore trailing zeros
       in the type of a tableau
+    - Tableau constructor can now actually create
+      the empty tableau (again spotted by Rudolf Tango)
 
 1.3
     - fixed PackageInfo.g
