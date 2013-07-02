@@ -10,6 +10,13 @@
 ##                                                                   ##
 #######################################################################
 
+## Hecke 1.4: June 2013
+##   - fixed a bug (reported by Rudolf Tango) in
+##     SemiStandardTableau(): ignore trailing zeros
+##     in the type of a tableau.
+##   - Tableau constructor can now actually create
+##     the empty tableau (again spotted by Rudolf Tango)
+
 ## Hecke 1.0: June 2010:
 ##   - Translated to GAP4
 
@@ -31,14 +38,18 @@ InstallMethod(TableauOp, "tableau constructor",[IsList],
     isSemiStandardTab := function(tab)
       local d, r, c;
 
-      d:=List([1..Length(tab[1])], r->[]);
-      for r in [1..Length(tab)] do
-        for c in [1..Length(tab[r])] do
-          d[c][r]:=tab[r][c];
+      if tab=[] then
+        return true;
+      else
+        d:=List([1..Length(tab[1])], r->[]);
+        for r in [1..Length(tab)] do
+	  for c in [1..Length(tab[r])] do
+	    d[c][r]:=tab[r][c];
+	  od;
         od;
-      od;
-      return ForAll(tab, r->r=SortedList(r))
-        and ForAll(d, r->IsSet(r));
+        return ForAll(tab, r->r=SortedList(r))
+	  and ForAll(d, r->IsSet(r));
+      fi;
     end;
 
     ## assuming semistandardness already been checked
@@ -47,7 +58,7 @@ InstallMethod(TableauOp, "tableau constructor",[IsList],
     end;
 
     ## validity checks ##
-    if ForAll(tab, x -> IsList(x) and
+    if not tab=[] and ForAll(tab, x -> IsList(x) and
         not ForAll(x, y-> ##not IsBound(y) or ## TODO: desirable
             IsInt(y))) then
       Error("argument must be a list of lists of integers.");
@@ -154,7 +165,13 @@ InstallMethod(
 ## so avoid repeats.
 InstallMethod(SemiStandardTableauxOp, [IsList,IsList],
   function(nu,mu)
-    local FillTableau, ss, i;
+    local FillTableau, ss, i, maxnz;
+
+    maxnz:=Length(mu);
+    while maxnz>0 and mu[maxnz]=0 do
+      maxnz:=maxnz - 1;
+    od;
+    mu:=mu{[1..maxnz]};
 
     #F FillTableau adds upto <n>nodes of weight <i> into the tableau <t> on
     ## or below its <row>-th row (similar to the Littlewood-Richardson rule).
