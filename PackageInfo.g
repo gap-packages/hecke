@@ -33,7 +33,7 @@ Version := "1.4",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 #
-Date := "01/07/2013",
+Date := "02/07/2013",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -187,7 +187,7 @@ AbstractHTML :=
 calculating decomposition matrices of Hecke algebras of the symmetric groups \
 and q-Schur algebras. Hecke is a port of the \
 <span class=\"pkgname\">GAP 3</span> package \
-<span class=\"Specht 2.4\">Specht 2.4</span> to \
+<span class=\"pkgname\">Specht 2.4</span> to \
 <span class=\"pkgname\">GAP 4</span>.",
 
 PackageWWWHome := Concatenation(
