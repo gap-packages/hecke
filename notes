@@ -1,0 +1,3 @@
+tar -czf hecke`cat VERSION`.tar.gz ../hecke/{CHANGES,VERSION,doc,gap,lib,*.g}
+
+check with PackageInfo Validator
