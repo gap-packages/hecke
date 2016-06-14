@@ -2,7 +2,7 @@
 ##
 ##  PackageInfo.g for the package hecke
 ##                                                            Dmitriy Traytel
-##  (created from Frank Lübeck's PackageInfo.g template file)
+##  (created from Frank LÃ¼beck's PackageInfo.g template file)
 ##
 
 ##  For the LoadPackage mechanism in GAP >= 4.4 only the entries
@@ -94,7 +94,7 @@ BinaryFiles := ["doc/manual.pdf"],
 ##     rec(
 ##     # these are compulsory, characters are interpreted as latin-1, so
 ##     # German umlauts and other western European special characters are ok:
-##     LastName := "Müller",
+##     LastName := "MÃ¼ller",
 ##     FirstNames := "Fritz Eduard",
 ##
 ##     # At least one of the following two entries must be given and set
@@ -110,7 +110,7 @@ BinaryFiles := ["doc/manual.pdf"],
 ##     # complete URL, starting with protocol
 ##     WWWHome := "http://www.no.org/~Mueller",
 ##     # separate lines by '\n' (*optional*)
-##     PostalAddress := "Dr. F. Müller\nNo Org Institute\nNo Place 13\n\
+##     PostalAddress := "Dr. F. MÃ¼ller\nNo Org Institute\nNo Place 13\n\
 ##     12345 Notown\nNocountry"
 ##
 ##     # If you want, add one or both of the following entries (*optional*)
@@ -127,7 +127,7 @@ Persons := [
     Email         := "traytel@in.tum.de",
     WWWHome       := "http://home.in.tum.de/~traytel/hecke/",
     Place         := "Munich",
-    Institution   := "Technische Universität München"
+    Institution   := "Technische UniversitÃ¤t MÃ¼nchen"
   )
 # provide such a record for each author and/or maintainer ...
 
@@ -168,6 +168,10 @@ README_URL := Concatenation(
 PackageInfoURL := Concatenation(
   "http://home.in.tum.de/~traytel/hecke/",
   "PackageInfo.g"),
+SourceRepository := rec( 
+  Type := "hg", 
+  URL := "https://bitbucket.org/gap-system/hecke"
+),
 
 ##  Here you  must provide a short abstract explaining the package content
 ##  in HTML format (used on the package overview Web page) and an URL
