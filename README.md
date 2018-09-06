@@ -1,41 +1,20 @@
-Hecke 1.4
----------
+# Hecke 1.4
+
 Hecke is a port of the GAP 3 package Specht 2.4 to GAP 4. Specht 2.4 was written
-by Andrew Mathas, who allowed me to use his source code as the basis for Hecke.
---------------------------------------------------------------------------------
-AUTHOR
-------
-Dmitriy Traytel (traytel <at> in <dot> tum <dot> de)
-Technische Universität München
-Munich, July 2013
---------------------------------------------------------------------------------
-INSTALLATION
-------------
+by Andrew Mathas, who allowed Dmitriy Traytel to use his source code as the basis
+for Hecke.
+
+
+## INSTALLATION
+
 To install the package simply extract the archive into the pkg-folder of your
-GAP(4.4 or newer)-installation. Then you should be able to load the package in
-GAP4 via
+GAP-installation. Then you should be able to load the package in GAP via
 
     LoadPackage("hecke");
 
-If this does not work, make sure that you have GAPDoc installed (again in the
-pkg-folder there should be a folder GAPDoc). If it is not there you can get it
-from
 
-    ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/packages-2010_08_27-09_40_UTC.tar.gz
+## FEATURES
 
-together with several other GAP4 packages.
-
-I would recommend to log all your Hecke-sessions. Then you can just send me the
-log in case of a bug. To log a GAP-session enter the command
-
-    LogTo("some_file");
-
-right after you start GAP. The file is then placed in the same folder from which
-you started GAP4. Absolute paths are allowed to (but all directories must
-already exist).
---------------------------------------------------------------------------------
-FEATURES
---------
 This package contains functions for computing the decomposition matrices for
 Iwahori-Hecke algebras of the symmetric groups. As the (modular) representation
 theory of these algebras closely resembles that of the (modular) representation
@@ -77,5 +56,10 @@ The package is now much more general and its highlights include:
 
 7.  The decomposition matrices for the symmetric groups S_n are included for
     n<15 and for all primes.
---------------------------------------------------------------------------------
 
+
+## SUPPORT, BUG REPORTS
+
+For bug reports, feature requests and suggestions, please refer to
+
+   <https://github.com/gap-packages/hecke/issues>
