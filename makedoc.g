@@ -4,7 +4,7 @@
 ##  Call this with GAP.
 ##
 
-RequirePackage("GAPDoc");
+LoadPackage("GAPDoc");
 
 MakeGAPDocDoc("doc", "hecke", [], "hecke");
 
