@@ -13,13 +13,6 @@ Version := "1.4",
 ##  Release date of the current version in dd/mm/yyyy format.
 Date := "02/07/2013",
 
-ArchiveURL := Concatenation(
-  "http://home.in.tum.de/~traytel/hecke/",
-  "hecke1.4"),
-
-ArchiveFormats := ".tar.gz",
-BinaryFiles := ["doc/manual.pdf"],
-
 Persons := [
   rec(
     LastName      := "Traytel",
@@ -43,16 +36,18 @@ Persons := [
 
 Status := "deposited",
 
-README_URL := Concatenation(
-  "http://home.in.tum.de/~traytel/hecke/",
-  "README.hecke"),
-PackageInfoURL := Concatenation(
-  "http://home.in.tum.de/~traytel/hecke/",
-  "PackageInfo.g"),
-SourceRepository := rec( 
-  Type := "hg", 
-  URL := "https://bitbucket.org/gap-system/hecke"
+PackageWWWHome  := "https://gap-packages.github.io/hecke/",
+README_URL      := Concatenation( ~.PackageWWWHome, "README" ),
+PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
+SourceRepository := rec(
+    Type := "git",
+    URL := "https://github.com/gap-packages/hecke",
 ),
+IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
+ArchiveURL      := Concatenation( ~.SourceRepository.URL,
+                                 "/releases/download/v", ~.Version,
+                                 "/hecke-", ~.Version ),
+ArchiveFormats := ".tar.gz",
 
 AbstractHTML :=
 "The <span class=\"pkgname\">Hecke</span> package provides functions for \
@@ -61,10 +56,6 @@ and q-Schur algebras. Hecke is a port of the \
 <span class=\"pkgname\">GAP 3</span> package \
 <span class=\"pkgname\">Specht 2.4</span> to \
 <span class=\"pkgname\">GAP 4</span>.",
-
-PackageWWWHome := Concatenation(
-  "http://home.in.tum.de/~traytel/hecke/",
-  "index.html"),
 
 PackageDoc := rec(
   BookName  := "hecke",
