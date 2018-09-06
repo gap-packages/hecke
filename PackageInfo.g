@@ -68,7 +68,6 @@ PackageDoc := rec(
   Autoload  := true
 ),
 
-
 Dependencies := rec(
   GAP := ">=4.4",
   NeededOtherPackages := [["GAPDoc", ">= 0.99"]],
@@ -80,15 +79,6 @@ AvailabilityTest := function()
     return true;
   end,
 
-BannerString := Concatenation(
-  "----------------------------------------------------------------\n",
-  "Loading  hecke ", ~.Version, "\n",
-  "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
-        " (", ~.Persons[1].WWWHome, ")\n",
-  "For help, type: ?hecke package \n",
-  "----------------------------------------------------------------\n" ),
-
-Autoload := false,
 #TestFile := "tst/testall.g",
 Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
 
