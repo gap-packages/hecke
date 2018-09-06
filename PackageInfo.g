@@ -25,11 +25,19 @@ Persons := [
     LastName      := "Traytel",
     FirstNames    := "Dmitriy",
     IsAuthor      := true,
-    IsMaintainer  := true,
+    IsMaintainer  := false,
     Email         := "traytel@in.tum.de",
     WWWHome       := "http://home.in.tum.de/~traytel/hecke/",
     Place         := "Munich",
     Institution   := "Technische Universität München"
+  ),
+
+  rec(
+    LastName      := "GAP Team",
+    FirstNames    := "The",
+    IsAuthor      := false,
+    IsMaintainer  := true,
+    Email         := "support@gap-system.org",
   ),
 ],
 
