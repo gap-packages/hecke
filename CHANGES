@@ -1,3 +1,7 @@
+1.5
+    - transfer maintainership of the package to the GAP team
+    - moved package to GitHub
+
 1.4
     - fixed HTML in PackageInfo.g
     - fixed a bug (reported by Rudolf Tango) in
