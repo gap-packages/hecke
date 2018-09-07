@@ -7,8 +7,8 @@
 SetPackageInfo( rec(
 
 PackageName := "hecke",
-Subtitle := "Hecke - Specht 2.4 ported to GAP 4",
-Version := "1.4",
+Subtitle := "Calculating decomposition matrices of Hecke algebras",
+Version := "1.4dev",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 Date := "02/07/2013",
