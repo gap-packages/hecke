@@ -1078,16 +1078,18 @@ InstallMethod(CrystalDecompositionMatrix,
 InstallMethod(InducedDecompositionMatrix,"induce from decomposition matrix",
   [IsDecompositionMatrix],
   function(d)
-    local newd, mu, nu, Px, Py, n,r;
+    local newd, mu, nu, Px, Py, n,r, needNewline;
 
     if IsCrystalDecompositionMatrix(d)
     then Error("InducedDecompositionMatrix(d): ",
                  "<d> must be a decomposition matrix.");
     fi;
 
+    needNewline := false;
     n:=Sum(d!.rows[1])+1;
     if n>8 then                            ## print dots to let the user
       PrintTo("*stdout*","# Inducing.");   ## know something is happening.
+      needNewline := true;
     fi;
 
     nu:=Partitions(n);
@@ -1135,12 +1137,12 @@ InstallMethod(InducedDecompositionMatrix,"induce from decomposition matrix",
             AddIndecomposable(newd,Px,false);
           fi;
         od;
-        if mu mod n = 0 then PrintTo("*stdout*",".");fi;
+        if mu mod n = 0 then PrintTo("*stdout*","."); needNewline := true; fi;
       fi;
     od;
     Unbind(d!.ind); Unbind(d!.simples); ## maybe we should leave these.
 
-    if n>8 then Print("\n"); fi;
+    if needNewline then Print("\n"); fi;
     MissingIndecomposables(newd);
     return newd;
   end
