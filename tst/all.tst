@@ -15,7 +15,7 @@ gap> H:=Specht(3,3);
 <Hecke algebra with e = 3>
 gap> d:=DecompositionMatrix(H,5);
 <7x5 decomposition matrix>
-gap> for n in [6..14] do d:=InducedDecompositionMatrix(d); SaveDecompositionMatrix(d);  od;
+gap> for n in [6..14] do d:=InducedDecompositionMatrix(d); od;
 # Inducing..
 # Inducing..
 # Inducing...
@@ -59,7 +59,6 @@ gap> d:=InducedDecompositionMatrix(DecompositionMatrix(H,14));
 The following projectives are missing from <d>:
     [ 15 ]  [ 8, 7 ]
 <176x70 decomposition matrix>
-gap> SaveDecompositionMatrix(d);
 gap> MakePIM(d,4,3,3,2,2,1);
 <direct sum of 4 S-modules>
 gap> MakeSpecht(d,7,3,3,2);
@@ -214,7 +213,6 @@ gap> IsNewIndecomposable(d,x,6,3,1);
 false
 gap> AddIndecomposable(d,x);
 # AddIndecomposable: overwriting old value of P(10) in <d>
-gap> SaveDecompositionMatrix(d);
 
 #############################
 gap> H:=Specht(4);
@@ -237,7 +235,6 @@ gap> H:=Specht(5,5);;
 gap> d:=DecompositionMatrix(H,9);;
 gap> for r in [10..20] do
 > d:=InducedDecompositionMatrix(d);
-> SaveDecompositionMatrix(d);
 > od;
 # Inducing...
 # Inducing....
