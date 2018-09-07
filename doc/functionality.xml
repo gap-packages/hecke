@@ -3,7 +3,7 @@
       functionality.xml            hecke package documentation
                                                                 Dmitriy Traytel
 
-         Copyright (C) 2010--2013, Dmitriy Traytel
+         Copyright (C) 2010-2013, Dmitriy Traytel
 
 This chapter gives examples for the usage of this package.
 
@@ -294,9 +294,8 @@ gap&gt; Display(MakeSpecht(d, MakeSimple(d,10,5) ));
 </Description>
 </ManSection>
 <!--######################################################################-->
-<ManSection>
+<Subsection>
 <Heading>Decomposition numbers of the symmetric groups</Heading>
-<Description>
 The last example looked at Hecke algebras with parameter <M>q=1</M> and
 <M>R</M> a field of characteristic <M>3</M> (so <M>e=3</M>); that is,
 the group algebra of the symmetric group over a field of characteristic
@@ -322,12 +321,10 @@ gap&gt; H:=Specht(5,5);; SimpleDimension(H,6);
 2,1^4   : 5
 true
 </Example>
-</Description>
-</ManSection>
+</Subsection>
 <!--######################################################################-->
-<ManSection>
+<Subsection>
 <Heading>Hecke algebras over fields of positive characteristic</Heading>
-<Description>
 To consider Hecke algebras defined over arbitrary fields, <Ref Oper="Specht"/>
 must also be supplied with a valuation map <M>val</M> as an argument.
 The function <M>val</M> is a map from some PID into the natural numbers; at
@@ -372,8 +369,7 @@ valuation map is used then <M>HeckeRing</M> is set to the string
 The function <Ref Oper="SaveDecompositionMatrix"/> will not save any
 decomposition matrix for any Hecke algebra <M>H</M> with
 <M>HeckeRing=</M><Q>unknown</Q>.
-</Description>
-</ManSection>
+</Subsection>
 <!--######################################################################-->
 <ManSection>
 <Heading>The Fock space and Hecke algebras over fields of characteristic zero
