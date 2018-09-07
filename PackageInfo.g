@@ -93,7 +93,7 @@ Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
           Acknowledgements := """
             &Specht; is a port of the &GAP; 3 package <Package>Specht</Package> 2.4 to &GAP; 4.
             <Package>Specht</Package> 2.4 was written by Andrew Mathas, who allowed
-            Dmitriy Traytel to use his source code as the basis for &Hecke;.
+            Dmitriy Traytel to use his source code as the basis for &specht;.
             """,
       ),
   ),
