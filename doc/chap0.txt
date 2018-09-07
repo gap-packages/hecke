@@ -1,1 +1,139 @@
-Placeholder
+  
+  
+                                    [1X hecke [101X
+  
+  
+             [1X Calculating decomposition matrices of Hecke algebras [101X
+  
+  
+                                     1.4dev
+  
+  
+                                  2 July 2013
+  
+  
+                                Dmitriy Traytel
+  
+                                  The GAP Team
+  
+  
+  
+  Dmitriy Traytel
+      Email:    [7Xmailto:traytel@in.tum.de[107X
+      Homepage: [7Xhttp://home.in.tum.de/~traytel/hecke/[107X
+  The GAP Team
+      Email:    [7Xmailto:support@gap-system.org[107X
+  
+  -------------------------------------------------------
+  [1XCopyright[101X
+  [33X[0;0Y© 2010–2013 by Dmitriy Traytel[133X
+  
+  [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
+  Public License Version 2 or higher.[133X
+  
+  
+  -------------------------------------------------------
+  [1XAcknowledgements[101X
+  [33X[0;0Y[5XHecke[105X  is  a  port  of the [5XGAP[105X 3 package [5XSpecht[105X 2.4 to [5XGAP[105X 4. [5XSpecht[105X 2.4 was
+  written by Andrew Mathas, who allowed Dmitriy Traytel to use his source code
+  as the basis for UNKNOWNEntity(Hecke).[133X
+  
+  
+  -------------------------------------------------------
+  
+  
+  [1XContents (hecke)[101X
+  
+  1 [33X[0;0YDecomposition numbers of Hecke algebras of type A[133X
+    1.1 [33X[0;0YDescription[133X
+    1.2 [33X[0;0YThe modular representation theory of Hecke algebras[133X
+    1.3 [33X[0;0YTwo small examples[133X
+    1.4 [33X[0;0YOverview over this manual[133X
+    1.5 [33X[0;0YCredits[133X
+  2 [33X[0;0YInstallation of the [5Xhecke[105X-Package[133X
+  3 [33X[0;0YSpecht functionality[133X
+    3.1 [33X[0;0YPorting notes[133X
+      3.1-1 [33X[0;0YStructure of [5XHecke[105X[133X
+      3.1-2 [33X[0;0YRenamings[133X
+    3.2 [33X[0;0YSpecht functions[133X
+      3.2-1 Specht
+      3.2-2 [33X[0;0YSimple information access[133X
+      3.2-3 [33X[0;0YThe functions MakeSpecht, MakePIM and MakeSimple[133X
+      3.2-4 [33X[0;0YDecomposition numbers of the symmetric groups[133X
+      3.2-5 [33X[0;0YHecke algebras over fields of positive characteristic[133X
+      3.2-6 [33X[0;0YThe Fock space and Hecke algebras over fields of characteristic
+      zero[133X
+      3.2-7 Schur
+      3.2-8 DecompositionMatrix
+      3.2-9 CrystalDecompositionMatrix
+      3.2-10 DecompositionNumber
+    3.3 [33X[0;0YPartitions in [5XHecke[105X[133X
+    3.4 [33X[0;0YInducing and restricting modules[133X
+      3.4-1 RInducedModule
+      3.4-2 SInducedModule
+      3.4-3 RRestrictedModule
+      3.4-4 SRestrictedModule
+    3.5 [33X[0;0YOperations on decomposition matrices[133X
+      3.5-1 InducedDecompositionMatrix
+      3.5-2 IsNewIndecomposable
+      3.5-3 InvertDecompositionMatrix
+      3.5-4 AdjustmentMatrix
+      3.5-5 SaveDecompositionMatrix
+      3.5-6 CalculateDecompositionMatrix
+      3.5-7 MatrixDecompositionMatrix
+      3.5-8 DecompositionMatrixMatrix
+      3.5-9 AddIndecomposable
+      3.5-10 RemoveIndecomposable
+      3.5-11 MissingIndecomposables
+    3.6 [33X[0;0YCalculating dimensions[133X
+      3.6-1 SimpleDimension
+      3.6-2 SpechtDimension
+    3.7 [33X[0;0YCombinatorics on Young diagrams[133X
+      3.7-1 Schaper
+      3.7-2 IsSimpleModule
+      3.7-3 MullineuxMap
+      3.7-4 MullineuxSymbol
+      3.7-5 PartitionMullineuxSymbol
+      3.7-6 GoodNodes
+      3.7-7 NormalNodes
+      3.7-8 GoodNodeSequence
+      3.7-9 PartitionGoodNodeSequence
+      3.7-10 GoodNodeLatticePath
+      3.7-11 LittlewoodRichardsonRule
+      3.7-12 InverseLittlewoodRichardsonRule
+      3.7-13 EResidueDiagram
+      3.7-14 HookLengthDiagram
+      3.7-15 RemoveRimHook
+      3.7-16 AddRimHook
+    3.8 [33X[0;0YOperations on partitions[133X
+      3.8-1 ECore
+      3.8-2 IsECore
+      3.8-3 EQuotient
+      3.8-4 CombineEQuotientECore
+      3.8-5 EWeight
+      3.8-6 ERegularPartitions
+      3.8-7 IsERegular
+      3.8-8 ConjugatePartition
+      3.8-9 BetaSet
+      3.8-10 PartitionBetaSet
+      3.8-11 ETopLadder
+      3.8-12 Dominates
+      3.8-13 LengthLexicographic
+      3.8-14 Lexicographic
+      3.8-15 ReverseDominance
+    3.9 [33X[0;0YMiscellaneous functions on modules[133X
+      3.9-1 Specialized
+      3.9-2 ERegulars
+      3.9-3 SplitECores
+      3.9-4 Coefficient
+      3.9-5 InnerProduct
+    3.10 [33X[0;0YSemi-standard and standard tableaux[133X
+      3.10-1 Tableau
+      3.10-2 SemiStandardTableaux
+      3.10-3 StandardTableaux
+      3.10-4 ConjugateTableau
+      3.10-5 ShapeTableau
+      3.10-6 TypeTableau
+  
+  
+  [32X

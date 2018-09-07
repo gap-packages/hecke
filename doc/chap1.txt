@@ -1,0 +1,174 @@
+  
+  [1X1 [33X[0;0YDecomposition numbers of Hecke algebras of type A[133X[101X
+  
+  
+  [1X1.1 [33X[0;0YDescription[133X[101X
+  
+  [33X[0;0Y[5XHecke[105X is a port of the [5XGAP[105X 3-package [5XSpecht[105X [22X2.4[122X to [5XGAP[105X 4.[133X
+  
+  [33X[0;0YThis package contains functions for computing the decomposition matrices for
+  Iwahori-Hecke   algebras   of   the   symmetric  groups.  As  the  (modular)
+  representation  theory  of  these  algebras  closely  resembles  that of the
+  (modular)  representation theory of the symmetric groups (indeed, the latter
+  is  a  special  case of the former) many of the combinatorial tools from the
+  representation theory of the symmetric group are included in the package.[133X
+  
+  [33X[0;0YThese  programs  grew  out of the attempts by Gordon James and Andrew Mathas
+  [JM96]  to understand the decomposition matrices of Hecke algebras of type [13XA[113X
+  when [22Xq=-1[122X. The package is now much more general and its highlights include:[133X
+  
+  [31X1[131X   [33X[0;6Y[5XHecke[105X  provides a means of working in the Grothendieck ring of a Hecke
+        algebra  [22XH[122X  using  the three natural bases corresponding to the Specht
+        modules, projective indecomposable modules, and simple modules.[133X
+  
+  [31X2[131X   [33X[0;6YFor  Hecke  algebras  defined  over fields of characteristic zero, the
+        algorithm  of  Lascoux,  Leclerc,  and  Thibon  [LLT96]  for computing
+        decomposition numbers and [21Xcrystallized decomposition matrices[121X has been
+        implemented.  In  principle,  this  gives  all  of  the  decomposition
+        matrices of Hecke algebras defined over fields of characteristic zero.[133X
+  
+  [31X3[131X   [33X[0;6Y[5XHecke[105X provides a way of inducing and restricting modules. In addition,
+        it  is  possible  to  [21Xinduce[121X  decomposition matrices; this function is
+        quite  effective  in  calculating  the decomposition matrices of Hecke
+        algebras for small [22Xn[122X.[133X
+  
+  [31X4[131X   [33X[0;6YThe  [22Xq[122X-analogue  of  Schaper's  theorem  [JM97]  is  included,  as  is
+        Kleshchev's  [Kle96]  algorithm of calculating the Mullineux map. Both
+        are used extensively when inducing decomposition matrices.[133X
+  
+  [31X5[131X   [33X[0;6Y[5XHecke[105X  can  be  used  to  compute the decomposition numbers of [22Xq[122X-Schur
+        algebras  (and  the  general  linear  groups),  although there is less
+        direct  support for these algebras. The decomposition matrices for the
+        [22Xq[122X-Schur  algebras  defined over fields of characteristic zero for [22Xn<11[122X
+        and all [22Xe[122X are included in [5XHecke[105X.[133X
+  
+  [31X6[131X   [33X[0;6YThe  Littlewood-Richard  rule,  its inverse, and functions for many of
+        the  standard  operations  on  partitions  (such as calculating cores,
+        quotients, and adding and removing hooks), are included.[133X
+  
+  [31X7[131X   [33X[0;6YThe  decomposition  matrices for the symmetric groups [22XS_n[122X are included
+        for [22Xn<15[122X and for all primes.[133X
+  
+  
+  [1X1.2 [33X[0;0YThe modular representation theory of Hecke algebras[133X[101X
+  
+  [33X[0;0YThe  [21Xmodular[121X  representation  theory of the Iwahori-Hecke algebras of type [13XA[113X
+  was  pioneered by Dipper and James [DJ86] [DJ87]; here the theory is briefly
+  outlined, referring the reader to the references for details.[133X
+  
+  [33X[0;0YGiven a commutative integral domain [22XR[122X and a non-zero unit [22Xq[122X in [22XR[122X, let [22XH=H_R,
+  q[122X  be the Hecke algebra of the symmetric group [22XS_n[122X on [22Xn[122X symbols defined over
+  [22XR[122X  and with parameter [22Xq[122X. For each partition [22Xμ[122X of [22Xn[122X, Dipper and James defined
+  a  [13XSpecht  module[113X  [22XS(μ)[122X.  Let  [22Xrad~S(μ)[122X  be  the  radical of [22XS(μ)[122X and define
+  [22XD(μ)=S(μ)/rad~S(μ)[122X.  When  [22XR[122X  is  a field, [22XD(μ)[122X is either zero or absolutely
+  irreducible. Henceforth, we will always assume that [22XR[122X is a field.[133X
+  
+  [33X[0;0YGiven  a non-negative integer [22Xi[122X, let [22X[i]_q=1+q+...+q^i-1[122X. Define [22Xe[122X to be the
+  smallest  non-negative integer such that [22X[e]_q=0[122X; if no such integer exists,
+  we  set  [22Xe[122X  equal to [22X0[122X. Many of the functions in this package depend upon e;
+  the  integer  [22Xe[122X  is the Hecke algebras analogue of the characteristic of the
+  field in the modular representation theory of finite groups.[133X
+  
+  [33X[0;0YA  partition [22Xμ=(μ_1,μ_2,...)[122X is [13X[22Xe[122X-singular[113X if there exists an integer [22Xi[122X such
+  that  [22Xμ_i=μ_i+1=⋯=  μ_i+e-1>0[122X;  otherwise,  [22Xμ[122X is [13X[22Xe[122X-regular[113X. Dipper and James
+  [DJ86]  showed  that [22XD(ν)≠ 0[122X if and only if [22Xν[122X is [22Xe[122X-regular and that the [22XD(ν)[122X
+  give  a  complete set of non-isomorphic irreducible [22XH[122X-modules as [22Xν[122X runs over
+  the  [22Xe[122X-regular  partitions  of  [22Xn[122X. Further, [22XS(μ)[122X and [22XS(ν)[122X belong to the same
+  block  if  and  only if [22Xμ[122X and [22Xν[122X have the same [22Xe[122X-core [DJ87][JM97]. Note that
+  these results depend only on [22Xe[122X and not directly on [22XR[122X or [22Xq[122X.[133X
+  
+  [33X[0;0YGiven  two  partitions  [22Xμ[122X  and  [22Xν[122X,  where  [22Xν[122X is [22Xe[122X -regular, let [22Xd_μ,ν[122X be the
+  composition  multiplicity  of  [22XD(ν)[122X  in  [22XS(ν)[122X.  The matrix [22XD=(d_μ,ν)[122X is the [13X
+  decomposition  matrix[113X  of  [22XH[122X. When the rows and columns are ordered in a way
+  compatible with dominance, [22XD[122X is lower unitriangular.[133X
+  
+  [33X[0;0YThe indecomposable [22XH[122X-modules [22XP(ν)[122X are indexed by [22Xe[122X -regular partitions [22Xν[122X. By
+  general  arguments, [22XP(ν)[122X has the same composition factors as [22X∑_μ d_μ,ν S(μ)[122X;
+  so   these   linear   combinations  of  modules  become  identified  in  the
+  Grothendieck  ring  of  [22XH[122X.  Similarly,  [22XD(ν)  =  ∑_μ  d_ν,μ^-1  S(μ)[122X  in the
+  Grothendieck  ring.  These  observations  are  the  basis  for  many  of the
+  computations in [5XHecke[105X.[133X
+  
+  
+  [1X1.3 [33X[0;0YTwo small examples[133X[101X
+  
+  [33X[0;0YBecause  of  the  algorithm  of  [LLT96], in principle, all of decomposition
+  matrices  for  all Hecke algebras defined over fields of characteristic zero
+  are known and available using [5XHecke[105X. The algorithm is recursive; however, it
+  is quite quick and, as with a car, you need never look at the engine:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);   # e=4, 'R' a field of characteristic 0[127X[104X
+    [4X[28X<Hecke algebra with e = 4>[128X[104X
+    [4X[25Xgap>[125X [27XRInducedModule(MakePIM(H,12,2));[127X[104X
+    [4X[28X<direct sum of 5 P-modules>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28XP(13,2) + P(12,3) + P(12,2,1) + P(10,3,2) + P(9,6)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe [LLT96] algorithm was applied 24 times during this calculation.[133X
+  
+  [33X[0;0YFor  Hecke algebras defined over fields of positive characteristic the major
+  tool  provided  by [5XHecke[105X, apart from the decomposition matrices contained in
+  the  libraries,  is  a way of [21Xinducing[121X decomposition matrices. This makes it
+  fairly  easy to calculate the associated decomposition matrices for [21Xsmall[121X [22Xn[122X.
+  For  example, the [5XHecke[105X libraries contain the decomposition matrices for the
+  symmetric  groups  [22XS_n[122X  over  fields  of  characteristic  [22X3[122X  for [22Xn<15[122X. These
+  matrices were calculated by [5XHecke[105X using the following commands:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3,3);   # e=3, 'R' field of characteristic 3[127X[104X
+    [4X[28X<Hecke algebra with e = 3>[128X[104X
+    [4X[25Xgap>[125X [27Xd:=DecompositionMatrix(H,5);  # known for n<2e[127X[104X
+    [4X[28X<7x5 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28X5    | 1[128X[104X
+    [4X[28X4,1  | . 1[128X[104X
+    [4X[28X3,2  | . 1 1[128X[104X
+    [4X[28X3,1^2| . . . 1[128X[104X
+    [4X[28X2^2,1| 1 . . . 1[128X[104X
+    [4X[28X2,1^3| . . . . 1[128X[104X
+    [4X[28X1^5  | . . 1 . .[128X[104X
+    [4X[25Xgap>[125X [27Xfor n in [6..14] do[127X[104X
+    [4X[25X>[125X [27X      d:=InducedDecompositionMatrix(d); SaveDecompositionMatrix(d);[127X[104X
+    [4X[25X>[125X [27X   od;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  function  [10XInducedDecompositionMatrix[110X  contains  almost  every trick for
+  computing decomposition matrices (except using the spin groups).[133X
+  
+  [33X[0;0Y[5XHecke[105X can also be used to calculate the decomposition numbers of the [22Xq[122X-Schur
+  algebras;  although, as yet, here no additional routines for calculating the
+  projective  indecomposables  indexed by [22Xe[122X-singular partitions. Such routines
+  may  be  included  in  a  future  release,  together  with the (conjectural)
+  algorithm  [LT96]  for  computing  the decomposition matrices of the [22Xq[122X-Schur
+  algebras over fields of characteristic zero.[133X
+  
+  
+  [1X1.4 [33X[0;0YOverview over this manual[133X[101X
+  
+  [33X[0;0YChapter  [14X2[114X  describes  the  installation  of  this  package. Chapter [14X3[114X shows
+  instructive examples for the usage of this package.[133X
+  
+  
+  [1X1.5 [33X[0;0YCredits[133X[101X
+  
+  [33X[0;0YI  would like to thank Anne Henke for offering me the interesting project of
+  porting  [5XSpecht[105X [22X2.4[122X to the current [5XGAP[105X version, Max Neunhöffer for giving me
+  an  excellent  introduction  to  the [5XGAP[105X 4-style of programming and Benjamin
+  Wilson  for  supporting  the  project  and  helping  me  to  understand  the
+  mathematics behind [5XHecke[105X.[133X
+  
+  [33X[0;0YAlso  I  thank  Andrew  Mathas  for allowing me to use his [5XGAP[105X 3-code of the
+  [5XSpecht[105X [22X2.4[122X package.[133X
+  
+  [33X[0;0YThe lastest version of [5XHecke[105X can be obtained from[133X
+  
+  [33X[0;0Y[7Xhttp://home.in.tum.de/~traytel/hecke/[107X.[133X
+  
+  [33X[0;0YDmitriy Traytel[133X
+  
+  [33X[0;0Ytraytel@in.tum.de[133X
+  
+  [33X[0;0YTechnische Universität München, 2010.[133X
+  

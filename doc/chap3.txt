@@ -1,0 +1,2278 @@
+  
+  [1X3 [33X[0;0YSpecht functionality[133X[101X
+  
+  
+  [1X3.1 [33X[0;0YPorting notes[133X[101X
+  
+  [33X[0;0YPorting the [5XSpecht[105X [22X2.4[122X package to [5XGAP[105X 4 did not influence the algorithms but
+  required  a  completely  new  object  oriented design of the underlying data
+  structures. In [5XGAP[105X 3 records were used to represent algebra objects, modules
+  and  decomposition  matrices  of  [5XSpecht[105X  [22X2.4[122X. Further functions were stored
+  inside of such records to provide name safety.[133X
+  
+  [33X[0;0YIn  [5XHecke[105X  objects  represent  all  the  data  that  was  named  above.  The
+  overloading  mechanism  the former record-internal functions to be available
+  on  the  toplevel.  The operation selection mechanism of [5XGAP[105X 4 allows one to
+  concentrate  on  the  computation  code  instead  of  dealing with different
+  possible argument inputs.[133X
+  
+  [33X[0;0YSince variable argument length operations are not yet supported by [5XGAP[105X 4, we
+  introduced  our  own dispatcher facility to enable the former possibility of
+  passing patrition arguments as sequences of integers (see [14X3.3[114X).[133X
+  
+  
+  [1X3.1-1 [33X[0;0YStructure of [5XHecke[105X[101X[1X[133X[101X
+  
+  [33X[0;0YThe  data  structure hierarchy in [5XGAP[105X 4 is defined through filters and their
+  dependencies.[133X
+  
+  [33X[1;0Y[29X[2XIsAlgebraObj[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsHecke[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsSchur[102X[32X filter[133X
+  
+  [33X[0;0Y[2XIsAlgebraObj[102X  is  a generic filter for the objects returned by the functions
+  [2XSpecht[102X  ([14X3.2-1[114X)  and  [2XSchur[102X  ([14X3.2-7[114X).  Concretely, [2XSpecht[102X ([14X3.2-1[114X) returns an
+  [2XIsHecke[102X  object  (automatically  also  an  [2XIsAlgebraObj[102X  object). For design
+  reasons  [2XIsSchur[102X  is  a  subfilter  of  [2XIsHecke[102X. This allows to use the same
+  functions for Schur-algebras as for Hecke-algebras with minor restrictions.[133X
+  
+  [33X[1;0Y[29X[2XIsAlgebraObjModule[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckeModule[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckeSpecht[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckePIM[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckeSimple[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockModule[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSpecht[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockPIM[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSimple[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurModule[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurWeyl[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurPIM[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurSimple[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurModule[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurWeyl[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurPIM[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurSimple[102X[32X filter[133X
+  
+  [33X[0;0YThe  hierarchy  of module objects is more complex. On top we have the filter
+  [2XIsAlgebraObjModule[102X.  Its  direct descendant [2XIsHeckeModule[102X has [2XIsHeckeSpecht[102X,
+  [2XIsHeckePIM[102X,  [2XIsHeckeSimple[102X,  [2XIsFockModule[102X  and  [2XIsSchurModule[102X as subfilters.
+  Again  the  last  two subfilter relations have no mathematical sense but are
+  technically   comfortable.   The   filter  [2XIsFockModule[102X  is  superfilter  of
+  [2XIsFockSpecht[102X,  [2XIsFockPIM[102X,  [2XIsFockSimple[102X  and [2XIsFockSchurModule[102X. Analogously,
+  [2XIsSchurModule[102X  is  superfilter of [2XIsSchurWeyl[102X, [2XIsSchurPIM[102X, [2XIsSchurSimple[102X and
+  [2XIsFockSchurModule[102X   which   itself   is   superfilter   of  [2XIsFockSchurWeyl[102X,
+  [2XIsFockSchurPIM[102X,  [2XIsFockSchurSimple[102X.  Further,  there are subfilter relations
+  between   [2XIsFockSpecht[102X   and   [2XIsHeckeSpecht[102X   etc.,   [2XIsFockSchurWeyl[102X   and
+  [2XIsFockSpecht[102X  etc.,  [2XIsFockSchurWeyl[102X  and  [2XIsSchurWeyl[102X etc., [2XIsSchurWeyl[102X and
+  [2XIsHeckeSpecht[102X etc. filters.[133X
+  
+  [33X[1;0Y[29X[2XIsDecompositionMatrix[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsCrystalDecompositionMatrix[102X[32X filter[133X
+  
+  [33X[0;0YFor  decomposition  matrices we use the filter [2XIsDecompositionMatrix[102X and its
+  subfilter [2XIsCrystalDecompositionMatrix[102X.[133X
+  
+  
+  [1X3.1-2 [33X[0;0YRenamings[133X[101X
+  
+  [33X[0;0YTo  keep  things as backwards compatible as possible, we tried not to change
+  names   and   function   signatures.   But   for   the   former  [10XH.***[110X-  and
+  [10XH.operations.***[110X-style  functions  it  makes  more  sense  to  use  toplevel
+  functions  (especially  when  the  [22XH[122X  is not explicitly needed inside of the
+  called operation). Here is an overview of some important changes:[133X
+  
+      │        [5XGAP[105X 3         │           [5XGAP[105X 4           │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XH.S[110X          │    [2XMakeSpecht[102X ([14X3.2-3[114X)     │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XH.P[110X          │      [2XMakePIM[102X ([14X3.2-3[114X)      │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XH.D[110X          │    [2XMakeSimple[102X ([14X3.2-3[114X)     │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XH.Sq[110X         │  [2XMakeFockSpecht[102X ([14X3.2-6[114X)   │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XH.Pq[110X         │    [2XMakeFockPIM[102X ([14X3.2-6[114X)    │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XS.W[110X          │    [2XMakeSpecht[102X ([14X3.2-3[114X)     │ 
+      ├──────────────────────┼───────────────────────────┤
+      │         [10XS.F[110X          │    [2XMakeSimple[102X ([14X3.2-3[114X)     │ 
+      ├──────────────────────┼───────────────────────────┤
+      │    [10XInducedModule[110X     │  [2XRInducedModule[102X ([14X3.4-1[114X)   │ 
+      ├──────────────────────┼───────────────────────────┤
+      │   [10XRestrictedModule[110X   │ [2XRRestrictedModule[102X ([14X3.4-3[114X) │ 
+      ├──────────────────────┼───────────────────────────┤
+      │   [10XH.operations.New[110X   │          [10XModule[110X           │ 
+      ├──────────────────────┼───────────────────────────┤
+      │ [10XH.operations.Collect[110X │          [10XCollect[110X          │ 
+      └──────────────────────┴───────────────────────────┘
+  
+  
+  [1X3.2 [33X[0;0YSpecht functions[133X[101X
+  
+  [1X3.2-1 Specht[101X
+  
+  [33X[1;0Y[29X[2XSpecht[102X( [3Xe[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSpecht[102X( [3Xe[103X, [3Xp[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSpecht[102X( [3Xe[103X, [3Xp[103X, [3Xval[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSpecht[102X( [3Xe[103X, [3Xp[103X, [3Xval[103X, [3Xring[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Yobject belonging to the filter [2XIsHecke[102X ([14X3.1-1[114X)[133X
+  
+  [33X[0;0YLet  [22XR[122X  be a field of characteristic [22X0[122X, [22Xq[122X a non-zero element of [22XR[122X, and let [22Xe[122X
+  be the smallest positive integer such that [22X1+q+...+q^e-1=0[122X (we set [22Xe=0[122X if no
+  such  integer  exists). The object returned by [10XSpecht(e)[110X allows calculations
+  in  the  Grothendieck  rings  of  the  Hecke  algebras [22XH[122X of type [13XA[113X which are
+  defined  over [22XR[122X and have parameter [22Xq[122X. Below we also describe how to consider
+  Hecke algebras defined over fields of positive characteristic.[133X
+  
+  [33X[0;0Y[2XSpecht[102X  returns an object which contains information about the the family of
+  Hecke  algebras determined by [22XR[122X and [22Xq[122X. This object needs to be passed to the
+  most of the [5XHecke[105X functions as an argument.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(5);[127X[104X
+    [4X[28X<Hecke algebra with e = 5>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28XSpecht(e=5, S(), P(), D())[128X[104X
+    [4X[25Xgap>[125X [27XIsZeroCharacteristic(last);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThere is also a method [2XSchur[102X ([14X3.2-7[114X) for doing calculations with the [22Xq[122X-Schur
+  algebra.  See  [2XDecompositionMatrix[102X  ([14X3.2-8[114X),  and [2XCrystalDecompositionMatrix[102X
+  ([14X3.2-9[114X).   This   function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X
+  ([14XReference: LoadPackage[114X)).[133X
+  
+  
+  [1X3.2-2 [33X[0;0YSimple information access[133X[101X
+  
+  [33X[0;0YWe  allow to read/store some information from/in the algebra object returned
+  by [2XSpecht[102X ([14X3.2-1[114X) using the following functions.[133X
+  
+  [33X[1;0Y[29X[2XOrderOfQ[102X( [3XH[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[22Xe[122X.[133X
+  
+  [33X[1;0Y[29X[2XCharacteristic[102X( [3XH[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[22Xp[122X.[133X
+  
+  [33X[1;0Y[29X[2XSetOrdering[102X( [3XH[103X, [3XOrdering[103X ) [32X method[133X
+  
+  [33X[0;0YProvides  writing  access  to  [22XOrdering[122X  that  is  stored in [22XH[122X. The ordering
+  influences the way how decomposition matrices are printed.[133X
+  
+  [33X[1;0Y[29X[2XSpechtDirectory[102X[32X global variable[133X
+  
+  [33X[0;0YSetting  this  global  variable  the  user  can  tell  [5XHecke[105X  where  to find
+  decomposition  matrices  that  are  not  in  the library and also not in the
+  current directory. By default this variable is set to the current directory.[133X
+  
+  
+  [1X3.2-3 [33X[0;0YThe functions MakeSpecht, MakePIM and MakeSimple[133X[101X
+  
+  [33X[0;0YThe functions MakeSpecht, MakePIM and MakeSimple return objects belonging to
+  the  filter  [2XIsAlgebraObjModule[102X  ([14X3.1-1[114X)  which correspond to Specht modules
+  ([2XIsHeckeSpecht[102X   ([14X3.1-1[114X)),  projective  indecomposable  modules  ([2XIsHeckePIM[102X
+  ([14X3.1-1[114X))  and  simple  modules  ([2XIsHeckeSimple[102X  ([14X3.1-1[114X)) respectively. [5XHecke[105X
+  allows  manipulation  of  arbitrary linear combinations of these [21Xmodules[121X, as
+  well  as  a  way  of  inducing  and  restricting  them, [21Xmultiplying[121X them and
+  converting  between  these  three  natural  bases  of the Grothendieck ring.
+  Multiplication  of  modules  corresponds  to taking a tensor productand then
+  inducing  (thus  giving  a module for a larger Hecke algebra). Each of these
+  three functions can be called in four different ways, as we now describe.[133X
+  
+  [33X[1;0Y[29X[2XMakeSpecht[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakePIM[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakeSimple[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YIn  the  first  form,  [22Xμ[122X  is  a  partition  (either a list, or a sequence of
+  integers)  and  the  corresponding  Specht  module,  PIM,  or  simple module
+  (respectively), is returned.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(5);; MakePIM(H,4,3,2);; Display(last);[127X[104X
+    [4X[28XP(4,3,2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[1;0Y[29X[2XMakeSpecht[102X( [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakePIM[102X( [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakeSimple[102X( [3Xx[103X ) [32X method[133X
+  
+  [33X[0;0YHere,  [22Xx[122X  is  an  [22XH[122X-module.  In this form, [2XMakeSpecht[102X rewrites [22Xx[122X as a linear
+  combination   of   Specht  modules,  if  possible.  Similarly,  [2XMakePIM[102X  and
+  [2XMakeSimple[102X  rewrite  [22Xx[122X  as  a  linear combination of PIMs and simple modules
+  respectively.   These   conversions   require   knowledge  of  the  relevant
+  decomposition  matrix of [22XH[122X; if this is not known then [9Xfail[109X is returned (over
+  fields  of  characteristic zero, all of the decomposition matrices are known
+  via  the  algorithm  of  [LLT96];  various  other decomposition matrices are
+  included  with  [5XHecke[105X).  For  example, [10XMakeSpecht(MakePIM([110X[22XH, μ[122X[10X))[110X returns [22X∑_ν
+  d_ν,μ  S(ν)[122X  or  [9Xfail[109X  if some of these decomposition multiplicities are not
+  known.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDisplay( MakeSimple( MakePIM(H,4,3,2) ) );[127X[104X
+    [4X[28XD(5,3,1) + 2D(4,3,2) + D(2^4,1)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay( MakeSpecht( MakeSimple( MakeSpecht(H,1,1,1,1,1) ) ) );[127X[104X
+    [4X[28X - S(5) + S(4,1) - S(3,1^2) + S(2,1^3)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAs  the  last  example  shows, [5XHecke[105X does not always behave as expected. The
+  reason  for this is that Specht modules indexed by [22Xe[122X-singular partitions can
+  always  be  written  as a linear combination of Specht modules which involve
+  only [22Xe[122X-regular partitions. As such, it is not always clear when two elements
+  are  equal  in  the  Grothendieck  ring.  Consequently,  to test whether two
+  modules are equal you should first rewrite both modules in the [22XD[122X-basis; this
+  is [13Xnot[113X done by [5XHecke[105X because it would be very inefficient.[133X
+  
+  [33X[1;0Y[29X[2XMakeSpecht[102X( [3Xd[103X, [3Xmu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakePIM[102X( [3Xd[103X, [3Xmu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakeSimple[102X( [3Xd[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YIn the third form, [22Xd[122X is a decomposition matrix and [22Xμ[122X is a partition. This is
+  useful when you are trying to calculate a new decomposition matrix [22Xd[122X because
+  it  allows  you  to  do  calculations using the known entries of [22Xd[122X to deduce
+  information  about  the  unknown  ones.  When  used in this way, [2XMakePIM[102X and
+  [2XMakeSimple[102X  use  [22Xd[122X  to  rewrite  [22XP(μ)[122X  and  [22XD(μ)[122X  respectively  as  a linear
+  combination  of  Specht  modules  and  [2XMakeSpecht[102X  uses [22Xd[122X to write [22XS(μ)[122X as a
+  linear  combination  of simple modules. If the values of the unknown entries
+  in [22Xd[122X are needed, [9Xfail[109X is returned.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3,3);;   # e = 3, p = 3 = characteristic of 'R'[127X[104X
+    [4X[25Xgap>[125X [27X d:=InducedDecompositionMatrix(DecompositionMatrix(H,14));;[127X[104X
+    [4X[28X# Inducing....[128X[104X
+    [4X[28XThe following projectives are missing from <d>:[128X[104X
+    [4X[28X    [ 15 ]  [ 8, 7 ][128X[104X
+    [4X[25Xgap>[125X [27XDisplay(MakePIM(d,4,3,3,2,2,1));[127X[104X
+    [4X[28XS(4,3^2,2^2,1) + S(4,3^2,2,1^3) + S(4,3,2^3,1^2) + S(3^3,2^2,1^2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(MakeSpecht(d,7, 3, 3, 2));[127X[104X
+    [4X[28XD(11,2,1^2) + D(10,3,1^2) + D(8,5,1^2) + D(8,3^2,1) + D(7,6,1^2) + D(7,3^2,2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(MakeSimple(d,14,1));[127X[104X
+    [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  final example returned [9Xfail[109X because the partitions [22X(14,1)[122X and [22X(15)[122X have
+  the same [22X3[122X-core (and [22XP(15)[122X is missing from [22Xd[122X).[133X
+  
+  [33X[1;0Y[29X[2XMakeSpecht[102X( [3Xd[103X, [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakePIM[102X( [3Xd[103X, [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakeSimple[102X( [3Xd[103X, [3Xx[103X ) [32X method[133X
+  
+  [33X[0;0YIn  the final form, [22Xd[122X is a decomposition matrix and [22Xx[122X is a module. All three
+  functions  rewrite  [22Xx[122X  in their respective basis using [22Xd[122X. Again this is only
+  useful  when you are trying to calculate a new decomposition matrix because,
+  for any [21Xknown[121X decomposition matrix [22Xd[122X, [10XMakeSpecht([110X[22Xx[122X[10X)[110X and [10XMakeSpecht([110X[22Xd, x[122X[10X)[110X are
+  equivalent (and similarly for [2XMakePIM[102X and [2XMakeSimple[102X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDisplay(MakeSpecht(d, MakeSimple(d,10,5) ));[127X[104X
+    [4X[28X - S(13,2) + S(10,5)[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.2-4 [33X[0;0YDecomposition numbers of the symmetric groups[133X[101X
+  
+  [33X[0;0YThe  last  example looked at Hecke algebras with parameter [22Xq=1[122X and [22XR[122X a field
+  of  characteristic  [22X3[122X  (so [22Xe=3[122X); that is, the group algebra of the symmetric
+  group  over  a  field  of  characteristic  [22X3[122X.  More  generally,  the command
+  [10XSpecht([110X[22Xp,p[122X[10X)[110X  can  be  used  to  consider the group algebras of the symmetric
+  groups  over  fields  of  characteristic  [22Xp[122X  (i.e.  [22Xe=p[122X  and  [22XR[122X  a  field of
+  characteristic  [22Xp[122X). For example, the dimensions of the simple modules of [22XS_6[122X
+  over fields of characteristic [22X5[122X can be computed as follows:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(5,5);; SimpleDimension(H,6);[127X[104X
+    [4X[28X6       : 1[128X[104X
+    [4X[28X5,1     : 5[128X[104X
+    [4X[28X4,2     : 8[128X[104X
+    [4X[28X4,1^2   : 10[128X[104X
+    [4X[28X3^2     : 5[128X[104X
+    [4X[28X3,2,1   : 8[128X[104X
+    [4X[28X3,1^3   : 10[128X[104X
+    [4X[28X2^3     : 5[128X[104X
+    [4X[28X2^2,1^2 : 1[128X[104X
+    [4X[28X2,1^4   : 5[128X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.2-5 [33X[0;0YHecke algebras over fields of positive characteristic[133X[101X
+  
+  [33X[0;0YTo  consider  Hecke  algebras  defined over arbitrary fields, [2XSpecht[102X ([14X3.2-1[114X)
+  must  also be supplied with a valuation map [22Xval[122X as an argument. The function
+  [22Xval[122X is a map from some PID into the natural numbers; at present it is needed
+  only  by  functions which rely (at least implicitly), upon the [22Xq[122X-analogue of
+  Schaper's  theorem. In general, [22Xval[122X depends upon [22Xq[122X and the characteristic of
+  [22XR[122X;  full  details can be found in [JM97]. Over fields of characteristic zero
+  and  in  the symmetric group case, the function [22Xval[122X is automatically defined
+  by [2XSpecht[102X ([14X3.2-1[114X). When [22XR[122X is a field of characteristic zero, [22Xval([i]_q)[122X is [22X1[122X
+  if  [22Xe[122X divides [22Xi[122X and [22X0[122X otherwise (this is the valuation map associated to the
+  prime  ideal  in [22Xℂ[v][122X generated by the [22Xe[122X-th cyclotomic polynomial). When [22Xq=1[122X
+  and [22XR[122X is a field of characteristic [22Xp[122X, [22Xval[122X is the usual [22Xp[122X-adic valuation map.
+  As  another  example,  if [22Xq=4[122X and [22XR[122X is a field of characteristic [22X5[122X (so [22Xe=2[122X),
+  then  the  valuation  map  sends  the integer [22Xx[122X to [22Xν_5([4]_x)[122X where [22X[4]_x[122X is
+  interpreted as an integer and [22Xν_5[122X is the usual [22X5[122X-adic valuation. To consider
+  this Hecke algebra one could proceed as follows:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xval:=function(x) local v;[127X[104X
+    [4X[25X>[125X [27X      x:=Sum([0..x-1],v->4^v);  # x->[x]_q[127X[104X
+    [4X[25X>[125X [27X      v:=0; while x mod 5=0 do x:=x/5; v:=v+1; od;[127X[104X
+    [4X[25X>[125X [27X      return v;[127X[104X
+    [4X[25X>[125X [27X    end;;[127X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2,5,val,"e2q4");; Display(H);[127X[104X
+    [4X[28XSpecht(e=2, p=5, S(), P(), D(), HeckeRing="e2q4")[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNotice  the  string  [21Xe2q4[121X  which  was  also passed to [2XSpecht[102X ([14X3.2-1[114X) in this
+  example. Although it is not strictly necessary, it is a good idea when using
+  a  [21Xnon-standard[121X  valuation  map  [22Xval[122X to specify the value of [22XHeckeRing[122X. This
+  string  is used for internal bookkeeping by [5XHecke[105X; in particular, it is used
+  to  determine filenames when reading and saving decomposition matrices. If a
+  [21Xstandard[121X valuation map is used then [22XHeckeRing[122X is set to the string [21Xe<e>p<p>[121X;
+  otherwise  it  defaults  to  [21Xunknown[121X.  The  function [2XSaveDecompositionMatrix[102X
+  ([14X3.5-5[114X)  will not save any decomposition matrix for any Hecke algebra [22XH[122X with
+  [22XHeckeRing=[122X[21Xunknown[121X.[133X
+  
+  
+  [1X3.2-6 [33X[0;0YThe Fock space and Hecke algebras over fields of characteristic zero[133X[101X
+  
+  [33X[0;0YFor  Hecke  algebras  [22XH[122X  defined over fields of characteristic zero Lascoux,
+  Leclerc  and Thibon [LLT96] have described an easy, inductive, algorithm for
+  calculating   the  decomposition  matrices  of  [22XH[122X.  Their  algorithm  really
+  calculates the [13Xcanonical basis[113X, or (global) [13Xcrystal basis[113X of the Fock space;
+  results  of  Grojnowski-Lusztig  [Gro94]  show  that computing this basis is
+  equivalent to computing the decomposition matrices of [22XH[122X (see also [Ari96]).[133X
+  
+  [33X[0;0YThe [13XFock space[113X [22XF[122X is an (integrable) module for the quantum group [22XU_q( sl^_e)[122X
+  of  the  affine special linear group. [22XF[122X is a free [22Xℂ[v][122X-module with basis the
+  set of all Specht modules [22XS(μ)[122X for all partitions [22Xμ[122X of all integers.[133X
+  
+  [33X[0;0YHere [22Xv[122X is an indeterminate over the integers (or strictly, [22Xℂ[122X) that is stored
+  in  the  algebra  object  produced  by  [2XSpecht[102X  ([14X3.2-1[114X). The canonical basis
+  elements  [22XPq(μ)[122X  for  the  [22XU_q(  sl^_e)[122X-submodule  of  [22XF[122X  generated  by  the
+  [22X0[122X-partition   are   indexed  by  [22Xe[122X-regular  partitions  [22Xμ[122X.  Moreover,  under
+  [13Xspecialization[113X, [22XPq(μ)[122X maps to [22XP(μ)[122X. An eloquent description of the algorithm
+  for computing [22XPq(μ)[122X can be found in [LLT96].[133X
+  
+  [33X[0;0YTo access the elements of the Fock space [5XHecke[105X provides the functions:[133X
+  
+  [33X[1;0Y[29X[2XMakeFockPIM[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XMakeFockSpecht[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YNotice  that,  unlike  [2XMakePIM[102X  ([14X3.2-3[114X)  and  [2XMakeSpecht[102X  ([14X3.2-3[114X),  the only
+  arguments which [2XMakeFockPIM[102X and [2XMakeFockSpecht[102X accept are partitions.[133X
+  
+  [33X[0;0YThe  function  [2XMakeFockPIM[102X computes the canonical basis element [22XPq(μ)[122X of the
+  Fock  space corresponding to the [22Xe[122X-regular partition [22Xμ[122X (there is a canonical
+  basis  --  defined using a larger quantum group -- for the whole of the Fock
+  space  [LT96];  conjecturally,  this  basis  can  be  used  to  compute  the
+  decomposition matrices for the [22Xq[122X-Schur algebra over fields of characteristic
+  zero). The second function returns a standard basis element [22XSq(μ)[122X of [22XF[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; MakeFockPIM(H,6,2);; Display(last);[127X[104X
+    [4X[28XSq(6,2) + vSq(5,3)[128X[104X
+    [4X[25Xgap>[125X [27XRRestrictedModule(last); Display(last);[127X[104X
+    [4X[28XSq(6,1) + (v+v^-1)Sq(5,2) + vSq(4,3)[128X[104X
+    [4X[25Xgap>[125X [27XMakePIM(last);; Display(last);[127X[104X
+    [4X[28XPq(6,1) + (v+v^-1)Pq(5,2)[128X[104X
+    [4X[25Xgap>[125X [27XSpecialized(last);; Display(last);[127X[104X
+    [4X[28XP(6,1) + 2P(5,2)[128X[104X
+    [4X[25Xgap>[125X [27XMakeFockSpecht(H,5,3,2);; Display(last);[127X[104X
+    [4X[28XSq(5,3,2)[128X[104X
+    [4X[25Xgap>[125X [27XRInducedModule(last,0);; Display(last);[127X[104X
+    [4X[28Xv^-1Sq(5,3^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe modules returned by [2XMakeFockPIM[102X and [2XMakeFockSpecht[102X behave very much like
+  elements  of  the Grothendieck ring of [22XH[122X; however, they should be considered
+  as  elements  of  the Fock space. The key difference is that when induced or
+  restricted  [21Xquantum[121X  analogues  of induction and restriction are used. These
+  analogues correspond to the action of [22XU_q( sl^_e)[122X on [22XF[122X [LLT96].[133X
+  
+  [33X[0;0YIn  effect,  the functions [2XMakeFockPIM[102X and [2XMakeFockSpecht[102X allow computations
+  in   the   Fock  space,  using  the  functions  [2XRInducedModule[102X  ([14X3.4-1[114X)  and
+  [2XRRestrictedModule[102X ([14X3.4-3[114X). The functions [2XMakeSpecht[102X ([14X3.2-3[114X), [2XMakePIM[102X ([14X3.2-3[114X)
+  and [2XMakeSimple[102X ([14X3.2-3[114X) can also be applied to elements of the Fock space, in
+  which  case  they  have the expected effect. In addition, any element of the
+  Fock  space  can  be  specialized  to  give the corresponding element of the
+  Grothendieck  ring of [22XH[122X (it is because of this correspondence that we do not
+  make  a  distinction between elements of the Fock space and the Grothendieck
+  ring of [22XH[122X).[133X
+  
+  [33X[0;0YWhen  working  over  fields  of characteristic zero [5XHecke[105X will automatically
+  calculate any canonical basis elements that it needs for computations in the
+  Grothendieck  ring  of  [22XH[122X.  If you are not interested in the canonical basis
+  elements you need never work with them directly.[133X
+  
+  [1X3.2-7 Schur[101X
+  
+  [33X[1;0Y[29X[2XSchur[102X( [3Xe[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSchur[102X( [3Xe[103X, [3Xp[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSchur[102X( [3Xe[103X, [3Xp[103X, [3Xval[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSchur[102X( [3Xe[103X, [3Xp[103X, [3Xval[103X, [3Xring[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Yobject belonging to the filter [2XIsSchur[102X ([14X3.1-1[114X)[133X
+  
+  [33X[0;0YThis function behaves almost identically to the function [2XSpecht[102X ([14X3.2-1[114X), the
+  only  difference being that the belonging modules are printed as [21XW[121X, [21XP[121X, [21XF[121X and
+  that  they  correspond  to the [22Xq[122X-Weyl modules, the projective indecomposable
+  modules,  and  the  simple modules of the [22Xq[122X-Schur algebra respectively. Note
+  that  the  [10XMake***[110X-functions  (i.e.  [2XMakeSpecht[102X  ([14X3.2-3[114X) is used to generate
+  [22Xq[122X-Weyl  modules).  Further,  note  that  our  labeling  of  these modules is
+  non-standard, following that used by James in [Jam90]. The standard labeling
+  can be obtained from ours by replacing all partitions by their conjugates.[133X
+  
+  [33X[0;0YAlmost  all  of the functions in [5XHecke[105X which accept a Hecke algebra object [22XH[122X
+  will also accept the object [22XS[122X returned by [2XSchur[102X .[133X
+  
+  [33X[0;0YIn  the  current  version  of  [5XHecke[105X  the decomposition matrices of [22Xq[122X -Schur
+  algebras  are  not  fully  supported. The [2XInducedDecompositionMatrix[102X ([14X3.5-1[114X)
+  function  can  be applied to these matrices; however there are no additional
+  routines  available  for calculating the columns corresponding to [22Xe[122X-singular
+  partitions. The decomposition matrices for the [22Xq[122X-Schur algebras defined over
+  a field of characteristic [22X0[122X for [22Xn≤ 10[122X are in the [5XHecke[105X libraries.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS:=Schur(2);[127X[104X
+    [4X[28X<Schur algebra with e = 2>[128X[104X
+    [4X[25Xgap>[125X [27XInducedDecompositionMatrix(DecompositionMatrix(S,3));[127X[104X
+    [4X[28X# The following projectives are missing from <d>:[128X[104X
+    [4X[28X#  [ 2, 2 ][128X[104X
+    [4X[28X<5x5 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28X4    | 1                   # DecompositionMatrix(S,4) returns the[128X[104X
+    [4X[28X3,1  | 1 1                 # full decomposition matrix. The point[128X[104X
+    [4X[28X2^2  | . 1 .               # of this example is to emphasize the[128X[104X
+    [4X[28X2,1^2| 1 1 . 1             # current limitations of Schur.[128X[104X
+    [4X[28X1^4  | 1 . . 1 1[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote  that  when  [22XS[122X  is defined over a field of characteristic zero then the
+  functions  [2XMakeFockSpecht[102X ([14X3.2-6[114X) and [2XMakeFockPIM[102X ([14X3.2-6[114X) will calculate the
+  canonical  basis  elements (see [2XSpecht[102X ([14X3.2-1[114X)); currently [10XMakeFockPIM([110X[22Xμ[122X[10X)[110X is
+  implemented only for [22Xe[122X-regular partitions.[133X
+  
+  [33X[0;0YSee  also  [2XSpecht[102X  ([14X3.2-1[114X).  This  function  requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.2-8 DecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XDecompositionMatrix[102X( [3XH[103X, [3Xn[103X[, [3XOrdering[103X] ) [32X method[133X
+  [33X[1;0Y[29X[2XDecompositionMatrix[102X( [3XH[103X, [3Xfile[103X[, [3XOrdering[103X] ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  decomposition  matrix  [22XD[122X of [22XH(S_n)[122X where [22XH[122X is a Hecke algebra
+            object  returned  by the function [2XSpecht[102X ([14X3.2-1[114X) (or [2XSchur[102X ([14X3.2-7[114X)
+            ).[133X
+  
+  [33X[0;0Y[2XDecompositionMatrix[102X  first  checks whether the required decomposition matrix
+  exists  as  a library file (checking first in the current directory, next in
+  the directory specified by [2XSpechtDirectory[102X ([14X3.2-2[114X), and finally in the [5XHecke[105X
+  libraries).   If   the   base   field   of   [22XH[122X   has   characteristic  zero,
+  [2XDecompositionMatrix[102X  next looks for [13Xcrystallized decomposition matrices[113X (see
+  [2XCrystalDecompositionMatrix[102X  ([14X3.2-9[114X)).  If  the decomposition matrix [22Xd[122X is not
+  stored in the library [2XDecompositionMatrix[102X will calculate [22Xd[122X when [22XH[122X is a Hecke
+  algebra  with  a  base  field  of  characteristic zero, and will return [10Xfail[110X
+  otherwise  (in  which case the function [2XCalculateDecompositionMatrix[102X ([14X3.5-6[114X)
+  can be used to force [5XHecke[105X to try and calculate this matrix).[133X
+  
+  [33X[0;0YFor  Hecke  algebras  defined over fields of characteristic zero, [5XHecke[105X uses
+  the   algorithm   of   [LLT96]   to  calculate  decomposition  matrices  The
+  decomposition  matrices  for  the [22Xq[122X-Schur algebras for [22Xn≤10[122X are contained in
+  the  [5XHecke[105X  library,  as  are  those  for the symmetric group over fields of
+  positive characteristic when [22Xn<15[122X.[133X
+  
+  [33X[0;0YOnce  a  decomposition  matrix  is known, [5XHecke[105X keeps an internal copy of it
+  which  is  used  by  the  functions [2XMakeSpecht[102X ([14X3.2-3[114X), [2XMakePIM[102X ([14X3.2-3[114X), and
+  [2XMakeSimple[102X  ([14X3.2-3[114X); these functions also read decomposition matrix files as
+  needed.[133X
+  
+  [33X[0;0YIf you set the variable [2XSpechtDirectory[102X ([14X3.2-2[114X), then [5XHecke[105X will also search
+  for  decomposition  matrix files in this directory. The files in the current
+  directory  override  those in [2XSpechtDirectory[102X ([14X3.2-2[114X) and those in the [5XHecke[105X
+  libraries.[133X
+  
+  [33X[0;0YIn   the  second  form  of  the  function,  when  a  [22Xfilename[122X  is  supplied,
+  [2XDecompositionMatrix[102X will read the decomposition matrix in the file [22Xfilename[122X,
+  and this matrix will become [5XHecke[105X's internal copy of this matrix.[133X
+  
+  [33X[0;0YBy  default,  the rows and columns of the decomposition matrices are ordered
+  [2XDecompositionMatrix[102X  with  an  ordering function such as [2XLengthLexicographic[102X
+  ([14X3.8-13[114X)  or  [2XReverseDominance[102X  ([14X3.8-15[114X).  You  do  not  need to specify the
+  ordering  you  want every time you call [2XDecompositionMatrix[102X; [5XHecke[105X will keep
+  the  same  ordering until you change it again. This ordering can also be set
+  [21Xby hand[121X using the operation [2XSetOrdering[102X ([14X3.2-2[114X)[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDecompositionMatrix(Specht(3),6,LengthLexicographic);[127X[104X
+    [4X[28X<11x7 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28X6      | 1[128X[104X
+    [4X[28X5,1    | 1 1[128X[104X
+    [4X[28X4,2    | . . 1[128X[104X
+    [4X[28X3^2    | . 1 . 1[128X[104X
+    [4X[28X4,1^2  | . 1 . . 1[128X[104X
+    [4X[28X3,2,1  | 1 1 . 1 1 1[128X[104X
+    [4X[28X2^3    | 1 . . . . 1[128X[104X
+    [4X[28X3,1^3  | . . . . 1 1[128X[104X
+    [4X[28X2^2,1^2| . . . . . . 1[128X[104X
+    [4X[28X2,1^4  | . . . 1 . 1 .[128X[104X
+    [4X[28X1^6    | . . . 1 . . .[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YOnce  you  have  a decomposition matrix it is often nice to be able to print
+  it. The on screen version is often good enough; There are also functions for
+  converting  [5XHecke[105X  decomposition  matrices  into [5XGAP[105X matrices and vice versa
+  (see   [2XMatrixDecompositionMatrix[102X   ([14X3.5-7[114X)   and   [2XDecompositionMatrixMatrix[102X
+  ([14X3.5-8[114X)).[133X
+  
+  [33X[0;0YUsing  the  function  [2XInducedDecompositionMatrix[102X  ([14X3.5-1[114X), it is possible to
+  induce  a decomposition matrix. See also [2XSaveDecompositionMatrix[102X ([14X3.5-5[114X) and
+  [2XIsNewIndecomposable[102X    ([14X3.5-2[114X),   [2XSpecht[102X   ([14X3.2-1[114X),   [2XSchur[102X   ([14X3.2-7[114X),   and
+  [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.2-9 CrystalDecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XCrystalDecompositionMatrix[102X( [3XH[103X, [3Xn[103X[, [3XOrdering[103X] ) [32X method[133X
+  [33X[1;0Y[29X[2XCrystalDecompositionMatrix[102X( [3XH[103X, [3Xfile[103X[, [3XOrdering[103X] ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  crystal  decomposition  matrix [22XD[122X of [22XH(S_n)[122X where [22XH[122X is a Hecke
+            algebra  object  returned by the function [2XSpecht[102X ([14X3.2-1[114X) (or [2XSchur[102X
+            ([14X3.2-7[114X) ).[133X
+  
+  [33X[0;0YThis  function  is  similar  to  [2XDecompositionMatrix[102X ([14X3.2-8[114X). The columns of
+  decomposition matrices correspond to projective indecomposables; the columns
+  of  crystallized  decomposition  matrices  correspond to the canonical basis
+  elements  of  the Fock space (see [2XSpecht[102X ([14X3.2-1[114X)). Consequently, the entries
+  in  these matrices are polynomials (in [22Xv[122X), and by specializing (i.e. setting
+  [22Xv[122X  equal to [22X1[122X; see [2XSpecialized[102X ([14X3.9-1[114X)), the decomposition matrices of [22XH[122X are
+  obtained  (see  [2XSpecht[102X  ([14X3.2-1[114X)).  Crystallized  decomposition  matrices are
+  defined  only  for  Hecke algebras over a base field of characteristic zero.
+  Unlike  [21Xnormal[121X  decomposition  matrices, crystallized decomposition matrices
+  cannot be induced.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XCrystalDecompositionMatrix(Specht(3), 6);[127X[104X
+    [4X[28X<11x7 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28X6      |   1[128X[104X
+    [4X[28X5,1    |   v   1[128X[104X
+    [4X[28X4,2    |   .   .   1[128X[104X
+    [4X[28X4,1^2  |   .   v   .   1[128X[104X
+    [4X[28X3^2    |   .   v   .   .   1[128X[104X
+    [4X[28X3,2,1  |   v v^2   .   v   v   1[128X[104X
+    [4X[28X3,1^3  |   .   .   . v^2   .   v[128X[104X
+    [4X[28X2^3    | v^2   .   .   .   .   v[128X[104X
+    [4X[28X2^2,1^2|   .   .   .   .   .   .   1[128X[104X
+    [4X[28X2,1^4  |   .   .   .   .   v v^2   .[128X[104X
+    [4X[28X1^6    |   .   .   .   . v^2   .   .[128X[104X
+    [4X[25Xgap>[125X [27XSpecialized(last);   # set v equal to 1.[127X[104X
+    [4X[28X<11x7 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(last);[127X[104X
+    [4X[28X6      | 1[128X[104X
+    [4X[28X5,1    | 1 1[128X[104X
+    [4X[28X4,2    | . . 1[128X[104X
+    [4X[28X4,1^2  | . 1 . 1[128X[104X
+    [4X[28X3^2    | . 1 . . 1[128X[104X
+    [4X[28X3,2,1  | 1 1 . 1 1 1[128X[104X
+    [4X[28X3,1^3  | . . . 1 . 1[128X[104X
+    [4X[28X2^3    | 1 . . . . 1[128X[104X
+    [4X[28X2^2,1^2| . . . . . . 1[128X[104X
+    [4X[28X2,1^4  | . . . . 1 1 .[128X[104X
+    [4X[28X1^6    | . . . . 1 . .[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XSpecht[102X  ([14X3.2-1[114X),  [2XSchur[102X  ([14X3.2-7[114X), [2XDecompositionMatrix[102X ([14X3.2-8[114X) and
+  [2XSpecialized[102X   ([14X3.9-1[114X).   This  function  requires  the  package  [5Xhecke[105X  (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.2-10 DecompositionNumber[101X
+  
+  [33X[1;0Y[29X[2XDecompositionNumber[102X( [3XH[103X, [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XDecompositionNumber[102X( [3Xd[103X, [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  
+  [33X[0;0YThis  function  attempts to calculate the decomposition multiplicity of [22XD(ν)[122X
+  in  [22XS(μ)[122X (equivalently, the multiplicity of [22XS(μ)[122X in [22XP(ν)[122X). If [22XP(ν)[122X is known,
+  we  just  look  up the answer; if not [2XDecompositionNumber[102X tries to calculate
+  the answer using [21Xrow and column removal[121X (see [Jam90, Theorem 6.18]).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(6);; DecompositionNumber(H,[6,4,2],[6,6]);[127X[104X
+    [4X[28X0[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  
+  [1X3.3 [33X[0;0YPartitions in [5XHecke[105X[101X[1X[133X[101X
+  
+  [33X[0;0YMany  of the functions in [5XHecke[105X take partitions as arguments. Partitions are
+  usually  represented  by  lists  in  [5XGAP[105X.  In [5XHecke[105X, all the functions which
+  expect  a partition will accept their argument either as a list or simply as
+  a sequence of numbers. So, for example:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; Print(MakeSpecht(MakePIM(H,6,4)),"\n");[127X[104X
+    [4X[28XS(6,4) + S(6,3,1) + S(5,3,1,1) + S(3,3,2,1,1) + S(2,2,2,2,2)[128X[104X
+    [4X[25Xgap>[125X [27XPrint(MakeSpecht(MakePIM(H,[6,4])),"\n");[127X[104X
+    [4X[28XS(6,4) + S(6,3,1) + S(5,3,1,1) + S(3,3,2,1,1) + S(2,2,2,2,2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSome  functions  require  more  than  one argument, but the convention still
+  applies.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XECore(3, [6,4,2]);[127X[104X
+    [4X[28X[ 6, 4, 2 ][128X[104X
+    [4X[25Xgap>[125X [27XECore(3, 6,4,2);[127X[104X
+    [4X[28X[ 6, 4, 2 ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodes(3, 6,4,2);[127X[104X
+    [4X[28X[ false, false, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodes(3, [6,4,2], 2);[127X[104X
+    [4X[28X3[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YBasically,  it  never  hurts  to  put the extra brackets in, and they can be
+  omitted  so  long  as this is not ambiguous. One function where the brackets
+  are  needed  is  [2XDecompositionNumber[102X  ([14X3.2-10[114X)  this  is  clear  because the
+  function takes two partitions as its arguments.[133X
+  
+  
+  [1X3.4 [33X[0;0YInducing and restricting modules[133X[101X
+  
+  [33X[0;0Y[5XHecke[105X  provides  four  functions  [2XRInducedModule[102X  ([14X3.4-1[114X), [2XRRestrictedModule[102X
+  ([14X3.4-3[114X),  [2XSInducedModule[102X  ([14X3.4-2[114X) and [2XSRestrictedModule[102X ([14X3.4-4[114X) for inducing
+  and  restricting  modules.  All  functions can be applied to Specht modules,
+  PIMs,  and  simple  modules. These functions all work by first rewriting all
+  modules  as  a linear combination of Specht modules (or [22Xq[122X-Weyl modules), and
+  then  inducing  and restricting. Whenever possible the induced or restricted
+  module will be written in the original basis.[133X
+  
+  [33X[0;0YAll  of  these  functions  can also be applied to elements of the Fock space
+  (see  [2XSpecht[102X  ([14X3.2-1[114X));  in  which case they correspond to the action of the
+  generators  [22XE_i[122X  and  [22XF_i[122X  of  [22XU_q(  sl^_e)[122X  on  [22XF[122X. There is also a function
+  [2XInducedDecompositionMatrix[102X ([14X3.5-1[114X) for inducing decomposition matrices.[133X
+  
+  [1X3.4-1 RInducedModule[101X
+  
+  [33X[1;0Y[29X[2XRInducedModule[102X( [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XRInducedModule[102X( [3Xx[103X, [3Xr1[103X[, [3Xr2[103X, [3X...[103X] ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe   induced   modules   of   the   Specht   modules,   principal
+            indecomposable modules, and simple modules (more accurately, their
+            image in the Grothendieck ring).[133X
+  
+  [33X[0;0YThere  is  an natural embedding of [22XH(S_n)[122X in [22XH(S_n+1)[122X which in the usual way
+  lets us define an [13Xinduced[113X [22XH(S_n+1)[122X-module for every [22XH(S_n)[122X-module.[133X
+  
+  [33X[0;0YThere is also a function [2XSInducedModule[102X ([14X3.4-2[114X) which provides a much faster
+  way of [22Xr[122X-inducing [22Xs[122X times (and inducing [22Xs[122X times).[133X
+  
+  [33X[0;0YLet  [22Xμ[122X  be a partition. Then the induced module [10XRInducedModule(S([110X[22Xμ[122X[10X))[110X is easy
+  to describe: it has the same composition factors as [22X∑ S(ν)[122X where [22Xν[122X runs over
+  all partitions whose diagrams can be obtained by adding a single node to the
+  diagram of [22Xμ[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2,2);;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,7,4,3,1)));[127X[104X
+    [4X[28XS(8,4,3,1) + S(7,5,3,1) + S(7,4^2,1) + S(7,4,3,2) + S(7,4,3,1^2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakePIM(H,5,3,1)));[127X[104X
+    [4X[28XP(6,3,1) + 2P(5,4,1) + P(5,3,2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSimple(H,11,2,1)));[127X[104X
+    [4X[28X# D(<x>), unable to rewrite <x> as a sum of simples[128X[104X
+    [4X[28XS(12,2,1) + S(11,3,1) + S(11,2^2) + S(11,2,1^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YWhen  inducing  indecomposable  modules  and  simple modules, [2XRInducedModule[102X
+  first  rewrites  these  modules  as  a  linear combination of Specht modules
+  (using   known   decomposition  matrices),  and  then  induces  this  linear
+  combination  of  Specht modules. If possible [5XHecke[105X then rewrites the induced
+  module  back in the original basis. Note that in the last example above, the
+  decomposition   matrix   for  [22XS_15[122X  is  not  known  by  [5XHecke[105X  this  is  why
+  [2XRInducedModule[102X was unable to rewrite this module in the [22XD[122X-basis.[133X
+  
+  [33X[0;0Y[13X[22Xr[122X-Induction[113X[133X
+  
+  [33X[0;0YTwo Specht modules [22XS(μ)[122X and [22XS(ν)[122X belong to the same block if and only if the
+  corresponding  partitions  [22Xμ[122X  and  [22Xν[122X  have the same [22Xe[122X-core [JM97] (see [2XECore[102X
+  ([14X3.8-1[114X)).  Because  the [22Xe[122X-core of a partition is determined by its (multiset
+  of)  [22Xe[122X  -residues, if [22XS(μ)[122X and [22XS(ν)[122X appear in [10XRInducedModule(S([110X[22Xτ[122X[10X))[110X, for some
+  partition  [22Xτ[122X,  then [22XS(μ)[122X and [22XS(nu)[122X belong to the same block if and only if [22Xμ[122X
+  and  [22Xν[122X can be obtained by adding a node of the same [22Xe[122X-residue to the diagram
+  of  [22Xτ[122X.  The second form of [2XRInducedModule[102X allows one to induce [21Xwithin blocks[121X
+  by  only  adding  nodes  of  some  fixed  [22Xe[122X-residue  [22Xr[122X;  this  is  known  as
+  [13Xr-induction[113X. Note that [22X0≤ r<e[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; Display(RInducedModule(MakeSpecht(H,5,2,1)));[127X[104X
+    [4X[28XS(6,2,1) + S(5,3,1) + S(5,2^2) + S(5,2,1^2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,5,2,1),0));[127X[104X
+    [4X[28X0S()[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,5,2,1),1));[127X[104X
+    [4X[28XS(6,2,1) + S(5,3,1) + S(5,2,1^2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,5,2,1),2));[127X[104X
+    [4X[28X0S()[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,5,2,1),3));[127X[104X
+    [4X[28XS(5,2^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  function  [2XEResidueDiagram[102X  ([14X3.7-13[114X),  prints the diagram of [22Xμ[122X, labeling
+  each  node  with  its  [22Xe[122X-residue. A quick check of this diagram confirms the
+  answers above.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XEResidueDiagram(H,5,2,1);[127X[104X
+    [4X[28X  0  1  2  3  0[128X[104X
+    [4X[28X  3  0[128X[104X
+    [4X[28X  2[128X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13X[21XQuantized[121X induction[113X[133X
+  
+  [33X[0;0YWhen   [2XRInducedModule[102X   is   applied   to   the   canonical  basis  elements
+  [10XMakeFockPIM([110X[22Xμ[122X[10X)[110X  (or  more  generally  elements of the Fock space; see [2XSpecht[102X
+  ([14X3.2-1[114X)),  a  [21Xquantum  analogue[121X of induction is applied. More precisely, the
+  function  [10XRInducedModule([110X[22X*,i[122X[10X)[110X corresponds to the action of the generator [22XF_i[122X
+  of the quantum group [22XU_q( sl^_e)[122X on [22XF[122X [LLT96].[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3);; x:=RInducedModule(MakeFockPIM(H,4,2),1,2);;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay(x); Display(MakePIM(x));[127X[104X
+    [4X[28XSq(6,2) + vSq(4^2) + v^2Sq(4,2^2)[128X[104X
+    [4X[28XPq(6,2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee    also    [2XSInducedModule[102X   ([14X3.4-2[114X),   [2XRRestrictedModule[102X   ([14X3.4-3[114X)   and
+  [2XSRestrictedModule[102X  ([14X3.4-4[114X).  This  function  requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.4-2 SInducedModule[101X
+  
+  [33X[1;0Y[29X[2XSInducedModule[102X( [3Xx[103X, [3Xs[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSInducedModule[102X( [3Xx[103X, [3Xs[103X, [3Xr[103X ) [32X method[133X
+  
+  [33X[0;0YThe  function [2XSInducedModule[102X, standing for [21Xstring induction[121X, provides a more
+  efficient  way  of  [22Xr[122X-inducing [22Xs[122X times (and a way of inducing [22Xs[122X times if the
+  residue [22Xr[122X is omitted); [22Xr[122X-induction is explained in "[2XRInducedModule[102X ([14X3.4-1[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);;[127X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; Display(SInducedModule(MakePIM(H,5,2,1),3));[127X[104X
+    [4X[28XP(8,2,1) + 3P(7,3,1) + 2P(7,2^2) + 6P(6,3,2) + 6P(6,3,1^2) + 3P(6,2,1^3) + 2P(\[128X[104X
+    [4X[28X5,3^2) + P(5,2^2,1^2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(SInducedModule(MakePIM(H,5,2,1),3,1));[127X[104X
+    [4X[28XP(6,3,1^2)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakePIM(H,5,2,1),1,1,1));[127X[104X
+    [4X[28X6P(6,3,1^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote  that  the multiplicity of each summand of [10XRInducedModule([110X[22Xx,r,...,r[122X[10X)[110X is
+  divisible by [22Xs![122X and that [2XSInducedModule[102X divides by this constant.[133X
+  
+  [33X[0;0YAs with [2XRInducedModule[102X ([14X3.4-1[114X) this function can also be applied to elements
+  of  the  Fock space (see [2XSpecht[102X ([14X3.2-1[114X)), in which case the quantum analogue
+  of induction is used.[133X
+  
+  [33X[0;0YSee  also  [2XRInducedModule[102X  ([14X3.4-1[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.4-3 RRestrictedModule[101X
+  
+  [33X[1;0Y[29X[2XRRestrictedModule[102X( [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XRRestrictedModule[102X( [3Xx[103X, [3Xr1[103X[, [3Xr2[103X, [3X...[103X] ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  corresponding  module  for [22XH(S_n-1)[122X when given a module [22Xx[122X for
+            [22XH(S_n)[122X[133X
+  
+  [33X[0;0YThe  restriction  of  the  Specht  module  [22XS(μ)[122X is the linear combination of
+  Specht  modules  [22X∑  S(ν)[122X where [22Xν[122X runs over the partitions whose diagrams are
+  obtained  by deleting a node from the diagram of [22Xμ[122X. If only nodes of residue
+  [22Xr[122X  are  deleted  then  this  corresponds  to first restricting [22XS(μ)[122X and then
+  taking one of the block components of the restriction; this process is known
+  as [13X[22Xr[122X-restriction[113X (cf. [22Xr[122X-induction in [2XRInducedModule[102X ([14X3.4-1[114X)).[133X
+  
+  [33X[0;0YThere  is  also a function [2XSRestrictedModule[102X ([14X3.4-4[114X) which provides a faster
+  way of [22Xr[122X-restricting [22Xs[122X times (and restricting [22Xs[122X times).[133X
+  
+  [33X[0;0YWhen  more  than  one  residue  if  given  to  [2XRRestrictedModule[102X  it returns
+  [10XRRestrictedModule([110X[22Xx,r_1,r_2,...,r_k[122X[10X)[110X=                     [10XRRestrictedModule(
+  RRestrictedModule([110X[22Xx,r_1[122X[10X)[110X[22X,r_2,...,r_k[122X[10X)[110X (cf. [2XRInducedModule[102X ([14X3.4-1[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(6);; Display(RRestrictedModule(MakePIM(H,5,3,2,1),4));[127X[104X
+    [4X[28X2P(4,3,2,1)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RRestrictedModule(MakeSimple(H,5,3,2),1));[127X[104X
+    [4X[28XD(5,2^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[13X[21XQuantized[121X restriction[113X[133X
+  
+  [33X[0;0YAs  with  [2XRInducedModule[102X  ([14X3.4-1[114X),  when [2XRRestrictedModule[102X is applied to the
+  canonical basis elements [10XMakeFockPIM([110X[22Xμ[122X[10X)[110X a quantum analogue of restriction is
+  applied;  this time, [10XRRestrictedModule([110X[22X*,i[122X[10X)[110X corresponds to the action of the
+  generator [22XE_i[122X of [22XU_q( sl^_e)[122X on [22XF[122X[LLT96].[133X
+  
+  [33X[0;0YSee    also    [2XRInducedModule[102X    ([14X3.4-1[114X),    [2XSInducedModule[102X    ([14X3.4-2[114X)   and
+  [2XSRestrictedModule[102X  ([14X3.4-4[114X).  This  function  requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.4-4 SRestrictedModule[101X
+  
+  [33X[1;0Y[29X[2XSRestrictedModule[102X( [3Xx[103X, [3Xs[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSRestrictedModule[102X( [3Xx[103X, [3Xs[103X, [3Xr[103X ) [32X method[133X
+  
+  [33X[0;0YAs  with  [2XSInducedModule[102X ([14X3.4-2[114X) this function provides a more efficient way
+  of [22Xr[122X-restricting [22Xs[122X times, or restricting [22Xs[122X times if the residue [22Xr[122X is omitted
+  (cf. [2XSInducedModule[102X ([14X3.4-2[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(6);; Display(SRestrictedModule(MakeSpecht(H,4,3,2),3));[127X[104X
+    [4X[28X3S(4,2) + 2S(4,1^2) + 3S(3^2) + 6S(3,2,1) + 2S(2^3)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(SRestrictedModule(MakePIM(H,5,4,1),2,4));[127X[104X
+    [4X[28XP(4^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee    also    [2XRInducedModule[102X    ([14X3.4-1[114X),    [2XSInducedModule[102X    ([14X3.4-2[114X)   and
+  [2XRRestrictedModule[102X  ([14X3.4-3[114X).  This  function  requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  
+  [1X3.5 [33X[0;0YOperations on decomposition matrices[133X[101X
+  
+  [33X[0;0Y[5XHecke[105X  is  a  package  for  computing  decomposition  matrices; this section
+  describes  the functions available for accessing these matrices directly. In
+  addition  to  decomposition matrices, [5XHecke[105X also calculates the [21Xcrystallized
+  decomposition  matrices[121X of [LLT96] and the [21Xadjustment matrices[121X introduced by
+  James [Jam90] (and Geck [Gec92]).[133X
+  
+  [33X[0;0YThroughout  [5XHecke[105X  we  place  an  emphasis  on  calculating  the  projective
+  indecomposable  modulesand hence upon the columns of decomposition matrices.
+  This  approach  seems  more  efficient  than  the  traditional  approach  of
+  calculating  decomposition  matrices by rows; ideally both approaches should
+  be combined (as is done by [2XIsNewIndecomposable[102X ([14X3.5-2[114X)).[133X
+  
+  [33X[0;0YIn principle, all decomposition matrices for all Hecke algebras defined over
+  a field of characteristic zero are available from within [5XHecke[105X. In addition,
+  the decomposition matrices for all [22Xq[122X-Schur algebras with [22Xn≤10[122X and all values
+  of  [22Xe[122X  and  the [22Xp[122X-modular decomposition matrices of the symmetric groups [22XS_n[122X
+  for [22Xn<15[122X are in the [5XHecke[105X library files.[133X
+  
+  [33X[0;0YIf you are using [5XHecke[105X regularly to do calculations involving certain values
+  of  [22Xe[122X it would be advantageous to have [5XHecke[105X calculate and save the first 20
+  odd  decomposition  matrices that you are interested in. So, for [22Xe=4[122X use the
+  commands:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; for n in [8..20] do[127X[104X
+    [4X[25X>[125X [27X     SaveDecompositionMatrix(DecompositionMatrix(H,n));[127X[104X
+    [4X[25X>[125X [27X   od;[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAlternatively,  you could save the crystallized decomposition matrices. Note
+  that  for  [22Xn<2e[122X  the decomposition matrices are known (by [5XHecke[105X) and easy to
+  compute.[133X
+  
+  [1X3.5-1 InducedDecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XInducedDecompositionMatrix[102X( [3Xd[103X ) [32X method[133X
+  
+  [33X[0;0YIf     [22Xd[122X     is     the     decomposition    matrix    of    [22XH(S_n)[122X,    then
+  [10XInducedDecompositionMatrix([110X[22Xd[122X[10X)[110X attempts to calculate the decomposition matrix
+  of  [22XH(S_n+1)[122X. It does this by extracting each projective indecomposable from
+  [22Xd[122X  and  inducing  these  modules  to obtain projective modules for [22XH(S_n+1)[122X.
+  [2XInducedDecompositionMatrix[102X  then  tries to decompose these projectives using
+  the  function  [2XIsNewIndecomposable[102X ([14X3.5-2[114X). In general there will be columns
+  of  the  decomposition  matrix which [2XInducedDecompositionMatrix[102X is unable to
+  decompose    and    these    will   have   to   be   calculated   [21Xby   hand[121X.
+  [2XInducedDecompositionMatrix[102X   prints   a   list   of  those  columns  of  the
+  decomposition  matrix  which  it  is  unable to calculate (this list is also
+  printed by the function [2XMissingIndecomposables[102X ([14X3.5-11[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xd:=DecompositionMatrix(Specht(3,3),14);[127X[104X
+    [4X[28X<135x57 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XInducedDecompositionMatrix(d);[127X[104X
+    [4X[28X# Inducing....[128X[104X
+    [4X[28XThe following projectives are missing from <d>:[128X[104X
+    [4X[28X    [ 15 ]  [ 8, 7 ][128X[104X
+    [4X[28X<176x70 decomposition matrix>[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote  that the missing indecomposables come in [21Xpairs[121X which map to each other
+  under the Mullineux map (see [2XMullineuxMap[102X ([14X3.7-3[114X)).[133X
+  
+  [33X[0;0YAlmost  all  of the decomposition matrices included in [5XHecke[105X were calculated
+  directly     by     [2XInducedDecompositionMatrix[102X.     When    [22Xn[122X    is    [21Xsmall[121X
+  [2XInducedDecompositionMatrix[102X  is usually able to return the full decomposition
+  matrix for [22XH(S_n)[122X. Finally, although the [2XInducedDecompositionMatrix[102X can also
+  be  applied to the decomposition matrices of the [22Xq[122X-Schur algebras (see [2XSchur[102X
+  ([14X3.2-7[114X)),  [2XInducedDecompositionMatrix[102X  is  much  less successful in inducing
+  these  decomposition  matrices  because  it contains no special routines for
+  dealing  with  the  indecomposable  modules of the [22Xq[122X-Schur algebra which are
+  indexed  by  [22Xe[122X-singular  partitions.  Note  also  that we use a non-standard
+  labeling  of  the  decomposition  matrices  of  [22Xq[122X-Schur  algebras; see [2XSchur[102X
+  ([14X3.2-7[114X).[133X
+  
+  [1X3.5-2 IsNewIndecomposable[101X
+  
+  [33X[1;0Y[29X[2XIsNewIndecomposable[102X( [3Xd[103X, [3Xx[103X[, [3Xmu[103X] ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  it  is  able  to show that [22Xx[122X is indecomposable (and this
+            indecomposable is not already listed in [22Xd[122X), and [9Xfalse[109X otherwise.[133X
+  
+  [33X[0;0Y[2XIsNewIndecomposable[102X is the function which does all of the hard work when the
+  function  [2XInducedDecompositionMatrix[102X  ([14X3.5-1[114X)  is  applied  to decomposition
+  matrices.  [2XIsNewIndecomposable[102X  will  also  print a brief description of its
+  findings,  giving an upper and lower bound on the [13Xfirst[113X decomposition number
+  [22Xμ[122X for which it is unable to determine the multiplicity of [22XS(μ)[122X in [22Xx[122X.[133X
+  
+  [33X[0;0Y[2XIsNewIndecomposable[102X  works  by  running through all of the partitions [22Xν[122X such
+  that  [22XP(ν)[122X  could be a summand of [22Xx[122X and it uses various results, such as the
+  [22Xq[122X-Schaper  theorem  of  [JM97] (see [2XSchaper[102X ([14X3.7-1[114X)), the Mullineux map (see
+  [2XMullineuxMap[102X ([14X3.7-3[114X)) and inducing simple modules, to determine if [22XP(ν)[122X does
+  indeed  split  off. In addition, if [22Xd[122X is the decomposition matrix for [22XH(S_n)[122X
+  then  [2XIsNewIndecomposable[102X  will  probably  use  some  of  the  decomposition
+  matrices  of  [22XH(S_m)[122X  for [22Xm≤ n[122X, if they are known. Consequently it is a good
+  idea   to   save   decomposition   matrices  as  they  are  calculated  (see
+  [2XSaveDecompositionMatrix[102X ([14X3.5-5[114X)).[133X
+  
+  [33X[0;0YFor  example, in calculating the [22X2[122X-modular decomposition matrices of [22XS_r[122X the
+  first  projective  which  [2XInducedDecompositionMatrix[102X  ([14X3.5-1[114X)  is  unable to
+  calculate is [22XP(10)[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2,2);;[127X[104X
+    [4X[25Xgap>[125X [27Xd:=InducedDecompositionMatrix(DecompositionMatrix(H,9));;[127X[104X
+    [4X[28X# Inducing.[128X[104X
+    [4X[28X# The following projectives are missing from <d>:[128X[104X
+    [4X[28X#  [ 10 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y(In fact, given the above commands, [5XHecke[105X will return the full decomposition
+  matrix  for  [22XS_10[122X  because  this  matrix  is  in the library; these were the
+  commands  that  were  used  to  calculate  the  decomposition  matrix in the
+  library.)[133X
+  
+  [33X[0;0YBy  inducing [22XP(9)[122X we can find a projective [22XH[122X-module which contains [22XP(10)[122X. We
+  can  then  use  [2XIsNewIndecomposable[102X to try and decompose this induced module
+  into a sum of PIMs.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; x:=RInducedModule(MakePIM(H,9),1);; Display(x);[127X[104X
+    [4X[28X# P(<x>), unable to rewrite <x> as a sum of projectives[128X[104X
+    [4X[28XS(10) + S(9,1) + S(8,2) + 2S(8,1^2) + S(7,3) + 2S(7,1^3) + 3S(6,3,1) + 3S(6,2^\[128X[104X
+    [4X[28X2) + 4S(6,2,1^2) + 2S(6,1^4) + 4S(5,3,2) + 5S(5,3,1^2) + 5S(5,2^2,1) + 2S(5,1^\[128X[104X
+    [4X[28X5) + 2S(4^2,2) + 2S(4^2,1^2) + 2S(4,3^2) + 5S(4,3,1^3) + 2S(4,2^3) + 5S(4,2^2,\[128X[104X
+    [4X[28X1^2) + 4S(4,2,1^4) + 2S(4,1^6) + 2S(3^3,1) + 2S(3^2,2^2) + 4S(3^2,2,1^2) + 3S(\[128X[104X
+    [4X[28X3^2,1^4) + 3S(3,2^2,1^3) + 2S(3,1^7) + S(2^3,1^4) + S(2^2,1^6) + S(2,1^8) + S(\[128X[104X
+    [4X[28X1^10)[128X[104X
+    [4X[25Xgap>[125X [27XIsNewIndecomposable(d,x);[127X[104X
+    [4X[28X# The multiplicity of S(6,3,1) in P(10) is at least 1 and at most 2.[128X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(x);[127X[104X
+    [4X[28XS(10) + S(9,1) + S(8,2) + 2S(8,1^2) + S(7,3) + 2S(7,1^3) + 2S(6,3,1) + 2S(6,2^\[128X[104X
+    [4X[28X2) + 3S(6,2,1^2) + 2S(6,1^4) + 3S(5,3,2) + 4S(5,3,1^2) + 4S(5,2^2,1) + 2S(5,1^\[128X[104X
+    [4X[28X5) + 2S(4^2,2) + 2S(4^2,1^2) + 2S(4,3^2) + 4S(4,3,1^3) + 2S(4,2^3) + 4S(4,2^2,\[128X[104X
+    [4X[28X1^2) + 3S(4,2,1^4) + 2S(4,1^6) + 2S(3^3,1) + 2S(3^2,2^2) + 3S(3^2,2,1^2) + 2S(\[128X[104X
+    [4X[28X3^2,1^4) + 2S(3,2^2,1^3) + 2S(3,1^7) + S(2^3,1^4) + S(2^2,1^6) + S(2,1^8) + S(\[128X[104X
+    [4X[28X1^10)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNotice  that  some  of  the  coefficients  of  the  Specht modules in [22Xx[122X have
+  changed;  this is because [2XIsNewIndecomposable[102X was able to determine that the
+  multiplicity  of  [22XS(6,3,1)[122X  was  at  most [22X2[122X and so it subtracted one copy of
+  [22XP(6,3,1)[122X from [22Xx[122X.[133X
+  
+  [33X[0;0YIn  this  case,  the  multiplicity  of  [22XS(6,3,1)[122X in [22XP(10)[122X is easy to resolve
+  because  general  theory says that this multiplicity must be odd. Therefore,
+  [22Xx-P(6,3,1)[122X  is  projective.  After  subtracting [22XP(6,3,1)[122X from [22Xx[122X we again use
+  [2XIsNewIndecomposable[102X  to  see  if  [22Xx[122X  is  now  indecomposable.  We  can  tell
+  [2XIsNewIndecomposable[102X  that  all  of  the  multiplicities  up to and including
+  [22XS(6,3,1)[122X  have  already  been  checked  by  giving  it the addition argument
+  [22Xμ=[6,3,1][122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xx:=x-MakePIM(d,6,3,1);; IsNewIndecomposable(d,x,6,3,1);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YConsequently,  [22Xx=P(10)[122X and we add it to the decomposition matrix [22Xd[122X (and save
+  it).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XAddIndecomposable(d,x); SaveDecompositionMatrix(d);[127X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YA  full description of what [2XIsNewIndecomposable[102X does can be found by reading
+  the  comments in [11Xspecht.gi[111X. Any suggestions or improvements on this function
+  would be especially welcome.[133X
+  
+  [33X[0;0YSee also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XInducedDecompositionMatrix[102X ([14X3.5-1[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-3 InvertDecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XInvertDecompositionMatrix[102X( [3Xd[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Yinverse  of  the ([22Xe[122X-regular part of) [22Xd[122X, where [22Xd[122X is a decomposition
+            matrix,  or  crystallized decomposition matrix, of a Hecke algebra
+            or [22Xq[122X-Schur algebra.[133X
+  
+  [33X[0;0YIf    part    of    the    decomposition    matrix   [22Xd[122X   is   unknown   then
+  [2XInvertDecompositionMatrix[102X will invert as much of [22Xd[122X as possible.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; d:=CrystalDecompositionMatrix(H,5);;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay(InvertDecompositionMatrix(d));[127X[104X
+    [4X[28X5    |   1[128X[104X
+    [4X[28X4,1  |   .   1[128X[104X
+    [4X[28X3,2  |  -v   .   1[128X[104X
+    [4X[28X3,1^2|   .   .   .   1[128X[104X
+    [4X[28X2^2,1| v^2   .  -v   .   1[128X[104X
+    [4X[28X2,1^3|   .   .   .   .   .   1[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-4 AdjustmentMatrix[101X
+  
+  [33X[1;0Y[29X[2XAdjustmentMatrix[102X( [3Xdp[103X, [3Xd[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe adjustment matrix [22Xa[122X[133X
+  
+  [33X[0;0YJames  [Jam90]  noticed  and  Geck  [Gec92]  proved,  that the decomposition
+  matrices   [22Xdp[122X   for   Hecke   algebras   defined  over  fields  of  positive
+  characteristic  admit  a factorization [22Xdp = d ⋅ a[122X where [22Xd[122X is a decomposition
+  matrix  for  a suitable Hecke algebra defined over a field of characteristic
+  zero and [22Xa[122X is the so-called [13Xadjustment matrix[113X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2);; Hp:=Specht(2,2);;[127X[104X
+    [4X[25Xgap>[125X [27Xd:=DecompositionMatrix(H,13);; dp:=DecompositionMatrix(Hp,13);;[127X[104X
+    [4X[25Xgap>[125X [27Xa:=AdjustmentMatrix(dp,d);[127X[104X
+    [4X[28X<18x18 decomposition matrix>[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(a);[127X[104X
+    [4X[28X13     | 1[128X[104X
+    [4X[28X12,1   | . 1[128X[104X
+    [4X[28X11,2   | 1 . 1[128X[104X
+    [4X[28X10,3   | . . . 1[128X[104X
+    [4X[28X10,2,1 | . . . . 1[128X[104X
+    [4X[28X9,4    | 1 . 1 . . 1[128X[104X
+    [4X[28X9,3,1  | 2 . . . . . 1[128X[104X
+    [4X[28X8,5    | . 1 . . . . . 1[128X[104X
+    [4X[28X8,4,1  | 1 . . . . . . . 1[128X[104X
+    [4X[28X8,3,2  | . 2 . . . . . 1 . 1[128X[104X
+    [4X[28X7,6    | 1 . . . . 1 . . . . 1[128X[104X
+    [4X[28X7,5,1  | . . . . . . 1 . . . . 1[128X[104X
+    [4X[28X7,4,2  | 1 . 1 . . 1 . . . . 1 . 1[128X[104X
+    [4X[28X7,3,2,1| . . . . . . . . . . . . . 1[128X[104X
+    [4X[28X6,5,2  | . 1 . . . . . 1 . 1 . . . . 1[128X[104X
+    [4X[28X6,4,3  | 2 . . . 1 . . . . . . . . . . 1[128X[104X
+    [4X[28X6,4,2,1| . 2 . 1 . . . . . . . . . . . . 1[128X[104X
+    [4X[28X5,4,3,1| 4 . 2 . . . . . . . . . . . . . . 1[128X[104X
+    [4X[25Xgap>[125X [27XMatrixDecompositionMatrix(dp)=[127X[104X
+    [4X[25X>[125X [27X          MatrixDecompositionMatrix(d)*MatrixDecompositionMatrix(a);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIn the last line we have checked our calculation.[133X
+  
+  [33X[0;0YSee also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-5 SaveDecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XSaveDecompositionMatrix[102X( [3Xd[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSaveDecompositionMatrix[102X( [3Xd[103X, [3Xfilename[103X ) [32X method[133X
+  
+  [33X[0;0YThe function [2XSaveDecompositionMatrix[102X saves the decomposition matrix [22Xd[122X. After
+  a  decomposition  matrix  has  been saved, the functions [2XMakeSpecht[102X ([14X3.2-3[114X),
+  [2XMakePIM[102X  ([14X3.2-3[114X)  and  [2XMakeSimple[102X  ([14X3.2-3[114X)  will  automatically access it as
+  needed.  So,  for  example,  before  saving  [22Xd[122X  in  order  to  retrieve  the
+  indecomposable [22XP(μ)[122X from [22Xd[122X it is necessary to type [10XMakePIM([110X[22Xd, μ[122X[10X)[110X; once [22Xd[122X has
+  been saved, the command [10XMakePIM([110X[22Xμ[122X[10X)[110X suffices.[133X
+  
+  [33X[0;0YSince [2XInducedDecompositionMatrix[102X ([14X3.5-1[114X) consults the decomposition matrices
+  for   smaller  [22Xn[122X,  if  they  are  available,  it  is  advantageous  to  save
+  decomposition  matrices as they are calculated. For example, over a field of
+  characteristic  [22X5[122X,  the  decomposition matrices for the symmetric groups [22XS_n[122X
+  with [22Xn≤ 20[122X can be calculated as follows:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(5,5);;[127X[104X
+    [4X[25Xgap>[125X [27Xd:=DecompositionMatrix(H,9);;[127X[104X
+    [4X[25Xgap>[125X [27Xfor r in [10..20] do[127X[104X
+    [4X[25X>[125X [27X     d:=InducedDecompositionMatrix(d);[127X[104X
+    [4X[25X>[125X [27X     SaveDecompositionMatrix(d);[127X[104X
+    [4X[25X>[125X [27X   od;[127X[104X
+    [4X[28X# Inducing...[128X[104X
+    [4X[28X# Inducing....[128X[104X
+    [4X[28X# Inducing....[128X[104X
+    [4X[28X# Inducing.....[128X[104X
+    [4X[28X# Inducing......[128X[104X
+    [4X[28X# Inducing.......[128X[104X
+    [4X[28X# Inducing........[128X[104X
+    [4X[28X# Inducing..........[128X[104X
+    [4X[28X# Inducing............[128X[104X
+    [4X[28X# Inducing..............[128X[104X
+    [4X[28X# Inducing.................[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIf your Hecke algebra object [22XH[122X is defined using a non-standard valuation map
+  (see  [2XSpecht[102X ([14X3.2-1[114X)) then it is also necessary to set the string [22XHeckeRing[122X,
+  or  to  supply the function with a [22Xfilename[122X before it will save your matrix.
+  [2XSaveDecompositionMatrix[102X  will  also save adjustment matrices and the various
+  other  matrices  that  appear  in  [5XHecke[105X  (they  can  be  read back in using
+  [2XDecompositionMatrix[102X  ([14X3.2-8[114X)).  Each matrix has a default filename which you
+  can  over  ride  by supplying a [22Xfilename[122X. Using non-standard file names will
+  stop  [5XHecke[105X  from automatically accessing these matrices in future. See also
+  [2XDecompositionMatrix[102X  ([14X3.2-8[114X)  and  [2XCrystalDecompositionMatrix[102X  ([14X3.2-9[114X). This
+  function   requires   the   package   [5Xhecke[105X   (see  [2XLoadPackage[102X  ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-6 CalculateDecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XCalculateDecompositionMatrix[102X( [3XH[103X, [3Xn[103X ) [32X method[133X
+  
+  [33X[0;0Y[2XCalculateDecompositionMatrix[102X  is similar to the function [2XDecompositionMatrix[102X
+  ([14X3.2-8[114X)  in  that both functions try to return the decomposition matrix [22Xd[122X of
+  [22XH(S_n)[122X;  the difference is that this function tries to calculate this matrix
+  whereas   the   latter   reads   the  matrix  from  the  library  files  (in
+  characteristic zero both functions apply the algorithm of [LLT96] to compute
+  [22Xd[122X).  In effect this function is only needed when working with Hecke algebras
+  defined  over  fields  of positive characteristic (or when you wish to avoid
+  the  libraries).  For  example,  if  you  want  to  do calculations with the
+  decomposition   matrix   of  the  symmetric  group  [22XS_15[122X  over  a  field  of
+  characteristic   two,   [2XDecompositionMatrix[102X  ([14X3.2-8[114X)  returns  fail  whereas
+  [2XCalculateDecompositionMatrix[102X returns a part of the decomposition matrix.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2,2);; d:=DecompositionMatrix(H,15);[127X[104X
+    [4X[28X# This decomposition matrix is not known; use CalculateDecompositionMatrix()[128X[104X
+    [4X[28X# or InducedDecompositionMatrix() to calculate with this matrix.[128X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27Xd:=CalculateDecompositionMatrix(H,15);;[127X[104X
+    [4X[28X# Projective indecomposable P(6,4,3,2) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(6,5,3,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(6,5,4) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(7,4,3,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(7,5,2,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(7,5,3) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(7,6,2) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(8,4,2,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(8,4,3) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(8,5,2) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(8,6,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(8,7) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(9,3,2,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(9,4,2) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(9,5,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(9,6) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(10,3,2) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(10,4,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(10,5) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(11,3,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(11,4) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(12,2,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(12,3) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(13,2) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(14,1) not known.[128X[104X
+    [4X[28X# Projective indecomposable P(15) not known.[128X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; MissingIndecomposables(d);[127X[104X
+    [4X[28XThe following projectives are missing from <d>:[128X[104X
+    [4X[28X    [ 15 ]  [ 14, 1 ]  [ 13, 2 ]  [ 12, 3 ]  [ 12, 2, 1 ]  [ 11, 4 ][128X[104X
+    [4X[28X[ 11, 3, 1 ]  [ 10, 5 ]  [ 10, 4, 1 ]  [ 10, 3, 2 ]  [ 9, 6 ]  [ 9, 5, 1 ][128X[104X
+    [4X[28X[ 9, 4, 2 ]  [ 9, 3, 2, 1 ]  [ 8, 7 ]  [ 8, 6, 1 ]  [ 8, 5, 2 ]  [ 8, 4, 3 ][128X[104X
+    [4X[28X[ 8, 4, 2, 1 ]  [ 7, 6, 2 ]  [ 7, 5, 3 ]  [ 7, 5, 2, 1 ]  [ 7, 4, 3, 1 ][128X[104X
+    [4X[28X[ 6, 5, 4 ]  [ 6, 5, 3, 1 ]  [ 6, 4, 3, 2 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YActually, you are much better starting with the decomposition matrix of [22XS_14[122X
+  and  then  applying  [2XInducedDecompositionMatrix[102X  ([14X3.5-1[114X) to this matrix. See
+  also  [2XDecompositionMatrix[102X  ([14X3.2-8[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.5-7 MatrixDecompositionMatrix[101X
+  
+  [33X[1;0Y[29X[2XMatrixDecompositionMatrix[102X( [3Xd[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe [5XGAP[105X matrix corresponding to the [5XHecke[105X decomposition matrix [22Xd[122X[133X
+  
+  [33X[0;0YThe  rows and columns of [22Xd[122X are sorted by the ordering stored in the internal
+  algebra object of the matrix [22Xd[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);;[127X[104X
+    [4X[25Xgap>[125X [27XMatrixDecompositionMatrix(DecompositionMatrix(Specht(3),5));[127X[104X
+    [4X[28X[ [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 1, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ],[128X[104X
+    [4X[28X  [ 1, 0, 0, 0, 1 ], [ 0, 0, 0, 0, 1 ], [ 0, 0, 1, 0, 0 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XDecompositionMatrixMatrix[102X ([14X3.5-8[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-8 DecompositionMatrixMatrix[101X
+  
+  [33X[1;0Y[29X[2XDecompositionMatrixMatrix[102X( [3XH[103X, [3Xm[103X, [3Xn[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe [5XHecke[105X decomposition matrix corresponding to the [5XGAP[105X matrix [22Xm[122X[133X
+  
+  [33X[0;0YIf  [22Xp[122X  is  the  number  of  partitions  of  [22Xn[122X  and [22Xr[122X the number of [22Xe[122X-regular
+  partitions  of  [22Xn[122X,  then  [22Xm[122X  must be either [22Xr× r[122X, [22Xp× r[122X or [22Xp× p[122X. The rows and
+  columns  of [22Xm[122X are assumed to be indexed by partitions sorted by the ordering
+  stored in the algebra object [22XH[122X (see [2XSpecht[102X ([14X3.2-1[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3);;[127X[104X
+    [4X[25Xgap>[125X [27Xm:=[ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 1, 0, 1, 0 ],[127X[104X
+    [4X[25X>[125X [27X        [ 0, 0, 0, 1 ], [ 0, 0, 1, 0 ] ];;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay(DecompositionMatrixMatrix(H,m,4));[127X[104X
+    [4X[28X4    | 1[128X[104X
+    [4X[28X3,1  | . 1[128X[104X
+    [4X[28X2^2  | 1 . 1[128X[104X
+    [4X[28X2,1^2| . . . 1[128X[104X
+    [4X[28X1^4  | . . 1 .[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XMatrixDecompositionMatrix[102X ([14X3.5-7[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-9 AddIndecomposable[101X
+  
+  [33X[1;0Y[29X[2XAddIndecomposable[102X( [3Xd[103X, [3Xx[103X ) [32X method[133X
+  
+  [33X[0;0Y[2XAddIndecomposable[102X inserts the indecomposable module [22Xx[122X into the decomposition
+  matrix  [22Xd[122X.  If  [22Xd[122X  already  contains  the indecomposable [22Xd[122X then a warning is
+  printed.  The  function  [2XAddIndecomposable[102X  also calculates [10XMullineuxMap([110X [22Xx[122X[10X)[110X
+  (see  [2XMullineuxMap[102X  ([14X3.7-3[114X)) and adds this indecomposable to [22Xd[122X (or checks to
+  see  that it agrees with the corresponding entry of [22Xd[122X if this indecomposable
+  is already in [22Xd[122X).[133X
+  
+  [33X[0;0YSee [2XIsNewIndecomposable[102X ([14X3.5-2[114X) for an example. See also [2XDecompositionMatrix[102X
+  ([14X3.2-8[114X)  and  [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X). This function requires the
+  package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.5-10 RemoveIndecomposable[101X
+  
+  [33X[1;0Y[29X[2XRemoveIndecomposable[102X( [3Xd[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YThe   function   [2XRemoveIndecomposable[102X   removes  the  column  from  [22Xd[122X  which
+  corresponds to [22XP(μ)[122X. This is sometimes useful when trying to calculate a new
+  decomposition matrix using [5XHecke[105X and want to test a possible candidate for a
+  yet to be identified PIM.[133X
+  
+  [33X[0;0YSee also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.5-11 MissingIndecomposables[101X
+  
+  [33X[1;0Y[29X[2XMissingIndecomposables[102X( [3Xd[103X ) [32X method[133X
+  
+  [33X[0;0YThe   function   [2XMissingIndecomposables[102X   prints   the  list  of  partitions
+  corresponding to the indecomposable modules which are not listed in [22Xd[122X.[133X
+  
+  [33X[0;0YSee also [2XDecompositionMatrix[102X ([14X3.2-8[114X) and [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X).
+  This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  
+  [1X3.6 [33X[0;0YCalculating dimensions[133X[101X
+  
+  [33X[0;0Y[5XHecke[105X  has  two functions for calculating the dimensions of modules of Hecke
+  algebras; [2XSimpleDimension[102X ([14X3.6-1[114X) and [2XSpechtDimension[102X ([14X3.6-2[114X). As yet, [5XHecke[105X
+  does  not  know  how  to  calculate  the  dimensions  of modules for [22Xq[122X-Schur
+  algebras (these depend up on [22Xq[122X).[133X
+  
+  [1X3.6-1 SimpleDimension[101X
+  
+  [33X[1;0Y[29X[2XSimpleDimension[102X( [3Xd[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSimpleDimension[102X( [3XH[103X, [3Xn[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XSimpleDimension[102X( [3XH|d[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YIn  the first two forms, [2XSimpleDimension[102X prints the dimensions of all of the
+  simple  modules specified by [22Xd[122X or for the Hecke algebra [22XH(S_n)[122X respectively.
+  If a partition [22Xμ[122X is supplied, as in the last form, then the dimension of the
+  simple  module  [22XD(μ)[122X is returned. At present the function is not implemented
+  for the simple modules of the [22Xq[122X-Schur algebras.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(6);;[127X[104X
+    [4X[25Xgap>[125X [27XSimpleDimension(H,11,3);[127X[104X
+    [4X[28X272[128X[104X
+    [4X[25Xgap>[125X [27Xd:=DecompositionMatrix(H,5);; SimpleDimension(d,3,2);[127X[104X
+    [4X[28X5[128X[104X
+    [4X[25Xgap>[125X [27XSimpleDimension(d);[127X[104X
+    [4X[28X5     : 1[128X[104X
+    [4X[28X4,1   : 4[128X[104X
+    [4X[28X3,2   : 5[128X[104X
+    [4X[28X3,1^2 : 6[128X[104X
+    [4X[28X2^2,1 : 5[128X[104X
+    [4X[28X2,1^3 : 4[128X[104X
+    [4X[28X1^5   : 1[128X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.6-2 SpechtDimension[101X
+  
+  [33X[1;0Y[29X[2XSpechtDimension[102X( [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe dimension of the Specht module [22XS(μ)[122X[133X
+  
+  [33X[0;0Y[22Xdim  S(μ)[122X is equal to the number of standard [22Xμ[122X-tableaux; the answer is given
+  by the hook length formula (see [JK81]).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSpechtDimension(6,3,2,1);[127X[104X
+    [4X[28X5632[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XSimpleDimension[102X ([14X3.6-1[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  
+  [1X3.7 [33X[0;0YCombinatorics on Young diagrams[133X[101X
+  
+  [33X[0;0YThese  functions  range  from the representation theoretic [22Xq[122X-Schaper theorem
+  and   Kleshchev's   algorithm  for  the  Mullineux  map  through  to  simple
+  combinatorial  operations  like  adding  and  removing  rim hooks from Young
+  diagrams.[133X
+  
+  [1X3.7-1 Schaper[101X
+  
+  [33X[1;0Y[29X[2XSchaper[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya  linear  combination  of  Specht  modules  which  have  the same
+            composition  factors  as  the  sum  of  the modules in the [21XJantzen
+            filtration  [121X  of  [22XS(μ)[122X;  see  [JM97]. In particular, if [22Xν[122X strictly
+            dominates  [22Xμ[122X then [22XD(ν)[122X is a composition factor of [22XS(μ)[122X if and only
+            if it is a composition factor of [10XSchaper([110X[22Xμ[122X[10X)[110X.[133X
+  
+  [33X[0;0Y[2XSchaper[102X  uses  the  valuation  map  attached  to  [22XH[122X  (see [2XSpecht[102X ([14X3.2-1[114X) and
+  [JM97]).[133X
+  
+  [33X[0;0YOne way in which the [22Xq[122X-Schaper theorem can be applied is as follows. Suppose
+  that  we  have  a  projective  module  [22Xx[122X, written as a linear combination of
+  Specht  modules  and  suppose  that  we  are  trying  to  decide whether the
+  projective  indecomposable  [22XP(μ)[122X  is  a direct summand of [22Xx[122X. Then, providing
+  that  we know that [22XP(ν)[122X is not a summand of [22Xx[122X for all ([22Xe[122X-regular) partitions
+  [22Xν[122X which strictly dominate [22Xμ[122X (see [2XDominates[102X ([14X3.8-12[114X)), [22XP(μ)[122X is a summand of [22Xx[122X
+  if   and  only  if  [10XInnerProduct(Schaper(  [110X[22XH,μ[122X[10X)[110X,[22Xx[122X[10X)[110X  is  non-zero  (note,  in
+  particular,  that  we don't need to know the indecomposable [22XP(μ)[122X in order to
+  perform this calculation).[133X
+  
+  [33X[0;0YThe  [22Xq[122X-Schaper theorem can also be used to check for irreduciblity; in fact,
+  this is the basis for the criterion employed by [2XIsSimpleModule[102X ([14X3.7-2[114X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; H:=Specht(2);;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay(Schaper(H,9,5,3,2,1));[127X[104X
+    [4X[28XS(17,2,1) - S(15,2,1^3) + S(13,2^3,1) - S(11,3^2,2,1) + S(10,4,3,2,1) - S(9,8,\[128X[104X
+    [4X[28X3) - S(9,8,1^3) + S(9,6,3,2) + S(9,6,3,1^2) + S(9,6,2^2,1)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(Schaper(H,9,6,5,2));[127X[104X
+    [4X[28X0S()[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  last calculation shows that [22XS(9,6,5,2)[122X is irreducible when [22XR[122X is a field
+  of   characteristic  zero  and  [22Xe=2[122X  (cf.  [10XIsSimpleModule([110X[22XH,9,6,5,2[122X[10X)[110X).  This
+  function   requires   the   package   [5Xhecke[105X   (see  [2XLoadPackage[102X  ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.7-2 IsSimpleModule[101X
+  
+  [33X[1;0Y[29X[2XIsSimpleModule[102X( [3XH[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22XS(μ)[122X is simple and [9Xfalse[109X otherwise.[133X
+  
+  [33X[0;0Y[22Xμ[122X an [22Xe[122X-regular partition.[133X
+  
+  [33X[0;0YThis  calculation uses the valuation function of [22XH[122X; see [2XSpecht[102X ([14X3.2-1[114X). Note
+  that the criterion used by [2XIsSimpleModule[102X is completely combinatorial; it is
+  derived from the [22Xq[122X-Schaper theorem [JM97].[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3);;[127X[104X
+    [4X[25Xgap>[125X [27XIsSimpleModule(H,45,31,24);[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XSchaper[102X  ([14X3.7-1[114X).  This  function requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-3 MullineuxMap[101X
+  
+  [33X[1;0Y[29X[2XMullineuxMap[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YThe sign representation [22XD(1^n)[122X of the Hecke algebra is the (one dimensional)
+  representation  sending  [22XT_w[122X to [22X(-1)^l(w)[122X. The Hecke algebra [22XH[122X is not a Hopf
+  algebra  so  there is no well defined action of [22XH[122X upon the tensor product of
+  two  [22XH[122X-modules;  however,  there  is  an  outer  automorphism  [22X#[122X  of [22XH[122X which
+  corresponds  to tensoring with [22XD(1^n)[122X. This sends an irreducible module [22XD(μ)[122X
+  to  an  irreducible  [22XD(μ)^#≅ D(μ^#)[122X for some [22Xe[122X-regular partition [22Xμ^#[122X. In the
+  symmetric group case, Mullineux gave a conjectural algorithm for calculating
+  [22Xμ^#[122X; consequently the map sending [22Xμ[122X to [22Xμ^#[122X is known as the [13XMullineux map[113X.[133X
+  
+  [33X[0;0YDeep  results  of  Kleshchev  [Kle96]  for  the symmetric group give another
+  (proven)  algorithm  for  calculating  the partition [22Xμ^#[122X (Ford and Kleshchev
+  have  deduced  Mullineux's conjecture from this). Using the canonical basis,
+  it  was  shown  by  [LLT96]  that  the natural generalization of Kleshchev's
+  algorithm  to  [22XH[122X  gives  the Mullineux map for Hecke algebras over fields of
+  characteristic  zero.  The  general case follows from this, so the Mullineux
+  map is now known for all Hecke algebras.[133X
+  
+  [33X[0;0YKleshchev's  map is easy to describe; he proved that if [22Xgns[122X is any good node
+  sequence  for  [22Xμ[122X,  then  the  sequence  obtained  from [22Xgns[122X by replacing each
+  residue  [22Xr[122X  by [22X-rmod e[122X is a good node sequence for [22Xμ^#[122X (see [2XGoodNodeSequence[102X
+  ([14X3.7-8[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XMullineuxMap(Specht(2),12,5,2);[127X[104X
+    [4X[28X[ 12, 5, 2 ][128X[104X
+    [4X[25Xgap>[125X [27XMullineuxMap(Specht(4),12,5,2);[127X[104X
+    [4X[28X[ 4, 4, 4, 2, 2, 1, 1, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XMullineuxMap(Specht(6),12,5,2);[127X[104X
+    [4X[28X[ 4, 3, 2, 2, 2, 2, 2, 1, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XMullineuxMap(Specht(8),12,5,2);[127X[104X
+    [4X[28X[ 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XMullineuxMap(Specht(10),12,5,2);[127X[104X
+    [4X[28X[ 3, 3, 3, 3, 2, 1, 1, 1, 1, 1 ][128X[104X
+  [4X[32X[104X
+  
+  [6XReturns:[106X  [33X[0;10Ythe image of [22Xμ[122X under the Mullineux map[133X
+  
+  [33X[1;0Y[29X[2XMullineuxMap[102X( [3Xd[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YThe  Mullineux  map  can also be calculated using a decomposition matrix. To
+  see  this  recall  that  [21Xtensoring[121X  a  Specht  module  [22XS(μ)[122X  with  the  sign
+  representation  yields  a  module isomorphic to the dual of [22XS(λ)[122X, where [22Xλ[122X is
+  the  partition  conjugate  to  [22Xμ[122X.  It  follows  that  [22Xd_μ,ν=d_λ,ν^#[122X  for all
+  [22Xe[122X-regular  partitions  [22Xν[122X.  Therefore,  if  [22Xμ[122X  is  the  last partition in the
+  lexicographic  order  such that [22Xd_μ,ν≠ 0[122X then we must have [22Xν^#=λ[122X. The second
+  form   of   [2XMullineuxMap[102X   uses   [22Xd[122X   to   calculate  [22Xμ^#[122X  rather  than  the
+  Kleshchev-[LLT96] result.[133X
+  
+  [33X[1;0Y[29X[2XMullineuxMap[102X( [3Xx[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Yreturns [22Xx^#[122X, the image of [22Xx[122X under [22X#[122X.[133X
+  
+  [33X[0;0YNote  that  the  above  remarks  show  that [22XP(μ)[122X is mapped to [22XP(μ^#)[122X via the
+  Mullineux  map;  this  observation  is useful when calculating decomposition
+  matrices (and is used by the function [2XInducedDecompositionMatrix[102X ([14X3.5-1[114X)).[133X
+  
+  [33X[0;0YSee  also  [2XGoodNodes[102X  ([14X3.7-6[114X)  and  [2XGoodNodeSequence[102X  ([14X3.7-8[114X). This function
+  requires the package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-4 MullineuxSymbol[101X
+  
+  [33X[1;0Y[29X[2XMullineuxSymbol[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe Mullineux symbol of the [22Xe[122X-regular partition [22Xμ[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XMullineuxSymbol(5,[8,6,5,5]);[127X[104X
+    [4X[28X[ [ 10, 6, 5, 3 ], [ 4, 4, 3, 2 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XPartitionMullineuxSymbol[102X  ([14X3.7-5[114X).  This  function  requires  the
+  package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-5 PartitionMullineuxSymbol[101X
+  
+  [33X[1;0Y[29X[2XPartitionMullineuxSymbol[102X( [3Xe|H[103X, [3Xms[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  [22Xe[122X-regular  partition  corresponding  to  the  given Mullineux
+            symbol [22Xms[122X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XPartitionMullineuxSymbol(5, MullineuxSymbol(5,[8,6,5,5]) );[127X[104X
+    [4X[28X[ 8, 6, 5, 5 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XMullineuxSymbol[102X ([14X3.7-4[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-6 GoodNodes[101X
+  
+  [33X[1;0Y[29X[2XGoodNodes[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya list of the rows of [22Xμ[122X which end in a good node. The good node of
+            residue [22Xr[122X (if it exists) is the [22X(r+1)[122X-st element in this list.[133X
+  
+  [33X[1;0Y[29X[2XGoodNodes[102X( [3Xe|H[103X, [3Xmu[103X, [3Xr[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  number  of the row which ends with the good node of residue [22Xr[122X
+            or [9Xfail[109X if there is no good node of residue [22Xr[122X.[133X
+  
+  [33X[0;0YGiven a partition and an integer [22Xe[122X, Kleshchev [K] defined the notion of [13Xgood
+  node[113X  for  each  residue  [22Xr[122X  ([22X0≤  r<e[122X).  When [22Xe[122X is prime and [22Xμ[122X is [22Xe[122X-regular,
+  Kleshchev  showed  that the good nodes describe the restriction of the socle
+  of   [22XD(μ)[122X  in  the  symmetric  group  case.  Brundan  [Bru98]  has  recently
+  generalized this result to the Hecke algebra.[133X
+  
+  [33X[0;0YBy  definition,  there  is at most one good node for each residue [22Xr[122X and this
+  node is a removable node (in the diagram of [22Xμ[122X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XGoodNodes(5,[5,4,3,2]);[127X[104X
+    [4X[28X[ fail, fail, 2, fail, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodes(5,[5,4,3,2],0);[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XGoodNodes(5,[5,4,3,2],4);[127X[104X
+    [4X[28X1[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe   good   nodes   also   determine   the   Kleshchev-Mullineux  map  (see
+  [2XGoodNodeSequence[102X  ([14X3.7-8[114X)  and [2XMullineuxMap[102X ([14X3.7-3[114X)). This function requires
+  the package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-7 NormalNodes[101X
+  
+  [33X[1;0Y[29X[2XNormalNodes[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  numbers  of  the  rows  of  [22Xμ[122X which end in one of Kleshchev's
+            [Kle96] normal nodes.[133X
+  
+  [33X[1;0Y[29X[2XNormalNodes[102X( [3Xe|H[103X, [3Xmu[103X, [3Xr[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe rows corresponding to normal nodes of the specified residue.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XNormalNodes(5,[6,5,4,4,3,2,1,1,1]);[127X[104X
+    [4X[28X[ [ 1, 4 ], [  ], [  ], [ 2, 5 ], [  ] ][128X[104X
+    [4X[25Xgap>[125X [27XNormalNodes(5,[6,5,4,4,3,2,1,1,1],0);[127X[104X
+    [4X[28X[ 1, 4 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XGoodNodes[102X  ([14X3.7-6[114X). This function requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-8 GoodNodeSequence[101X
+  
+  [33X[1;0Y[29X[2XGoodNodeSequence[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YGiven  an  [22Xe[122X-regular  partition  [22Xμ[122X  of  [22Xn[122X,  a  [13Xgood node sequence[113X for [22Xμ[122X is a
+  sequence [22Xgns[122X of [22Xn[122X residues such that [22Xμ[122X has a good node of residue [22Xr[122X, where [22Xr[122X
+  is the last residue in [22Xgns[122X and the first [22Xn-1[122X residues in [22Xgns[122X are a good node
+  sequence  for  the  partition  obtained from [22Xμ[122X by deleting its (unique) good
+  node  with  residue  [22Xr[122X (see [2XGoodNodes[102X ([14X3.7-6[114X)). In general, [22Xμ[122X will have more
+  than  one  good  node  sequence;  however,  any  good node sequence uniquely
+  determines [22Xμ[122X (see [2XPartitionGoodNodeSequence[102X ([14X3.7-9[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; GoodNodeSequence(H,4,3,1);[127X[104X
+    [4X[28X[ 0, 3, 1, 0, 2, 2, 1, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodeSequence(H,4,3,2);[127X[104X
+    [4X[28X[ 0, 3, 1, 0, 2, 2, 1, 3, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodeSequence(H,4,4,2);[127X[104X
+    [4X[28X[ 0, 3, 1, 0, 2, 2, 1, 3, 3, 2 ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodeSequence(H,5,4,2);[127X[104X
+    [4X[28X[ 0, 3, 1, 0, 2, 2, 1, 3, 3, 2, 0 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[1;0Y[29X[2XGoodNodeSequences[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ylist of all good node sequences for [22Xμ[122X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);; GoodNodeSequences(H,5,2,1);[127X[104X
+    [4X[28X[ [ 0, 1, 2, 3, 3, 2, 0, 0 ], [ 0, 3, 1, 2, 2, 3, 0, 0 ],[128X[104X
+    [4X[28X  [ 0, 1, 3, 2, 2, 3, 0, 0 ], [ 0, 1, 2, 3, 3, 0, 2, 0 ],[128X[104X
+    [4X[28X  [ 0, 1, 2, 3, 0, 3, 2, 0 ], [ 0, 1, 2, 3, 3, 0, 0, 2 ],[128X[104X
+    [4X[28X  [ 0, 1, 2, 3, 0, 3, 0, 2 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  good  node sequences determine the Mullineux map (see [2XGoodNodes[102X ([14X3.7-6[114X)
+  and  [2XMullineuxMap[102X  ([14X3.7-3[114X)).  This  function requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-9 PartitionGoodNodeSequence[101X
+  
+  [33X[1;0Y[29X[2XPartitionGoodNodeSequence[102X( [3Xe|H[103X, [3Xgns[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe unique [22Xe[122X-regular partition corresponding to [22Xgns[122X (or [9Xfail[109X if in
+            fact [22Xgns[122X is not a good node sequence).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);;[127X[104X
+    [4X[25Xgap>[125X [27XPartitionGoodNodeSequence(H,0, 3, 1, 0, 2, 2, 1, 3, 3, 2);[127X[104X
+    [4X[28X[ 4, 4, 2 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XGoodNodes[102X  ([14X3.7-6[114X),  [2XGoodNodeSequence[102X  ([14X3.7-8[114X)  and  [2XMullineuxMap[102X
+  ([14X3.7-3[114X).   This   function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X
+  ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-10 GoodNodeLatticePath[101X
+  
+  [33X[1;0Y[29X[2XGoodNodeLatticePath[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya sequence of partitions which give a path in the [22Xe[122X-good partition
+            lattice from the empty partition to [22Xμ[122X.[133X
+  
+  [33X[1;0Y[29X[2XGoodNodeLatticePaths[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe list of all paths in the [22Xe[122X-good partition lattice which end in
+            [22Xμ[122X.[133X
+  
+  [33X[1;0Y[29X[2XLatticePathGoodNodeSequence[102X( [3Xe|H[103X, [3Xgns[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe path corresponding to a given good node sequence [22Xgns[122X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XGoodNodeLatticePath(3,3,2,1);[127X[104X
+    [4X[28X[ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 1, 1 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodeLatticePaths(3,3,2,1);[127X[104X
+    [4X[28X[ [ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 1, 1 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ],[128X[104X
+    [4X[28X  [ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 2 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XGoodNodeSequence(4,6,3,2);[127X[104X
+    [4X[28X[ 0, 3, 1, 0, 2, 2, 3, 3, 0, 1, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XLatticePathGoodNodeSequence(4,last);[127X[104X
+    [4X[28X[ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 2 ], [ 3, 2 ], [ 3, 2, 1 ], [ 4, 2, 1 ],[128X[104X
+    [4X[28X  [ 4, 2, 2 ], [ 5, 2, 2 ], [ 6, 2, 2 ], [ 6, 3, 2 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XGoodNodes[102X  ([14X3.7-6[114X). This function requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-11 LittlewoodRichardsonRule[101X
+  
+  [33X[1;0Y[29X[2XLittlewoodRichardsonRule[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XLittlewoodRichardsonCoefficient[102X( [3Xmu[103X, [3Xnu[103X, [3Xtau[103X ) [32X method[133X
+  
+  [33X[0;0YGiven  partitions  [22Xμ[122X  of  [22Xn[122X and [22Xν[122X of [22Xm[122X the module [22XS(μ)⊗ S(ν)[122X is naturally an
+  [22XH(S_n×  S_m)[122X-  module  and,  by inducing, we obtain an [22XH(S_n+m)[122X-module. This
+  module  has  the same composition factors as [22X∑_ν a_μ,ν^λ S(λ)[122X, where the sum
+  runs  over  all  partitions  [22Xλ[122X  of  [22Xn+m[122X  and  the  integers  [22Xa_μ,ν^λ[122X are the
+  Littlewood-Richardson  coefficients.  The integers [22Xa_μ,ν^λ[122X can be calculated
+  using    a    straightforward   combinatorial   algorithm   known   as   the
+  Littlewood-Richardson      rule      (see      [JK81]).     The     function
+  [2XLittlewoodRichardsonRule[102X returns an (unordered) list of partitions of [22Xn+m[122X in
+  which  each  partition  [22Xλ[122X  occurs  [22Xa_μ,ν^λ[122X  times. The Littlewood-Richardson
+  coefficients  are  independent  of  [22Xe[122X; they can be read more easily from the
+  computation [22XS(μ)⊗ S(ν)[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);;[127X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(0);; # the generic Hecke algebra with R=C[q][127X[104X
+    [4X[25Xgap>[125X [27XLittlewoodRichardsonRule([3,2,1],[4,2]);[127X[104X
+    [4X[28X[ [ 4, 3, 2, 2, 1 ], [ 4, 3, 3, 1, 1 ], [ 4, 3, 3, 2 ], [ 4, 4, 2, 1, 1 ],[128X[104X
+    [4X[28X  [ 4, 4, 2, 2 ], [ 4, 4, 3, 1 ], [ 5, 2, 2, 2, 1 ], [ 5, 3, 2, 1, 1 ],[128X[104X
+    [4X[28X  [ 5, 3, 2, 2 ], [ 5, 4, 2, 1 ], [ 5, 3, 2, 1, 1 ], [ 5, 3, 3, 1 ],[128X[104X
+    [4X[28X  [ 5, 4, 1, 1, 1 ], [ 5, 4, 2, 1 ], [ 5, 5, 1, 1 ], [ 5, 3, 2, 2 ],[128X[104X
+    [4X[28X  [ 5, 3, 3, 1 ], [ 5, 4, 2, 1 ], [ 5, 4, 3 ], [ 5, 5, 2 ], [ 6, 2, 2, 1, 1 ],[128X[104X
+    [4X[28X  [ 6, 3, 1, 1, 1 ], [ 6, 3, 2, 1 ], [ 6, 4, 1, 1 ], [ 6, 2, 2, 2 ],[128X[104X
+    [4X[28X  [ 6, 3, 2, 1 ], [ 6, 4, 2 ], [ 6, 3, 2, 1 ], [ 6, 3, 3 ], [ 6, 4, 1, 1 ],[128X[104X
+    [4X[28X  [ 6, 4, 2 ], [ 6, 5, 1 ], [ 7, 2, 2, 1 ], [ 7, 3, 1, 1 ], [ 7, 3, 2 ],[128X[104X
+    [4X[28X  [ 7, 4, 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XDisplay(MakeSpecht(H,3,2,1)*MakeSpecht(H,4,2));[127X[104X
+    [4X[28XS(7,4,1) + S(7,3,2) + S(7,3,1^2) + S(7,2^2,1) + S(6,5,1) + 2S(6,4,2) + 2S(6,4,\[128X[104X
+    [4X[28X1^2) + S(6,3^2) + 3S(6,3,2,1) + S(6,3,1^3) + S(6,2^3) + S(6,2^2,1^2) + S(5^2,2\[128X[104X
+    [4X[28X) + S(5^2,1^2) + S(5,4,3) + 3S(5,4,2,1) + S(5,4,1^3) + 2S(5,3^2,1) + 2S(5,3,2^\[128X[104X
+    [4X[28X2) + 2S(5,3,2,1^2) + S(5,2^3,1) + S(4^2,3,1) + S(4^2,2^2) + S(4^2,2,1^2) + S(4\[128X[104X
+    [4X[28X,3^2,2) + S(4,3^2,1^2) + S(4,3,2^2,1)[128X[104X
+    [4X[25Xgap>[125X [27XLittlewoodRichardsonCoefficient([3,2,1],[4,2],[5,4,2,1]);[127X[104X
+    [4X[28X3[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe    function    [2XLittlewoodRichardsonCoefficient[102X    returns    a    single
+  Littlewood-Richardson coefficient (although you are really better off asking
+  for all of them, since they will all be calculated anyway).[133X
+  
+  [33X[0;0YSee   also   [2XRInducedModule[102X   ([14X3.4-1[114X)   and  [2XInverseLittlewoodRichardsonRule[102X
+  ([14X3.7-12[114X).   This  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X
+  ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-12 InverseLittlewoodRichardsonRule[101X
+  
+  [33X[1;0Y[29X[2XInverseLittlewoodRichardsonRule[102X( [3Xtau[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya   list   of   all  pairs  of  partitions  [22X[μ,ν][122X  such  that  the
+            Littlewood-Richardson   coefficient   [22Xa_μ,ν^τ[122X   is  non-zero  (see
+            [2XLittlewoodRichardsonRule[102X ([14X3.7-11[114X)). The list returned is unordered
+            and [22X[μ,ν][122X will appear [22Xa_μ,ν^τ[122X times in it.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; InverseLittlewoodRichardsonRule(3,2,1);[127X[104X
+    [4X[28X[ [ [  ], [ 3, 2, 1 ] ], [ [ 1 ], [ 3, 2 ] ], [ [ 1 ], [ 2, 2, 1 ] ],[128X[104X
+    [4X[28X  [ [ 1 ], [ 3, 1, 1 ] ], [ [ 1, 1 ], [ 2, 2 ] ], [ [ 1, 1 ], [ 3, 1 ] ],[128X[104X
+    [4X[28X  [ [ 1, 1 ], [ 2, 1, 1 ] ], [ [ 1, 1, 1 ], [ 2, 1 ] ], [ [ 2 ], [ 2, 2 ] ],[128X[104X
+    [4X[28X  [ [ 2 ], [ 3, 1 ] ], [ [ 2 ], [ 2, 1, 1 ] ], [ [ 2, 1 ], [ 3 ] ],[128X[104X
+    [4X[28X  [ [ 2, 1 ], [ 2, 1 ] ], [ [ 2, 1 ], [ 2, 1 ] ], [ [ 2, 1 ], [ 1, 1, 1 ] ],[128X[104X
+    [4X[28X  [ [ 2, 1, 1 ], [ 2 ] ], [ [ 2, 1, 1 ], [ 1, 1 ] ], [ [ 2, 2 ], [ 2 ] ],[128X[104X
+    [4X[28X  [ [ 2, 2 ], [ 1, 1 ] ], [ [ 2, 2, 1 ], [ 1 ] ], [ [ 3 ], [ 2, 1 ] ],[128X[104X
+    [4X[28X  [ [ 3, 1 ], [ 2 ] ], [ [ 3, 1 ], [ 1, 1 ] ], [ [ 3, 1, 1 ], [ 1 ] ],[128X[104X
+    [4X[28X  [ [ 3, 2 ], [ 1 ] ], [ [ 3, 2, 1 ], [  ] ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XLittlewoodRichardsonRule[102X  ([14X3.7-11[114X).  This  function  requires the
+  package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-13 EResidueDiagram[101X
+  
+  [33X[1;0Y[29X[2XEResidueDiagram[102X( [3XH|e[103X, [3Xmu[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XEResidueDiagram[102X( [3Xx[103X ) [32X method[133X
+  
+  [33X[0;0YThe  [22Xe[122X-residue  of  the  [22X(i,j)[122X-th  node  in  the diagram of a partition [22Xμ[122X is
+  [22X(j-i)mod  e[122X.  [10XEResidueDiagram([110X[22Xe,  μ[122X[10X)[110X  prints  the diagram of the partition [22Xμ[122X
+  replacing   each   node   with   its  [22Xe[122X-residue.  If  [22Xx[122X  is  a  module  then
+  [10XEResidueDiagram([110X[22Xx[122X[10X)[110X  prints  the  [22Xe[122X-residue  diagrams of all of the [22Xe[122X-regular
+  partitions  appearing  in  [22Xx[122X (such diagrams are useful when trying to decide
+  how  to restrict and induce modules and also in applying results such as the
+  [21XScattering  theorem[121X  of [JM96]). It is not necessary to supply the integer [22Xe[122X
+  in this case because [22Xx[122X [21Xknows[121X the value of [22Xe[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2);; EResidueDiagram(MakeSpecht(MakePIM(H,7,5)));[127X[104X
+    [4X[28X[ 7, 5 ][128X[104X
+    [4X[28X   0   1   0   1   0   1   0[128X[104X
+    [4X[28X   1   0   1   0   1[128X[104X
+    [4X[28X[ 6, 5, 1 ][128X[104X
+    [4X[28X   0   1   0   1   0   1[128X[104X
+    [4X[28X   1   0   1   0   1[128X[104X
+    [4X[28X   0[128X[104X
+    [4X[28X[ 5, 4, 2, 1 ][128X[104X
+    [4X[28X   0   1   0   1   0[128X[104X
+    [4X[28X   1   0   1   0[128X[104X
+    [4X[28X   0   1[128X[104X
+    [4X[28X   1[128X[104X
+    [4X[28X# There are 3 2-regular partitions.[128X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.7-14 HookLengthDiagram[101X
+  
+  [33X[1;0Y[29X[2XHookLengthDiagram[102X( [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YPrints  the  diagram  of  [22Xμ[122X,  replacing  each node with its hook length (see
+  [JK81]).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XHookLengthDiagram(11,6,3,2);[127X[104X
+    [4X[28X  14  13  11   9   8   7   5   4   3   2   1[128X[104X
+    [4X[28X   8   7   5   3   2   1[128X[104X
+    [4X[28X   4   3   1[128X[104X
+    [4X[28X   2   1[128X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.7-15 RemoveRimHook[101X
+  
+  [33X[1;0Y[29X[2XRemoveRimHook[102X( [3Xmu[103X, [3Xrow[103X, [3Xcol[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  partition  obtained  from [22Xμ[122X by removing the [22X(row, col)[122X-th rim
+            hook from (the diagram of) [22Xμ[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XRemoveRimHook([6,5,4],1,2);[127X[104X
+    [4X[28X[ 4, 3, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XRemoveRimHook([6,5,4],2,3);[127X[104X
+    [4X[28X[ 6, 3, 2 ][128X[104X
+    [4X[25Xgap>[125X [27XHookLengthDiagram(6,5,4);[127X[104X
+    [4X[28X   8   7   6   5   3   1[128X[104X
+    [4X[28X   6   5   4   3   1[128X[104X
+    [4X[28X   4   3   2   1[128X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also [2XAddRimHook[102X ([14X3.7-16[114X). This function requires the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.7-16 AddRimHook[101X
+  
+  [33X[1;0Y[29X[2XAddRimHook[102X( [3Xmu[103X, [3Xr[103X, [3Xh[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya list [22X[ν, l][122X where [22Xν[122X is the partition obtained from [22Xμ[122X by adding a
+            rim hook of length [22Xh[122X with its [21Xfoot[121X in the [22Xr[122X-th row of (the diagram
+            of) [22Xμ[122X and [22Xl[122X is the leg length of the wrapped on rim hook (see, for
+            example, [JK81]). If the resulting diagram [22Xν[122X is not the diagram of
+            a partition then [9Xfail[109X is returned.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XAddRimHook([6,4,3],1,3);[127X[104X
+    [4X[28X[ [ 9, 4, 3 ], 0 ][128X[104X
+    [4X[25Xgap>[125X [27XAddRimHook([6,4,3],2,3);[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XAddRimHook([6,4,3],3,3);[127X[104X
+    [4X[28X[ [ 6, 5, 5 ], 1 ][128X[104X
+    [4X[25Xgap>[125X [27XAddRimHook([6,4,3],4,3);[127X[104X
+    [4X[28X[ [ 6, 4, 3, 3 ], 0 ][128X[104X
+    [4X[25Xgap>[125X [27XAddRimHook([6,4,3],5,3);[127X[104X
+    [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XRemoveRimHook[102X  ([14X3.7-15[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  
+  [1X3.8 [33X[0;0YOperations on partitions[133X[101X
+  
+  [33X[0;0YThis section contains functions for manipulating partitions and also several
+  useful orderings on the set of partitions.[133X
+  
+  [1X3.8-1 ECore[101X
+  
+  [33X[1;0Y[29X[2XECore[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe [22Xe[122X-core of the partition [22Xμ[122X.[133X
+  
+  [33X[1;0Y[29X[2XEAbacus[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YThe  [22Xe[122X-core  of  a  partition [22Xμ[122X is what remains after as many rim [22Xe[122X-hooks as
+  possible  have been removed from the diagram of [22Xμ[122X (that this is well defined
+  is not obvious; see [JK81]).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(6);; ECore(H,16,8,6,5,3,1);[127X[104X
+    [4X[28X[ 4, 3, 1, 1 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThe  [22Xe[122X-core  is calculated here using James'; notation of an [13Xabacus[113X there is
+  also an [2XEAbacus[102X function; but it is more [21Xpretty[121X than useful.[133X
+  
+  [33X[0;0YSee  also  [2XIsECore[102X  ([14X3.8-2[114X),  [2XEQuotient[102X  ([14X3.8-3[114X)  and  [2XEWeight[102X ([14X3.8-5[114X). This
+  function   requires   the   package   [5Xhecke[105X   (see  [2XLoadPackage[102X  ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-2 IsECore[101X
+  
+  [33X[1;0Y[29X[2XIsECore[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22Xμ[122X is an [22Xe[122X-core and [9Xfalse[109X otherwise.[133X
+  
+  [33X[0;0YSee  also  [2XECore[102X  ([14X3.8-1[114X).  This  function  requires  the package [5Xhecke[105X (see
+  [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.8-3 EQuotient[101X
+  
+  [33X[1;0Y[29X[2XEQuotient[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  [22Xe[122X-quotient  of  [22Xμ[122X;  this  is a sequence of [22Xe[122X partitions whose
+            definition can be found in [JK81].[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(8);; EQuotient(H,22,18,16,12,12,1,1);[127X[104X
+    [4X[28X[ [ 1, 1 ], [  ], [  ], [  ], [  ], [ 2, 2 ], [  ], [ 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XECore[102X  ([14X3.8-1[114X)  and  [2XCombineEQuotientECore[102X ([14X3.8-4[114X). This function
+  requires the package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.8-4 CombineEQuotientECore[101X
+  
+  [33X[1;0Y[29X[2XCombineEQuotientECore[102X( [3Xe|H[103X, [3Xq[103X, [3XC[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe partition which has [22Xe[122X-quotient [22Xq[122X and [22Xe[122X -core [22XC[122X.[133X
+  
+  [33X[0;0YA  partition  is  uniquely determined by its [22Xe[122X-quotient and its [22Xe[122X -core (see
+  [2XEQuotient[102X ([14X3.8-3[114X) and [2XECore[102X ([14X3.8-1[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(11);; mu:=[100,98,57,43,12,1];;[127X[104X
+    [4X[25Xgap>[125X [27XQ:=EQuotient(H,mu);[127X[104X
+    [4X[28X[ [ 9 ], [  ], [  ], [  ], [  ], [  ], [ 3 ], [ 1 ], [ 9 ], [  ], [ 5 ] ][128X[104X
+    [4X[25Xgap>[125X [27XC:=ECore(H,mu);[127X[104X
+    [4X[28X[ 7, 2, 2, 1, 1, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XCombineEQuotientECore(H,Q,C);[127X[104X
+    [4X[28X[ 100, 98, 57, 43, 12, 1 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XECore[102X  ([14X3.8-1[114X)  and [2XEQuotient[102X ([14X3.8-3[114X). This function requires the
+  package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.8-5 EWeight[101X
+  
+  [33X[1;0Y[29X[2XEWeight[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YThe  [22Xe[122X-weight  of a partition is the number of [22Xe[122X-hooks which must be removed
+  from the partition to reach the [22Xe[122X-core (see [2XECore[102X ([14X3.8-1[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XEWeight(6,[16,8,6,5,3,1]);[127X[104X
+    [4X[28X5[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-6 ERegularPartitions[101X
+  
+  [33X[1;0Y[29X[2XERegularPartitions[102X( [3Xe|H[103X, [3Xn[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe   list   of   [22Xe[122X-regular   partitions  of  [22Xn[122X,  ordered  reverse
+            lexicographically (see [2XLexicographic[102X ([14X3.8-14[114X)).[133X
+  
+  [33X[0;0YA  partition [22Xμ=(μ_1,μ_2,...)[122X is [13X[22Xe[122X-regular[113X if there is no integer [22Xi[122X such that
+  [22Xμ_i=μ_i+1=⋯=μ_i+e-1>0[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3);; ERegularPartitions(H,6);[127X[104X
+    [4X[28X[ [ 2, 2, 1, 1 ], [ 3, 2, 1 ], [ 3, 3 ], [ 4, 1, 1 ], [ 4, 2 ], [ 5, 1 ],[128X[104X
+    [4X[28X  [ 6 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-7 IsERegular[101X
+  
+  [33X[1;0Y[29X[2XIsERegular[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22Xμ[122X is [22Xe[122X-regular and [9Xfalse[109X otherwise.[133X
+  
+  [33X[0;0YThis  functions  requires  the  package  [5Xhecke[105X  (see [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-8 ConjugatePartition[101X
+  
+  [33X[1;0Y[29X[2XConjugatePartition[102X( [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  partition whose diagram is obtained by interchanging the rows
+            and columns in the diagram of [22Xμ[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XConjugatePartition(6,4,3,2);[127X[104X
+    [4X[28X[ 4, 4, 3, 2, 1, 1 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-9 BetaSet[101X
+  
+  [33X[1;0Y[29X[2XBetaSet[102X( [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya [13Xset[113X of beta numbers (i.e. first column hook lengths; see [JK81])
+            corresponding to the partition [22Xμ[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XBetaSet([5,4,2,2]);[127X[104X
+    [4X[28X[ 2, 3, 6, 8 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee also [2XPartitionBetaSet[102X ([14X3.8-10[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.8-10 PartitionBetaSet[101X
+  
+  [33X[1;0Y[29X[2XPartitionBetaSet[102X( [3Xbn[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe  partitions  corresponding  to  the  given set of beta numbers
+            [22Xbn[122X.Note in particular that [22Xbn[122X must be a set of integers.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XPartitionBetaSet([ 2, 3, 6, 8 ]);[127X[104X
+    [4X[28X[ 5, 4, 2, 2 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-11 ETopLadder[101X
+  
+  [33X[1;0Y[29X[2XETopLadder[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
+  
+  [33X[0;0YThe  ladders in the diagram of a partition are the lines connecting nodes of
+  constant  [22Xe[122X-residue,  having  slope [22Xe-1[122X (see [JK81]). A new partition can be
+  obtained  from  [22Xμ[122X  by  sliding all nodes up to the highest possible rungs on
+  their ladders.[133X
+  
+  [6XReturns:[106X  [33X[0;10Ythe  partition obtained in this way; it is automatically [22Xe[122X-regular
+            (this partition is denoted [22Xμ^R[122X in [JK81]).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(4);;[127X[104X
+    [4X[25Xgap>[125X [27XETopLadder(H,1,1,1,1,1,1,1,1,1,1);[127X[104X
+    [4X[28X[ 4, 3, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XETopLadder(6,1,1,1,1,1,1,1,1,1,1);[127X[104X
+    [4X[28X[ 2, 2, 2, 2, 2 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-12 Dominates[101X
+  
+  [33X[1;0Y[29X[2XDominates[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  either  [22Xμ[122X=[22Xν[122X  or  [22X∀ i≥ 1: ∑_j=1^iμ_j≥∑_j=1^iν_j[122X and [9Xfalse[109X
+            otherwise.[133X
+  
+  [33X[0;0YThe  dominance  ordering is an important partial order in the representation
+  theory of Hecke algebra because [22Xd_μ,ν=0[122X unless [22Xν[122X dominates [22Xμ[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDominates([5,4],[4,4,1]);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-13 LengthLexicographic[101X
+  
+  [33X[1;0Y[29X[2XLengthLexicographic[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  the  length  of [22Xμ[122X is less than the length of [22Xν[122X or if the
+            length of [22Xμ[122X equals the length of [22Xν[122X and [10XLexicographic([110X[22Xμ, ν[122X[10X)[110X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xp:=Partitions(6);;Sort(p,LengthLexicographic); p;[127X[104X
+    [4X[28X[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ],[128X[104X
+    [4X[28X  [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-14 Lexicographic[101X
+  
+  [33X[1;0Y[29X[2XLexicographic[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22Xμ[122X is lexicographically greater than or equal to [22Xν[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xp:=Partitions(6);;Sort(p,Lexicographic); p;[127X[104X
+    [4X[28X[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 4, 1, 1 ], [ 3, 3 ], [ 3, 2, 1 ],[128X[104X
+    [4X[28X  [ 3, 1, 1, 1 ], [ 2, 2, 2 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ],[128X[104X
+    [4X[28X  [ 1, 1, 1, 1, 1, 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.8-15 ReverseDominance[101X
+  
+  [33X[1;0Y[29X[2XReverseDominance[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22X∀ i>0: ∑_j≥ iμ_j > ∑_j≥ iν_j[122X.[133X
+  
+  [33X[0;0YThis  is  another  total  order  on  partitions  which extends the dominance
+  ordering (see [2XDominates[102X ([14X3.8-12[114X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xp:=Partitions(6);;Sort(p,ReverseDominance); p;[127X[104X
+    [4X[28X[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ],[128X[104X
+    [4X[28X  [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  is  the ordering used by James in the appendix of his Springer lecture
+  notes book.[133X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  
+  [1X3.9 [33X[0;0YMiscellaneous functions on modules[133X[101X
+  
+  [33X[0;0YThis  section  contains  some  functions  for looking at the partitions in a
+  given  module  for  the  Hecke algebras. Most of them are used internally by
+  [5XHecke[105X.[133X
+  
+  [1X3.9-1 Specialized[101X
+  
+  [33X[1;0Y[29X[2XSpecialized[102X( [3Xx[103X[, [3Xq[103X] ) [32X method[133X
+  [33X[1;0Y[29X[2XSpecialized[102X( [3Xd[103X[, [3Xq[103X] ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe   corresponding  element  of  the  Grothendieck  ring  or  the
+            corresponding decomposition matrix of the Hecke algebra when given
+            an  element  of  the  Fock  space  [22Xx[122X  (see  [2XSpecht[102X  ([14X3.2-1[114X)), or a
+            crystallized  decomposition matrix (see [2XCrystalDecompositionMatrix[102X
+            ([14X3.2-9[114X)), respectively.[133X
+  
+  [33X[0;0YBy  default  the  indeterminate  [22Xv[122X  is  specialized  to  [22X1[122X; however [22Xv[122X can be
+  specialized to any (integer) [22Xq[122X by supplying a second argument.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; H:=Specht(2);; x:=MakeFockPIM(H,6,2);; Display(x);[127X[104X
+    [4X[28XSq(6,2) + vSq(6,1^2) + vSq(5,3) + v^2Sq(5,1^3) + vSq(4,3,1) + v^2Sq(4,2^2) + (\[128X[104X
+    [4X[28Xv^3+v)Sq(4,2,1^2) + v^2Sq(4,1^4) + v^2Sq(3^2,1^2) + v^3Sq(3,2^2,1) + v^3Sq(3,1\[128X[104X
+    [4X[28X^5) + v^3Sq(2^3,1^2) + v^4Sq(2^2,1^4)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(Specialized(x));[127X[104X
+    [4X[28XS(6,2) + S(6,1^2) + S(5,3) + S(5,1^3) + S(4,3,1) + S(4,2^2) + 2S(4,2,1^2) + S(\[128X[104X
+    [4X[28X4,1^4) + S(3^2,1^2) + S(3,2^2,1) + S(3,1^5) + S(2^3,1^2) + S(2^2,1^4)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(Specialized(x,2));[127X[104X
+    [4X[28XS(6,2) + 2S(6,1^2) + 2S(5,3) + 4S(5,1^3) + 2S(4,3,1) + 4S(4,2^2) + 10S(4,2,1^2\[128X[104X
+    [4X[28X) + 4S(4,1^4) + 4S(3^2,1^2) + 8S(3,2^2,1) + 8S(3,1^5) + 8S(2^3,1^2) + 16S(2^2,\[128X[104X
+    [4X[28X1^4)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAn  example  of  [2XSpecialized[102X  being  applied to a crystallized decomposition
+  matrix  can  be  found  in [2XCrystalDecompositionMatrix[102X ([14X3.2-9[114X). This function
+  requires the package [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.9-2 ERegulars[101X
+  
+  [33X[1;0Y[29X[2XERegulars[102X( [3Xx[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XERegulars[102X( [3Xd[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XListERegulars[102X( [3Xx[103X ) [32X method[133X
+  
+  [33X[0;0Y[10XERegulars([110X[22Xx[122X[10X)[110X  prints  a  list  of  the  [22Xe[122X-regular  partitions, together with
+  multiplicities,  which  occur  in  the module [22Xx[122X. [10XListERegulars([110X[22Xx[122X[10X)[110X returns an
+  actual list of these partitions rather than printing them.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(8);;[127X[104X
+    [4X[25Xgap>[125X [27Xx:=MakeSpecht(RInducedModule(MakePIM(H,8,5,3)));; Display(x);[127X[104X
+    [4X[28XS(9,5,3) + S(8,6,3) + S(8,5,4) + S(8,5,3,1) + S(6,5,3^2) + S(5^2,4,3) + S(5^2,3^2,1)[128X[104X
+    [4X[25Xgap>[125X [27XERegulars(x);[127X[104X
+    [4X[28X[ 9, 5, 3 ]  [ 8, 6, 3 ]  [ 8, 5, 4 ]  [ 8, 5, 3, 1 ][128X[104X
+    [4X[28X[ 6, 5, 3, 3 ]  [ 5, 5, 4, 3 ]  [ 5, 5, 3, 3, 1 ][128X[104X
+    [4X[25Xgap>[125X [27XDisplay(MakePIM(x));[127X[104X
+    [4X[28XP(9,5,3) + P(8,6,3) + P(8,5,4) + P(8,5,3,1)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis example shows why these functions are useful: given a projective module
+  [22Xx[122X,  as  aboveand  the list of [22Xe[122X-regular partitions in [22Xx[122X we know the possible
+  indecomposable direct summands of [22Xx[122X.[133X
+  
+  [33X[0;0YNote  that  it  is  not  necessary  to  specify  what [22Xe[122X is when calling this
+  function because [22Xx[122X [21Xknows[121X the value of [22Xe[122X.[133X
+  
+  [33X[0;0YThe  function  [2XERegulars[102X can also be applied to a decomposition matrix [22Xd[122X; in
+  this case it returns the unitriangular submatrix of [22Xd[122X whose rows and columns
+  are indexed by the [22Xe[122X-regular partitions.[133X
+  
+  [33X[0;0YThese  function  requires  the  package  [5Xhecke[105X  (see [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.9-3 SplitECores[101X
+  
+  [33X[1;0Y[29X[2XSplitECores[102X( [3Xx[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ya  list  [22X[b_1,...,b_k][122X  where  the  Specht modules in each [22Xb_i[122X all
+            belong to the same block (i.e. they have the same [22Xe[122X-core).[133X
+  
+  [33X[1;0Y[29X[2XSplitECores[102X( [3Xx[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe component of [22Xx[122X which is in the same block as [22Xμ[122X.[133X
+  
+  [33X[1;0Y[29X[2XSplitECores[102X( [3Xx[103X, [3Xy[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe component of [22Xx[122X which is in the same block as [22Xy[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2);;[127X[104X
+    [4X[25Xgap>[125X [27XDisplay(SplitECores(RInducedModule(MakeSpecht(H,5,3,1))));[127X[104X
+    [4X[28X[ S(6,3,1) + S(5,3,2) + S(5,3,1,1), S(5,4,1) ][128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,5,3,1),0));[127X[104X
+    [4X[28XS(5,4,1)[128X[104X
+    [4X[25Xgap>[125X [27XDisplay(RInducedModule(MakeSpecht(H,5,3,1),1));[127X[104X
+    [4X[28XS(6,3,1) + S(5,3,2) + S(5,3,1^2)[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee   also  [2XECore[102X  ([14X3.8-1[114X),  [2XRInducedModule[102X  ([14X3.4-1[114X)  and  [2XRRestrictedModule[102X
+  ([14X3.4-3[114X).   This   function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X
+  ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.9-4 Coefficient[101X
+  
+  [33X[1;0Y[29X[2XCoefficient[102X( [3Xx[103X, [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe coefficient of [22XS(μ)[122X in [22Xx[122X (resp. [22XD(μ)[122X, or [22XP(μ)[122X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);;[127X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(3);; x:=MakeSpecht(MakePIM(H,7,3));; Display(x);[127X[104X
+    [4X[28XS(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) +\[128X[104X
+    [4X[28X S(4,3,2,1)[128X[104X
+    [4X[25Xgap>[125X [27XCoefficient(x,5,2,2,1);[127X[104X
+    [4X[28X1[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.9-5 InnerProduct[101X
+  
+  [33X[1;0Y[29X[2XInnerProduct[102X( [3Xx[103X, [3Xy[103X ) [32X method[133X
+  
+  [33X[0;0YHere  [22Xx[122X  and  [22Xy[122X  are some modules of the Hecke algebra (i.e. Specht modules,
+  PIMS,  or  simple modules). [2XInnerProduct[102X computes the standard inner product
+  of   these   elements.  This  is  sometimes  a  convenient  way  to  compute
+  decomposition numbers (for example).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH:=Specht(2);; InnerProduct(MakeSpecht(H,2,2,2,1), MakePIM(H,4,3));[127X[104X
+    [4X[28X1[128X[104X
+    [4X[25Xgap>[125X [27XDecompositionNumber(H,[2,2,2,1],[4,3]);[127X[104X
+    [4X[28X1[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  
+  [1X3.10 [33X[0;0YSemi-standard and standard tableaux[133X[101X
+  
+  [33X[0;0YThese  functions  are  not  really  part  of  [5XHecke[105X proper; however they are
+  related  and  may  well  be  of  use to someone. Tableaux are represented by
+  objects, that can be constructed from a list of lists.[133X
+  
+  [1X3.10-1 Tableau[101X
+  
+  [33X[1;0Y[29X[2XTableau[102X( [3Xtab[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ytableau object corresponding to the given list of lists[133X
+  
+  [33X[0;0YThis  is  the  constructor for tableau objects. The first entry of the given
+  argument list is the list corresponding to the first row of the tableau.[133X
+  
+  [1X3.10-2 SemiStandardTableaux[101X
+  
+  [33X[1;0Y[29X[2XSemiStandardTableaux[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ylist of the semistandard [22Xμ[122X-tableaux of type [22Xν[122X [JK81][133X
+  
+  [33X[0;0Y[22Xμ[122X a partition, [22Xν[122X a composition.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; Display(SemiStandardTableaux([4,3],[1,1,1,2,2]));[127X[104X
+    [4X[28X[ Tableau( [ [ 1, 2, 3, 4 ], [ 4, 5, 5 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 2, 3, 5 ], [ 4, 4, 5 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 2, 4, 4 ], [ 3, 5, 5 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 2, 4, 5 ], [ 3, 4, 5 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 3, 4, 4 ], [ 2, 5, 5 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 3, 4, 5 ], [ 2, 4, 5 ] ] ) ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee also [2XStandardTableaux[102X ([14X3.10-3[114X). This function requires the package [5Xhecke[105X
+  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.10-3 StandardTableaux[101X
+  
+  [33X[1;0Y[29X[2XStandardTableaux[102X( [3Xmu[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ylist of the standard [22Xμ[122X-tableaux[133X
+  
+  [33X[0;0Y[22Xμ[122X a partition[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);; Display(StandardTableaux(4,2));[127X[104X
+    [4X[28X[ Tableau( [ [ 1, 2, 3, 4 ], [ 5, 6 ] ] ), Tableau( [ [ 1, 2, 3, 5 ], [ 4, 6 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 2, 3, 6 ], [ 4, 5 ] ] ), Tableau( [ [ 1, 2, 4, 5 ], [ 3, 6 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 2, 4, 6 ], [ 3, 5 ] ] ), Tableau( [ [ 1, 2, 5, 6 ], [ 3, 4 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 3, 4, 5 ], [ 2, 6 ] ] ), Tableau( [ [ 1, 3, 4, 6 ], [ 2, 5 ] ] ),[128X[104X
+    [4X[28X  Tableau( [ [ 1, 3, 5, 6 ], [ 2, 4 ] ] ) ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YSee  also  [2XSemiStandardTableaux[102X ([14X3.10-2[114X). This function requires the package
+  [5Xhecke[105X (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
+  
+  [1X3.10-4 ConjugateTableau[101X
+  
+  [33X[1;0Y[29X[2XConjugateTableau[102X( [3Xtab[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ytableau obtained from [22Xtab[122X by interchangings its rows and columns[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDisplay(ConjugateTableau(Tableau([ [ 1, 3, 5, 6 ], [ 2, 4 ] ])));[127X[104X
+    [4X[28XStandard Tableau:[128X[104X
+    [4X[28X1	2[128X[104X
+    [4X[28X3	4[128X[104X
+    [4X[28X5[128X[104X
+    [4X[28X6[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.10-5 ShapeTableau[101X
+  
+  [33X[1;0Y[29X[2XShapeTableau[102X( [3Xtab[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe partition (or composition) obtained from [22Xtab[122X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XShapeTableau( Tableau([ [ 1, 1, 2, 3 ], [ 4, 5 ] ]) );[127X[104X
+    [4X[28X[ 4, 2 ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
+  [1X3.10-6 TypeTableau[101X
+  
+  [33X[1;0Y[29X[2XTypeTableau[102X( [3Xtab[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ythe type of the (semistandard) tableau [22Xtab[122X[133X
+  
+  [33X[0;0YThe  type of a tableau is, the composition [22Xσ= (σ_1,σ_2,...)[122X where [22Xσ_i[122X is the
+  number of entries in [22Xtab[122X which are equal to [22Xi[122X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSizeScreen([80,20]);;[127X[104X
+    [4X[25Xgap>[125X [27XList(SemiStandardTableaux([5,4,2],[4,3,0,1,3]),TypeTableau);[127X[104X
+    [4X[28X[ [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ],[128X[104X
+    [4X[28X  [ 4, 3, 0, 1, 3 ] ][128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
+  LoadPackage[114X)).[133X
+  
