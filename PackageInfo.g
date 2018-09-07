@@ -81,5 +81,22 @@ AvailabilityTest := function()
 #TestFile := "tst/testall.g",
 Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
 
+
+  AutoDoc := rec(
+      TitlePage := rec(
+          Copyright := """
+            &copyright; 2010&ndash;2013 by Dmitriy Traytel<P/>
+
+            This package may be distributed under the terms and conditions of the
+            GNU Public License Version 2 or higher.
+            """,
+          Acknowledgements := """
+            &Specht; is a port of the &GAP; 3 package <Package>Specht</Package> 2.4 to &GAP; 4.
+            <Package>Specht</Package> 2.4 was written by Andrew Mathas, who allowed
+            Dmitriy Traytel to use his source code as the basis for &Hecke;.
+            """,
+      ),
+  ),
+
 ));
 

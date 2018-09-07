@@ -10,42 +10,16 @@
       hecke.xml          hecke package documentation
                                                               Dmitriy Traytel
 
-  Copyright (C) 2010--2013, Dmitriy Traytel
+  Copyright (C) 2010-2013, Dmitriy Traytel
 
 -->
 
 <Book Name="hecke">
 
-<TitlePage>
-    <Title>GAP 4 Package &specht;</Title>
-    <Subtitle>&Specht; - a port of &OldSpecht; to GAP 4</Subtitle>
-    <Version>
-      <#Include SYSTEM "../VERSION">
-    </Version>
-  <Author>Dmitriy Traytel
-    <!--<Address>
-    Hasenberglstr. 19,
-    80935 München,
-    Germany
-    </Address>-->
-    <Email>traytel@in.tum.de</Email>
-    <Homepage>http://home.in.tum.de/&tilde;traytel</Homepage>
-  </Author>
-  <Date>July 2013</Date>
+<#Include SYSTEM "title.xml">
 
-<Copyright>
-  &copyright; 2010&ndash;2013 by Dmitriy Traytel<P/>
-
-  This package may be distributed under the terms and conditions of the
-  GNU Public License Version 2 or higher.
-</Copyright>
-
-</TitlePage>
-
-<!--  TableOfContents  . . . . . .  generate a table of contents   -->
 <TableOfContents/>
 
-<!--  The only chapter of the book  -->
 <Body>
 <#Include SYSTEM "intro.xml">
 <#Include SYSTEM "install.xml">
@@ -54,7 +28,6 @@
 
 <Bibliography Databases="hecke"/>
 
-<!--  And finally an index as well   -->
 <TheIndex/>
 
 </Book>
