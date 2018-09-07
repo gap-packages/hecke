@@ -78,7 +78,7 @@ AvailabilityTest := function()
     return true;
   end,
 
-#TestFile := "tst/testall.g",
+TestFile := "tst/testall.g",
 Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
 
 
