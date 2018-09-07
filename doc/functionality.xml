@@ -2153,25 +2153,9 @@ This function requires the package &specht;
 </ManSection>
 <!--######################################################################-->
 <ManSection>
-<Meth Name="BetaSet" Arg="mu"/>
-<Returns>a <E>set</E> of beta numbers (i.e. first column hook
-lengths; see <Cite Key="JK"/>) corresponding to the partition
-<M>\mu</M>.</Returns>
-<Description>
-<Example>
-gap&gt; BetaSet([5,4,2,2]);
-[ 2, 3, 6, 8 ]
-</Example>
-
-See also <Ref Oper="PartitionBetaSet"/>. This function requires
-the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
-</Description>
-</ManSection>
-<!--######################################################################-->
-<ManSection>
 <Meth Name="PartitionBetaSet" Arg="bn"/>
 <Returns>the partitions corresponding to the given set of beta numbers
-<M>bn</M>.Note in particular that <M>bn</M> must be a set of integers.
+<M>bn</M>. Note in particular that <M>bn</M> must be a set of integers.
 </Returns>
 <Description>
 <Example>

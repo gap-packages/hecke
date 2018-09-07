@@ -30,8 +30,6 @@ MakeDispatcherFunc("InverseLittlewoodRichardsonRule", [[]],[1],[1]);
 MakeDispatcherFunc("SpechtDimension", [[],[IsHeckeSpecht]],[1,0],[1,1]);
 
 MakeDispatcherFunc("BetaNumbers", [[]],[1],[1]);
-## ALREADY AVAILABLE IN GAP4
-## MakeDispatcherFunc("BetaSet", [],1,1);
 MakeDispatcherFunc("PartitionBetaSet", [[]],[1],[1]);
 
 MakeDispatcherFunc("EAbacusRunners", [[IsInt]],[2],[2]);
