@@ -590,6 +590,9 @@ InstallMethod(
         Add(beta, (j-1)*e + i - 1);
       od;
     od;
+    if Length(beta) = 0 then
+      return beta;
+    fi;
     Sort(beta);
     if beta[1]=0 then  ## remove irrelevant beta numbers; see ECore()
       if beta[Length(beta)]=Length(beta)-1 then return []; fi;
