@@ -5,7 +5,6 @@
   [2XAddIndecomposable[102X 3.5-9 
   [2XAddRimHook[102X 3.7-16 
   [2XAdjustmentMatrix[102X 3.5-4 
-  [2XBetaSet[102X 3.8-9 
   [2XCalculateDecompositionMatrix[102X 3.5-6 
   [2XCharacteristic[102X 3.2-2 
   [2XCoefficient[102X 3.9-4 
@@ -19,7 +18,7 @@
   [2XDecompositionMatrixMatrix[102X 3.5-8 
   [2XDecompositionNumber[102X 3.2-10 
       for a decomposition matrix 3.2-10 
-  [2XDominates[102X 3.8-12 
+  [2XDominates[102X 3.8-11 
   [2XEAbacus[102X 3.8-1 
   [2XECore[102X 3.8-1 
   [2XEQuotient[102X 3.8-3 
@@ -28,7 +27,7 @@
       for a decomposition matrix 3.9-2 
   [2XEResidueDiagram[102X 3.7-13 
       for modules 3.7-13 
-  [2XETopLadder[102X 3.8-11 
+  [2XETopLadder[102X 3.8-10 
   [2XEWeight[102X 3.8-5 
   [2XGoodNodeLatticePath[102X 3.7-10 
   [2XGoodNodeLatticePaths[102X 3.7-10 
@@ -70,8 +69,8 @@
   [2XIsSchurWeyl[102X 3.1-1 
   [2XIsSimpleModule[102X 3.7-2 
   [2XLatticePathGoodNodeSequence[102X 3.7-10 
-  [2XLengthLexicographic[102X 3.8-13 
-  [2XLexicographic[102X 3.8-14 
+  [2XLengthLexicographic[102X 3.8-12 
+  [2XLexicographic[102X 3.8-13 
   [2XListERegulars[102X 3.9-2 
   [2XLittlewoodRichardsonCoefficient[102X 3.7-11 
   [2XLittlewoodRichardsonRule[102X 3.7-11 
@@ -98,12 +97,12 @@
   [2XNormalNodes[102X 3.7-7 
       for residues 3.7-7 
   [2XOrderOfQ[102X 3.2-2 
-  [2XPartitionBetaSet[102X 3.8-10 
+  [2XPartitionBetaSet[102X 3.8-9 
   [2XPartitionGoodNodeSequence[102X 3.7-9 
   [2XPartitionMullineuxSymbol[102X 3.7-5 
   [2XRemoveIndecomposable[102X 3.5-10 
   [2XRemoveRimHook[102X 3.7-15 
-  [2XReverseDominance[102X 3.8-15 
+  [2XReverseDominance[102X 3.8-14 
   [2XRInducedModule[102X 3.4-1 
       for residues 3.4-1 
   [2XRRestrictedModule[102X 3.4-3 

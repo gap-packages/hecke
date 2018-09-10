@@ -1,4 +1,7 @@
-# Hecke 1.4
+[![Build Status](https://travis-ci.org/gap-packages/hecke.svg?branch=master)](https://travis-ci.org/gap-packages/hecke)
+[![Code Coverage](https://codecov.io/github/gap-packages/hecke/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/hecke)
+
+# Hecke
 
 Hecke is a port of the GAP 3 package Specht 2.4 to GAP 4. Specht 2.4 was written
 by Andrew Mathas, who allowed Dmitriy Traytel to use his source code as the basis

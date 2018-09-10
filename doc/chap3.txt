@@ -496,7 +496,7 @@
   
   [33X[0;0YBy  default,  the rows and columns of the decomposition matrices are ordered
   [2XDecompositionMatrix[102X  with  an  ordering function such as [2XLengthLexicographic[102X
-  ([14X3.8-13[114X)  or  [2XReverseDominance[102X  ([14X3.8-15[114X).  You  do  not  need to specify the
+  ([14X3.8-12[114X)  or  [2XReverseDominance[102X  ([14X3.8-14[114X).  You  do  not  need to specify the
   ordering  you  want every time you call [2XDecompositionMatrix[102X; [5XHecke[105X will keep
   the  same  ordering until you change it again. This ordering can also be set
   [21Xby hand[121X using the operation [2XSetOrdering[102X ([14X3.2-2[114X)[133X
@@ -1357,7 +1357,7 @@
   Specht  modules  and  suppose  that  we  are  trying  to  decide whether the
   projective  indecomposable  [22XP(μ)[122X  is  a direct summand of [22Xx[122X. Then, providing
   that  we know that [22XP(ν)[122X is not a summand of [22Xx[122X for all ([22Xe[122X-regular) partitions
-  [22Xν[122X which strictly dominate [22Xμ[122X (see [2XDominates[102X ([14X3.8-12[114X)), [22XP(μ)[122X is a summand of [22Xx[122X
+  [22Xν[122X which strictly dominate [22Xμ[122X (see [2XDominates[102X ([14X3.8-11[114X)), [22XP(μ)[122X is a summand of [22Xx[122X
   if   and  only  if  [10XInnerProduct(Schaper(  [110X[22XH,μ[122X[10X)[110X,[22Xx[122X[10X)[110X  is  non-zero  (note,  in
   particular,  that  we don't need to know the indecomposable [22XP(μ)[122X in order to
   perform this calculation).[133X
@@ -1885,7 +1885,7 @@
   
   [33X[1;0Y[29X[2XERegularPartitions[102X( [3Xe|H[103X, [3Xn[103X ) [32X method[133X
   [6XReturns:[106X  [33X[0;10Ythe   list   of   [22Xe[122X-regular   partitions  of  [22Xn[122X,  ordered  reverse
-            lexicographically (see [2XLexicographic[102X ([14X3.8-14[114X)).[133X
+            lexicographically (see [2XLexicographic[102X ([14X3.8-13[114X)).[133X
   
   [33X[0;0YA  partition [22Xμ=(μ_1,μ_2,...)[122X is [13X[22Xe[122X-regular[113X if there is no integer [22Xi[122X such that
   [22Xμ_i=μ_i+1=⋯=μ_i+e-1>0[122X.[133X
@@ -1921,25 +1921,11 @@
   [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
   LoadPackage[114X)).[133X
   
-  [1X3.8-9 BetaSet[101X
-  
-  [33X[1;0Y[29X[2XBetaSet[102X( [3Xmu[103X ) [32X method[133X
-  [6XReturns:[106X  [33X[0;10Ya [13Xset[113X of beta numbers (i.e. first column hook lengths; see [JK81])
-            corresponding to the partition [22Xμ[122X.[133X
-  
-  [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XBetaSet([5,4,2,2]);[127X[104X
-    [4X[28X[ 2, 3, 6, 8 ][128X[104X
-  [4X[32X[104X
-  
-  [33X[0;0YSee also [2XPartitionBetaSet[102X ([14X3.8-10[114X). This function requires the package [5Xhecke[105X
-  (see [2XLoadPackage[102X ([14XReference: LoadPackage[114X)).[133X
-  
-  [1X3.8-10 PartitionBetaSet[101X
+  [1X3.8-9 PartitionBetaSet[101X
   
   [33X[1;0Y[29X[2XPartitionBetaSet[102X( [3Xbn[103X ) [32X method[133X
-  [6XReturns:[106X  [33X[0;10Ythe  partitions  corresponding  to  the  given set of beta numbers
-            [22Xbn[122X.Note in particular that [22Xbn[122X must be a set of integers.[133X
+  [6XReturns:[106X  [33X[0;10Ythe  partitions corresponding to the given set of beta numbers [22Xbn[122X.
+            Note in particular that [22Xbn[122X must be a set of integers.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XPartitionBetaSet([ 2, 3, 6, 8 ]);[127X[104X
@@ -1949,7 +1935,7 @@
   [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
   LoadPackage[114X)).[133X
   
-  [1X3.8-11 ETopLadder[101X
+  [1X3.8-10 ETopLadder[101X
   
   [33X[1;0Y[29X[2XETopLadder[102X( [3Xe|H[103X, [3Xmu[103X ) [32X method[133X
   
@@ -1972,7 +1958,7 @@
   [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
   LoadPackage[114X)).[133X
   
-  [1X3.8-12 Dominates[101X
+  [1X3.8-11 Dominates[101X
   
   [33X[1;0Y[29X[2XDominates[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  either  [22Xμ[122X=[22Xν[122X  or  [22X∀ i≥ 1: ∑_j=1^iμ_j≥∑_j=1^iν_j[122X and [9Xfalse[109X
@@ -1989,7 +1975,7 @@
   [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
   LoadPackage[114X)).[133X
   
-  [1X3.8-13 LengthLexicographic[101X
+  [1X3.8-12 LengthLexicographic[101X
   
   [33X[1;0Y[29X[2XLengthLexicographic[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X  if  the  length  of [22Xμ[122X is less than the length of [22Xν[122X or if the
@@ -2004,7 +1990,7 @@
   [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
   LoadPackage[114X)).[133X
   
-  [1X3.8-14 Lexicographic[101X
+  [1X3.8-13 Lexicographic[101X
   
   [33X[1;0Y[29X[2XLexicographic[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22Xμ[122X is lexicographically greater than or equal to [22Xν[122X.[133X
@@ -2019,13 +2005,13 @@
   [33X[0;0YThis  function  requires  the  package  [5Xhecke[105X  (see  [2XLoadPackage[102X ([14XReference:
   LoadPackage[114X)).[133X
   
-  [1X3.8-15 ReverseDominance[101X
+  [1X3.8-14 ReverseDominance[101X
   
   [33X[1;0Y[29X[2XReverseDominance[102X( [3Xmu[103X, [3Xnu[103X ) [32X method[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X if [22X∀ i>0: ∑_j≥ iμ_j > ∑_j≥ iν_j[122X.[133X
   
   [33X[0;0YThis  is  another  total  order  on  partitions  which extends the dominance
-  ordering (see [2XDominates[102X ([14X3.8-12[114X)).[133X
+  ordering (see [2XDominates[102X ([14X3.8-11[114X)).[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27Xp:=Partitions(6);;Sort(p,ReverseDominance); p;[127X[104X

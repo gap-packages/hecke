@@ -8,10 +8,10 @@ SetPackageInfo( rec(
 
 PackageName := "hecke",
 Subtitle := "Calculating decomposition matrices of Hecke algebras",
-Version := "1.4dev",
+Version := "1.5",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "02/07/2013",
+Date := "10/09/2018",
 
 Persons := [
   rec(
@@ -78,7 +78,7 @@ AvailabilityTest := function()
     return true;
   end,
 
-#TestFile := "tst/testall.g",
+TestFile := "tst/testall.g",
 Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
 
 
@@ -93,7 +93,7 @@ Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
           Acknowledgements := """
             &Specht; is a port of the &GAP; 3 package <Package>Specht</Package> 2.4 to &GAP; 4.
             <Package>Specht</Package> 2.4 was written by Andrew Mathas, who allowed
-            Dmitriy Traytel to use his source code as the basis for &Hecke;.
+            Dmitriy Traytel to use his source code as the basis for &specht;.
             """,
       ),
   ),

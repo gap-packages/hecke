@@ -116,13 +116,12 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X86308F6C818B220C">3.8-6 ERegularPartitions</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7BEDA8F286ED5F20">3.8-7 IsERegular</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7D131AF0839089BD">3.8-8 ConjugatePartition</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8796C1D783ED9CB4">3.8-9 BetaSet</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8711CC56792711A7">3.8-10 PartitionBetaSet</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7EC4D0FA81B55391">3.8-11 ETopLadder</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X820388EF7C8333BA">3.8-12 Dominates</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X84DB1DD37AF227CF">3.8-13 LengthLexicographic</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8480188D81ECBD92">3.8-14 Lexicographic</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78F41DF77D6F8292">3.8-15 ReverseDominance</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8711CC56792711A7">3.8-9 PartitionBetaSet</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7EC4D0FA81B55391">3.8-10 ETopLadder</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X820388EF7C8333BA">3.8-11 Dominates</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X84DB1DD37AF227CF">3.8-12 LengthLexicographic</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8480188D81ECBD92">3.8-13 Lexicographic</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78F41DF77D6F8292">3.8-14 ReverseDominance</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3_mj.html#X83890936806E3A34">3.9 <span class="Heading">Miscellaneous functions on modules</span></a>
 </span>
@@ -277,7 +276,7 @@ Specht(e=5, S(), P(), D())
 true
 </pre></div>
 
-<p>There is also a method <code class="func">Schur</code> (<a href="chap3_mj.html#X7B57DF517F73F00D"><span class="RefLink">3.2-7</span></a>) for doing calculations with the <span class="SimpleMath">\(q\)</span>-Schur algebra. See <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>), and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>There is also a method <code class="func">Schur</code> (<a href="chap3_mj.html#X7B57DF517F73F00D"><span class="RefLink">3.2-7</span></a>) for doing calculations with the <span class="SimpleMath">\(q\)</span>-Schur algebra. See <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>), and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8037763587274161" name="X8037763587274161"></a></p>
 
@@ -478,7 +477,7 @@ v^-1Sq(5,3^2)
 
 <p>Note that when <span class="SimpleMath">\(S\)</span> is defined over a field of characteristic zero then the functions <code class="func">MakeFockSpecht</code> (<a href="chap3_mj.html#X83009CE685621BD4"><span class="RefLink">3.2-6</span></a>) and <code class="func">MakeFockPIM</code> (<a href="chap3_mj.html#X83009CE685621BD4"><span class="RefLink">3.2-6</span></a>) will calculate the canonical basis elements (see <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>)); currently <code class="code">MakeFockPIM(</code><span class="SimpleMath">\(\mu\)</span><code class="code">)</code> is implemented only for <span class="SimpleMath">\(e\)</span>-regular partitions.</p>
 
-<p>See also <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X84F0F9E47D5EEBCF" name="X84F0F9E47D5EEBCF"></a></p>
 
@@ -498,7 +497,7 @@ v^-1Sq(5,3^2)
 
 <p>In the second form of the function, when a <span class="SimpleMath">\(filename\)</span> is supplied, <code class="func">DecompositionMatrix</code> will read the decomposition matrix in the file <span class="SimpleMath">\(filename\)</span>, and this matrix will become <strong class="pkg">Hecke</strong>'s internal copy of this matrix.</p>
 
-<p>By default, the rows and columns of the decomposition matrices are ordered <code class="func">DecompositionMatrix</code> with an ordering function such as <code class="func">LengthLexicographic</code> (<a href="chap3_mj.html#X84DB1DD37AF227CF"><span class="RefLink">3.8-13</span></a>) or <code class="func">ReverseDominance</code> (<a href="chap3_mj.html#X78F41DF77D6F8292"><span class="RefLink">3.8-15</span></a>). You do not need to specify the ordering you want every time you call <code class="func">DecompositionMatrix</code>; <strong class="pkg">Hecke</strong> will keep the same ordering until you change it again. This ordering can also be set "by hand" using the operation <code class="func">SetOrdering</code> (<a href="chap3_mj.html#X8037763587274161"><span class="RefLink">3.2-2</span></a>)</p>
+<p>By default, the rows and columns of the decomposition matrices are ordered <code class="func">DecompositionMatrix</code> with an ordering function such as <code class="func">LengthLexicographic</code> (<a href="chap3_mj.html#X84DB1DD37AF227CF"><span class="RefLink">3.8-12</span></a>) or <code class="func">ReverseDominance</code> (<a href="chap3_mj.html#X78F41DF77D6F8292"><span class="RefLink">3.8-14</span></a>). You do not need to specify the ordering you want every time you call <code class="func">DecompositionMatrix</code>; <strong class="pkg">Hecke</strong> will keep the same ordering until you change it again. This ordering can also be set "by hand" using the operation <code class="func">SetOrdering</code> (<a href="chap3_mj.html#X8037763587274161"><span class="RefLink">3.2-2</span></a>)</p>
 
 
 <div class="example"><pre>
@@ -520,7 +519,7 @@ v^-1Sq(5,3^2)
 
 <p>Once you have a decomposition matrix it is often nice to be able to print it. The on screen version is often good enough; There are also functions for converting <strong class="pkg">Hecke</strong> decomposition matrices into <strong class="pkg">GAP</strong> matrices and vice versa (see <code class="func">MatrixDecompositionMatrix</code> (<a href="chap3_mj.html#X7FDC65328102C1B9"><span class="RefLink">3.5-7</span></a>) and <code class="func">DecompositionMatrixMatrix</code> (<a href="chap3_mj.html#X86EBEBF680EBC98E"><span class="RefLink">3.5-8</span></a>)).</p>
 
-<p>Using the function <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>), it is possible to induce a decomposition matrix. See also <code class="func">SaveDecompositionMatrix</code> (<a href="chap3_mj.html#X78B0FF2079269138"><span class="RefLink">3.5-5</span></a>) and <code class="func">IsNewIndecomposable</code> (<a href="chap3_mj.html#X803A99987E501AC9"><span class="RefLink">3.5-2</span></a>), <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>), <code class="func">Schur</code> (<a href="chap3_mj.html#X7B57DF517F73F00D"><span class="RefLink">3.2-7</span></a>), and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>Using the function <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>), it is possible to induce a decomposition matrix. See also <code class="func">SaveDecompositionMatrix</code> (<a href="chap3_mj.html#X78B0FF2079269138"><span class="RefLink">3.5-5</span></a>) and <code class="func">IsNewIndecomposable</code> (<a href="chap3_mj.html#X803A99987E501AC9"><span class="RefLink">3.5-2</span></a>), <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>), <code class="func">Schur</code> (<a href="chap3_mj.html#X7B57DF517F73F00D"><span class="RefLink">3.2-7</span></a>), and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7F616CCE808FA11E" name="X7F616CCE808FA11E"></a></p>
 
@@ -564,7 +563,7 @@ v^-1Sq(5,3^2)
 1^6    | . . . . 1 . .
 </pre></div>
 
-<p>See also <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>), <code class="func">Schur</code> (<a href="chap3_mj.html#X7B57DF517F73F00D"><span class="RefLink">3.2-7</span></a>), <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">Specialized</code> (<a href="chap3_mj.html#X7A8E810C85A62DD6"><span class="RefLink">3.9-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>), <code class="func">Schur</code> (<a href="chap3_mj.html#X7B57DF517F73F00D"><span class="RefLink">3.2-7</span></a>), <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">Specialized</code> (<a href="chap3_mj.html#X7A8E810C85A62DD6"><span class="RefLink">3.9-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X829A23A97EE4C20E" name="X829A23A97EE4C20E"></a></p>
 
@@ -580,7 +579,7 @@ v^-1Sq(5,3^2)
 0
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7C5B169286EFC900" name="X7C5B169286EFC900"></a></p>
 
@@ -689,7 +688,7 @@ Sq(6,2) + vSq(4^2) + v^2Sq(4,2^2)
 Pq(6,2)
 </pre></div>
 
-<p>See also <code class="func">SInducedModule</code> (<a href="chap3_mj.html#X780709B3865BC344"><span class="RefLink">3.4-2</span></a>), <code class="func">RRestrictedModule</code> (<a href="chap3_mj.html#X783BC74E81A7D0E6"><span class="RefLink">3.4-3</span></a>) and <code class="func">SRestrictedModule</code> (<a href="chap3_mj.html#X8041ABFA86D7A3EF"><span class="RefLink">3.4-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">SInducedModule</code> (<a href="chap3_mj.html#X780709B3865BC344"><span class="RefLink">3.4-2</span></a>), <code class="func">RRestrictedModule</code> (<a href="chap3_mj.html#X783BC74E81A7D0E6"><span class="RefLink">3.4-3</span></a>) and <code class="func">SRestrictedModule</code> (<a href="chap3_mj.html#X8041ABFA86D7A3EF"><span class="RefLink">3.4-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X780709B3865BC344" name="X780709B3865BC344"></a></p>
 
@@ -715,7 +714,7 @@ P(6,3,1^2)
 
 <p>As with <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>) this function can also be applied to elements of the Fock space (see <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>)), in which case the quantum analogue of induction is used.</p>
 
-<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X783BC74E81A7D0E6" name="X783BC74E81A7D0E6"></a></p>
 
@@ -743,7 +742,7 @@ D(5,2^2)
 
 <p>As with <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>), when <code class="func">RRestrictedModule</code> is applied to the canonical basis elements <code class="code">MakeFockPIM(</code><span class="SimpleMath">\(\mu\)</span><code class="code">)</code> a quantum analogue of restriction is applied; this time, <code class="code">RRestrictedModule(</code><span class="SimpleMath">\(*,i\)</span><code class="code">)</code> corresponds to the action of the generator <span class="SimpleMath">\(E_i\)</span> of <span class="SimpleMath">\(U_q( sl^_{e})\)</span> on <span class="SimpleMath">\( F\)</span><a href="chapBib_mj.html#biBLLT">[LLT96]</a>.</p>
 
-<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>), <code class="func">SInducedModule</code> (<a href="chap3_mj.html#X780709B3865BC344"><span class="RefLink">3.4-2</span></a>) and <code class="func">SRestrictedModule</code> (<a href="chap3_mj.html#X8041ABFA86D7A3EF"><span class="RefLink">3.4-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>), <code class="func">SInducedModule</code> (<a href="chap3_mj.html#X780709B3865BC344"><span class="RefLink">3.4-2</span></a>) and <code class="func">SRestrictedModule</code> (<a href="chap3_mj.html#X8041ABFA86D7A3EF"><span class="RefLink">3.4-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8041ABFA86D7A3EF" name="X8041ABFA86D7A3EF"></a></p>
 
@@ -761,7 +760,7 @@ D(5,2^2)
 P(4^2)
 </pre></div>
 
-<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>), <code class="func">SInducedModule</code> (<a href="chap3_mj.html#X780709B3865BC344"><span class="RefLink">3.4-2</span></a>) and <code class="func">RRestrictedModule</code> (<a href="chap3_mj.html#X783BC74E81A7D0E6"><span class="RefLink">3.4-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>), <code class="func">SInducedModule</code> (<a href="chap3_mj.html#X780709B3865BC344"><span class="RefLink">3.4-2</span></a>) and <code class="func">RRestrictedModule</code> (<a href="chap3_mj.html#X783BC74E81A7D0E6"><span class="RefLink">3.4-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X79F430837BA7BAD2" name="X79F430837BA7BAD2"></a></p>
 
@@ -873,7 +872,7 @@ true
 
 <p>A full description of what <code class="func">IsNewIndecomposable</code> does can be found by reading the comments in <code class="file">specht.gi</code>. Any suggestions or improvements on this function would be especially welcome.</p>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X802E811683E611EE" name="X802E811683E611EE"></a></p>
 
@@ -896,7 +895,7 @@ true
 2,1^3|   .   .   .   .   .   1
 </pre></div>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X87B18FD97B2D8E80" name="X87B18FD97B2D8E80"></a></p>
 
@@ -939,7 +938,7 @@ true
 
 <p>In the last line we have checked our calculation.</p>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X78B0FF2079269138" name="X78B0FF2079269138"></a></p>
 
@@ -972,7 +971,7 @@ true
 # Inducing.................
 </pre></div>
 
-<p>If your Hecke algebra object <span class="SimpleMath">\(H\)</span> is defined using a non-standard valuation map (see <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>)) then it is also necessary to set the string <span class="SimpleMath">\(HeckeRing\)</span>, or to supply the function with a <span class="SimpleMath">\(filename\)</span> before it will save your matrix. <code class="func">SaveDecompositionMatrix</code> will also save adjustment matrices and the various other matrices that appear in <strong class="pkg">Hecke</strong> (they can be read back in using <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>)). Each matrix has a default filename which you can over ride by supplying a <span class="SimpleMath">\(filename\)</span>. Using non-standard file names will stop <strong class="pkg">Hecke</strong> from automatically accessing these matrices in future. See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>If your Hecke algebra object <span class="SimpleMath">\(H\)</span> is defined using a non-standard valuation map (see <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>)) then it is also necessary to set the string <span class="SimpleMath">\(HeckeRing\)</span>, or to supply the function with a <span class="SimpleMath">\(filename\)</span> before it will save your matrix. <code class="func">SaveDecompositionMatrix</code> will also save adjustment matrices and the various other matrices that appear in <strong class="pkg">Hecke</strong> (they can be read back in using <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>)). Each matrix has a default filename which you can over ride by supplying a <span class="SimpleMath">\(filename\)</span>. Using non-standard file names will stop <strong class="pkg">Hecke</strong> from automatically accessing these matrices in future. See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X84DD2D517FC1F905" name="X84DD2D517FC1F905"></a></p>
 
@@ -1023,7 +1022,7 @@ The following projectives are missing from &lt;d&gt;:
 [ 6, 5, 4 ]  [ 6, 5, 3, 1 ]  [ 6, 4, 3, 2 ]
 </pre></div>
 
-<p>Actually, you are much better starting with the decomposition matrix of <span class="SimpleMath">\(S_{14}\)</span> and then applying <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>) to this matrix. See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>Actually, you are much better starting with the decomposition matrix of <span class="SimpleMath">\(S_{14}\)</span> and then applying <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>) to this matrix. See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7FDC65328102C1B9" name="X7FDC65328102C1B9"></a></p>
 
@@ -1042,7 +1041,7 @@ The following projectives are missing from &lt;d&gt;:
   [ 1, 0, 0, 0, 1 ], [ 0, 0, 0, 0, 1 ], [ 0, 0, 1, 0, 0 ] ]
 </pre></div>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">DecompositionMatrixMatrix</code> (<a href="chap3_mj.html#X86EBEBF680EBC98E"><span class="RefLink">3.5-8</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">DecompositionMatrixMatrix</code> (<a href="chap3_mj.html#X86EBEBF680EBC98E"><span class="RefLink">3.5-8</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X86EBEBF680EBC98E" name="X86EBEBF680EBC98E"></a></p>
 
@@ -1066,7 +1065,7 @@ The following projectives are missing from &lt;d&gt;:
 1^4  | . . 1 .
 </pre></div>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">MatrixDecompositionMatrix</code> (<a href="chap3_mj.html#X7FDC65328102C1B9"><span class="RefLink">3.5-7</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">MatrixDecompositionMatrix</code> (<a href="chap3_mj.html#X7FDC65328102C1B9"><span class="RefLink">3.5-7</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7B05627D83E6977E" name="X7B05627D83E6977E"></a></p>
 
@@ -1075,7 +1074,7 @@ The following projectives are missing from &lt;d&gt;:
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AddIndecomposable</code>( <var class="Arg">d</var>, <var class="Arg">x</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p><code class="func">AddIndecomposable</code> inserts the indecomposable module <span class="SimpleMath">\(x\)</span> into the decomposition matrix <span class="SimpleMath">\(d\)</span>. If <span class="SimpleMath">\(d\)</span> already contains the indecomposable <span class="SimpleMath">\(d\)</span> then a warning is printed. The function <code class="func">AddIndecomposable</code> also calculates <code class="code">MullineuxMap(</code> <span class="SimpleMath">\(x\)</span><code class="code">)</code> (see <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>)) and adds this indecomposable to <span class="SimpleMath">\(d\)</span> (or checks to see that it agrees with the corresponding entry of <span class="SimpleMath">\(d\)</span> if this indecomposable is already in <span class="SimpleMath">\(d\)</span>).</p>
 
-<p>See <code class="func">IsNewIndecomposable</code> (<a href="chap3_mj.html#X803A99987E501AC9"><span class="RefLink">3.5-2</span></a>) for an example. See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See <code class="func">IsNewIndecomposable</code> (<a href="chap3_mj.html#X803A99987E501AC9"><span class="RefLink">3.5-2</span></a>) for an example. See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X79FA055E8250E6A2" name="X79FA055E8250E6A2"></a></p>
 
@@ -1084,7 +1083,7 @@ The following projectives are missing from &lt;d&gt;:
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RemoveIndecomposable</code>( <var class="Arg">d</var>, <var class="Arg">mu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>The function <code class="func">RemoveIndecomposable</code> removes the column from <span class="SimpleMath">\(d\)</span> which corresponds to <span class="SimpleMath">\(P(\mu)\)</span>. This is sometimes useful when trying to calculate a new decomposition matrix using <strong class="pkg">Hecke</strong> and want to test a possible candidate for a yet to be identified PIM.</p>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8434DC7C8364CB54" name="X8434DC7C8364CB54"></a></p>
 
@@ -1093,7 +1092,7 @@ The following projectives are missing from &lt;d&gt;:
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MissingIndecomposables</code>( <var class="Arg">d</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>The function <code class="func">MissingIndecomposables</code> prints the list of partitions corresponding to the indecomposable modules which are not listed in <span class="SimpleMath">\(d\)</span>.</p>
 
-<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">DecompositionMatrix</code> (<a href="chap3_mj.html#X84F0F9E47D5EEBCF"><span class="RefLink">3.2-8</span></a>) and <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7A697AAA799BA7D4" name="X7A697AAA799BA7D4"></a></p>
 
@@ -1128,7 +1127,7 @@ The following projectives are missing from &lt;d&gt;:
 true
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7B98631580E193BB" name="X7B98631580E193BB"></a></p>
 
@@ -1145,7 +1144,7 @@ true
 5632
 </pre></div>
 
-<p>See also <code class="func">SimpleDimension</code> (<a href="chap3_mj.html#X828528747E4AC4C9"><span class="RefLink">3.6-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">SimpleDimension</code> (<a href="chap3_mj.html#X828528747E4AC4C9"><span class="RefLink">3.6-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X78F1DC277875BAFD" name="X78F1DC277875BAFD"></a></p>
 
@@ -1162,7 +1161,7 @@ true
 
 <p><code class="func">Schaper</code> uses the valuation map attached to <span class="SimpleMath">\(H\)</span> (see <code class="func">Specht</code> (<a href="chap3_mj.html#X7FE26921867C440A"><span class="RefLink">3.2-1</span></a>) and <a href="chapBib_mj.html#biBJM2">[JM97]</a>).</p>
 
-<p>One way in which the <span class="SimpleMath">\(q\)</span>-Schaper theorem can be applied is as follows. Suppose that we have a projective module <span class="SimpleMath">\(x\)</span>, written as a linear combination of Specht modules and suppose that we are trying to decide whether the projective indecomposable <span class="SimpleMath">\(P(\mu)\)</span> is a direct summand of <span class="SimpleMath">\(x\)</span>. Then, providing that we know that <span class="SimpleMath">\(P(\nu)\)</span> is not a summand of <span class="SimpleMath">\(x\)</span> for all (<span class="SimpleMath">\(e\)</span>-regular) partitions <span class="SimpleMath">\(\nu\)</span> which strictly dominate <span class="SimpleMath">\(\mu\)</span> (see <code class="func">Dominates</code> (<a href="chap3_mj.html#X820388EF7C8333BA"><span class="RefLink">3.8-12</span></a>)), <span class="SimpleMath">\(P(\mu)\)</span> is a summand of <span class="SimpleMath">\(x\)</span> if and only if <code class="code">InnerProduct(Schaper( </code><span class="SimpleMath">\(H,\mu\)</span><code class="code">)</code>,<span class="SimpleMath">\(x\)</span><code class="code">)</code> is non-zero (note, in particular, that we don't need to know the indecomposable <span class="SimpleMath">\(P(\mu)\)</span> in order to perform this calculation).</p>
+<p>One way in which the <span class="SimpleMath">\(q\)</span>-Schaper theorem can be applied is as follows. Suppose that we have a projective module <span class="SimpleMath">\(x\)</span>, written as a linear combination of Specht modules and suppose that we are trying to decide whether the projective indecomposable <span class="SimpleMath">\(P(\mu)\)</span> is a direct summand of <span class="SimpleMath">\(x\)</span>. Then, providing that we know that <span class="SimpleMath">\(P(\nu)\)</span> is not a summand of <span class="SimpleMath">\(x\)</span> for all (<span class="SimpleMath">\(e\)</span>-regular) partitions <span class="SimpleMath">\(\nu\)</span> which strictly dominate <span class="SimpleMath">\(\mu\)</span> (see <code class="func">Dominates</code> (<a href="chap3_mj.html#X820388EF7C8333BA"><span class="RefLink">3.8-11</span></a>)), <span class="SimpleMath">\(P(\mu)\)</span> is a summand of <span class="SimpleMath">\(x\)</span> if and only if <code class="code">InnerProduct(Schaper( </code><span class="SimpleMath">\(H,\mu\)</span><code class="code">)</code>,<span class="SimpleMath">\(x\)</span><code class="code">)</code> is non-zero (note, in particular, that we don't need to know the indecomposable <span class="SimpleMath">\(P(\mu)\)</span> in order to perform this calculation).</p>
 
 <p>The <span class="SimpleMath">\(q\)</span>-Schaper theorem can also be used to check for irreduciblity; in fact, this is the basis for the criterion employed by <code class="func">IsSimpleModule</code> (<a href="chap3_mj.html#X7FB82B3184287362"><span class="RefLink">3.7-2</span></a>).</p>
 
@@ -1176,7 +1175,7 @@ S(17,2,1) - S(15,2,1^3) + S(13,2^3,1) - S(11,3^2,2,1) + S(10,4,3,2,1) - S(9,8,\
 0S()
 </pre></div>
 
-<p>The last calculation shows that <span class="SimpleMath">\(S(9,6,5,2)\)</span> is irreducible when <span class="SimpleMath">\(R\)</span> is a field of characteristic zero and <span class="SimpleMath">\(e=2\)</span> (cf. <code class="code">IsSimpleModule(</code><span class="SimpleMath">\(H,9,6,5,2\)</span><code class="code">)</code>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>The last calculation shows that <span class="SimpleMath">\(S(9,6,5,2)\)</span> is irreducible when <span class="SimpleMath">\(R\)</span> is a field of characteristic zero and <span class="SimpleMath">\(e=2\)</span> (cf. <code class="code">IsSimpleModule(</code><span class="SimpleMath">\(H,9,6,5,2\)</span><code class="code">)</code>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7FB82B3184287362" name="X7FB82B3184287362"></a></p>
 
@@ -1196,7 +1195,7 @@ S(17,2,1) - S(15,2,1^3) + S(13,2^3,1) - S(11,3^2,2,1) + S(10,4,3,2,1) - S(9,8,\
 false
 </pre></div>
 
-<p>See also <code class="func">Schaper</code> (<a href="chap3_mj.html#X820A908F8337F59C"><span class="RefLink">3.7-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">Schaper</code> (<a href="chap3_mj.html#X820A908F8337F59C"><span class="RefLink">3.7-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7A6262B684185E3D" name="X7A6262B684185E3D"></a></p>
 
@@ -1233,7 +1232,7 @@ false
 
 <p>Note that the above remarks show that <span class="SimpleMath">\(P(\mu)\)</span> is mapped to <span class="SimpleMath">\(P(\mu^\#)\)</span> via the Mullineux map; this observation is useful when calculating decomposition matrices (and is used by the function <code class="func">InducedDecompositionMatrix</code> (<a href="chap3_mj.html#X7D257389845738DB"><span class="RefLink">3.5-1</span></a>)).</p>
 
-<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>) and <code class="func">GoodNodeSequence</code> (<a href="chap3_mj.html#X85B290977A17D9EE"><span class="RefLink">3.7-8</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>) and <code class="func">GoodNodeSequence</code> (<a href="chap3_mj.html#X85B290977A17D9EE"><span class="RefLink">3.7-8</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7CC6C04482DD1E9D" name="X7CC6C04482DD1E9D"></a></p>
 
@@ -1248,7 +1247,7 @@ false
 [ [ 10, 6, 5, 3 ], [ 4, 4, 3, 2 ] ]
 </pre></div>
 
-<p>See also <code class="func">PartitionMullineuxSymbol</code> (<a href="chap3_mj.html#X7826922879DD8D8A"><span class="RefLink">3.7-5</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">PartitionMullineuxSymbol</code> (<a href="chap3_mj.html#X7826922879DD8D8A"><span class="RefLink">3.7-5</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7826922879DD8D8A" name="X7826922879DD8D8A"></a></p>
 
@@ -1263,7 +1262,7 @@ false
 [ 8, 6, 5, 5 ]
 </pre></div>
 
-<p>See also <code class="func">MullineuxSymbol</code> (<a href="chap3_mj.html#X7CC6C04482DD1E9D"><span class="RefLink">3.7-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">MullineuxSymbol</code> (<a href="chap3_mj.html#X7CC6C04482DD1E9D"><span class="RefLink">3.7-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7CE4D6487FD009B1" name="X7CE4D6487FD009B1"></a></p>
 
@@ -1289,7 +1288,7 @@ fail
 1
 </pre></div>
 
-<p>The good nodes also determine the Kleshchev-Mullineux map (see <code class="func">GoodNodeSequence</code> (<a href="chap3_mj.html#X85B290977A17D9EE"><span class="RefLink">3.7-8</span></a>) and <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>)). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>The good nodes also determine the Kleshchev-Mullineux map (see <code class="func">GoodNodeSequence</code> (<a href="chap3_mj.html#X85B290977A17D9EE"><span class="RefLink">3.7-8</span></a>) and <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>)). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X783B52458335975F" name="X783B52458335975F"></a></p>
 
@@ -1309,7 +1308,7 @@ fail
 [ 1, 4 ]
 </pre></div>
 
-<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X85B290977A17D9EE" name="X85B290977A17D9EE"></a></p>
 
@@ -1342,7 +1341,7 @@ fail
   [ 0, 1, 2, 3, 0, 3, 0, 2 ] ]
 </pre></div>
 
-<p>The good node sequences determine the Mullineux map (see <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>) and <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>)). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>The good node sequences determine the Mullineux map (see <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>) and <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>)). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7B704FE781A311E5" name="X7B704FE781A311E5"></a></p>
 
@@ -1358,7 +1357,7 @@ fail
 [ 4, 4, 2 ]
 </pre></div>
 
-<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>), <code class="func">GoodNodeSequence</code> (<a href="chap3_mj.html#X85B290977A17D9EE"><span class="RefLink">3.7-8</span></a>) and <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>), <code class="func">GoodNodeSequence</code> (<a href="chap3_mj.html#X85B290977A17D9EE"><span class="RefLink">3.7-8</span></a>) and <code class="func">MullineuxMap</code> (<a href="chap3_mj.html#X7A6262B684185E3D"><span class="RefLink">3.7-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7A9DC101850008A2" name="X7A9DC101850008A2"></a></p>
 
@@ -1387,7 +1386,7 @@ fail
   [ 4, 2, 2 ], [ 5, 2, 2 ], [ 6, 2, 2 ], [ 6, 3, 2 ] ]
 </pre></div>
 
-<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">GoodNodes</code> (<a href="chap3_mj.html#X7CE4D6487FD009B1"><span class="RefLink">3.7-6</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7918D9DE7ACE2294" name="X7918D9DE7ACE2294"></a></p>
 
@@ -1423,7 +1422,7 @@ S(7,4,1) + S(7,3,2) + S(7,3,1^2) + S(7,2^2,1) + S(6,5,1) + 2S(6,4,2) + 2S(6,4,\
 
 <p>The function <code class="func">LittlewoodRichardsonCoefficient</code> returns a single Littlewood-Richardson coefficient (although you are really better off asking for all of them, since they will all be calculated anyway).</p>
 
-<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>) and <code class="func">InverseLittlewoodRichardsonRule</code> (<a href="chap3_mj.html#X7B9901427D1CF6F4"><span class="RefLink">3.7-12</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>) and <code class="func">InverseLittlewoodRichardsonRule</code> (<a href="chap3_mj.html#X7B9901427D1CF6F4"><span class="RefLink">3.7-12</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7B9901427D1CF6F4" name="X7B9901427D1CF6F4"></a></p>
 
@@ -1446,7 +1445,7 @@ S(7,4,1) + S(7,3,2) + S(7,3,1^2) + S(7,2^2,1) + S(6,5,1) + 2S(6,4,2) + 2S(6,4,\
   [ [ 3, 2 ], [ 1 ] ], [ [ 3, 2, 1 ], [  ] ] ]
 </pre></div>
 
-<p>See also <code class="func">LittlewoodRichardsonRule</code> (<a href="chap3_mj.html#X7918D9DE7ACE2294"><span class="RefLink">3.7-11</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">LittlewoodRichardsonRule</code> (<a href="chap3_mj.html#X7918D9DE7ACE2294"><span class="RefLink">3.7-11</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X790D4ACF7930340F" name="X790D4ACF7930340F"></a></p>
 
@@ -1475,7 +1474,7 @@ S(7,4,1) + S(7,3,2) + S(7,3,1^2) + S(7,2^2,1) + S(6,5,1) + 2S(6,4,2) + 2S(6,4,\
 true
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7DE3773C78BC324C" name="X7DE3773C78BC324C"></a></p>
 
@@ -1494,7 +1493,7 @@ true
 true
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7F2ACCBF788A62E8" name="X7F2ACCBF788A62E8"></a></p>
 
@@ -1516,7 +1515,7 @@ true
 true
 </pre></div>
 
-<p>See also <code class="func">AddRimHook</code> (<a href="chap3_mj.html#X7CEA98C779BDBD1A"><span class="RefLink">3.7-16</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">AddRimHook</code> (<a href="chap3_mj.html#X7CEA98C779BDBD1A"><span class="RefLink">3.7-16</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7CEA98C779BDBD1A" name="X7CEA98C779BDBD1A"></a></p>
 
@@ -1539,7 +1538,7 @@ fail
 fail
 </pre></div>
 
-<p>See also <code class="func">RemoveRimHook</code> (<a href="chap3_mj.html#X7F2ACCBF788A62E8"><span class="RefLink">3.7-15</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">RemoveRimHook</code> (<a href="chap3_mj.html#X7F2ACCBF788A62E8"><span class="RefLink">3.7-15</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8350934A7F9AB5BE" name="X8350934A7F9AB5BE"></a></p>
 
@@ -1565,7 +1564,7 @@ fail
 
 <p>The <span class="SimpleMath">\(e\)</span>-core is calculated here using James'; notation of an <em>abacus</em> there is also an <code class="func">EAbacus</code> function; but it is more "pretty" than useful.</p>
 
-<p>See also <code class="func">IsECore</code> (<a href="chap3_mj.html#X8236220C87814790"><span class="RefLink">3.8-2</span></a>), <code class="func">EQuotient</code> (<a href="chap3_mj.html#X8538AAAF8628A725"><span class="RefLink">3.8-3</span></a>) and <code class="func">EWeight</code> (<a href="chap3_mj.html#X7C460635829E7ED0"><span class="RefLink">3.8-5</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">IsECore</code> (<a href="chap3_mj.html#X8236220C87814790"><span class="RefLink">3.8-2</span></a>), <code class="func">EQuotient</code> (<a href="chap3_mj.html#X8538AAAF8628A725"><span class="RefLink">3.8-3</span></a>) and <code class="func">EWeight</code> (<a href="chap3_mj.html#X7C460635829E7ED0"><span class="RefLink">3.8-5</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8236220C87814790" name="X8236220C87814790"></a></p>
 
@@ -1574,7 +1573,7 @@ fail
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsECore</code>( <var class="Arg">e|H</var>, <var class="Arg">mu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> if <span class="SimpleMath">\(\mu\)</span> is an <span class="SimpleMath">\(e\)</span>-core and <code class="keyw">false</code> otherwise.</p>
 
-<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8538AAAF8628A725" name="X8538AAAF8628A725"></a></p>
 
@@ -1589,7 +1588,7 @@ fail
 [ [ 1, 1 ], [  ], [  ], [  ], [  ], [ 2, 2 ], [  ], [ 1 ] ]
 </pre></div>
 
-<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>) and <code class="func">CombineEQuotientECore</code> (<a href="chap3_mj.html#X7F357B417D495B6F"><span class="RefLink">3.8-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>) and <code class="func">CombineEQuotientECore</code> (<a href="chap3_mj.html#X7F357B417D495B6F"><span class="RefLink">3.8-4</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7F357B417D495B6F" name="X7F357B417D495B6F"></a></p>
 
@@ -1611,7 +1610,7 @@ fail
 [ 100, 98, 57, 43, 12, 1 ]
 </pre></div>
 
-<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>) and <code class="func">EQuotient</code> (<a href="chap3_mj.html#X8538AAAF8628A725"><span class="RefLink">3.8-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>) and <code class="func">EQuotient</code> (<a href="chap3_mj.html#X8538AAAF8628A725"><span class="RefLink">3.8-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7C460635829E7ED0" name="X7C460635829E7ED0"></a></p>
 
@@ -1626,14 +1625,14 @@ fail
 5
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X86308F6C818B220C" name="X86308F6C818B220C"></a></p>
 
 <h5>3.8-6 ERegularPartitions</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ERegularPartitions</code>( <var class="Arg">e|H</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
-<p>Returns: the list of <span class="SimpleMath">\(e\)</span>-regular partitions of <span class="SimpleMath">\(n\)</span>, ordered reverse lexicographically (see <code class="func">Lexicographic</code> (<a href="chap3_mj.html#X8480188D81ECBD92"><span class="RefLink">3.8-14</span></a>)).</p>
+<p>Returns: the list of <span class="SimpleMath">\(e\)</span>-regular partitions of <span class="SimpleMath">\(n\)</span>, ordered reverse lexicographically (see <code class="func">Lexicographic</code> (<a href="chap3_mj.html#X8480188D81ECBD92"><span class="RefLink">3.8-13</span></a>)).</p>
 
 <p>A partition <span class="SimpleMath">\(\mu=(\mu_1,\mu_2,\ldots)\)</span> is <em><span class="SimpleMath">\(e\)</span>-regular</em> if there is no integer <span class="SimpleMath">\(i\)</span> such that <span class="SimpleMath">\(\mu_i=\mu_{i+1}=\cdots=\mu_{i+e-1}&gt;0\)</span>.</p>
 
@@ -1644,7 +1643,7 @@ fail
   [ 6 ] ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7BEDA8F286ED5F20" name="X7BEDA8F286ED5F20"></a></p>
 
@@ -1653,7 +1652,7 @@ fail
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsERegular</code>( <var class="Arg">e|H</var>, <var class="Arg">mu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> if <span class="SimpleMath">\(\mu\)</span> is <span class="SimpleMath">\(e\)</span>-regular and <code class="keyw">false</code> otherwise.</p>
 
-<p>This functions requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This functions requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7D131AF0839089BD" name="X7D131AF0839089BD"></a></p>
 
@@ -1668,29 +1667,14 @@ fail
 [ 4, 4, 3, 2, 1, 1 ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
-
-<p><a id="X8796C1D783ED9CB4" name="X8796C1D783ED9CB4"></a></p>
-
-<h5>3.8-9 BetaSet</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; BetaSet</code>( <var class="Arg">mu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
-<p>Returns: a <em>set</em> of beta numbers (i.e. first column hook lengths; see <a href="chapBib_mj.html#biBJK">[JK81]</a>) corresponding to the partition <span class="SimpleMath">\(\mu\)</span>.</p>
-
-
-<div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">BetaSet([5,4,2,2]);</span>
-[ 2, 3, 6, 8 ]
-</pre></div>
-
-<p>See also <code class="func">PartitionBetaSet</code> (<a href="chap3_mj.html#X8711CC56792711A7"><span class="RefLink">3.8-10</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8711CC56792711A7" name="X8711CC56792711A7"></a></p>
 
-<h5>3.8-10 PartitionBetaSet</h5>
+<h5>3.8-9 PartitionBetaSet</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PartitionBetaSet</code>( <var class="Arg">bn</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
-<p>Returns: the partitions corresponding to the given set of beta numbers <span class="SimpleMath">\(bn\)</span>.Note in particular that <span class="SimpleMath">\(bn\)</span> must be a set of integers.</p>
+<p>Returns: the partitions corresponding to the given set of beta numbers <span class="SimpleMath">\(bn\)</span>. Note in particular that <span class="SimpleMath">\(bn\)</span> must be a set of integers.</p>
 
 
 <div class="example"><pre>
@@ -1698,11 +1682,11 @@ fail
 [ 5, 4, 2, 2 ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7EC4D0FA81B55391" name="X7EC4D0FA81B55391"></a></p>
 
-<h5>3.8-11 ETopLadder</h5>
+<h5>3.8-10 ETopLadder</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ETopLadder</code>( <var class="Arg">e|H</var>, <var class="Arg">mu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>The ladders in the diagram of a partition are the lines connecting nodes of constant <span class="SimpleMath">\(e\)</span>-residue, having slope <span class="SimpleMath">\(e-1\)</span> (see <a href="chapBib_mj.html#biBJK">[JK81]</a>). A new partition can be obtained from <span class="SimpleMath">\(\mu\)</span> by sliding all nodes up to the highest possible rungs on their ladders.</p>
@@ -1718,11 +1702,11 @@ fail
 [ 2, 2, 2, 2, 2 ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X820388EF7C8333BA" name="X820388EF7C8333BA"></a></p>
 
-<h5>3.8-12 Dominates</h5>
+<h5>3.8-11 Dominates</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Dominates</code>( <var class="Arg">mu</var>, <var class="Arg">nu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> if either <span class="SimpleMath">\(\mu\)</span>=<span class="SimpleMath">\(\nu\)</span> or <span class="SimpleMath">\(\forall i\geq 1: \sum_{j=1}^i\mu_j\geq\sum_{j=1}^i\nu_j\)</span> and <code class="keyw">false</code> otherwise.</p>
@@ -1735,11 +1719,11 @@ fail
 true
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X84DB1DD37AF227CF" name="X84DB1DD37AF227CF"></a></p>
 
-<h5>3.8-13 LengthLexicographic</h5>
+<h5>3.8-12 LengthLexicographic</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LengthLexicographic</code>( <var class="Arg">mu</var>, <var class="Arg">nu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> if the length of <span class="SimpleMath">\(\mu\)</span> is less than the length of <span class="SimpleMath">\(\nu\)</span> or if the length of <span class="SimpleMath">\(\mu\)</span> equals the length of <span class="SimpleMath">\(\nu\)</span> and <code class="code">Lexicographic(</code><span class="SimpleMath">\(\mu, \nu\)</span><code class="code">)</code>.</p>
@@ -1751,11 +1735,11 @@ true
   [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8480188D81ECBD92" name="X8480188D81ECBD92"></a></p>
 
-<h5>3.8-14 Lexicographic</h5>
+<h5>3.8-13 Lexicographic</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Lexicographic</code>( <var class="Arg">mu</var>, <var class="Arg">nu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> if <span class="SimpleMath">\(\mu\)</span> is lexicographically greater than or equal to <span class="SimpleMath">\(\nu\)</span>.</p>
@@ -1768,16 +1752,16 @@ true
   [ 1, 1, 1, 1, 1, 1 ] ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X78F41DF77D6F8292" name="X78F41DF77D6F8292"></a></p>
 
-<h5>3.8-15 ReverseDominance</h5>
+<h5>3.8-14 ReverseDominance</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ReverseDominance</code>( <var class="Arg">mu</var>, <var class="Arg">nu</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> if <span class="SimpleMath">\(\forall i&gt;0: \sum_{j\geq i}\mu_j &gt; \sum_{j\geq i}\nu_j\)</span>.</p>
 
-<p>This is another total order on partitions which extends the dominance ordering (see <code class="func">Dominates</code> (<a href="chap3_mj.html#X820388EF7C8333BA"><span class="RefLink">3.8-12</span></a>)).</p>
+<p>This is another total order on partitions which extends the dominance ordering (see <code class="func">Dominates</code> (<a href="chap3_mj.html#X820388EF7C8333BA"><span class="RefLink">3.8-11</span></a>)).</p>
 
 
 <div class="example"><pre>
@@ -1788,7 +1772,7 @@ true
 
 <p>This is the ordering used by James in the appendix of his Springer lecture notes book.</p>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X83890936806E3A34" name="X83890936806E3A34"></a></p>
 
@@ -1821,7 +1805,7 @@ S(6,2) + 2S(6,1^2) + 2S(5,3) + 4S(5,1^3) + 2S(4,3,1) + 4S(4,2^2) + 10S(4,2,1^2\
 1^4)
 </pre></div>
 
-<p>An example of <code class="func">Specialized</code> being applied to a crystallized decomposition matrix can be found in <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>An example of <code class="func">Specialized</code> being applied to a crystallized decomposition matrix can be found in <code class="func">CrystalDecompositionMatrix</code> (<a href="chap3_mj.html#X7F616CCE808FA11E"><span class="RefLink">3.2-9</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X8232C0A1846A27FB" name="X8232C0A1846A27FB"></a></p>
 
@@ -1850,7 +1834,7 @@ P(9,5,3) + P(8,6,3) + P(8,5,4) + P(8,5,3,1)
 
 <p>The function <code class="func">ERegulars</code> can also be applied to a decomposition matrix <span class="SimpleMath">\(d\)</span>; in this case it returns the unitriangular submatrix of <span class="SimpleMath">\(d\)</span> whose rows and columns are indexed by the <span class="SimpleMath">\(e\)</span>-regular partitions.</p>
 
-<p>These function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>These function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X822E8193835DD1D9" name="X822E8193835DD1D9"></a></p>
 
@@ -1876,7 +1860,7 @@ S(5,4,1)
 S(6,3,1) + S(5,3,2) + S(5,3,1^2)
 </pre></div>
 
-<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>), <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>) and <code class="func">RRestrictedModule</code> (<a href="chap3_mj.html#X783BC74E81A7D0E6"><span class="RefLink">3.4-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">ECore</code> (<a href="chap3_mj.html#X867496487DC35776"><span class="RefLink">3.8-1</span></a>), <code class="func">RInducedModule</code> (<a href="chap3_mj.html#X81D7F7A4812BB04D"><span class="RefLink">3.4-1</span></a>) and <code class="func">RRestrictedModule</code> (<a href="chap3_mj.html#X783BC74E81A7D0E6"><span class="RefLink">3.4-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7E92948B80075E46" name="X7E92948B80075E46"></a></p>
 
@@ -1895,7 +1879,7 @@ S(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) +\
 1
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X79FB3FE67D55BCFA" name="X79FB3FE67D55BCFA"></a></p>
 
@@ -1912,7 +1896,7 @@ S(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) +\
 1
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7D473E167C866CEC" name="X7D473E167C866CEC"></a></p>
 
@@ -1949,7 +1933,7 @@ S(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) +\
   Tableau( [ [ 1, 3, 4, 5 ], [ 2, 4, 5 ] ] ) ]
 </pre></div>
 
-<p>See also <code class="func">StandardTableaux</code> (<a href="chap3_mj.html#X7E51D6107DBE2A74"><span class="RefLink">3.10-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">StandardTableaux</code> (<a href="chap3_mj.html#X7E51D6107DBE2A74"><span class="RefLink">3.10-3</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7E51D6107DBE2A74" name="X7E51D6107DBE2A74"></a></p>
 
@@ -1970,7 +1954,7 @@ S(7,3) + S(7,2,1) + S(6,2,1^2) + S(5^2) + S(5,2^2,1) + S(4^2,1^2) + S(4,3^2) +\
   Tableau( [ [ 1, 3, 5, 6 ], [ 2, 4 ] ] ) ]
 </pre></div>
 
-<p>See also <code class="func">SemiStandardTableaux</code> (<a href="chap3_mj.html#X79ADB1B980D12A14"><span class="RefLink">3.10-2</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>See also <code class="func">SemiStandardTableaux</code> (<a href="chap3_mj.html#X79ADB1B980D12A14"><span class="RefLink">3.10-2</span></a>). This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7869DA9A8198BD28" name="X7869DA9A8198BD28"></a></p>
 
@@ -1989,7 +1973,7 @@ Standard Tableau:
 6
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7E5351C27C9253D9" name="X7E5351C27C9253D9"></a></p>
 
@@ -2004,7 +1988,7 @@ Standard Tableau:
 [ 4, 2 ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 <p><a id="X7CABF92D7BF07DD1" name="X7CABF92D7BF07DD1"></a></p>
 
@@ -2023,7 +2007,7 @@ Standard Tableau:
   [ 4, 3, 0, 1, 3 ] ]
 </pre></div>
 
-<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
+<p>This function requires the package <strong class="pkg">hecke</strong> (see <code class="func">LoadPackage</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap76_mj.html#X79B373A77B29D1F5"><span class="RefLink">Reference: LoadPackage</span></a>)).</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapBib_mj.html">[Next Chapter]</a>&nbsp;  </div>

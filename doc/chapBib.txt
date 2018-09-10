@@ -2,35 +2,49 @@
   
   [1XReferences[101X
   
-  [[20XAri96[120X] [16XAriki, S.[116X, [17XOn the decomposition numbers of the Hecke algebra of G(m,1,n)[117X, [18XJ. Math. Kyoto Univ.[118X, [19X36[119X, 4 (1996), 789--808.
+  [[20XAri96[120X]  [16XAriki,  S.[116X,  [17XOn  the  decomposition numbers of the Hecke algebra of
+  G(m,1,n)[117X, [18XJ. Math. Kyoto Univ.[118X, [19X36[119X, 4 (1996), 789--808.
   
-  [[20XBru98[120X] [16XBrundan, J.[116X, [17XModular branching rules and the Mullineux map for Hecke algebras of type A[117X, [18XProc. London Math. Soc. (3)[118X, [19X77[119X, 3 (1998), 551--581.
+  [[20XBru98[120X] [16XBrundan, J.[116X, [17XModular branching rules and the Mullineux map for Hecke
+  algebras of type A[117X, [18XProc. London Math. Soc. (3)[118X, [19X77[119X, 3 (1998), 551--581.
   
-  [[20XDJ86[120X] [16XDipper, R. and James, G.[116X, [17XRepresentations of Hecke algebras of general linear groups[117X, [18XProc. London Math. Soc. (3)[118X, [19X52[119X, 1 (1986), 20--52.
+  [[20XDJ86[120X]  [16XDipper,  R.  and  James,  G.[116X,  [17XRepresentations  of Hecke algebras of
+  general linear groups[117X, [18XProc. London Math. Soc. (3)[118X, [19X52[119X, 1 (1986), 20--52.
   
-  [[20XDJ87[120X] [16XDipper, R. and James, G.[116X, [17XBlocks and idempotents of Hecke algebras of general linear groups[117X, [18XProc. London Math. Soc. (3)[118X, [19X54[119X, 1 (1987), 57--82.
+  [[20XDJ87[120X] [16XDipper, R. and James, G.[116X, [17XBlocks and idempotents of Hecke algebras of
+  general linear groups[117X, [18XProc. London Math. Soc. (3)[118X, [19X54[119X, 1 (1987), 57--82.
   
-  [[20XGec92[120X] [16XGeck, M.[116X, [17XBrauer trees of Hecke algebras[117X, [18XComm. Algebra[118X, [19X20[119X, 10 (1992), 2937--2973.
+  [[20XGec92[120X]  [16XGeck,  M.[116X,  [17XBrauer  trees  of Hecke algebras[117X, [18XComm. Algebra[118X, [19X20[119X, 10
+  (1992), 2937--2973.
   
-  [[20XGro94[120X]  [16XGrojnowski,  I.[116X,  [17XRepresentations  of  affine  Hecke  algebras  (and affine quantum GL_n) at roots of unity[117X, [18XInternat. Math. Res. Notices[118X, [19X1994[119X, 5 (1994), 215 ff.,
-  approx.\ 3 pp.\ (electronic).
+  [[20XGro94[120X] [16XGrojnowski, I.[116X, [17XRepresentations of affine Hecke algebras (and affine
+  quantum  GL_n)  at  roots  of  unity[117X,  [18XInternat. Math. Res. Notices[118X, [19X1994[119X, 5
+  (1994), 215 ff., approx.\ 3 pp.\ (electronic).
   
-  [[20XJam90[120X] [16XJames, G.[116X, [17XThe decomposition matrices of GL_n(q) for nle 10[117X, [18XProc. London Math. Soc. (3)[118X, [19X60[119X, 2 (1990), 225--265.
+  [[20XJam90[120X]  [16XJames,  G.[116X, [17XThe decomposition matrices of GL_n(q) for nle 10[117X, [18XProc.
+  London Math. Soc. (3)[118X, [19X60[119X, 2 (1990), 225--265.
   
-  [[20XJK81[120X]  [16XJames,  G.  and  Kerber,  A.[116X,  [17XThe  representation theory of the symmetric group[117X, Addison-Wesley Publishing Co., Reading, Mass., Encyclopedia of Mathematics and its
-  Applications, [19X16[119X (1981), xxviii+510 pages, ((With a foreword by P. M. Cohn, With an introduction by Gilbert de B. Robinson)).
+  [[20XJK81[120X]  [16XJames, G. and Kerber, A.[116X, [17XThe representation theory of the symmetric
+  group[117X,  Addison-Wesley  Publishing  Co.,  Reading,  Mass.,  Encyclopedia  of
+  Mathematics  and  its  Applications,  [19X16[119X  (1981), xxviii+510 pages, ((With a
+  foreword by P. M. Cohn, With an introduction by Gilbert de B. Robinson)).
   
-  [[20XJM96[120X] [16XJames, G. and Mathas, A.[116X, [17XHecke algebras of type A with q=-1[117X, [18XJ. Algebra[118X, [19X184[119X, 1 (1996), 102--158.
+  [[20XJM96[120X]  [16XJames,  G.  and  Mathas,  A.[116X, [17XHecke algebras of type A with q=-1[117X, [18XJ.
+  Algebra[118X, [19X184[119X, 1 (1996), 102--158.
   
-  [[20XJM97[120X] [16XJames, G. and Mathas, A.[116X, [17XA q-analogue of the Jantzen-Schaper theorem[117X, [18XProc. London Math. Soc. (3)[118X, [19X74[119X, 2 (1997), 241--274.
+  [[20XJM97[120X]  [16XJames,  G.  and  Mathas,  A.[116X,  [17XA  q-analogue  of the Jantzen-Schaper
+  theorem[117X, [18XProc. London Math. Soc. (3)[118X, [19X74[119X, 2 (1997), 241--274.
   
-  [[20XKle96[120X] [16XKleshchev, A. S.[116X, [17XBranching rules for modular representations of symmetric groups. III. Some corollaries and a problem of Mullineux[117X, [18XJ. London Math. Soc. (2)[118X, [19X54[119X, 1
-  (1996), 25--38.
+  [[20XKle96[120X]  [16XKleshchev,  A.  S.[116X,  [17XBranching rules for modular representations of
+  symmetric  groups.  III.  Some  corollaries  and  a problem of Mullineux[117X, [18XJ.
+  London Math. Soc. (2)[118X, [19X54[119X, 1 (1996), 25--38.
   
-  [[20XLLT96[120X]  [16XLascoux,  A.,  Leclerc,  B.  and  Thibon,  J.-Y.[116X,  [17XHecke algebras at roots of unity and crystal bases of quantum affine algebras[117X, [18XComm. Math. Phys.[118X, [19X181[119X, 1 (1996),
-  205--263.
+  [[20XLLT96[120X]  [16XLascoux, A., Leclerc, B. and Thibon, J.-Y.[116X, [17XHecke algebras at roots
+  of  unity  and  crystal bases of quantum affine algebras[117X, [18XComm. Math. Phys.[118X,
+  [19X181[119X, 1 (1996), 205--263.
   
-  [[20XLT96[120X] [16XLeclerc, B. and Thibon, J.-Y.[116X, [17XCanonical bases of q-deformed Fock spaces[117X, [18XInternat. Math. Res. Notices[118X, [19X1996[119X, 9 (1996), 447--456.
+  [[20XLT96[120X]  [16XLeclerc,  B.  and  Thibon, J.-Y.[116X, [17XCanonical bases of q-deformed Fock
+  spaces[117X, [18XInternat. Math. Res. Notices[118X, [19X1996[119X, 9 (1996), 447--456.
   
   
   
