@@ -18,7 +18,7 @@
 
 ## SPECHT Change log
 ## 2.4: October 1997:
-##  - added funtions MullineuxSymbol, PartitionMullineuxSymbol,
+##  - added functions MullineuxSymbol, PartitionMullineuxSymbol,
 ##    NormalNodes (plus undocumented friends), BetaSet, PartitionBetaSet.
 
 ## 2.2: June 1996:

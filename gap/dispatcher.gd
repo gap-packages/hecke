@@ -1,5 +1,5 @@
 #######################################################################
-##  Hecke - dispatcher.gi : Compability for variable numbers of      ##
+##  Hecke - dispatcher.gi : Compatibility for variable numbers of    ##
 ##           arguments                                               ##
 ##                                                                   ##
 ##     This file contains a hack to support a variable number of     ##

@@ -65,7 +65,7 @@
 ##     matrices for all Hecke algebras over fields of characteristic
 ##     zero; most of the work is done by the internal function Pq().
 ##     This required a new set of 'module' types ("Pq", "Sq", and "Dq"),
-##     with correspondining operation sets H.operations.X. In particular,
+##     with corresponding operation sets H.operations.X. In particular,
 ##     these include q-induction and q-restriction, effectively allowing
 ##     computations with $U_q(\hat sl_e)$ on the Fock space.
 ##   - crystallized decomposition matrices added and decomposition
@@ -102,7 +102,7 @@
 #### by the filter IsHecke
 ##   S(), P(), D() : these three functions return records which
 ##                   represent Specht modules, PIMs, and simple
-##                   'H' modules repectively. These functions exist
+##                   'H' modules respectively. These functions exist
 ##                   only when 'H' is a Hecke algebra record.
 #### Use MakeSpecht(H,...) instead of H.S(...)
 ##   W(), P(), F() : these are the corresponding functions for Weyl
@@ -113,7 +113,7 @@
 ##                     Library: path to SPECHT library files
 ##                     SpechtDirectory: addition directory searched by
 ##                            SPECHT (defaults to current directory)
-##                     Indeterminate: the indedeterminate used by SPECHT
+##                     Indeterminate: the indeterminate used by SPECHT
 ##                            in the LLT algorithm when H.p=0.
 ##   operations    : apart from the obvious things like the Print()
 ##                   function for 'H' this record also contains the
@@ -181,7 +181,7 @@
 ##   coeffs : a *set* of coefficients
 ##   parts  : the corresponding *set* of partitions
 ##   operations :
-##       + - * / : for algebric manipulations
+##       + - * / : for algebraic manipulations
 ##       Print : calls PrintModule
 ##       Coefficient : returns the coefficient of a given partition
 #### Use Coefficient(x,...) instead of x.operations.Coefficient(...)
@@ -210,8 +210,8 @@
 ##   cols : the *set* of the partitions which make up the rows or 'd'.
 ##   inverse : a list of records containing the inverse of 'd'. These
 ##          records are computed only as needed.
-##   dimensions : a list of the dimensions of the simle modules; again
-##          comuted only as needed.
+##   dimensions : a list of the dimensions of the simple modules; again
+##          computed only as needed.
 ##   IsDecompositionMatrix : false if 'd' is a crystallized decomposition
 ##          matrix, and true otherwise.
 ##   H :a pointer back to the corresponding algebra
@@ -224,7 +224,7 @@
 ##              convert between the various types of 'H'--modules.
 ##              These are actually records, each containing three
 ##              functions S(), P(), and D(); so X.Y() tells 'd' how
-##              to write an X-module as a linear comination of Y-modules.
+##              to write an X-module as a linear combination of Y-modules.
 ##     Invert : calculates D(mu) using 'd'.
 ##     IsNewIndecomposable : the heart of the 'IsNewIndecomposable'
 ##              function.
@@ -234,7 +234,7 @@
 ###########################################################################
 
 ## Specht() is the main function in the package, although in truth it is
-## little more than a wrapper for the funcions S(), P(), and D().
+## little more than a wrapper for the functions S(), P(), and D().
 ## Originally, I had these as external functions, but decided that it
 ## was better to tie these functions to e=H.e as strongly as possible.
 InstallMethod(Specht_GenAlgebra,"generate a type-Algebra object",
@@ -514,7 +514,7 @@ InstallMethod(ListERegulars,"e-regular partitions of a module",
 
 ##P Print the e-regular partitions in x if IsSpecht(x); on the other hand,
 ### if IsDecompositionMatrix(x) then return the e-regular part of the
-### decompotion marix.
+### decomposition matrix.
 InstallMethod(ERegulars,"e-regular part of the given decomposition matrix",
   [IsDecompositionMatrix],
   function(d) local regs, y, r, len;
@@ -557,7 +557,7 @@ InstallMethod(ERegulars, "print e-regular partitions of a module",
 
 #F Returns true if S(mu)=D(mu) - note that this implies that mu is e-regular
 ## (if mu is not e-regular, fail is returned).     -- see [JM2]
-## IsSimle(H,mu)
+## IsSimple(H,mu)
 ##   ** uses H.valuation
 InstallMethod(IsSimpleModuleOp,
   "test whether the given partition defines a simple module",
@@ -577,7 +577,7 @@ InstallMethod(IsSimpleModuleOp,
   end
 ); #IsSimpleModule
 
-#F Split an element up into compontents which have the same core.
+#F Split an element up into components which have the same core.
 ## Usage: SplitECores(x) - returns as list of all block components
 ##        SplitECores(x,lambda) - returns a list with (i) core lambda,
 ## (ii) the same core as lambda, or (iii) the same core as the first
@@ -638,7 +638,7 @@ InstallMethod(SplitECoresOp,"for a module and a specht module",
 ); #SplitECores
 
 #F This function returns the image of <mu> under the Mullineux map using
-## the Kleshcehev(-James) algorihm, or the supplied decomposition matrix.
+## the Kleshcehev(-James) algorithm, or the supplied decomposition matrix.
 ## Alternatively, given a "module" x it works out the image of x under
 ## Mullineux.
 ## Usage:  MullineuxMap(e|H|d, mu) or MullineuxMap(x)
@@ -789,7 +789,7 @@ InstallMethod(SchaperMatrix,"upper bounds of entries of a decomposition matrix",
 ## Next some functions for accessing decomposition matrices ##
 ##############################################################
 
-#F Returns the dcomposition number d_{mu,nu}; row and column removal
+#F Returns the decomposition number d_{mu,nu}; row and column removal
 ## are used if the projective P(nu) is not already known.
 ## Usage: DecompositionNumber(H,mu,nu), or
 ##        DecompositionNumber(d,mu,nu);
@@ -1012,7 +1012,7 @@ InstallOtherMethod(DecompositionMatrix,
   end
 ); # DecompositionMatrix
 
-#F Tries to calulcate the decomposition matrix d_{H,n} from scratch.
+#F Tries to calculate the decomposition matrix d_{H,n} from scratch.
 ## At present will return only those column indexed by the partitions
 ## of e-weight less than 2.
 InstallMethod(CalculateDecompositionMatrix,"for an algebra and an integer",
@@ -1502,7 +1502,7 @@ InstallMethod(Module,"create new module",[IsAlgebraObj,IsString,IsLaurentPolynom
 );
 
 ## Takes two lists, one containing coefficients and the other the
-## corresponding partitions, and orders them lexicogrphcailly collecting
+## corresponding partitions, and orders them lexicographically collecting
 ## like terms on the way. We use a variation on quicksort which is
 ## induced by the lexicographic order (if parts contains partitions of
 ## different integers this can lead to an error - which we don't catch).
@@ -2395,7 +2395,7 @@ InstallMethod(RInducedModuleOp, "r-induction on specht modules",
 ## multiplicities). Does both standard and q-induction.
 
 ## We look at the size of x.module to decide whether we want to use
-## ordinary indcution or q-induction (in the Fock space). We could
+## ordinary induction or q-induction (in the Fock space). We could
 ## write H.operations.X.SInduce to as to make this choice for us, or
 ## do q-induction always, setting v=1 afterwards, but this seems the
 ## better choice.
@@ -2841,12 +2841,12 @@ InstallMethod(qSInducedModule,"q-induction for modules",
     v:=H!.Indeterminate;
 
     # add n nodes of residue r to the partition y from the i-th row down
-    # here exp is the exponent of the indertminate
+    # here exp is the exponent of the indeterminate
     qsinduced:=function(y, n, r, i, exp) local ny, j, z;
      ny:=[];
      for j in [i..Length(y)-n+1] do
        if y[j]>0 and r=(y[j]-j) mod H!.e and (j=Length(y) or y[j]>y[j+1])
-       then exp:=exp-n;               ## removeable node of residue r
+       then exp:=exp-n;               ## removable node of residue r
        elif r=(y[j] - j + 1) mod H!.e then
          if j=1 or y[j] < y[j-1] then ## addable node of residue r
            z:=StructuralCopy(y);
@@ -2901,7 +2901,7 @@ InstallMethod(qSRestrictedModule,"q-restriction for modules",
       for j in [i,i-1..n] do
         if y[j]>0 and r=(y[j]+1-j) mod H!.e and (j=1 or y[j]<y[j-1]) then
            exp:=exp-n;                 ## an addable node of residue r
-        elif r=(y[j] - j) mod H!.e then   ## removeable node of residue r
+        elif r=(y[j] - j) mod H!.e then   ## removable node of residue r
           if j=Length(y) or y[j] > y[j+1] then
             z:=StructuralCopy(y);
             z[j]:=z[j]-1;
@@ -3241,7 +3241,7 @@ InstallMethod(IsNewIndecomposableOp, "checks whether the given module is indecom
         M:=Minimum(M,InnerProduct(Px/Px!.coeffs[Length(Px!.parts)],
                                   Schaper(H, y)));
         if M=0 then # NO!
-          ## Px-(Px:Sy)Py is still projective so substract Py if it is
+          ## Px-(Px:Sy)Py is still projective so subtract Py if it is
           ## known. If Py=false (ie. not known), then at least we know
           ## that Px is not indecomposable, even though we couldn't
           ## calculate Py.

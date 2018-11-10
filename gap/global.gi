@@ -1,5 +1,5 @@
 #######################################################################
-##  Hecke - global.gi : some usefull global functions                ##
+##  Hecke - global.gi : some useful global functions                 ##
 ##                                                                   ##
 ##     A GAP package for calculating the decomposition numbers of    ##
 ##     Hecke algebras of type A (over fields of characteristic       ##

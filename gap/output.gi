@@ -239,7 +239,7 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
     if tex then # print tex output
       PrintFn:=function(x) Append(str, TeX(x)); end;
                     ## PrintFn() allows us to tex() matrix elements (which
-                    ## is necessary for crystallized decomposition matices).
+                    ## is necessary for crystallized decomposition matrices).
       Append(str,"$$\\begin{array}{l|*{", Length(d!.cols)+1,"}{l}}\n");
       sep:="&";
       endBit:=function(i) Append(str,"\\\\\n"); end;
