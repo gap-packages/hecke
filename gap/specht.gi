@@ -1275,8 +1275,6 @@ InstallMethod(SaveDecompositionMatrix,
     end;
 
     ## the actual saving of d
-    InfoRead1("#I* ", "SaveDecompositionMatrix( \"",
-              file, "\")\n");
     SaveDm(file);
 
     ## now we put d into DecompositionMatrices
