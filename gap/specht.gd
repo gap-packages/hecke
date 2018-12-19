@@ -46,20 +46,23 @@ DeclareCategory("IsHeckeModule", IsAlgebraObjModule);
 DeclareCategory("IsHeckeSpecht", IsHeckeModule);
 DeclareCategory("IsHeckePIM", IsHeckeModule);
 DeclareCategory("IsHeckeSimple", IsHeckeModule);
+
 DeclareCategory("IsFockModule", IsHeckeModule);
-DeclareCategory("IsFockSpecht", IsHeckeSpecht);
-DeclareCategory("IsFockPIM", IsHeckePIM);
-DeclareCategory("IsFockSimple", IsHeckeSimple);
+DeclareSynonym("IsFockSpecht", IsHeckeSpecht and IsFockModule);
+DeclareSynonym("IsFockPIM", IsHeckePIM and IsFockModule);
+DeclareSynonym("IsFockSimple", IsHeckeSimple and IsFockModule);
 ##
 DeclareCategory("IsSchurModule", IsHeckeModule);
-DeclareCategory("IsSchurWeyl", IsHeckeSpecht);
-DeclareCategory("IsSchurPIM", IsHeckePIM);
-DeclareCategory("IsSchurSimple", IsHeckeSimple);
-DeclareCategory("IsFockSchurModule", IsFockModule);
-DeclareCategory("IsFockSchurWeyl", IsFockSpecht);
-DeclareCategory("IsFockSchurPIM", IsFockPIM);
-DeclareCategory("IsFockSchurSimple", IsFockSimple);
+DeclareCategory("IsSchurWeyl", IsHeckeSpecht and IsSchurModule);
+DeclareSynonym("IsSchurPIM", IsHeckePIM and IsSchurModule);
+DeclareSynonym("IsSchurSimple", IsHeckeSimple and IsSchurModule);
 
+DeclareSynonym("IsFockSchurModule", IsFockModule and IsSchurModule);
+DeclareSynonym("IsFockSchurWeyl", IsFockSpecht and IsSchurWeyl);
+DeclareSynonym("IsFockSchurPIM", IsFockPIM and IsSchurPIM);
+DeclareSynonym("IsFockSchurSimple", IsFockSimple and IsSchurSimple);
+
+##
 BindGlobal("HeckeSpechtType", NewType(AlgebraObjFamily, IsHeckeSpecht));
 BindGlobal("HeckePIMType", NewType(AlgebraObjFamily, IsHeckePIM));
 BindGlobal("HeckeSimpleType", NewType(AlgebraObjFamily, IsHeckeSimple));
