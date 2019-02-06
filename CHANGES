@@ -1,3 +1,6 @@
+1.5.2
+    - change definitions of various categories to correctly model their meaning
+
 1.5.1
     - remove use of obsolete and undocumented GAP function `InfoRead1`
 
