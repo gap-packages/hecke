@@ -429,6 +429,7 @@ second function returns a standard basis element <M>Sq(\mu)</M> of
 gap> H:=Specht(4);; MakeFockPIM(H,6,2);; Display(last);
 Sq(6,2) + vSq(5,3)
 gap> RRestrictedModule(last); Display(last);
+<direct sum of 3 Sq-modules>
 Sq(6,1) + (v+v^-1)Sq(5,2) + vSq(4,3)
 gap> MakePIM(last);; Display(last);
 Pq(6,1) + (v+v^-1)Pq(5,2)
@@ -491,8 +492,8 @@ Almost all of the functions in &Specht; which accept a Hecke algebra object
 <M>H</M> will also accept the object <M>S</M> returned by <Ref Oper="Schur"/>
 .<P/>
 
-In the current version of &Specht; the decomposition matrices of <M>q</M>
--Schur algebras are not fully supported. The <Ref Oper=
+In the current version of &Specht; the decomposition matrices of <M>q</M>-Schur
+algebras are not fully supported. The <Ref Oper=
 "InducedDecompositionMatrix"/> function can be applied to these matrices;
 however there are no additional routines available for calculating the
 columns corresponding to <M>e</M>-singular partitions. The decomposition
@@ -503,15 +504,18 @@ characteristic <M>0</M> for <M>n\leq 10</M> are in the &Specht; libraries.
 gap> S:=Schur(2);
 <Schur algebra with e = 2>
 gap> InducedDecompositionMatrix(DecompositionMatrix(S,3));
-# The following projectives are missing from <d>:
-#  [ 2, 2 ]
+The following projectives are missing from <d>:
+    [ 2, 2 ]
 <5x5 decomposition matrix>
 gap> Display(last);
-4    | 1                   # DecompositionMatrix(S,4) returns the
-3,1  | 1 1                 # full decomposition matrix. The point
-2^2  | . 1 .               # of this example is to emphasize the
-2,1^2| 1 1 . 1             # current limitations of Schur.
+4    | 1         
+3,1  | 1 1       
+2^2  | . 1 .     
+2,1^2| 1 1 . 1   
 1^4  | 1 . . 1 1
+
+# DecompositionMatrix(S,4) returns the full decomposition matrix. The point of
+# this example is to emphasize the current limitations of Schur.
 ]]></Example>
 
 Note that when <M>S</M> is defined over a field of characteristic zero then
@@ -580,17 +584,17 @@ hand</Q> using the operation <Ref Oper="SetOrdering"/>
 gap> DecompositionMatrix(Specht(3),6,LengthLexicographic);
 <11x7 decomposition matrix>
 gap> Display(last);
-6      | 1
-5,1    | 1 1
-4,2    | . . 1
-3^2    | . 1 . 1
-4,1^2  | . 1 . . 1
-3,2,1  | 1 1 . 1 1 1
-2^3    | 1 . . . . 1
-3,1^3  | . . . . 1 1
+6      | 1             
+5,1    | 1 1           
+4,2    | . . 1         
+3^2    | . 1 . 1       
+4,1^2  | . 1 . . 1     
+3,2,1  | 1 1 . 1 1 1   
+2^3    | 1 . . . . 1   
+3,1^3  | . . . . 1 1   
 2^2,1^2| . . . . . . 1
-2,1^4  | . . . 1 . 1 .
-1^6    | . . . 1 . . .
+2,1^4  | . . . 1 . 1 . 
+1^6    | . . . 1 . . . 
 ]]></Example>
 
 Once you have a decomposition matrix it is often nice to be able
@@ -636,31 +640,31 @@ induced.
 gap> CrystalDecompositionMatrix(Specht(3), 6);
 <11x7 decomposition matrix>
 gap> Display(last);
-6      |   1
-5,1    |   v   1
-4,2    |   .   .   1
-4,1^2  |   .   v   .   1
-3^2    |   .   v   .   .   1
-3,2,1  |   v v^2   .   v   v   1
-3,1^3  |   .   .   . v^2   .   v
-2^3    | v^2   .   .   .   .   v
+6      |   1                         
+5,1    |   v   1                     
+4,2    |   .   .   1                 
+4,1^2  |   .   v   .   1             
+3^2    |   .   v   .   .   1         
+3,2,1  |   v v^2   .   v   v   1     
+3,1^3  |   .   .   . v^2   .   v     
+2^3    | v^2   .   .   .   .   v     
 2^2,1^2|   .   .   .   .   .   .   1
-2,1^4  |   .   .   .   .   v v^2   .
-1^6    |   .   .   .   . v^2   .   .
+2,1^4  |   .   .   .   .   v v^2   . 
+1^6    |   .   .   .   . v^2   .   . 
 gap> Specialized(last);   # set v equal to 1.
 <11x7 decomposition matrix>
 gap> Display(last);
-6      | 1
-5,1    | 1 1
-4,2    | . . 1
-4,1^2  | . 1 . 1
-3^2    | . 1 . . 1
-3,2,1  | 1 1 . 1 1 1
-3,1^3  | . . . 1 . 1
-2^3    | 1 . . . . 1
+6      | 1             
+5,1    | 1 1           
+4,2    | . . 1         
+4,1^2  | . 1 . 1       
+3^2    | . 1 . . 1     
+3,2,1  | 1 1 . 1 1 1   
+3,1^3  | . . . 1 . 1   
+2^3    | 1 . . . . 1   
 2^2,1^2| . . . . . . 1
-2,1^4  | . . . . 1 1 .
-1^6    | . . . . 1 . .
+2,1^4  | . . . . 1 1 . 
+1^6    | . . . . 1 . . 
 ]]></Example>
 
 See also <Ref Oper="Specht"/>, <Ref Oper="Schur"/>,
@@ -714,9 +718,9 @@ gap> ECore(3, [6,4,2]);
 gap> ECore(3, 6,4,2);
 [ 6, 4, 2 ]
 gap> GoodNodes(3, 6,4,2);
-[ false, false, 3 ]
-gap> GoodNodes(3, [6,4,2], 2);
-3
+[ fail, fail, 3 ]
+gap> GoodNodes(3, [6,4,2]);
+[ fail, fail, 3 ]
 ]]></Example>
 
 Basically, it never hurts to put the extra brackets in, and they can
@@ -819,9 +823,9 @@ this diagram confirms the answers above.
 
 <Example><![CDATA[
 gap> EResidueDiagram(H,5,2,1);
-  0  1  2  3  0
-  3  0
-  2
+   0   1   2   3   0
+   3   0
+   2
 true
 ]]></Example>
 
@@ -1071,13 +1075,13 @@ For example, in calculating the <M>2</M>-modular decomposition matrices of
 <Ref Oper="InducedDecompositionMatrix"/> is unable to calculate is
 <M>P(10)</M>.
 
-<Example><![CDATA[
+<Log><![CDATA[
 gap> H:=Specht(2,2);;
 gap> d:=InducedDecompositionMatrix(DecompositionMatrix(H,9));;
 # Inducing.
 # The following projectives are missing from <d>:
 #  [ 10 ]
-]]></Example>
+]]></Log>
 
 (In fact, given the above commands, &Specht; will return the full
 decomposition matrix for <M>S_{10}</M> because this matrix is in the library;
@@ -1088,7 +1092,7 @@ By inducing <M>P(9)</M> we can find a projective <M>H</M>-module which
 contains <M>P(10)</M>. We can then use <Ref Oper="IsNewIndecomposable"/>
 to try and decompose this induced module into a sum of PIMs.
 
-<Example><![CDATA[
+<Log><![CDATA[
 gap> SizeScreen([80,20]);; x:=RInducedModule(MakePIM(H,9),1);; Display(x);
 # P(<x>), unable to rewrite <x> as a sum of projectives
 S(10) + S(9,1) + S(8,2) + 2S(8,1^2) + S(7,3) + 2S(7,1^3) + 3S(6,3,1) + 3S(6,2^\
@@ -1107,7 +1111,7 @@ S(10) + S(9,1) + S(8,2) + 2S(8,1^2) + S(7,3) + 2S(7,1^3) + 2S(6,3,1) + 2S(6,2^\
 1^2) + 3S(4,2,1^4) + 2S(4,1^6) + 2S(3^3,1) + 2S(3^2,2^2) + 3S(3^2,2,1^2) + 2S(\
 3^2,1^4) + 2S(3,2^2,1^3) + 2S(3,1^7) + S(2^3,1^4) + S(2^2,1^6) + S(2,1^8) + S(\
 1^10)
-]]></Example>
+]]></Log>
 
 Notice that some of the coefficients of the Specht modules in <M>x</M> have
 changed; this is because <Ref Oper="IsNewIndecomposable"/> was able to
@@ -1122,17 +1126,17 @@ from <M>x</M> we again use <Ref Oper="IsNewIndecomposable"/> to see if
 that all of the multiplicities up to and including <M>S(6,3,1)</M> have
 already been checked by giving it the addition argument <M>\mu=[6,3,1]</M>.
 
-<Example><![CDATA[
+<Log><![CDATA[
 gap> x:=x-MakePIM(d,6,3,1);; IsNewIndecomposable(d,x,6,3,1);
 true
-]]></Example>
+]]></Log>
 
 Consequently, <M>x=P(10)</M> and we add it to the decomposition matrix
 <M>d</M> (and save it).
 
-<Example><![CDATA[
+<Log><![CDATA[
 gap> AddIndecomposable(d,x); SaveDecompositionMatrix(d);
-]]></Example>
+]]></Log>
 
 A full description of what <Ref Oper="IsNewIndecomposable"/> does can be
 found by reading the comments in <F>specht.gi</F>. Any suggestions or
@@ -1157,11 +1161,11 @@ as possible.
 <Example><![CDATA[
 gap> H:=Specht(4);; d:=CrystalDecompositionMatrix(H,5);;
 gap> Display(InvertDecompositionMatrix(d));
-5    |   1
-4,1  |   .   1
-3,2  |  -v   .   1
-3,1^2|   .   .   .   1
-2^2,1| v^2   .  -v   .   1
+5    |   1                     
+4,1  |   .   1                 
+3,2  |  -v   .   1             
+3,1^2|   .   .   .   1         
+2^2,1| v^2   .  -v   .   1     
 2,1^3|   .   .   .   .   .   1
 ]]></Example>
 
@@ -1188,23 +1192,23 @@ gap> d:=DecompositionMatrix(H,13);; dp:=DecompositionMatrix(Hp,13);;
 gap> a:=AdjustmentMatrix(dp,d);
 <18x18 decomposition matrix>
 gap> Display(a);
-13     | 1
-12,1   | . 1
-11,2   | 1 . 1
-10,3   | . . . 1
-10,2,1 | . . . . 1
-9,4    | 1 . 1 . . 1
-9,3,1  | 2 . . . . . 1
-8,5    | . 1 . . . . . 1
-8,4,1  | 1 . . . . . . . 1
-8,3,2  | . 2 . . . . . 1 . 1
-7,6    | 1 . . . . 1 . . . . 1
-7,5,1  | . . . . . . 1 . . . . 1
-7,4,2  | 1 . 1 . . 1 . . . . 1 . 1
-7,3,2,1| . . . . . . . . . . . . . 1
-6,5,2  | . 1 . . . . . 1 . 1 . . . . 1
-6,4,3  | 2 . . . 1 . . . . . . . . . . 1
-6,4,2,1| . 2 . 1 . . . . . . . . . . . . 1
+13     | 1                                   
+12,1   | . 1                                 
+11,2   | 1 . 1                               
+10,3   | . . . 1                             
+10,2,1 | . . . . 1                           
+9,4    | 1 . 1 . . 1                         
+9,3,1  | 2 . . . . . 1                       
+8,5    | . 1 . . . . . 1                     
+8,4,1  | 1 . . . . . . . 1                   
+8,3,2  | . 2 . . . . . 1 . 1                 
+7,6    | 1 . . . . 1 . . . . 1               
+7,5,1  | . . . . . . 1 . . . . 1             
+7,4,2  | 1 . 1 . . 1 . . . . 1 . 1           
+7,3,2,1| . . . . . . . . . . . . . 1         
+6,5,2  | . 1 . . . . . 1 . 1 . . . . 1       
+6,4,3  | 2 . . . 1 . . . . . . . . . . 1     
+6,4,2,1| . 2 . 1 . . . . . . . . . . . . 1   
 5,4,3,1| 4 . 2 . . . . . . . . . . . . . . 1
 gap> MatrixDecompositionMatrix(dp)=
 >           MatrixDecompositionMatrix(d)*MatrixDecompositionMatrix(a);
@@ -1328,10 +1332,10 @@ gap> d:=CalculateDecompositionMatrix(H,15);;
 # Projective indecomposable P(15) not known.
 gap> SizeScreen([80,20]);; MissingIndecomposables(d);
 The following projectives are missing from <d>:
-    [ 15 ]  [ 14, 1 ]  [ 13, 2 ]  [ 12, 3 ]  [ 12, 2, 1 ]  [ 11, 4 ]
-[ 11, 3, 1 ]  [ 10, 5 ]  [ 10, 4, 1 ]  [ 10, 3, 2 ]  [ 9, 6 ]  [ 9, 5, 1 ]
-[ 9, 4, 2 ]  [ 9, 3, 2, 1 ]  [ 8, 7 ]  [ 8, 6, 1 ]  [ 8, 5, 2 ]  [ 8, 4, 3 ]
-[ 8, 4, 2, 1 ]  [ 7, 6, 2 ]  [ 7, 5, 3 ]  [ 7, 5, 2, 1 ]  [ 7, 4, 3, 1 ]
+    [ 15 ]  [ 14, 1 ]  [ 13, 2 ]  [ 12, 3 ]  [ 12, 2, 1 ]  [ 11, 4 ]  
+[ 11, 3, 1 ]  [ 10, 5 ]  [ 10, 4, 1 ]  [ 10, 3, 2 ]  [ 9, 6 ]  [ 9, 5, 1 ]  
+[ 9, 4, 2 ]  [ 9, 3, 2, 1 ]  [ 8, 7 ]  [ 8, 6, 1 ]  [ 8, 5, 2 ]  [ 8, 4, 3 ]  
+[ 8, 4, 2, 1 ]  [ 7, 6, 2 ]  [ 7, 5, 3 ]  [ 7, 5, 2, 1 ]  [ 7, 4, 3, 1 ]  
 [ 6, 5, 4 ]  [ 6, 5, 3, 1 ]  [ 6, 4, 3, 2 ]
 ]]></Example>
 
@@ -1355,7 +1359,7 @@ internal algebra object of the matrix <M>d</M>.
 <Example><![CDATA[
 gap> SizeScreen([80,20]);;
 gap> MatrixDecompositionMatrix(DecompositionMatrix(Specht(3),5));
-[ [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 1, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ],
+[ [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 1, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ], 
   [ 1, 0, 0, 0, 1 ], [ 0, 0, 0, 0, 1 ], [ 0, 0, 1, 0, 0 ] ]
 ]]></Example>
 
@@ -1381,11 +1385,11 @@ gap> H:=Specht(3);;
 gap> m:=[ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 1, 0, 1, 0 ],
 >         [ 0, 0, 0, 1 ], [ 0, 0, 1, 0 ] ];;
 gap> Display(DecompositionMatrixMatrix(H,m,4));
-4    | 1
-3,1  | . 1
-2^2  | 1 . 1
+4    | 1       
+3,1  | . 1     
+2^2  | 1 . 1   
 2,1^2| . . . 1
-1^4  | . . 1 .
+1^4  | . . 1 . 
 ]]></Example>
 
 See also <Ref Oper="DecompositionMatrix"/> and
@@ -1762,9 +1766,9 @@ gap> GoodNodeSequence(H,5,4,2);
 <Description>
 <Example><![CDATA[
 gap> H:=Specht(4);; GoodNodeSequences(H,5,2,1);
-[ [ 0, 1, 2, 3, 3, 2, 0, 0 ], [ 0, 3, 1, 2, 2, 3, 0, 0 ],
-  [ 0, 1, 3, 2, 2, 3, 0, 0 ], [ 0, 1, 2, 3, 3, 0, 2, 0 ],
-  [ 0, 1, 2, 3, 0, 3, 2, 0 ], [ 0, 1, 2, 3, 3, 0, 0, 2 ],
+[ [ 0, 1, 2, 3, 3, 2, 0, 0 ], [ 0, 3, 1, 2, 2, 3, 0, 0 ], 
+  [ 0, 1, 3, 2, 2, 3, 0, 0 ], [ 0, 1, 2, 3, 3, 0, 2, 0 ], 
+  [ 0, 1, 2, 3, 0, 3, 2, 0 ], [ 0, 1, 2, 3, 3, 0, 0, 2 ], 
   [ 0, 1, 2, 3, 0, 3, 0, 2 ] ]
 ]]></Example>
 The good node sequences determine the Mullineux map (see
@@ -1807,12 +1811,12 @@ end in <M>\mu</M>.</Returns>
 gap> GoodNodeLatticePath(3,3,2,1);
 [ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 1, 1 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ]
 gap> GoodNodeLatticePaths(3,3,2,1);
-[ [ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 1, 1 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ],
+[ [ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 1, 1 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ], 
   [ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 2 ], [ 2, 2, 1 ], [ 3, 2, 1 ] ] ]
 gap> GoodNodeSequence(4,6,3,2);
 [ 0, 3, 1, 0, 2, 2, 3, 3, 0, 1, 1 ]
 gap> LatticePathGoodNodeSequence(4,last);
-[ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 2 ], [ 3, 2 ], [ 3, 2, 1 ], [ 4, 2, 1 ],
+[ [ 1 ], [ 1, 1 ], [ 2, 1 ], [ 2, 2 ], [ 3, 2 ], [ 3, 2, 1 ], [ 4, 2, 1 ], 
   [ 4, 2, 2 ], [ 5, 2, 2 ], [ 6, 2, 2 ], [ 6, 3, 2 ] ]
 ]]></Example>
 
@@ -1846,14 +1850,14 @@ the computation <M>S(\mu)\otimes S(\nu)</M>.
 gap> SizeScreen([80,20]);;
 gap> H:=Specht(0);; # the generic Hecke algebra with R=C[q]
 gap> LittlewoodRichardsonRule([3,2,1],[4,2]);
-[ [ 4, 3, 2, 2, 1 ], [ 4, 3, 3, 1, 1 ], [ 4, 3, 3, 2 ], [ 4, 4, 2, 1, 1 ],
-  [ 4, 4, 2, 2 ], [ 4, 4, 3, 1 ], [ 5, 2, 2, 2, 1 ], [ 5, 3, 2, 1, 1 ],
-  [ 5, 3, 2, 2 ], [ 5, 4, 2, 1 ], [ 5, 3, 2, 1, 1 ], [ 5, 3, 3, 1 ],
-  [ 5, 4, 1, 1, 1 ], [ 5, 4, 2, 1 ], [ 5, 5, 1, 1 ], [ 5, 3, 2, 2 ],
+[ [ 4, 3, 2, 2, 1 ], [ 4, 3, 3, 1, 1 ], [ 4, 3, 3, 2 ], [ 4, 4, 2, 1, 1 ], 
+  [ 4, 4, 2, 2 ], [ 4, 4, 3, 1 ], [ 5, 2, 2, 2, 1 ], [ 5, 3, 2, 1, 1 ], 
+  [ 5, 3, 2, 2 ], [ 5, 4, 2, 1 ], [ 5, 3, 2, 1, 1 ], [ 5, 3, 3, 1 ], 
+  [ 5, 4, 1, 1, 1 ], [ 5, 4, 2, 1 ], [ 5, 5, 1, 1 ], [ 5, 3, 2, 2 ], 
   [ 5, 3, 3, 1 ], [ 5, 4, 2, 1 ], [ 5, 4, 3 ], [ 5, 5, 2 ], [ 6, 2, 2, 1, 1 ],
-  [ 6, 3, 1, 1, 1 ], [ 6, 3, 2, 1 ], [ 6, 4, 1, 1 ], [ 6, 2, 2, 2 ],
-  [ 6, 3, 2, 1 ], [ 6, 4, 2 ], [ 6, 3, 2, 1 ], [ 6, 3, 3 ], [ 6, 4, 1, 1 ],
-  [ 6, 4, 2 ], [ 6, 5, 1 ], [ 7, 2, 2, 1 ], [ 7, 3, 1, 1 ], [ 7, 3, 2 ],
+  [ 6, 3, 1, 1, 1 ], [ 6, 3, 2, 1 ], [ 6, 4, 1, 1 ], [ 6, 2, 2, 2 ], 
+  [ 6, 3, 2, 1 ], [ 6, 4, 2 ], [ 6, 3, 2, 1 ], [ 6, 3, 3 ], [ 6, 4, 1, 1 ], 
+  [ 6, 4, 2 ], [ 6, 5, 1 ], [ 7, 2, 2, 1 ], [ 7, 3, 1, 1 ], [ 7, 3, 2 ], 
   [ 7, 4, 1 ] ]
 gap> Display(MakeSpecht(H,3,2,1)*MakeSpecht(H,4,2));
 S(7,4,1) + S(7,3,2) + S(7,3,1^2) + S(7,2^2,1) + S(6,5,1) + 2S(6,4,2) + 2S(6,4,\
@@ -1885,14 +1889,14 @@ and <M>[\mu,\nu]</M> will appear <M>a_{\mu<Alt Not="LaTeX">,</Alt>\nu}^\tau</M> 
 <Description>
 <Example><![CDATA[
 gap> SizeScreen([80,20]);; InverseLittlewoodRichardsonRule(3,2,1);
-[ [ [  ], [ 3, 2, 1 ] ], [ [ 1 ], [ 3, 2 ] ], [ [ 1 ], [ 2, 2, 1 ] ],
-  [ [ 1 ], [ 3, 1, 1 ] ], [ [ 1, 1 ], [ 2, 2 ] ], [ [ 1, 1 ], [ 3, 1 ] ],
-  [ [ 1, 1 ], [ 2, 1, 1 ] ], [ [ 1, 1, 1 ], [ 2, 1 ] ], [ [ 2 ], [ 2, 2 ] ],
-  [ [ 2 ], [ 3, 1 ] ], [ [ 2 ], [ 2, 1, 1 ] ], [ [ 2, 1 ], [ 3 ] ],
-  [ [ 2, 1 ], [ 2, 1 ] ], [ [ 2, 1 ], [ 2, 1 ] ], [ [ 2, 1 ], [ 1, 1, 1 ] ],
-  [ [ 2, 1, 1 ], [ 2 ] ], [ [ 2, 1, 1 ], [ 1, 1 ] ], [ [ 2, 2 ], [ 2 ] ],
-  [ [ 2, 2 ], [ 1, 1 ] ], [ [ 2, 2, 1 ], [ 1 ] ], [ [ 3 ], [ 2, 1 ] ],
-  [ [ 3, 1 ], [ 2 ] ], [ [ 3, 1 ], [ 1, 1 ] ], [ [ 3, 1, 1 ], [ 1 ] ],
+[ [ [  ], [ 3, 2, 1 ] ], [ [ 1 ], [ 3, 2 ] ], [ [ 1 ], [ 2, 2, 1 ] ], 
+  [ [ 1 ], [ 3, 1, 1 ] ], [ [ 1, 1 ], [ 2, 2 ] ], [ [ 1, 1 ], [ 3, 1 ] ], 
+  [ [ 1, 1 ], [ 2, 1, 1 ] ], [ [ 1, 1, 1 ], [ 2, 1 ] ], [ [ 2 ], [ 2, 2 ] ], 
+  [ [ 2 ], [ 3, 1 ] ], [ [ 2 ], [ 2, 1, 1 ] ], [ [ 2, 1 ], [ 3 ] ], 
+  [ [ 2, 1 ], [ 2, 1 ] ], [ [ 2, 1 ], [ 2, 1 ] ], [ [ 2, 1 ], [ 1, 1, 1 ] ], 
+  [ [ 2, 1, 1 ], [ 2 ] ], [ [ 2, 1, 1 ], [ 1, 1 ] ], [ [ 2, 2 ], [ 2 ] ], 
+  [ [ 2, 2 ], [ 1, 1 ] ], [ [ 2, 2, 1 ], [ 1 ] ], [ [ 3 ], [ 2, 1 ] ], 
+  [ [ 3, 1 ], [ 2 ] ], [ [ 3, 1 ], [ 1, 1 ] ], [ [ 3, 1, 1 ], [ 1 ] ], 
   [ [ 3, 2 ], [ 1 ] ], [ [ 3, 2, 1 ], [  ] ] ]
 ]]></Example>
 
@@ -2118,7 +2122,7 @@ there is no integer <M>i</M> such that
 
 <Example><![CDATA[
 gap> H:=Specht(3);; ERegularPartitions(H,6);
-[ [ 2, 2, 1, 1 ], [ 3, 2, 1 ], [ 3, 3 ], [ 4, 1, 1 ], [ 4, 2 ], [ 5, 1 ],
+[ [ 2, 2, 1, 1 ], [ 3, 2, 1 ], [ 3, 3 ], [ 4, 1, 1 ], [ 4, 2 ], [ 5, 1 ], 
   [ 6 ] ]
 ]]></Example>
 
@@ -2220,7 +2224,7 @@ and <C>Lexicographic(</C><M>\mu, \nu</M><C>)</C>.</Returns>
 <Description>
 <Example><![CDATA[
 gap> p:=Partitions(6);;Sort(p,LengthLexicographic); p;
-[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ],
+[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ], 
   [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ]
 ]]></Example>
 
@@ -2236,8 +2240,8 @@ equal to <M>\nu</M>.</Returns>
 <Description>
 <Example><![CDATA[
 gap> p:=Partitions(6);;Sort(p,Lexicographic); p;
-[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 4, 1, 1 ], [ 3, 3 ], [ 3, 2, 1 ],
-  [ 3, 1, 1, 1 ], [ 2, 2, 2 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ],
+[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 4, 1, 1 ], [ 3, 3 ], [ 3, 2, 1 ], 
+  [ 3, 1, 1, 1 ], [ 2, 2, 2 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], 
   [ 1, 1, 1, 1, 1, 1 ] ]
 ]]></Example>
 
@@ -2255,7 +2259,7 @@ This is another total order on partitions which extends the dominance
 ordering (see <Ref Oper="Dominates"/>).
 <Example><![CDATA[
 gap> p:=Partitions(6);;Sort(p,ReverseDominance); p;
-[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ],
+[ [ 6 ], [ 5, 1 ], [ 4, 2 ], [ 3, 3 ], [ 4, 1, 1 ], [ 3, 2, 1 ], [ 2, 2, 2 ], 
   [ 3, 1, 1, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 1, 1 ], [ 1, 1, 1, 1, 1, 1 ] ]
 ]]></Example>
 
@@ -2321,10 +2325,11 @@ returns an actual list of these partitions rather than printing them.
 <Example><![CDATA[
 gap> H:=Specht(8);;
 gap> x:=MakeSpecht(RInducedModule(MakePIM(H,8,5,3)));; Display(x);
-S(9,5,3) + S(8,6,3) + S(8,5,4) + S(8,5,3,1) + S(6,5,3^2) + S(5^2,4,3) + S(5^2,3^2,1)
+S(9,5,3) + S(8,6,3) + S(8,5,4) + S(8,5,3,1) + S(6,5,3^2) + S(5^2,4,3) + S(5^2,\
+3^2,1)
 gap> ERegulars(x);
-[ 9, 5, 3 ]  [ 8, 6, 3 ]  [ 8, 5, 4 ]  [ 8, 5, 3, 1 ]
-[ 6, 5, 3, 3 ]  [ 5, 5, 4, 3 ]  [ 5, 5, 3, 3, 1 ]
+[ 9, 5, 3 ]  [ 8, 6, 3 ]  [ 8, 5, 4 ]  [ 8, 5, 3, 1 ]  
+[ 6, 5, 3, 3 ]  [ 5, 5, 4, 3 ]  [ 5, 5, 3, 3, 1 ]  
 gap> Display(MakePIM(x));
 P(9,5,3) + P(8,6,3) + P(8,5,4) + P(8,5,3,1)
 ]]></Example>
@@ -2438,11 +2443,11 @@ argument list is the list corresponding to the first row of the tableau.
 <M>\mu</M> a partition, <M>\nu</M> a composition.
 <Example><![CDATA[
 gap> SizeScreen([80,20]);; Display(SemiStandardTableaux([4,3],[1,1,1,2,2]));
-[ Tableau( [ [ 1, 2, 3, 4 ], [ 4, 5, 5 ] ] ),
-  Tableau( [ [ 1, 2, 3, 5 ], [ 4, 4, 5 ] ] ),
-  Tableau( [ [ 1, 2, 4, 4 ], [ 3, 5, 5 ] ] ),
-  Tableau( [ [ 1, 2, 4, 5 ], [ 3, 4, 5 ] ] ),
-  Tableau( [ [ 1, 3, 4, 4 ], [ 2, 5, 5 ] ] ),
+[ Tableau( [ [ 1, 2, 3, 4 ], [ 4, 5, 5 ] ] ), 
+  Tableau( [ [ 1, 2, 3, 5 ], [ 4, 4, 5 ] ] ), 
+  Tableau( [ [ 1, 2, 4, 4 ], [ 3, 5, 5 ] ] ), 
+  Tableau( [ [ 1, 2, 4, 5 ], [ 3, 4, 5 ] ] ), 
+  Tableau( [ [ 1, 3, 4, 4 ], [ 2, 5, 5 ] ] ), 
   Tableau( [ [ 1, 3, 4, 5 ], [ 2, 4, 5 ] ] ) ]
 ]]></Example>
 See also <Ref Oper="StandardTableaux"/>. This function requires the package
@@ -2457,10 +2462,14 @@ See also <Ref Oper="StandardTableaux"/>. This function requires the package
 <M>\mu</M> a partition
 <Example><![CDATA[
 gap> SizeScreen([80,20]);; Display(StandardTableaux(4,2));
-[ Tableau( [ [ 1, 2, 3, 4 ], [ 5, 6 ] ] ), Tableau( [ [ 1, 2, 3, 5 ], [ 4, 6 ] ] ),
-  Tableau( [ [ 1, 2, 3, 6 ], [ 4, 5 ] ] ), Tableau( [ [ 1, 2, 4, 5 ], [ 3, 6 ] ] ),
-  Tableau( [ [ 1, 2, 4, 6 ], [ 3, 5 ] ] ), Tableau( [ [ 1, 2, 5, 6 ], [ 3, 4 ] ] ),
-  Tableau( [ [ 1, 3, 4, 5 ], [ 2, 6 ] ] ), Tableau( [ [ 1, 3, 4, 6 ], [ 2, 5 ] ] ),
+[ Tableau( [ [ 1, 2, 3, 4 ], [ 5, 6 ] ] ), 
+  Tableau( [ [ 1, 2, 3, 5 ], [ 4, 6 ] ] ), 
+  Tableau( [ [ 1, 2, 3, 6 ], [ 4, 5 ] ] ), 
+  Tableau( [ [ 1, 2, 4, 5 ], [ 3, 6 ] ] ), 
+  Tableau( [ [ 1, 2, 4, 6 ], [ 3, 5 ] ] ), 
+  Tableau( [ [ 1, 2, 5, 6 ], [ 3, 4 ] ] ), 
+  Tableau( [ [ 1, 3, 4, 5 ], [ 2, 6 ] ] ), 
+  Tableau( [ [ 1, 3, 4, 6 ], [ 2, 5 ] ] ), 
   Tableau( [ [ 1, 3, 5, 6 ], [ 2, 4 ] ] ) ]
 ]]></Example>
 See also <Ref Oper="SemiStandardTableaux"/>. This function requires the package
@@ -2476,10 +2485,10 @@ columns</Returns>
 <Example><![CDATA[
 gap> Display(ConjugateTableau(Tableau([ [ 1, 3, 5, 6 ], [ 2, 4 ] ])));
 Standard Tableau:
-1	2
-3	4
-5
-6
+1	2	
+3	4	
+5	
+6	
 ]]></Example>
 This function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Reference"/>).
 </Description>
@@ -2507,7 +2516,7 @@ the number of entries in <M>tab</M> which are equal to <M>i</M>.
 <Example><![CDATA[
 gap> SizeScreen([80,20]);;
 gap> List(SemiStandardTableaux([5,4,2],[4,3,0,1,3]),TypeTableau);
-[ [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ],
+[ [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], [ 4, 3, 0, 1, 3 ], 
   [ 4, 3, 0, 1, 3 ] ]
 ]]></Example>
 This function requires the package &specht;
