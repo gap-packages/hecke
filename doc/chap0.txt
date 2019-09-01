@@ -6,23 +6,19 @@
              [1X Calculating decomposition matrices of Hecke algebras [101X
   
   
-                                     1.5.2
+                                     1.5.3
   
   
-                                6 February 2019
+                                1 September 2019
   
   
                                 Dmitriy Traytel
-  
-                                  The GAP Team
   
   
   
   Dmitriy Traytel
       Email:    [7Xmailto:traytel@in.tum.de[107X
       Homepage: [7Xhttp://home.in.tum.de/~traytel/hecke/[107X
-  The GAP Team
-      Email:    [7Xmailto:support@gap-system.org[107X
   
   -------------------------------------------------------
   [1XCopyright[101X
