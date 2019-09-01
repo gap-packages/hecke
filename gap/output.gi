@@ -207,17 +207,14 @@ InstallMethod(Display, "pretty decomposition matrix output", [IsDecompositionMat
   function(d) Print(DisplayString(d),"\n"); end
 );
 
-## Pretty printing (and TeXing) of a (decomposition) matrix.
-## d=decomposition matrix record, TeX=true of false
+## Pretty printing of a (decomposition) matrix d.
 ## Actually, d can be any record having .d=matrix, .labels=[strings],
 ## row, and cols components (this is also used by KappaMatrix for example).
-##   tex=0 normal printing
-##   tex=1 LaTeX output
 InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
   [IsDecompositionMatrix],
   function(d)
-    local rows, cols, r, c, col, len, endBit, sep, M, label, rowlabel,
-          spacestr, dotstr, PrintFn, i, str;
+    local rows, cols, r, c, col, len, M, rowlabel,
+          spacestr, dotstr, i, str;
 
     str:="";
 
@@ -236,16 +233,7 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
 
     rowlabel:=List(d!.rows, LabelPartition);
 
-    PrintFn:=function(x) Append(str,String(x,len)); end;
-    endBit:=function(i) if i<>Length(d!.rows) then Append(str,"\n"); fi; end;
-
     M:=-Maximum( List(rows, r->Length(rowlabel[r])) );
-    label:=function(i) Append(str,Concatenation(String(rowlabel[i],M),"| "));end;
-
-    ## used to be able to print the dimensions at the end of the row.
-    # if false then
-    #   endBit:=function(i) Print(" ", String(d.dim[i],-10),"\n");end;
-    # fi;
 
     ## Find out how wide the columns have to be (very expensive for
     ## crystallized matrices - also slightly incorrect as String(<poly>)
@@ -261,17 +249,17 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
     dotstr:=String(".",len);
     col:=0;
     for r in rows do
-      label(r);
+      Append(str,Concatenation(String(rowlabel[r],M),"| "));
       if d!.rows[r] in d!.cols then col:=col+1; fi;
       for c in [1..Length(cols)] do
         if IsBound(d!.d[cols[c]]) and r in d!.d[cols[c]].parts then
-            PrintFn(d!.d[cols[c]].coeffs[Position(d!.d[cols[c]].parts,r)]);
-          if c<>cols[1] then Append(str,sep); fi;
-        elif c<=col then Append(str, Concatenation(dotstr, sep));
-        else Append(str, Concatenation(spacestr, sep));
+            Append(str,String(d!.d[cols[c]].coeffs[Position(d!.d[cols[c]].parts,r)], len));
+          if c<>cols[1] then Append(str," "); fi;
+        elif c<=col then Append(str, Concatenation(dotstr, " "));
+        else Append(str, Concatenation(spacestr, " "));
         fi;
       od;
-      endBit(rows[r]);
+      if rows[r]<>Length(d!.rows) then Append(str,"\n"); fi;
     od;
     return str;
   end
