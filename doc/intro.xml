@@ -154,16 +154,22 @@ gap> H:=Specht(3,3);   # e=3, 'R' field of characteristic 3
 gap> d:=DecompositionMatrix(H,5);  # known for n<2e
 <7x5 decomposition matrix>
 gap> Display(last);
-5    | 1
-4,1  | . 1
-3,2  | . 1 1
-3,1^2| . . . 1
+5    | 1         
+4,1  | . 1       
+3,2  | . 1 1     
+3,1^2| . . . 1   
 2^2,1| 1 . . . 1
 2,1^3| . . . . 1
-1^5  | . . 1 . .
+1^5  | . . 1 . . 
 gap> for n in [6..14] do
 >       d:=InducedDecompositionMatrix(d); SaveDecompositionMatrix(d);
 >    od;
+# Inducing..
+# Inducing..
+# Inducing...
+# Inducing...
+# Inducing...
+# Inducing....
 ]]></Example>
 
 The function <C>InducedDecompositionMatrix</C> contains almost every trick
