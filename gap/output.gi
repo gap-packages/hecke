@@ -200,7 +200,7 @@ InstallMethod(ViewObj, "compact decomposition matrix output", [IsDecompositionMa
 );
 
 InstallMethod(DisplayString, "pretty decomposition matrix output", [IsDecompositionMatrix],
-  function(d) return DecompositionMatrixString(d,false); end
+  function(d) return DecompositionMatrixString(d); end
 );
 
 InstallMethod(Display, "pretty decomposition matrix output", [IsDecompositionMatrix],
@@ -214,8 +214,8 @@ InstallMethod(Display, "pretty decomposition matrix output", [IsDecompositionMat
 ##   tex=0 normal printing
 ##   tex=1 LaTeX output
 InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
-  [IsDecompositionMatrix,IsBool],
-  function(d, tex)
+  [IsDecompositionMatrix],
+  function(d)
     local rows, cols, r, c, col, len, endBit, sep, M, label, rowlabel,
           spacestr, dotstr, PrintFn, i, str;
 
@@ -236,57 +236,27 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
 
     rowlabel:=List(d!.rows, LabelPartition);
 
-    if tex then # print tex output
-      PrintFn:=function(x) Append(str, TeX(x)); end;
-                    ## PrintFn() allows us to tex() matrix elements (which
-                    ## is necessary for crystallized decomposition matrices).
-      Append(str,"$$\\begin{array}{l|*{", Length(d!.cols)+1,"}{l}}\n");
-      sep:="&";
-      endBit:=function(i) Append(str,"\\\\\n"); end;
+    PrintFn:=function(x) Append(str,String(x,len)); end;
+    endBit:=function(i) if i<>Length(d!.rows) then Append(str,"\n"); fi; end;
 
-      ## gangely work around to tex 1^10 properly as 1^{10} etc.
-      label:=function(i) local locstr, bad, l;
-        bad:=Filtered(Collected(d!.rows[i]),l->l[2]>9);
-        if bad=[] then Append(str,rowlabel[i]);
-        else # assume no conflicts as 1^10 and 1^101
-          locstr:=StructuralCopy(rowlabel[i]);
-          IsString(locstr);   ## seems to be necessary...
-          for l in bad do
-            locstr:=ReplacedString(locstr,
-                   Concatenation(String(l[1]),"^",String(l[2])),
-                   Concatenation(String(l[1]),"^{",String(l[2]),"}"));
-          od;
-          Append(str,locstr);
-        fi;
-        Append(str,"&");
-      end;
-    else
-      PrintFn:=function(x) Append(str,String(x,len)); end;
-      if tex then sep:="#"; else sep:=" ";fi;
-      endBit:=function(i) if i<>Length(d!.rows) then Append(str,"\n"); fi; end;
+    M:=-Maximum( List(rows, r->Length(rowlabel[r])) );
+    label:=function(i) Append(str,Concatenation(String(rowlabel[i],M),"| "));end;
 
-      M:=-Maximum( List(rows, r->Length(rowlabel[r])) );
-      label:=function(i) Append(str,Concatenation(String(rowlabel[i],M),"| "));end;
-
-      ## used to be able to print the dimensions at the end of the row.
-      # if false then
-      #   endBit:=function(i) Print(" ", String(d.dim[i],-10),"\n");end;
-      # fi;
-    fi;
+    ## used to be able to print the dimensions at the end of the row.
+    # if false then
+    #   endBit:=function(i) Print(" ", String(d.dim[i],-10),"\n");end;
+    # fi;
 
     ## Find out how wide the columns have to be (very expensive for
     ## crystallized matrices - also slightly incorrect as String(<poly>)
     ## returns such wonders as (2)*v rather than 2*v).
-    if tex then len:=0;
-    else
-      len:=1;
-      for i in d!.d do
-        if i.coeffs<>[] then
-          len:=Maximum(len,Maximum(List(i.coeffs,
-                                 j->Length(String(j)))));
-        fi;
-      od;
-    fi;
+    len:=1;
+    for i in d!.d do
+      if i.coeffs<>[] then
+        len:=Maximum(len,Maximum(List(i.coeffs,
+                               j->Length(String(j)))));
+      fi;
+    od;
     spacestr:=String("",len);
     dotstr:=String(".",len);
     col:=0;
@@ -303,7 +273,6 @@ InstallMethod(DecompositionMatrixString,"generic decomposition matrix output",
       od;
       endBit(rows[r]);
     od;
-    if tex then Append(str, "\\end{array}$$\n"); fi;
     return str;
   end
 ); # DecompositionMatrixString
