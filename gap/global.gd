@@ -19,8 +19,6 @@
 ## Hecke 1.0: September 2010:
 ##   - initial
 
-DeclareOperation("\*",[IsFunction,IsFunction]);
-DeclareOperation("FoldLeft",[IsFunction,IsObject,IsList]);
 DeclareOperation("FoldAfterMapLeft",[IsFunction,IsFunction,IsObject,IsList]);
 DeclareOperation("StringFold",[IsString,IsList]);
 DeclareOperation("Zip",[IsList,IsList]);

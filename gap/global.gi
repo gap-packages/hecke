@@ -19,22 +19,6 @@
 ## Hecke 1.0: September 2010:
 ##   - initial
 
-InstallMethod(\*,"function composition",[IsFunction,IsFunction],
-  function(f,g)
-    return function(x) return f(g(x)); end;
-  end
-);
-
-InstallMethod(FoldLeft,[IsFunction,IsObject,IsList],
-  function(f,i,l) local acc, x;
-    acc := i;
-    for x in l do
-      acc := f(acc,x);
-    od;
-    return acc;
-  end
-);
-
 InstallMethod(FoldAfterMapLeft,[IsFunction,IsFunction,IsObject,IsList],
   function(f,g,i,l) local acc, x;
     acc := i;
