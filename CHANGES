@@ -1,3 +1,9 @@
+1.XXX
+    - various janitorial changes
+    - remove unused and undocumented FoldLeft operation
+    - remove unused and undocumented * method for functions (to
+      allow function composition)
+
 1.5.2
     - change definitions of various categories to correctly model their meaning
 
