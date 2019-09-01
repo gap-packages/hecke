@@ -1,8 +1,10 @@
 1.XXX
-    - various janitorial changes
     - remove unused and undocumented FoldLeft operation
     - remove unused and undocumented * method for functions (to
       allow function composition)
+    - remove unused, undocumented and broken TeX support in undocumented
+      function DecompositionMatrixString
+    - various janitorial changes
 
 1.5.2
     - change definitions of various categories to correctly model their meaning
