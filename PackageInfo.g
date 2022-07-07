@@ -59,7 +59,7 @@ and q-Schur algebras. Hecke is a port of the \
 PackageDoc := rec(
   BookName  := "hecke",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Hecke - Specht 2.4 ported to GAP 4",
