@@ -19,7 +19,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "traytel@in.tum.de",
-    WWWHome       := "http://home.in.tum.de/~traytel/hecke/",
+    WWWHome       := "https://home.in.tum.de/~traytel/hecke/",
     Place         := "Munich",
     Institution   := "Technische Universität München"
   ),
