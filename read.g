@@ -10,7 +10,6 @@
 #############################################################################
 
 ReadPackage("hecke","gap/global.gi");
-ReadPackage("hecke","gap/dispatcher.gi");
 ReadPackage("hecke","gap/output.gi");
 ReadPackage("hecke","gap/symmcomb.gi");
 ReadPackage("hecke","gap/tableaux.gi");
