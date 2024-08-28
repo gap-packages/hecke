@@ -55,10 +55,10 @@
 <li><p><strong class="pkg">Hecke</strong> provides a means of working in the Grothendieck ring of a Hecke algebra <span class="SimpleMath">H</span> using the three natural bases corresponding to the Specht modules, projective indecomposable modules, and simple modules.</p>
 
 </li>
-<li><p>For Hecke algebras defined over fields of characteristic zero, the algorithm of Lascoux, Leclerc, and Thibon <a href="chapBib.html#biBLLT">[LLT96]</a> for computing decomposition numbers and "crystallized decomposition matrices" has been implemented. In principle, this gives all of the decomposition matrices of Hecke algebras defined over fields of characteristic zero.</p>
+<li><p>For Hecke algebras defined over fields of characteristic zero, the algorithm of Lascoux, Leclerc, and Thibon <a href="chapBib.html#biBLLT">[LLT96]</a> for computing decomposition numbers and <q>crystallized decomposition matrices</q> has been implemented. In principle, this gives all of the decomposition matrices of Hecke algebras defined over fields of characteristic zero.</p>
 
 </li>
-<li><p><strong class="pkg">Hecke</strong> provides a way of inducing and restricting modules. In addition, it is possible to "induce" decomposition matrices; this function is quite effective in calculating the decomposition matrices of Hecke algebras for small <span class="SimpleMath">n</span>.</p>
+<li><p><strong class="pkg">Hecke</strong> provides a way of inducing and restricting modules. In addition, it is possible to <q>induce</q> decomposition matrices; this function is quite effective in calculating the decomposition matrices of Hecke algebras for small <span class="SimpleMath">n</span>.</p>
 
 </li>
 <li><p>The <span class="SimpleMath">q</span>-analogue of Schaper's theorem <a href="chapBib.html#biBJM2">[JM97]</a> is included, as is Kleshchev's <a href="chapBib.html#biBK">[Kle96]</a> algorithm of calculating the Mullineux map. Both are used extensively when inducing decomposition matrices.</p>
@@ -78,7 +78,7 @@
 
 <h4>1.2 <span class="Heading">The modular representation theory of Hecke algebras</span></h4>
 
-<p>The "modular" representation theory of the Iwahori-Hecke algebras of type <em>A</em> was pioneered by Dipper and James <a href="chapBib.html#biBDJ1">[DJ86]</a> <a href="chapBib.html#biBDJ2">[DJ87]</a>; here the theory is briefly outlined, referring the reader to the references for details.</p>
+<p>The <q>modular</q> representation theory of the Iwahori-Hecke algebras of type <em>A</em> was pioneered by Dipper and James <a href="chapBib.html#biBDJ1">[DJ86]</a> <a href="chapBib.html#biBDJ2">[DJ87]</a>; here the theory is briefly outlined, referring the reader to the references for details.</p>
 
 <p>Given a commutative integral domain <span class="SimpleMath">R</span> and a non-zero unit <span class="SimpleMath">q</span> in <span class="SimpleMath">R</span>, let <span class="SimpleMath">H=H_R, q</span> be the Hecke algebra of the symmetric group <span class="SimpleMath">S_n</span> on <span class="SimpleMath">n</span> symbols defined over <span class="SimpleMath">R</span> and with parameter <span class="SimpleMath">q</span>. For each partition <span class="SimpleMath">μ</span> of <span class="SimpleMath">n</span>, Dipper and James defined a <em>Specht module</em> <span class="SimpleMath">S(μ)</span>. Let <span class="SimpleMath">rad~S(μ)</span> be the radical of <span class="SimpleMath">S(μ)</span> and define <span class="SimpleMath">D(μ)=S(μ)/rad~S(μ)</span>. When <span class="SimpleMath">R</span> is a field, <span class="SimpleMath">D(μ)</span> is either zero or absolutely irreducible. Henceforth, we will always assume that <span class="SimpleMath">R</span> is a field.</p>
 
@@ -108,7 +108,7 @@ P(13,2) + P(12,3) + P(12,2,1) + P(10,3,2) + P(9,6)
 
 <p>The <a href="chapBib.html#biBLLT">[LLT96]</a> algorithm was applied 24 times during this calculation.</p>
 
-<p>For Hecke algebras defined over fields of positive characteristic the major tool provided by <strong class="pkg">Hecke</strong>, apart from the decomposition matrices contained in the libraries, is a way of "inducing" decomposition matrices. This makes it fairly easy to calculate the associated decomposition matrices for "small" <span class="SimpleMath">n</span>. For example, the <strong class="pkg">Hecke</strong> libraries contain the decomposition matrices for the symmetric groups <span class="SimpleMath">S_n</span> over fields of characteristic <span class="SimpleMath">3</span> for <span class="SimpleMath">n&lt;15</span>. These matrices were calculated by <strong class="pkg">Hecke</strong> using the following commands:</p>
+<p>For Hecke algebras defined over fields of positive characteristic the major tool provided by <strong class="pkg">Hecke</strong>, apart from the decomposition matrices contained in the libraries, is a way of <q>inducing</q> decomposition matrices. This makes it fairly easy to calculate the associated decomposition matrices for <q>small</q> <span class="SimpleMath">n</span>. For example, the <strong class="pkg">Hecke</strong> libraries contain the decomposition matrices for the symmetric groups <span class="SimpleMath">S_n</span> over fields of characteristic <span class="SimpleMath">3</span> for <span class="SimpleMath">n&lt;15</span>. These matrices were calculated by <strong class="pkg">Hecke</strong> using the following commands:</p>
 
 
 <div class="example"><pre>
@@ -155,7 +155,7 @@ P(13,2) + P(12,3) + P(12,2,1) + P(10,3,2) + P(9,6)
 
 <p>The lastest version of <strong class="pkg">Hecke</strong> can be obtained from</p>
 
-<p><span class="URL"><a href="http://home.in.tum.de/~traytel/hecke/">http://home.in.tum.de/~traytel/hecke/</a></span>.</p>
+<p><span class="URL"><a href="https://home.in.tum.de/~traytel/hecke/">https://home.in.tum.de/~traytel/hecke/</a></span>.</p>
 
 <p>Dmitriy Traytel</p>
 
@@ -170,6 +170,6 @@ P(13,2) + P(12,3) + P(12,2,1) + P(10,3,2) + P(9,6)
 <div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <hr />
-<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+<p class="foot">generated by <a href="https://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
 </body>
 </html>

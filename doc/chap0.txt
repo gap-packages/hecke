@@ -6,10 +6,10 @@
              [1X Calculating decomposition matrices of Hecke algebras [101X
   
   
-                                     1.5.3
+                                     1.5.4
   
   
-                                1 September 2019
+                                 27 August 2024
   
   
                                 Dmitriy Traytel
@@ -18,7 +18,7 @@
   
   Dmitriy Traytel
       Email:    [7Xmailto:traytel@in.tum.de[107X
-      Homepage: [7Xhttp://home.in.tum.de/~traytel/hecke/[107X
+      Homepage: [7Xhttps://home.in.tum.de/~traytel/hecke/[107X
   
   -------------------------------------------------------
   [1XCopyright[101X

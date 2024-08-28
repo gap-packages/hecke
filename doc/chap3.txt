@@ -26,9 +26,9 @@
   [33X[0;0YThe  data  structure hierarchy in [5XGAP[105X 4 is defined through filters and their
   dependencies.[133X
   
-  [33X[1;0Y[29X[2XIsAlgebraObj[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsHecke[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsSchur[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsAlgebraObj[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsHecke[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsSchur[102X [32X filter[133X
   
   [33X[0;0Y[2XIsAlgebraObj[102X  is  a generic filter for the objects returned by the functions
   [2XSpecht[102X  ([14X3.2-1[114X)  and  [2XSchur[102X  ([14X3.2-7[114X).  Concretely, [2XSpecht[102X ([14X3.2-1[114X) returns an
@@ -36,23 +36,23 @@
   reasons  [2XIsSchur[102X  is  a  subfilter  of  [2XIsHecke[102X. This allows to use the same
   functions for Schur-algebras as for Hecke-algebras with minor restrictions.[133X
   
-  [33X[1;0Y[29X[2XIsAlgebraObjModule[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsHeckeModule[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsHeckeSpecht[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsHeckePIM[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsHeckeSimple[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockModule[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockSpecht[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockPIM[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockSimple[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsSchurModule[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsSchurWeyl[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsSchurPIM[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsSchurSimple[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockSchurModule[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockSchurWeyl[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockSchurPIM[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsFockSchurSimple[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsAlgebraObjModule[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckeModule[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckeSpecht[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckePIM[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsHeckeSimple[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockModule[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSpecht[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockPIM[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSimple[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurModule[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurWeyl[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurPIM[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsSchurSimple[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurModule[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurWeyl[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurPIM[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsFockSchurSimple[102X [32X filter[133X
   
   [33X[0;0YThe  hierarchy  of module objects is more complex. On top we have the filter
   [2XIsAlgebraObjModule[102X.  Its  direct descendant [2XIsHeckeModule[102X has [2XIsHeckeSpecht[102X,
@@ -67,8 +67,8 @@
   [2XIsFockSpecht[102X  etc.,  [2XIsFockSchurWeyl[102X  and  [2XIsSchurWeyl[102X etc., [2XIsSchurWeyl[102X and
   [2XIsHeckeSpecht[102X etc. filters.[133X
   
-  [33X[1;0Y[29X[2XIsDecompositionMatrix[102X[32X filter[133X
-  [33X[1;0Y[29X[2XIsCrystalDecompositionMatrix[102X[32X filter[133X
+  [33X[1;0Y[29X[2XIsDecompositionMatrix[102X [32X filter[133X
+  [33X[1;0Y[29X[2XIsCrystalDecompositionMatrix[102X [32X filter[133X
   
   [33X[0;0YFor  decomposition  matrices we use the filter [2XIsDecompositionMatrix[102X and its
   subfilter [2XIsCrystalDecompositionMatrix[102X.[133X
@@ -160,7 +160,7 @@
   [33X[0;0YProvides  writing  access  to  [22XOrdering[122X  that  is  stored in [22XH[122X. The ordering
   influences the way how decomposition matrices are printed.[133X
   
-  [33X[1;0Y[29X[2XSpechtDirectory[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XSpechtDirectory[102X [32X global variable[133X
   
   [33X[0;0YSetting  this  global  variable  the  user  can  tell  [5XHecke[105X  where  to find
   decomposition  matrices  that  are  not  in  the library and also not in the

@@ -35,8 +35,8 @@
       for residues 3.7-6 
   [2XGoodNodeSequence[102X 3.7-8 
   [2XGoodNodeSequences[102X 3.7-8 
-  [5Xhecke[105X 2. 
-  [5Xhecke[105X package 1. 
+  [5Xhecke[105X 2.0 
+  [5Xhecke[105X package 1.0 
   [2XHookLengthDiagram[102X 3.7-14 
   [2XInducedDecompositionMatrix[102X 3.5-1 
   [2XInnerProduct[102X 3.9-5 

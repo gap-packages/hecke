@@ -170,7 +170,7 @@
   
   [33X[0;0YThe lastest version of [5XHecke[105X can be obtained from[133X
   
-  [33X[0;0Y[7Xhttp://home.in.tum.de/~traytel/hecke/[107X.[133X
+  [33X[0;0Y[7Xhttps://home.in.tum.de/~traytel/hecke/[107X.[133X
   
   [33X[0;0YDmitriy Traytel[133X
   

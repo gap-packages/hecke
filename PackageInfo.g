@@ -8,8 +8,8 @@ SetPackageInfo( rec(
 
 PackageName := "hecke",
 Subtitle := "Calculating decomposition matrices of Hecke algebras",
-Version := "1.5.3",
-Date := "01/09/2019", # dd/mm/yyyy format
+Version := "1.5.4",
+Date := "27/08/2024", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -19,7 +19,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "traytel@in.tum.de",
-    WWWHome       := "http://home.in.tum.de/~traytel/hecke/",
+    WWWHome       := "https://home.in.tum.de/~traytel/hecke/",
     Place         := "Munich",
     Institution   := "Technische Universität München"
   ),
@@ -59,7 +59,7 @@ and q-Schur algebras. Hecke is a port of the \
 PackageDoc := rec(
   BookName  := "hecke",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Hecke - Specht 2.4 ported to GAP 4",

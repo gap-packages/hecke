@@ -21,13 +21,13 @@
   quantum  GL_n)  at  roots  of  unity[117X,  [18XInternat. Math. Res. Notices[118X, [19X1994[119X, 5
   (1994), 215 ff., approx.\ 3 pp.\ (electronic).
   
-  [[20XJam90[120X]  [16XJames,  G.[116X, [17XThe decomposition matrices of GL_n(q) for nle 10[117X, [18XProc.
+  [[20XJam90[120X]  [16XJames,  G.[116X,  [17XThe decomposition matrices of GL_n(q) for n≤ 10[117X, [18XProc.
   London Math. Soc. (3)[118X, [19X60[119X, 2 (1990), 225--265.
   
   [[20XJK81[120X]  [16XJames, G. and Kerber, A.[116X, [17XThe representation theory of the symmetric
   group[117X,  Addison-Wesley  Publishing  Co.,  Reading,  Mass.,  Encyclopedia  of
-  Mathematics  and  its  Applications,  [19X16[119X  (1981), xxviii+510 pages, ((With a
-  foreword by P. M. Cohn, With an introduction by Gilbert de B. Robinson)).
+  Mathematics  and  its  Applications,  [19X16[119X  (1981),  xxviii+510 pages, (With a
+  foreword by P. M. Cohn, With an introduction by Gilbert de B. Robinson).
   
   [[20XJM96[120X]  [16XJames,  G.  and  Mathas,  A.[116X, [17XHecke algebras of type A with q=-1[117X, [18XJ.
   Algebra[118X, [19X184[119X, 1 (1996), 102--158.
