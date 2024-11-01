@@ -63,7 +63,6 @@ PackageDoc := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Hecke - Specht 2.4 ported to GAP 4",
-  Autoload  := true
 ),
 
 Dependencies := rec(
