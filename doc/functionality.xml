@@ -673,7 +673,7 @@ function requires the package &specht; (see <Ref Func="LoadPackage" BookName="Re
 </Description>
 </ManSection>
 <!--######################################################################-->
-<ManSection Label="DecompositionNumber">
+<ManSection>
 <Meth Name="DecompositionNumber" Arg="H, mu, nu"/>
 <Meth Name="DecompositionNumber" Label="for a decomposition matrix"
   Arg="d, mu, nu"/>
