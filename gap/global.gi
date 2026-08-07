@@ -29,9 +29,23 @@ InstallMethod(FoldAfterMapLeft,[IsFunction,IsFunction,IsObject,IsList],
   end
 );
 
+## Returns what Print(obj) would output, as a string. Note that PrintString
+## is not an alternative: for an object which installs a PrintObj method but
+## no String method, PrintString falls back to String and thus returns
+## "<object>", whereas Print uses the PrintObj method.
+BindGlobal("HECKE_StringPrint",
+  function(obj) local str, out;
+    str := "";
+    out := OutputTextString(str, false);
+    PrintTo(out, obj);
+    CloseStream(out);
+    return str;
+  end
+);
+
 InstallMethod(StringFold,[IsString,IsList],
   function(str,l)
-    return FoldAfterMapLeft(Concatenation,StringPrint,str,l);
+    return FoldAfterMapLeft(Concatenation,HECKE_StringPrint,str,l);
   end
 );
 
