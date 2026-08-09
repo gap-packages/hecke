@@ -57,7 +57,7 @@ less direct support for these algebras. The decomposition matrices for the
 <M>q</M>-Schur algebras defined over fields of characteristic zero for
 <M>n&lt;11</M> and all <M>e</M> are included in &Specht;.
 </Item>
-<Item>The Littlewood-Richard rule, its inverse, and functions for many
+<Item>The Littlewood-Richardson rule, its inverse, and functions for many
 of the standard operations on partitions (such as calculating cores,
 quotients, and adding and removing hooks), are included.
 </Item>

@@ -53,7 +53,7 @@ The package is now much more general and its highlights include:
     these algebras. The decomposition matrices for the q-Schur algebras defined
     over fields of characteristic zero for n<11 and all e are included in Hecke.
 
-6.  The Littlewood-Richard rule, its inverse, and functions for many of the
+6.  The Littlewood-Richardson rule, its inverse, and functions for many of the
     standard operations on partitions (such as calculating cores, quotients, and
     adding and removing hooks), are included.
 
