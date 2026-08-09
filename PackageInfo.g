@@ -1,101 +1,103 @@
 #############################################################################
-##
-##  PackageInfo.g for the package hecke
-##                                                            Dmitriy Traytel
+##  
+##  Demo PackageInfo.g for the GitHubPagesForGAP
 ##
 
 SetPackageInfo( rec(
 
-PackageName := "hecke",
-Subtitle := "Calculating decomposition matrices of Hecke algebras",
-Version := "1.5.4",
-Date := "27/08/2024", # dd/mm/yyyy format
-License := "GPL-2.0-or-later",
+PackageName := "GitHubPagesForGAP",
+
+Subtitle := "A GitHub Pages generator for GAP packages",
+Version := "0.4",
+Date := "10/04/2025", # dd/mm/yyyy format
+License := "0BSD",
 
 Persons := [
   rec(
-    LastName      := "Traytel",
-    FirstNames    := "Dmitriy",
+    LastName      := "Horn",
+    FirstNames    := "Max",
     IsAuthor      := true,
-    IsMaintainer  := false,
-    Email         := "traytel@in.tum.de",
-    WWWHome       := "https://home.in.tum.de/~traytel/hecke/",
-    Place         := "Munich",
-    Institution   := "Technische Universität München"
+    IsMaintainer  := true,
+    Email         := "mhorn@rptu.de",
+    WWWHome       := "https://www.quendi.de/math",
+    GitHubUsername:= "fingolfin",
+    PostalAddress := Concatenation(
+                       "Fachbereich Mathematik\n",
+                       "RPTU Kaiserslautern-Landau\n",
+                       "Gottlieb-Daimler-Straße 48\n",
+                       "67663 Kaiserslautern\n",
+                       "Germany" ),
+    Place         := "Kaiserslautern, Germany",
+    Institution   := "RPTU Kaiserslautern-Landau"
   ),
 
   rec(
-    LastName      := "GAP Team",
-    FirstNames    := "The",
+    LastName      := "Thor",
+    FirstNames    := "A. U.",
+    IsAuthor      := true,
+    IsMaintainer  := false,
+    #Email         := "author@example.com",
+  ),
+
+  rec(
+    LastName      := "Itor",
+    FirstNames    := "Jan",
     IsAuthor      := false,
     IsMaintainer  := true,
-    Email         := "support@gap-system.org",
+    #Email         := "janitor@example.com",
   ),
 ],
 
-Status := "deposited",
+Status := "other",
 
-PackageWWWHome  := "https://gap-packages.github.io/hecke/",
-README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
-PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
-SourceRepository := rec(
-    Type := "git",
-    URL := "https://github.com/gap-packages/hecke",
-),
-IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-ArchiveURL      := Concatenation( ~.SourceRepository.URL,
-                                 "/releases/download/v", ~.Version,
-                                 "/hecke-", ~.Version ),
-ArchiveFormats := ".tar.gz",
+# The following are not strictly necessary in your own PackageInfo.g
+# (in the sense that update.g only looks at the usual fields
+# like PackageWWWHome, ArchiveURL etc.). But they are convenient
+# if you use exactly the scheme for your package website that we propose.
+GithubUser := "gap-system",
+GithubRepository := ~.PackageName,
+GithubWWW := Concatenation("https://github.com/", ~.GithubUser, "/", ~.GithubRepository),
 
-AbstractHTML :=
-"The <span class=\"pkgname\">Hecke</span> package provides functions for \
-calculating decomposition matrices of Hecke algebras of the symmetric groups \
-and q-Schur algebras. Hecke is a port of the \
-<span class=\"pkgname\">GAP 3</span> package \
-<span class=\"pkgname\">Specht 2.4</span> to \
-<span class=\"pkgname\">GAP 4</span>.",
+PackageWWWHome := Concatenation("https://", ~.GithubUser, ".github.io/", ~.GithubRepository, "/"),
+README_URL     := Concatenation( ~.PackageWWWHome, "README.md" ),
+PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
+# The following assumes you are using the Github releases system. If not, adjust
+# it accordingly.
+ArchiveURL     := Concatenation(~.GithubWWW,
+                    "/releases/download/v", ~.Version, "/",
+                    ~.GithubRepository, "-", ~.Version),
+
+ArchiveFormats := ".tar.gz .tar.bz2",
+
+AbstractHTML := 
+  "This is a pseudo package that contains no actual\
+  <span class=\"pkgname\">GAP</span> code. Instead, it is a template for other\
+  GAP packages that allows to quickly setup GitHub Pages.",
 
 PackageDoc := rec(
-  BookName  := "hecke",
+  BookName  := "GitHubPagesForGAP",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0_mj.html",
+  HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Hecke - Specht 2.4 ported to GAP 4",
-  Autoload  := true
+  LongTitle := "A GitHub Pages generator for GAP packages",
 ),
 
+# The following dependencies are fake and for testing / demo purposes
 Dependencies := rec(
-  GAP := ">=4.8",
-  NeededOtherPackages := [],
-  SuggestedOtherPackages := [],
+  GAP := ">=4.8.1",
+  NeededOtherPackages := [
+    ["GAPDoc", ">= 1.2"],
+    ["IO", ">= 4.1"],
+  ],
+  SuggestedOtherPackages := [["orb", ">= 4.2"]],
   ExternalConditions := []
 ),
 
-AvailabilityTest := function()
-    return true;
-  end,
+AvailabilityTest := ReturnTrue,
 
-TestFile := "tst/testall.g",
-Keywords := ["Hecke", "decomposition matrix", "Specht module", "Schur"],
-
-
-  AutoDoc := rec(
-      TitlePage := rec(
-          Copyright := """
-            &copyright; 2010&ndash;2013 by Dmitriy Traytel<P/>
-
-            This package may be distributed under the terms and conditions of the
-            GNU Public License Version 2 or higher.
-            """,
-          Acknowledgements := """
-            &Specht; is a port of the &GAP; 3 package <Package>Specht</Package> 2.4 to &GAP; 4.
-            <Package>Specht</Package> 2.4 was written by Andrew Mathas, who allowed
-            Dmitriy Traytel to use his source code as the basis for &specht;.
-            """,
-      ),
-  ),
+Keywords := ["GitHub Pages", "GAP"]
 
 ));
+
 
