@@ -8,8 +8,8 @@ SetPackageInfo( rec(
 
 PackageName := "hecke",
 Subtitle := "Calculating decomposition matrices of Hecke algebras",
-Version := "1.5.4",
-Date := "27/08/2024", # dd/mm/yyyy format
+Version := "1.6.0",
+Date := "09/08/2026", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
