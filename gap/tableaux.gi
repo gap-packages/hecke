@@ -226,11 +226,12 @@ InstallMethod(SemiStandardTableauxOp, [IsList,IsList],
       Error("<nu> and <mu> must be partitions of the same integer.\n");
     fi;
 
-    ## no semi-standard nu-tableau with content mu
-    if Dominates(mu, nu) then
-      if mu<>nu then return [];
-      else return [Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)))];
-      fi;
+    ## A semi-standard nu-tableau of content mu exists if and only if nu
+    ## dominates mu sorted into decreasing order; FillTableau below relies on
+    ## this and produces garbage otherwise.
+    if not Dominates(nu, Reversed(SortedList(mu))) then return []; fi;
+    if mu=nu then
+      return [Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)))];
     fi;
 
     ss:=[]; ## will hold the semi-standard tableaux
@@ -241,23 +242,8 @@ InstallMethod(SemiStandardTableauxOp, [IsList,IsList],
 );
 
 InstallMethod(SemiStandardTableauxOp, [IsList],
-  function(nu)
-    local ss, i, mu;
-
-    ss:=[];
-    for mu in Partitions(Sum(nu)) do
-      if Dominates(mu, nu) then
-        if mu = nu then
-          Append(ss,
-              [ Tableau(List([1..Length(mu)], i->List([1..mu[i]], ss->i)) )]);
-          return ss;
-        fi;
-      else
-          Append(ss,SemiStandardTableaux(nu,mu));
-      fi;
-    od;
-    return ss;
-  end
+  nu -> Concatenation(List(Partitions(Sum(nu)),
+                           mu -> SemiStandardTableaux(nu,mu)))
 );
 
 #F Standard tableau of shape ([nu,] mu)
