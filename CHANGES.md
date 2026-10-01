@@ -1,42 +1,54 @@
-1.6.0 (2026-08-09)
-    - Fix SemiStandardTableaux to not return bogus tableaux on occasion
-    - various janitorial changes
+## 1.6.0 (2026-08-09)
 
-1.5.4 (2024-08-27)
-    - various janitorial changes
+- Fix SemiStandardTableaux to not return bogus tableaux on occasion
+- various janitorial changes
 
-1.5.3 (2019-09-01)
-    - remove unused and undocumented FoldLeft operation
-    - remove unused and undocumented * method for functions (to
-      allow function composition)
-    - remove unused, undocumented and broken TeX support in undocumented
-      function DecompositionMatrixString
-    - clarify package licensing terms (GPL 2 or later)
-    - various janitorial changes
+## 1.5.4 (2024-08-27)
 
-1.5.2
-    - change definitions of various categories to correctly model their meaning
+- various janitorial changes
 
-1.5.1
-    - remove use of obsolete and undocumented GAP function `InfoRead1`
+## 1.5.3 (2019-09-01)
 
-1.5
-    - transfer maintainership of the package to the GAP team
-    - moved package to GitHub
-    - fix error in CombineEQuotientECore, see <https://github.com/gap-packages/hecke/issues/1>
+- remove unused and undocumented FoldLeft operation
+- remove unused and undocumented * method for functions (to
+  allow function composition)
+- remove unused, undocumented and broken TeX support in undocumented
+  function DecompositionMatrixString
+- clarify package licensing terms (GPL 2 or later)
+- various janitorial changes
 
-1.4
-    - fixed HTML in PackageInfo.g
-    - fixed a bug (reported by Rudolf Tango) in
-      SemiStandardTableau(): ignore trailing zeros
-      in the type of a tableau
-    - Tableau constructor can now actually create
-      the empty tableau (again spotted by Rudolf Tango)
+## 1.5.2 (2019-02-06)
 
-1.3
-    - fixed PackageInfo.g
-1.2
-    - added missing PackageInfo.g file
-    - added changelog
-1.1
-    - set package status to deposited
+- change definitions of various categories to correctly model their meaning
+
+## 1.5.1 (2018-11-10)
+
+- remove use of obsolete and undocumented GAP function `InfoRead1`
+
+## 1.5 (2018-09-10)
+
+- transfer maintainership of the package to the GAP team
+- moved package to GitHub
+- fix error in CombineEQuotientECore, see <https://github.com/gap-packages/hecke/issues/1>
+
+## 1.4 (2013-07-02)
+
+- fixed HTML in PackageInfo.g
+- fixed a bug (reported by Rudolf Tango) in
+  SemiStandardTableau(): ignore trailing zeros
+  in the type of a tableau
+- Tableau constructor can now actually create
+  the empty tableau (again spotted by Rudolf Tango)
+
+## 1.3
+
+- fixed PackageInfo.g
+
+## 1.2
+
+- added missing PackageInfo.g file
+- added changelog
+
+## 1.1
+
+- set package status to deposited
